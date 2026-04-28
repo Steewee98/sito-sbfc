@@ -167,18 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ═══════ CONTACT FORM ═══════ */
-    var form = document.getElementById('contactForm');
-    if (form) {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            var btn = this.querySelector('button[type="submit"]');
-            var txt = btn.textContent;
-            btn.textContent = 'Messaggio inviato!';
-            btn.style.background = '#2a7d45';
-            this.reset();
-            setTimeout(function () { btn.textContent = txt; btn.style.background = ''; }, 3000);
-        });
-    }
+    /* Form contatti gestito da inviaContatto() in contatti.html */
 
     /* ═══════ ACADEMY AREA STUDENTI ═══════ */
     if (document.getElementById('area-studenti')) {

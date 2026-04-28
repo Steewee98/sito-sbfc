@@ -107,9 +107,12 @@
                     <label for="message">Messaggio</label>
                     <textarea id="message" name="message" placeholder="Raccontaci del tuo locale e di come possiamo aiutarti..." required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Invia messaggio</button>
+                <button type="button" onclick="inviaContatto()" class="btn btn-primary" style="width:100%">Invia messaggio</button>
                 <p class="form-note">Risponderemo entro 24 ore.</p>
             </form>
+            <div id="form-success" style="display:none;background:#f5f2ee;border:1px solid #c4622d;padding:24px;border-radius:4px;margin-top:16px;text-align:center">
+                <p style="color:#1a1a1a;font-size:1rem;margin:0">Messaggio inviato. Ti contatteremo entro 24 ore.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -136,5 +139,48 @@
 </footer>
 
 <script src="main.js"></script>
+<script>
+const BACKEND_URL = 'BACKEND_URL_PLACEHOLDER';
+
+async function inviaContatto() {
+    var btn = document.querySelector('[onclick="inviaContatto()"]');
+    var nome = (document.getElementById('name') || {}).value || '';
+    var cognome = (document.getElementById('surname') || {}).value || '';
+    var email = (document.getElementById('email') || {}).value || '';
+    var telefono = (document.getElementById('phone') || {}).value || '';
+    var tipo_locale = (document.getElementById('type') || {}).value || '';
+    var messaggio = (document.getElementById('message') || {}).value || '';
+
+    nome = nome.trim(); cognome = cognome.trim(); email = email.trim();
+    telefono = telefono.trim(); messaggio = messaggio.trim();
+
+    if (!nome || !email || !messaggio) {
+        alert('Compila almeno nome, email e messaggio.');
+        return;
+    }
+
+    btn.textContent = 'Invio in corso...';
+    btn.disabled = true;
+
+    try {
+        var res = await fetch(BACKEND_URL + '/api/contatti', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome: nome, cognome: cognome, email: email, telefono: telefono, tipo_locale: tipo_locale, messaggio: messaggio })
+        });
+        var data = await res.json();
+        if (data.success) {
+            document.getElementById('contactForm').style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+        } else {
+            throw new Error('Errore server');
+        }
+    } catch(e) {
+        alert("Errore nell'invio. Riprova o scrivici a info@sbfoodconsulting.com");
+        btn.textContent = 'Invia messaggio';
+        btn.disabled = false;
+    }
+}
+</script>
 </body>
 </html>

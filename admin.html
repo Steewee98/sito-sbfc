@@ -405,12 +405,29 @@ tr:hover td{background:#fafaf8}
 </div>
 
 <script>
+// ============ BACKEND API ============
+var BACKEND_URL = 'BACKEND_URL_PLACEHOLDER';
+var ADMIN_TOKEN = localStorage.getItem('sb_admin_token') || '';
+
+function apiFetch(endpoint, options) {
+    options = options || {};
+    var headers = { 'Content-Type': 'application/json', 'X-Admin-Token': ADMIN_TOKEN };
+    if (options.headers) { for (var k in options.headers) headers[k] = options.headers[k]; }
+    options.headers = headers;
+    return fetch(BACKEND_URL + endpoint, options).then(function(res) {
+        if (!res.ok) throw new Error('API error: ' + res.status);
+        return res.json();
+    });
+}
+
 // ============ AUTH ============
 function doLogin(){
     var u=document.getElementById('adminUser').value.trim();
     var p=document.getElementById('adminPass').value;
     if(u==='admin'&&p==='sbfood2025admin'){
         localStorage.setItem('sb_admin_logged','true');
+        localStorage.setItem('sb_admin_token','5wD6Zf9e7Ezt9v_JEQYNjoc--4IAiA94tMaWfh2m4V0');
+        ADMIN_TOKEN='5wD6Zf9e7Ezt9v_JEQYNjoc--4IAiA94tMaWfh2m4V0';
         showDashboard();
     } else {
         var e=document.getElementById('loginError');e.style.display='block';
@@ -485,29 +502,37 @@ function initAll(){
 
 // ============ DASHBOARD ============
 function renderDashboard(){
-    var contatti=getData('contatti',[]);
-    var studenti=getData('studenti',[]);
-    var pagamenti=getData('pagamenti',[]);
-    var eventi=getData('eventi',[]);
-    var now=new Date(),thisMonth=now.getFullYear()+'-'+pad(now.getMonth()+1);
-    var reqThisMonth=contatti.filter(function(c){return c.data.startsWith(thisMonth)}).length;
-    var activeStudents=studenti.filter(function(s){return s.stato==='Attivo'}).length;
-    var incassoMese=pagamenti.filter(function(p){return p.data.startsWith(thisMonth)&&p.stato==='Completato'}).reduce(function(a,b){return a+b.importo},0);
+    apiFetch('/api/stats').then(function(stats){
+        var delta=stats.contatti_mese_scorso>0?Math.round((stats.contatti_questo_mese-stats.contatti_mese_scorso)/stats.contatti_mese_scorso*100):0;
+        var deltaStr=delta>=0?'+'+delta+'% vs mese scorso':delta+'% vs mese scorso';
+        document.getElementById('dashKpi').innerHTML=
+            kpiCard('Richieste questo mese',stats.contatti_questo_mese,deltaStr,delta>=0?'up':'down')+
+            kpiCard('Studenti attivi',stats.studenti_attivi,'—','neutral')+
+            kpiCard('Incasso corsi mese','&euro; '+stats.incasso_questo_mese.toFixed(2),'—','neutral')+
+            kpiCard('Visite settimana','0','Collega Google Analytics','neutral');
 
-    document.getElementById('dashKpi').innerHTML=
-        kpiCard('Richieste questo mese',reqThisMonth,studenti.length>0?'+0% vs mese scorso':'—','neutral')+
-        kpiCard('Studenti attivi',activeStudents,studenti.length+' totali iscritti','neutral')+
-        kpiCard('Incasso corsi mese','&euro; '+incassoMese.toFixed(2),'—','neutral')+
-        kpiCard('Visite settimana','0','Collega Google Analytics','neutral');
-
-    var last5=contatti.slice(0,5);
-    var rhtml='';
-    last5.forEach(function(c){
-        rhtml+='<div class="panel-list-item"><div class="info"><h4>'+c.nome+'</h4><p>'+c.tipo+' &mdash; '+fmtDateIT(c.data)+'</p></div><span class="badge badge-'+badgeClass(c.stato)+'">'+c.stato+'</span></div>';
+        var rhtml='';
+        stats.nuovi_contatti.forEach(function(c){
+            var d=c.created_at?c.created_at.substring(0,10):'';
+            rhtml+='<div class="panel-list-item"><div class="info"><h4>'+c.nome+' '+c.cognome+'</h4><p>'+(c.tipo_locale||'—')+' &mdash; '+fmtDateIT(d)+'</p></div><span class="badge badge-'+badgeClass(c.stato)+'">'+c.stato+'</span></div>';
+        });
+        document.getElementById('dashRequests').innerHTML=rhtml||'<p style="color:#5a5a5a;font-size:.85rem">Nessuna richiesta ancora.</p>';
+    }).catch(function(e){
+        console.error('Stats API error:',e);
+        // Fallback locale
+        var contatti=getData('contatti',[]);
+        var eventi=getData('eventi',[]);
+        document.getElementById('dashKpi').innerHTML=
+            kpiCard('Richieste questo mese',contatti.length,'API offline','neutral')+
+            kpiCard('Studenti attivi','—','API offline','neutral')+
+            kpiCard('Incasso corsi mese','—','API offline','neutral')+
+            kpiCard('Visite settimana','0','Collega Google Analytics','neutral');
+        document.getElementById('dashRequests').innerHTML='<p style="color:#5a5a5a;font-size:.85rem">API non raggiungibile.</p>';
     });
-    document.getElementById('dashRequests').innerHTML=rhtml||'<p style="color:#5a5a5a;font-size:.85rem">Nessuna richiesta ancora.</p>';
 
-    var todayStr=fmtDate(now);
+    // Calendario eventi (resta locale)
+    var eventi=getData('eventi',[]);
+    var now=new Date(),todayStr=fmtDate(now);
     var upcoming=eventi.filter(function(e){return e.data>=todayStr}).sort(function(a,b){return a.data.localeCompare(b.data)||a.oraInizio.localeCompare(b.oraInizio)}).slice(0,3);
     var ahtml='';
     upcoming.forEach(function(e){
@@ -524,22 +549,38 @@ function badgeClass(stato){
 }
 
 // ============ CONTATTI ============
+var _contattiCache=[];
 function renderContatti(filtered){
-    var contatti=filtered||getData('contatti',[]);
+    if(filtered){
+        renderContattiTable(filtered);
+        return;
+    }
+    apiFetch('/api/contatti').then(function(contatti){
+        _contattiCache=contatti;
+        renderContattiTable(contatti);
+    }).catch(function(e){
+        console.error('Contatti API error:',e);
+        renderContattiTable([]);
+    });
+}
+function renderContattiTable(contatti){
     var html='';
     if(contatti.length===0){
         html='<tr><td colspan="8" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuna richiesta ricevuta ancora.</td></tr>';
     } else {
         contatti.forEach(function(c){
+            var d=c.created_at?c.created_at.substring(0,10):'';
+            var statoApi=c.stato||'nuovo';
+            var statoDisplay=statoApi.charAt(0).toUpperCase()+statoApi.slice(1).replace('_',' ');
             html+='<tr>'+
-                '<td>'+fmtDateIT(c.data)+'</td>'+
-                '<td><strong>'+c.nome+'</strong></td>'+
+                '<td>'+fmtDateIT(d)+'</td>'+
+                '<td><strong>'+c.nome+' '+(c.cognome||'')+'</strong></td>'+
                 '<td>'+c.email+'</td>'+
-                '<td>'+(c.tel||'—')+'</td>'+
-                '<td>'+c.tipo+'</td>'+
-                '<td><span class="msg-truncate">'+c.msg+'</span></td>'+
+                '<td>'+(c.telefono||'—')+'</td>'+
+                '<td>'+(c.tipo_locale||'—')+'</td>'+
+                '<td><span class="msg-truncate">'+(c.messaggio||'')+'</span></td>'+
                 '<td><select class="status-select" onchange="changeContattoStato('+c.id+',this.value)">'+
-                    statusOpts(c.stato)+
+                    statusOpts(statoApi)+
                 '</select></td>'+
                 '<td><button class="btn-action" onclick="viewContatto('+c.id+')">Leggi</button></td>'+
             '</tr>';
@@ -548,38 +589,39 @@ function renderContatti(filtered){
     document.getElementById('contattiBody').innerHTML=html;
 }
 function statusOpts(current){
-    var opts=['Nuovo','Contattato','In trattativa','Chiuso vinto','Chiuso perso'];
-    return opts.map(function(o){return '<option value="'+o+'"'+(o===current?' selected':'')+'>'+o+'</option>'}).join('');
+    var opts=[['nuovo','Nuovo'],['contattato','Contattato'],['trattativa','In trattativa'],['chiuso_vinto','Chiuso vinto'],['chiuso_perso','Chiuso perso']];
+    return opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===current?' selected':'')+'>'+o[1]+'</option>'}).join('');
 }
 function changeContattoStato(id,val){
-    var contatti=getData('contatti',[]);
-    contatti.forEach(function(c){if(c.id===id)c.stato=val});
-    setData('contatti',contatti);
-    renderDashboard();
+    apiFetch('/api/contatti/'+id,{method:'PATCH',body:JSON.stringify({stato:val})}).then(function(){
+        renderDashboard();
+        renderContatti();
+    }).catch(function(e){console.error('Update stato error:',e)});
 }
 function viewContatto(id){
-    var c=getData('contatti',[]).find(function(x){return x.id===id});
+    var c=_contattiCache.find(function(x){return x.id===id});
     if(!c)return;
-    openModal('<h3>Messaggio di '+c.nome+'</h3><p style="margin-bottom:12px;font-size:.82rem;color:#5a5a5a">'+fmtDateIT(c.data)+' &mdash; '+c.email+' &mdash; '+c.tel+'</p><p style="font-size:.92rem;line-height:1.75;color:#1a1a1a">'+c.msg+'</p>');
+    var d=c.created_at?c.created_at.substring(0,10):'';
+    openModal('<h3>Messaggio di '+c.nome+' '+(c.cognome||'')+'</h3><p style="margin-bottom:12px;font-size:.82rem;color:#5a5a5a">'+fmtDateIT(d)+' &mdash; '+c.email+' &mdash; '+(c.telefono||'—')+'</p><p style="font-size:.92rem;line-height:1.75;color:#1a1a1a">'+(c.messaggio||'')+'</p>');
 }
 function filterContatti(){
-    var contatti=getData('contatti',[]);
     var stato=document.getElementById('filterStato').value;
     var tipo=document.getElementById('filterTipo').value;
-    var data=document.getElementById('filterData').value;
-    var filtered=contatti.filter(function(c){
-        if(stato&&c.stato!==stato)return false;
-        if(tipo&&c.tipo!==tipo)return false;
-        if(data&&c.data!==data)return false;
-        return true;
-    });
-    renderContatti(filtered);
+    var params=[];
+    if(stato)params.push('stato='+encodeURIComponent(stato));
+    if(tipo)params.push('tipo_locale='+encodeURIComponent(tipo));
+    var qs=params.length?'?'+params.join('&'):'';
+    apiFetch('/api/contatti'+qs).then(function(contatti){
+        _contattiCache=contatti;
+        renderContattiTable(contatti);
+    }).catch(function(e){console.error('Filter error:',e)});
 }
 function exportCSV(){
-    var contatti=getData('contatti',[]);
-    var csv='Data,Nome,Email,Telefono,Tipo,Messaggio,Stato\n';
+    var contatti=_contattiCache;
+    var csv='Data,Nome,Cognome,Email,Telefono,Tipo,Messaggio,Stato\n';
     contatti.forEach(function(c){
-        csv+='"'+c.data+'","'+c.nome+'","'+c.email+'","'+(c.tel||'')+'","'+c.tipo+'","'+c.msg.replace(/"/g,'""')+'","'+c.stato+'"\n';
+        var d=c.created_at?c.created_at.substring(0,10):'';
+        csv+='"'+d+'","'+c.nome+'","'+(c.cognome||'')+'","'+c.email+'","'+(c.telefono||'')+'","'+(c.tipo_locale||'')+'","'+(c.messaggio||'').replace(/"/g,'""')+'","'+c.stato+'"\n';
     });
     var blob=new Blob([csv],{type:'text/csv'});
     var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='contatti_sbfood.csv';a.click();
