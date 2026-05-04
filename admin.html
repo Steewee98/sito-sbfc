@@ -986,6 +986,12 @@ function renderTraffico(){
             kpiCard('Trend','—','','neutral');
     });
 }
+
+setInterval(() => {
+    if (document.querySelector('#sec-traffico')?.style.display !== 'none') {
+        renderTraffico();
+    }
+}, 5 * 60 * 1000);
 </script>
 </body>
 </html>
