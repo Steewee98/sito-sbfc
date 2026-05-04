@@ -431,25 +431,34 @@
 /* ═══════ STRIPE CHECKOUT ═══════ */
 
 async function avviaCheckout(prodottoId) {
-    chiudiSceltaModulo();
-    var btn = event && event.target;
-    if (btn) { btn.textContent = 'Caricamento...'; btn.disabled = true; }
+    const btn = event.target;
+    btn.textContent = 'Caricamento...';
+    btn.disabled = true;
 
     try {
-        var res = await fetch(BACKEND_URL + '/api/checkout', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prodotto: prodottoId })
-        });
-        var data = await res.json();
+        const res = await fetch(
+            'https://web-production-f3794.up.railway.app/api/checkout',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prodotto: prodottoId
+                })
+            }
+        );
+        const data = await res.json();
         if (data.url) {
             window.location.href = data.url;
         } else {
-            throw new Error(data.error);
+            throw new Error(data.error || 'Errore sconosciuto');
         }
     } catch(e) {
+        console.error('Errore checkout:', e);
         alert('Errore. Riprova o contattaci a info@sbfoodconsulting.com');
-        if (btn) { btn.textContent = 'Acquista'; btn.disabled = false; }
+        btn.textContent = 'Acquista';
+        btn.disabled = false;
     }
 }
 
@@ -474,22 +483,17 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ═══════ GESTIONE RITORNO DA STRIPE ═══════ */
-(function() {
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('pagamento') === 'successo') {
-        var area = document.getElementById('area-studenti');
-        if (area) area.scrollIntoView({behavior: 'smooth'});
-        alert('Pagamento completato! Accedi con le credenziali ricevute via email.');
-    }
-    if (urlParams.get('pagamento') === 'annullato') {
-        alert('Pagamento annullato. Puoi riprovare quando vuoi.');
-    }
-    // Pulisci URL
-    if (urlParams.get('pagamento')) {
-        var cleanUrl = window.location.pathname + window.location.hash;
-        window.history.replaceState({}, '', cleanUrl);
-    }
-})();
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('pagamento') === 'successo') {
+    setTimeout(() => {
+        document.getElementById('area-studenti')
+            ?.scrollIntoView({behavior: 'smooth'});
+    }, 500);
+    alert('Pagamento completato! Controlla la tua email per le credenziali di accesso.');
+}
+if (urlParams.get('pagamento') === 'annullato') {
+    alert('Pagamento annullato. Puoi riprovare quando vuoi.');
+}
 </script>
 <script type="application/ld+json">
 {
