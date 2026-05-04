@@ -180,17 +180,27 @@ document.addEventListener('DOMContentLoaded', function () {
 var BACKEND_URL = 'https://web-production-f3794.up.railway.app';
 
 /* ═══════ PAGE TRACKING ═══════ */
-function trackPagina() {
-    fetch(BACKEND_URL + '/api/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            pagina: window.location.pathname,
-            referrer: document.referrer
-        })
-    }).catch(function() {});
+async function trackPagina() {
+    try {
+        const res = await fetch(
+            'https://web-production-f3794.up.railway.app/api/track',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pagina: window.location.pathname,
+                    referrer: document.referrer
+                })
+            }
+        );
+        const data = await res.json();
+        console.log('Track OK:', data, window.location.pathname);
+    } catch(e) {
+        console.error('Track ERRORE:', e);
+    }
 }
-trackPagina();
+
+document.addEventListener('DOMContentLoaded', trackPagina);
 
 function handleLogin() {
     var email = document.getElementById('login-email');
