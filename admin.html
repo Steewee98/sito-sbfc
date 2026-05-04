@@ -185,6 +185,30 @@ tr:hover td{background:#fafaf8}
     table{min-width:700px}
     .side-panel{width:100%;right:-100%}
 }
+
+.realtime-card {
+    background: #fff;
+    border: 1px solid #d9d4cc;
+    border-left: 4px solid #2ecc71;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.realtime-dot {
+    width: 10px;
+    height: 10px;
+    background: #2ecc71;
+    border-radius: 50%;
+    animation: pulse-green 2s infinite;
+    flex-shrink: 0;
+}
+
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(46,204,113,0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(46,204,113,0); }
+    100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
+}
 </style>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-dark-32x32.png" media="(prefers-color-scheme: light)">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-dark-16x16.png" media="(prefers-color-scheme: light)">
@@ -372,6 +396,18 @@ tr:hover td{background:#fafaf8}
                 <option value="90d">Ultimi 90 giorni</option>
             </select>
         </div>
+    </div>
+    <div class="realtime-card" id="realtime-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+            <div class="realtime-dot"></div>
+            <span style="font-size:0.85rem;font-weight:600;color:#1a1a1a;text-transform:uppercase;letter-spacing:0.05em">In tempo reale</span>
+            <span id="realtime-updated" style="font-size:0.75rem;color:#a0a0a0;margin-left:auto"></span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:16px">
+            <span id="realtime-count" style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:#37393f">0</span>
+            <span style="color:#5a5a5a;font-size:0.9rem">visitatori negli ultimi 5 minuti</span>
+        </div>
+        <div id="realtime-pagine" style="display:flex;flex-wrap:wrap;gap:8px"></div>
     </div>
     <div class="kpi-grid" id="trafficoKpi"></div>
     <div class="chart-wrap">
@@ -992,6 +1028,56 @@ setInterval(() => {
         renderTraffico();
     }
 }, 5 * 60 * 1000);
+
+// ============ REALTIME VISITORS ============
+
+async function aggiornaRealtime() {
+    try {
+        const data = await apiFetch('/api/analytics/realtime');
+
+        document.getElementById('realtime-count')
+            .textContent = data.visitatori_attivi;
+
+        const pagineEl = document.getElementById('realtime-pagine');
+        const nomiPagine = {
+            '/': 'Home',
+            '/chi-siamo.html': 'Chi siamo',
+            '/servizi.html': 'Servizi',
+            '/percorso-sb.html': 'Percorso SB',
+            '/academy.html': 'Academy',
+            '/clienti.html': 'Clienti',
+            '/contatti.html': 'Contatti'
+        };
+
+        if (data.pagine_attive.length > 0) {
+            pagineEl.innerHTML = data.pagine_attive.map(p => `
+                <span style="background:#f5f2ee;border:1px solid #d9d4cc;border-radius:20px;padding:4px 12px;font-size:0.78rem;color:#37393f">
+                ${nomiPagine[p.pagina] || p.pagina} <strong>${p.visite}</strong>
+                </span>
+            `).join('');
+        } else {
+            pagineEl.innerHTML = '<span style="color:#a0a0a0;font-size:0.85rem">Nessun visitatore attivo</span>';
+        }
+
+        document.getElementById('realtime-updated')
+            .textContent = 'aggiornato ora';
+
+    } catch(e) {
+        console.error('Errore realtime:', e);
+    }
+}
+
+// Aggiorna ogni 30 secondi automaticamente
+aggiornaRealtime();
+setInterval(aggiornaRealtime, 30000);
+
+// Aggiorna anche quando si apre la sezione traffico
+document.addEventListener('DOMContentLoaded', () => {
+    const trafficoBtn = document.querySelector('[data-section="traffico"]');
+    if (trafficoBtn) {
+        trafficoBtn.addEventListener('click', aggiornaRealtime);
+    }
+});
 </script>
 </body>
 </html>
