@@ -250,9 +250,9 @@ tr:hover td{background:#fafaf8}
             <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             Pagamenti Stripe
         </div>
-        <div class="sidebar-item" data-section="statistiche">
-            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            Statistiche sito
+        <div class="sidebar-item" data-section="traffico">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            Traffico sito
         </div>
     </div>
 </aside>
@@ -358,36 +358,46 @@ tr:hover td{background:#fafaf8}
     </div>
 </section>
 
-<!-- ========== STATISTICHE ========== -->
-<section class="admin-section" id="sec-statistiche">
-    <div class="section-header">
-        <h2>Statistiche sito</h2>
-        <p>Panoramica traffico e performance</p>
-    </div>
-    <div class="note-box">
-        Collega Google Analytics 4 inserendo il tuo Measurement ID nel campo qui sotto per dati in tempo reale.
-        <div class="ga-input-row">
-            <input type="text" id="gaId" placeholder="G-XXXXXXXXXX">
-            <button class="btn-sm" onclick="saveGA()">Salva</button>
+<!-- ========== TRAFFICO SITO ========== -->
+<section class="admin-section" id="sec-traffico">
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+            <h2>Traffico sito</h2>
+            <p>Tracking interno delle visite</p>
+        </div>
+        <div class="table-filters" style="border:none;padding:0">
+            <select id="filterTrafficoPeriodo" onchange="renderTraffico()">
+                <option value="7d">Ultimi 7 giorni</option>
+                <option value="30d" selected>Ultimi 30 giorni</option>
+                <option value="90d">Ultimi 90 giorni</option>
+            </select>
         </div>
     </div>
-    <div class="kpi-grid" id="statKpi"></div>
+    <div class="kpi-grid" id="trafficoKpi"></div>
     <div class="chart-wrap">
-        <h3>Visite giornaliere — ultimi 30 giorni</h3>
+        <h3>Visite giornaliere</h3>
         <canvas id="visitChart" height="80"></canvas>
     </div>
     <div class="two-col-layout">
-        <div class="table-wrap">
-            <table>
-                <thead><tr><th>Pagina</th><th>Visite</th><th>Tempo medio</th><th>Rimbalzo</th></tr></thead>
+        <div class="panel">
+            <h3>Pagine più visitate</h3>
+            <table style="width:100%">
+                <thead><tr><th>Pagina</th><th>Visite</th><th>%</th></tr></thead>
                 <tbody id="pagesBody"></tbody>
             </table>
         </div>
-        <div class="table-wrap">
-            <table>
-                <thead><tr><th>Sorgente</th><th>%</th><th></th></tr></thead>
-                <tbody id="trafficBody"></tbody>
-            </table>
+        <div>
+            <div class="panel" style="margin-bottom:24px">
+                <h3>Dispositivi</h3>
+                <canvas id="deviceChart" height="200"></canvas>
+            </div>
+            <div class="panel">
+                <h3>Sorgenti di traffico</h3>
+                <table style="width:100%">
+                    <thead><tr><th>Sorgente</th><th>Visite</th></tr></thead>
+                    <tbody id="trafficBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>
@@ -502,7 +512,7 @@ function initAll(){
     renderStudenti();
     renderCalendar();
     renderPagamenti();
-    renderStatistiche();
+    renderTraffico();
 }
 
 // ============ DASHBOARD ============
@@ -514,7 +524,22 @@ function renderDashboard(){
             kpiCard('Richieste questo mese',stats.contatti_questo_mese,deltaStr,delta>=0?'up':'down')+
             kpiCard('Studenti attivi',stats.studenti_attivi,'—','neutral')+
             kpiCard('Incasso corsi mese','&euro; '+stats.incasso_questo_mese.toFixed(2),'—','neutral')+
-            kpiCard('Visite settimana','0','Collega Google Analytics','neutral');
+            kpiCard('Visite settimana','...','caricamento','neutral');
+
+        // Carica visite settimana dalla API analytics
+        apiFetch('/api/analytics?periodo=7d').then(function(ad){
+            var el=document.querySelectorAll('#dashKpi .kpi-card');
+            if(el[3]){
+                el[3].querySelector('.kpi-value').textContent=ad.visite_totali;
+                var tStr=ad.trend>=0?'+'+ad.trend+'% vs sett. prec.':ad.trend+'% vs sett. prec.';
+                var tDir=ad.trend>0?'up':ad.trend<0?'down':'neutral';
+                var tEl=el[3].querySelector('.kpi-trend');
+                tEl.textContent=tStr;tEl.className='kpi-trend '+tDir;
+            }
+        }).catch(function(){
+            var el=document.querySelectorAll('#dashKpi .kpi-card');
+            if(el[3])el[3].querySelector('.kpi-value').textContent='0';
+        });
 
         var rhtml='';
         stats.nuovi_contatti.forEach(function(c){
@@ -531,7 +556,7 @@ function renderDashboard(){
             kpiCard('Richieste questo mese',contatti.length,'API offline','neutral')+
             kpiCard('Studenti attivi','—','API offline','neutral')+
             kpiCard('Incasso corsi mese','—','API offline','neutral')+
-            kpiCard('Visite settimana','0','Collega Google Analytics','neutral');
+            kpiCard('Visite settimana','—','API offline','neutral');
         document.getElementById('dashRequests').innerHTML='<p style="color:#5a5a5a;font-size:.85rem">API non raggiungibile.</p>';
     });
 
@@ -868,67 +893,98 @@ function filterPagamenti(){
     renderPagamenti(filtered);
 }
 
-// ============ STATISTICHE ============
-function renderStatistiche(){
-    var gaId=localStorage.getItem('sb_admin_gaId')||'';
-    if(gaId)document.getElementById('gaId').value=gaId;
+// ============ TRAFFICO SITO ============
+var _nomiPagine={'/':'Home','/index.html':'Home','/chi-siamo.html':'Chi siamo','/servizi.html':'Servizi','/percorso-sb.html':'Percorso SB','/academy.html':'Academy','/clienti.html':'Clienti','/contatti.html':'Contatti'};
+function nomePagina(p){return _nomiPagine[p]||p}
 
-    document.getElementById('statKpi').innerHTML=
-        kpiCard('Visite settimana','0','Collega Google Analytics','neutral')+
-        kpiCard('Pagine viste','0','—','neutral')+
-        kpiCard('Durata media','0m 00s','—','neutral')+
-        kpiCard('Tasso rimbalzo','0%','—','neutral');
-
-    // Pages table
-    var pages=[
-        {p:'Home',v:0,t:'0m 00s',r:'0%'},
-        {p:'Servizi',v:0,t:'0m 00s',r:'0%'},
-        {p:'Academy',v:0,t:'0m 00s',r:'0%'},
-        {p:'Chi siamo',v:0,t:'0m 00s',r:'0%'},
-        {p:'Contatti',v:0,t:'0m 00s',r:'0%'},
-        {p:'Clienti',v:0,t:'0m 00s',r:'0%'}
-    ];
-    var phtml='';
-    pages.forEach(function(pg){
-        phtml+='<tr><td>'+pg.p+'</td><td>'+pg.v+'</td><td>'+pg.t+'</td><td>'+pg.r+'</td></tr>';
-    });
-    document.getElementById('pagesBody').innerHTML=phtml;
-
-    // Traffic table
-    var traffic=[
-        {s:'Organico',pct:0,c:'#27ae60'},
-        {s:'Diretto',pct:0,c:'#2e6bc4'},
-        {s:'Social',pct:0,c:'#c4622d'},
-        {s:'Referral',pct:0,c:'#8e44ad'},
-        {s:'Email',pct:0,c:'#f39c12'}
-    ];
-    var thtml='';
-    traffic.forEach(function(t){
-        thtml+='<tr><td>'+t.s+'</td><td>'+t.pct+'%</td><td style="width:50%"><div class="traffic-bar"><span style="width:'+t.pct+'%;background:'+t.c+'"></span></div></td></tr>';
-    });
-    document.getElementById('trafficBody').innerHTML=thtml;
-
-    // Chart
-    var ctx=document.getElementById('visitChart');
-    if(ctx&&typeof Chart!=='undefined'){
-        var labels=[];var data=[];
-        for(var i=29;i>=0;i--){
-            var d=daysAgo(i);
-            labels.push(pad(d.getDate())+'/'+pad(d.getMonth()+1));
-            data.push(0);
-        }
-        if(window._visitChart)window._visitChart.destroy();
-        window._visitChart=new Chart(ctx,{
-            type:'line',
-            data:{labels:labels,datasets:[{label:'Visite',data:data,borderColor:'#c4622d',backgroundColor:'rgba(196,98,45,0.08)',tension:0.3,fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2}]},
-            options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#f0ece7'}},x:{grid:{display:false},ticks:{maxTicksLimit:10,font:{size:11}}}}}
-        });
-    }
+function nomeReferrer(r){
+    if(!r||r==='')return 'Diretto';
+    var rl=r.toLowerCase();
+    if(rl.indexOf('google')!==-1)return 'Google';
+    if(rl.indexOf('instagram')!==-1)return 'Instagram';
+    if(rl.indexOf('linkedin')!==-1)return 'LinkedIn';
+    if(rl.indexOf('facebook')!==-1)return 'Facebook';
+    if(rl.indexOf('t.co')!==-1)return 'Twitter/X';
+    try{return new URL(r).hostname}catch(e){return r}
 }
-function saveGA(){
-    var v=document.getElementById('gaId').value.trim();
-    localStorage.setItem('sb_admin_gaId',v);
-    alert('Measurement ID salvato: '+v);
+
+function renderTraffico(){
+    var periodo=document.getElementById('filterTrafficoPeriodo')?document.getElementById('filterTrafficoPeriodo').value:'30d';
+    apiFetch('/api/analytics?periodo='+periodo).then(function(data){
+        // KPI
+        var trendStr=data.trend>=0?'+'+data.trend+'% vs periodo prec.':data.trend+'% vs periodo prec.';
+        var trendDir=data.trend>0?'up':data.trend<0?'down':'neutral';
+        var topPage=data.pagine_top.length?nomePagina(data.pagine_top[0].pagina):'—';
+        document.getElementById('trafficoKpi').innerHTML=
+            kpiCard('Visite totali',data.visite_totali,trendStr,trendDir)+
+            kpiCard('Visitatori unici',data.visitatori_unici,'per IP hash','neutral')+
+            kpiCard('Pagina più visitata',topPage,data.pagine_top.length?data.pagine_top[0].visite+' visite':'','neutral')+
+            kpiCard('Trend',data.trend+'%','vs periodo precedente',trendDir);
+
+        // Line chart
+        var ctx=document.getElementById('visitChart');
+        if(ctx&&typeof Chart!=='undefined'){
+            var labels=[];var chartData=[];
+            data.visite_giornaliere.forEach(function(v){
+                var parts=v.data.split('-');
+                labels.push(parts[2]+'/'+parts[1]);
+                chartData.push(v.visite);
+            });
+            if(window._visitChart)window._visitChart.destroy();
+            window._visitChart=new Chart(ctx,{
+                type:'line',
+                data:{labels:labels,datasets:[{label:'Visite',data:chartData,borderColor:'#c4622d',backgroundColor:'rgba(196,98,45,0.08)',tension:0.3,fill:true,pointRadius:2,pointHoverRadius:5,borderWidth:2}]},
+                options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#f0ece7'}},x:{grid:{display:false},ticks:{maxTicksLimit:15,font:{size:11}}}}}
+            });
+        }
+
+        // Pages table
+        var phtml='';
+        if(data.pagine_top.length===0){
+            phtml='<tr><td colspan="3" style="text-align:center;padding:24px;color:#5a5a5a;font-size:.85rem">Nessun dato ancora.</td></tr>';
+        } else {
+            data.pagine_top.forEach(function(p){
+                var pct=data.visite_totali>0?Math.round(p.visite/data.visite_totali*100):0;
+                phtml+='<tr><td><strong>'+nomePagina(p.pagina)+'</strong><br><span style="font-size:.75rem;color:#888">'+p.pagina+'</span></td><td>'+p.visite+'</td><td>'+pct+'%</td></tr>';
+            });
+        }
+        document.getElementById('pagesBody').innerHTML=phtml;
+
+        // Device pie chart
+        var dctx=document.getElementById('deviceChart');
+        if(dctx&&typeof Chart!=='undefined'){
+            var dLabels=[];var dData=[];var dColors=['#c4622d','#37393f','#27ae60'];
+            data.dispositivi.forEach(function(d,i){
+                var lbl=d.tipo.charAt(0).toUpperCase()+d.tipo.slice(1);
+                dLabels.push(lbl);dData.push(d.count);
+            });
+            if(window._deviceChart)window._deviceChart.destroy();
+            window._deviceChart=new Chart(dctx,{
+                type:'doughnut',
+                data:{labels:dLabels,datasets:[{data:dData,backgroundColor:dColors.slice(0,dData.length),borderWidth:2,borderColor:'#fff'}]},
+                options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:12},padding:16}}}}
+            });
+        }
+
+        // Sources table
+        var thtml='';
+        if(data.sorgenti.length===0){
+            thtml='<tr><td colspan="2" style="text-align:center;padding:24px;color:#5a5a5a;font-size:.85rem">Nessun referrer registrato.</td></tr>';
+        } else {
+            data.sorgenti.forEach(function(s){
+                thtml+='<tr><td>'+nomeReferrer(s.referrer)+'</td><td>'+s.count+'</td></tr>';
+            });
+        }
+        document.getElementById('trafficBody').innerHTML=thtml;
+
+    }).catch(function(e){
+        console.error('Analytics API error:',e);
+        document.getElementById('trafficoKpi').innerHTML=
+            kpiCard('Visite totali','—','API non raggiungibile','neutral')+
+            kpiCard('Visitatori unici','—','','neutral')+
+            kpiCard('Pagina più visitata','—','','neutral')+
+            kpiCard('Trend','—','','neutral');
+    });
 }
 </script>
 </body>

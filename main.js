@@ -179,6 +179,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
 var BACKEND_URL = 'https://web-production-f3794.up.railway.app';
 
+/* ═══════ PAGE TRACKING ═══════ */
+function trackPagina() {
+    fetch(BACKEND_URL + '/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            pagina: window.location.pathname,
+            referrer: document.referrer
+        })
+    }).catch(function() {});
+}
+trackPagina();
+
 function handleLogin() {
     var email = document.getElementById('login-email');
     var password = document.getElementById('login-password');
