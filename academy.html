@@ -208,7 +208,7 @@
                     <li>Video + slides + podcast</li>
                     <li>Accesso illimitato</li>
                 </ul>
-                <button onclick="apriSceltaModulo()" class="btn btn-outline-dark" style="width:100%">Scegli un modulo</button>
+                <button onclick="apriSceltaModulo()" class="btn btn-outline-dark" style="width:100%;cursor:pointer">Scegli un modulo</button>
             </div>
             <div class="pricing-card pricing-card--dark" data-reveal data-reveal-delay="150">
                 <div class="pricing-badge">Consigliato</div>
@@ -221,7 +221,7 @@
                     <li>Aggiornamenti futuri inclusi</li>
                     <li>Risparmio rispetto ai singoli</li>
                 </ul>
-                <button onclick="acquistaModulo('corso_completo')" class="btn btn-primary" style="width:100%">Inizia ora</button>
+                <button onclick="avviaCheckout('corso-completo')" class="btn btn-primary" style="width:100%;cursor:pointer">Inizia ora</button>
             </div>
         </div>
 
@@ -233,23 +233,23 @@
                     <button onclick="chiudiSceltaModulo()" style="background:none;border:none;color:var(--ivory);font-size:1.5rem;cursor:pointer;line-height:1">&times;</button>
                 </div>
                 <div style="padding:24px 32px">
-                    <div onclick="acquistaModulo('modulo_1')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                    <div onclick="avviaCheckout('modulo-1')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
                         <div><strong style="color:var(--ink)">01</strong> <span style="color:var(--ink);margin-left:8px">Hai davvero il controllo del tuo ristorante?</span></div>
                         <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
                     </div>
-                    <div onclick="acquistaModulo('modulo_2')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                    <div onclick="avviaCheckout('modulo-2')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
                         <div><strong style="color:var(--ink)">02</strong> <span style="color:var(--ink);margin-left:8px">Stai pagando per i risultati giusti?</span></div>
                         <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
                     </div>
-                    <div onclick="acquistaModulo('modulo_3')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                    <div onclick="avviaCheckout('modulo-3')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
                         <div><strong style="color:var(--ink)">03</strong> <span style="color:var(--ink);margin-left:8px">Cosa ti blocca dal crescere?</span></div>
                         <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
                     </div>
-                    <div onclick="acquistaModulo('modulo_4')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                    <div onclick="avviaCheckout('modulo-4')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
                         <div><strong style="color:var(--ink)">04</strong> <span style="color:var(--ink);margin-left:8px">L'Arte di Accogliere nel Food</span></div>
                         <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
                     </div>
-                    <div onclick="acquistaModulo('modulo_5')" style="padding:14px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                    <div onclick="avviaCheckout('modulo-5')" style="padding:14px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
                         <div><strong style="color:var(--ink)">05</strong> <span style="color:var(--ink);margin-left:8px">Come prepararsi al lancio del tuo locale</span></div>
                         <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
                     </div>
@@ -281,7 +281,7 @@
             </div>
             <div id="login-error" style="display:none;color:var(--accent);font-size:0.85rem;margin-bottom:16px"></div>
             <button onclick="handleLogin()" class="btn btn-primary" style="width:100%">Accedi</button>
-            <p class="ac-login-note">Non hai ancora un account? <a href="#" onclick="acquistaModulo('corso_completo');return false">Acquista il corso</a></p>
+            <p class="ac-login-note">Non hai ancora un account? <a href="#" onclick="avviaCheckout('corso-completo');return false">Acquista il corso</a></p>
         </div>
 
         <!-- AREA CORSI -->
@@ -316,7 +316,7 @@
                 <div class="modulo-row" id="modulo-row-1">
                     <div class="modulo-row-header">
                         <div class="modulo-row-info"><span class="modulo-numero">01</span><div><h4>Hai davvero il controllo del tuo ristorante?</h4><p>4 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast</p></div></div>
-                        <div class="modulo-row-status" id="status-1"><span class="badge-locked">Bloccato</span><button onclick="acquistaModulo('modulo_1')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
+                        <div class="modulo-row-status" id="status-1"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-1')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
                     </div>
                     <div class="modulo-row-contenuti" id="contenuti-1" style="display:none">
                         <div class="lezione-item" onclick="apriLezione(1,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
@@ -329,7 +329,7 @@
                 <div class="modulo-row" id="modulo-row-2">
                     <div class="modulo-row-header">
                         <div class="modulo-row-info"><span class="modulo-numero">02</span><div><h4>Stai pagando per i risultati giusti?</h4><p>4 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast</p></div></div>
-                        <div class="modulo-row-status" id="status-2"><span class="badge-locked">Bloccato</span><button onclick="acquistaModulo('modulo_2')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
+                        <div class="modulo-row-status" id="status-2"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-2')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
                     </div>
                     <div class="modulo-row-contenuti" id="contenuti-2" style="display:none">
                         <div class="lezione-item" onclick="apriLezione(2,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
@@ -342,7 +342,7 @@
                 <div class="modulo-row" id="modulo-row-3">
                     <div class="modulo-row-header">
                         <div class="modulo-row-info"><span class="modulo-numero">03</span><div><h4>Cosa ti blocca dal crescere?</h4><p>4 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast</p></div></div>
-                        <div class="modulo-row-status" id="status-3"><span class="badge-locked">Bloccato</span><button onclick="acquistaModulo('modulo_3')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
+                        <div class="modulo-row-status" id="status-3"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-3')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
                     </div>
                     <div class="modulo-row-contenuti" id="contenuti-3" style="display:none">
                         <div class="lezione-item" onclick="apriLezione(3,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
@@ -355,7 +355,7 @@
                 <div class="modulo-row" id="modulo-row-4">
                     <div class="modulo-row-header">
                         <div class="modulo-row-info"><span class="modulo-numero">04</span><div><h4>L'Arte di Accogliere nel Food</h4><p>4 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast</p></div></div>
-                        <div class="modulo-row-status" id="status-4"><span class="badge-locked">Bloccato</span><button onclick="acquistaModulo('modulo_4')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
+                        <div class="modulo-row-status" id="status-4"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-4')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
                     </div>
                     <div class="modulo-row-contenuti" id="contenuti-4" style="display:none">
                         <div class="lezione-item" onclick="apriLezione(4,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
@@ -368,7 +368,7 @@
                 <div class="modulo-row" id="modulo-row-5">
                     <div class="modulo-row-header">
                         <div class="modulo-row-info"><span class="modulo-numero">05</span><div><h4>Come prepararsi al lancio del tuo locale</h4><p>4 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast</p></div></div>
-                        <div class="modulo-row-status" id="status-5"><span class="badge-locked">Bloccato</span><button onclick="acquistaModulo('modulo_5')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
+                        <div class="modulo-row-status" id="status-5"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-5')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
                     </div>
                     <div class="modulo-row-contenuti" id="contenuti-5" style="display:none">
                         <div class="lezione-item" onclick="apriLezione(5,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
@@ -401,7 +401,7 @@
         <span class="label" data-reveal>Pronto a iniziare?</span>
         <h2 class="ed-cta-title" data-reveal data-reveal-delay="50">Smetti di<br>improvvisare.</h2>
         <p class="ed-cta-sub" data-reveal data-reveal-delay="100">Inizia oggi con il corso completo o scegli il modulo più urgente.</p>
-        <button onclick="acquistaModulo('corso_completo')" class="btn btn-primary" data-reveal data-reveal-delay="150">Inizia ora</button>
+        <button onclick="avviaCheckout('corso-completo')" class="btn btn-primary" data-reveal data-reveal-delay="150">Inizia ora</button>
     </div>
 </section>
 
@@ -430,29 +430,27 @@
 <script>
 /* ═══════ STRIPE CHECKOUT ═══════ */
 
-function acquistaModulo(prodottoId) {
+async function avviaCheckout(prodottoId) {
     chiudiSceltaModulo();
     var btn = event && event.target;
-    if (btn) { btn.disabled = true; btn.textContent = 'Caricamento...'; }
+    if (btn) { btn.textContent = 'Caricamento...'; btn.disabled = true; }
 
-    fetch(BACKEND_URL + '/api/pagamenti/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prodotto: prodottoId })
-    })
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
+    try {
+        var res = await fetch(BACKEND_URL + '/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prodotto: prodottoId })
+        });
+        var data = await res.json();
         if (data.url) {
             window.location.href = data.url;
         } else {
-            alert(data.error || 'Errore nella creazione del pagamento.');
-            if (btn) { btn.disabled = false; btn.textContent = btn.dataset.originalText || 'Acquista'; }
+            throw new Error(data.error);
         }
-    })
-    .catch(function() {
-        alert('Errore di connessione. Riprova.');
-        if (btn) { btn.disabled = false; btn.textContent = btn.dataset.originalText || 'Acquista'; }
-    });
+    } catch(e) {
+        alert('Errore. Riprova o contattaci a info@sbfoodconsulting.com');
+        if (btn) { btn.textContent = 'Acquista'; btn.disabled = false; }
+    }
 }
 
 function apriSceltaModulo() {
@@ -475,33 +473,22 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') chiudiSceltaModulo();
 });
 
-/* ═══════ PAYMENT SUCCESS/CANCEL BANNER ═══════ */
+/* ═══════ GESTIONE RITORNO DA STRIPE ═══════ */
 (function() {
-    var params = new URLSearchParams(window.location.search);
-    var stato = params.get('pagamento');
-    if (!stato) return;
-
-    var banner = document.createElement('div');
-    banner.style.cssText = 'position:fixed;top:0;left:0;width:100%;z-index:10000;padding:16px 24px;text-align:center;font-size:0.95rem;font-weight:500;animation:slideDown 0.4s ease';
-
-    if (stato === 'successo') {
-        banner.style.background = '#2d6a4f';
-        banner.style.color = '#fff';
-        banner.innerHTML = 'Pagamento completato! Riceverai le credenziali di accesso via email. <button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;margin-left:16px;vertical-align:middle">&times;</button>';
-    } else if (stato === 'annullato') {
-        banner.style.background = '#c4622d';
-        banner.style.color = '#fff';
-        banner.innerHTML = 'Pagamento annullato. Puoi riprovare quando vuoi. <button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;margin-left:16px;vertical-align:middle">&times;</button>';
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('pagamento') === 'successo') {
+        var area = document.getElementById('area-studenti');
+        if (area) area.scrollIntoView({behavior: 'smooth'});
+        alert('Pagamento completato! Accedi con le credenziali ricevute via email.');
     }
-
-    document.body.prepend(banner);
-
-    // Rimuovi parametro dall'URL senza reload
-    var cleanUrl = window.location.pathname + window.location.hash;
-    window.history.replaceState({}, '', cleanUrl);
-
-    // Auto-dismiss dopo 8 secondi
-    setTimeout(function() { if (banner.parentElement) banner.remove(); }, 8000);
+    if (urlParams.get('pagamento') === 'annullato') {
+        alert('Pagamento annullato. Puoi riprovare quando vuoi.');
+    }
+    // Pulisci URL
+    if (urlParams.get('pagamento')) {
+        var cleanUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, '', cleanUrl);
+    }
 })();
 </script>
 <script type="application/ld+json">
