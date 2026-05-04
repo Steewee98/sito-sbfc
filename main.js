@@ -177,10 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /* ═══════════ ACADEMY LOGIN SYSTEM ═══════════ */
 
-var utenti = {
-    'demo@sbfoodacademy.com': { password: 'sbfood2025', nome: 'Utente Demo', moduli: [1,2,3,4,5] },
-    'modulo1@test.com': { password: 'test123', nome: 'Studente', moduli: [1] }
-};
+var BACKEND_URL = 'https://web-production-f3794.up.railway.app';
 
 function handleLogin() {
     var email = document.getElementById('login-email');
@@ -196,14 +193,25 @@ function handleLogin() {
         return;
     }
 
-    var utente = utenti[emailVal];
-    if (!utente || utente.password !== passVal) {
-        if (errorEl) { errorEl.textContent = 'Credenziali non corrette. Controlla email e password.'; errorEl.style.display = 'block'; }
-        return;
-    }
+    if (errorEl) { errorEl.style.display = 'none'; }
 
-    localStorage.setItem('sb_user', JSON.stringify({ email: emailVal, nome: utente.nome, moduli: utente.moduli }));
-    mostraAreaCorsi();
+    fetch(BACKEND_URL + '/api/studenti/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailVal, password: passVal })
+    })
+    .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+    .then(function(result) {
+        if (!result.ok || !result.data.success) {
+            if (errorEl) { errorEl.textContent = result.data.error || 'Credenziali non corrette.'; errorEl.style.display = 'block'; }
+            return;
+        }
+        localStorage.setItem('sb_user', JSON.stringify({ email: emailVal, nome: result.data.nome, moduli: result.data.moduli }));
+        mostraAreaCorsi();
+    })
+    .catch(function() {
+        if (errorEl) { errorEl.textContent = 'Errore di connessione. Riprova.'; errorEl.style.display = 'block'; }
+    });
 }
 
 function handleLogout() {
