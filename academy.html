@@ -431,7 +431,26 @@
 /* ═══════ STRIPE CHECKOUT ═══════ */
 
 async function avviaCheckout(prodottoId) {
+    // Se l'utente è già loggato usa la sua email
+    const userData = JSON.parse(
+        localStorage.getItem('sb_user') || 'null');
+
+    let emailCliente = userData?.email || null;
+
+    // Se non loggato chiedi l'email prima del checkout
+    if (!emailCliente) {
+        emailCliente = prompt(
+            'Inserisci la tua email per ricevere ' +
+            'le credenziali di accesso al corso:'
+        );
+        if (!emailCliente || !emailCliente.includes('@')) {
+            alert('Email non valida. Inserisci una email corretta.');
+            return;
+        }
+    }
+
     const btn = event.target;
+    const testoOriginale = btn.textContent;
     btn.textContent = 'Caricamento...';
     btn.disabled = true;
 
@@ -444,7 +463,8 @@ async function avviaCheckout(prodottoId) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    prodotto: prodottoId
+                    prodotto: prodottoId,
+                    email: emailCliente
                 })
             }
         );
@@ -456,8 +476,9 @@ async function avviaCheckout(prodottoId) {
         }
     } catch(e) {
         console.error('Errore checkout:', e);
-        alert('Errore. Riprova o contattaci a info@sbfoodconsulting.com');
-        btn.textContent = 'Acquista';
+        alert('Errore. Riprova o contattaci a ' +
+              'info@sbfoodconsulting.com');
+        btn.textContent = testoOriginale;
         btn.disabled = false;
     }
 }
