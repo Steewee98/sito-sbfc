@@ -74,6 +74,17 @@ input,select,textarea{font-family:'Inter',sans-serif}
 
 /* TWO COL LAYOUT */
 .two-col-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.dash-two-col{display:grid;grid-template-columns:3fr 2fr;gap:24px;margin-bottom:0}
+.dash-stat-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f0ece7}
+.dash-stat-row:last-child{border-bottom:none}
+.dash-stat-label{font-size:.85rem;color:#5a5a5a}
+.dash-stat-value{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:#37393f}
+.dash-page-bar{margin-bottom:14px}
+.dash-page-bar .page-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.dash-page-bar .page-name{font-size:.85rem;font-weight:600;color:#1a1a1a}
+.dash-page-bar .page-count{font-size:.78rem;color:#5a5a5a}
+.dash-page-bar .bar-bg{height:6px;background:#f0ece7;border-radius:3px;overflow:hidden}
+.dash-page-bar .bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
 .panel{background:#fff;border-radius:6px;border:1px solid #e8e4df;padding:24px}
 .panel h3{font-size:1.05rem;color:#37393f;margin-bottom:16px;font-family:'Inter',sans-serif;font-weight:600}
 .panel-list-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f0ece7}
@@ -176,6 +187,7 @@ tr:hover td{background:#fafaf8}
 @media(max-width:1024px){
     .kpi-grid{grid-template-columns:repeat(2,1fr)}
     .two-col-layout{grid-template-columns:1fr}
+    .dash-two-col{grid-template-columns:1fr}
 }
 @media(max-width:768px){
     .admin-sidebar{display:none}
@@ -290,15 +302,56 @@ tr:hover td{background:#fafaf8}
         <h2>Dashboard</h2>
         <p>Panoramica generale</p>
     </div>
-    <div class="kpi-grid" id="dashKpi"></div>
-    <div class="two-col-layout">
+
+    <!-- RIGA 1 — KPI PRINCIPALI -->
+    <div class="kpi-grid" id="dashKpi">
+        <div class="kpi-card"><div class="kpi-label">Visitatori oggi</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
+        <div class="kpi-card"><div class="kpi-label">Contatti questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
+        <div class="kpi-card"><div class="kpi-label">Acquisti questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
+        <div class="kpi-card"><div class="kpi-label">Incasso questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
+    </div>
+
+    <!-- RIGA 2 — DUE COLONNE -->
+    <div class="dash-two-col">
+        <!-- Colonna sinistra 60% — TRAFFICO -->
         <div class="panel">
-            <h3>Ultime richieste</h3>
-            <div id="dashRequests"></div>
+            <h3>Traffico sito — ultimi 7 giorni</h3>
+            <div class="chart-container">
+                <canvas id="dashVisitChart" height="220"></canvas>
+            </div>
+            <div id="dashTopPages" style="margin-top:20px"></div>
         </div>
+        <!-- Colonna destra 40% — ACADEMY -->
         <div class="panel">
-            <h3>Prossimi appuntamenti</h3>
-            <div id="dashAppointments"></div>
+            <h3>Academy</h3>
+            <div id="dashAcademy" style="margin-bottom:20px"></div>
+            <div class="chart-container" style="max-width:240px;margin:0 auto">
+                <canvas id="dashModuliChart" height="240"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGA 3 — ULTIMI CONTATTI -->
+    <div class="panel" style="margin-top:24px">
+        <h3>Ultimi contatti</h3>
+        <div class="table-wrap" style="border:none">
+            <table>
+                <thead><tr><th>Nome</th><th>Tipo locale</th><th>Data</th><th>Stato</th><th>Azione</th></tr></thead>
+                <tbody id="dashLastContacts"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- RIGA 4 — CONSIGLI AI -->
+    <div style="background:#fff;border:1px solid #d9d4cc;border-top:3px solid #c4622d;border-radius:4px;padding:24px;margin-top:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+            <span style="font-size:1.2rem">&#10022;</span>
+            <h3 style="margin:0;font-family:'Playfair Display',serif;font-size:1.1rem;color:#1a1a1a">Suggerimenti AI</h3>
+            <div style="width:8px;height:8px;background:#2ecc71;border-radius:50%;animation:pulse-green 2s infinite;margin-left:4px"></div>
+            <button onclick="generaConsigliAI()" style="margin-left:auto;background:none;border:1px solid #d9d4cc;padding:6px 14px;border-radius:4px;font-size:0.8rem;cursor:pointer;color:#5a5a5a;font-family:'Inter',sans-serif">&#8635; Aggiorna</button>
+        </div>
+        <div id="ai-consigli">
+            <p style="color:#a0a0a0;font-size:0.85rem">Clicca "Aggiorna" per generare consigli basati sui tuoi dati reali.</p>
         </div>
     </div>
 </section>
@@ -555,62 +608,222 @@ function initAll(){
 
 // ============ DASHBOARD ============
 function renderDashboard(){
+    var kpiCards=document.querySelectorAll('#dashKpi .kpi-card');
+
+    // --- KPI 1: Visitatori oggi (realtime) ---
+    apiFetch('/api/analytics/realtime').then(function(rt){
+        if(kpiCards[0]){
+            kpiCards[0].querySelector('.kpi-value').textContent=rt.visitatori_attivi||0;
+            kpiCards[0].querySelector('.kpi-trend').textContent='in tempo reale';
+            kpiCards[0].querySelector('.kpi-trend').className='kpi-trend neutral';
+        }
+    }).catch(function(){
+        if(kpiCards[0]){kpiCards[0].querySelector('.kpi-value').textContent='—';kpiCards[0].querySelector('.kpi-trend').textContent='offline';}
+    });
+
+    // --- KPI 2: Contatti questo mese (stats) ---
     apiFetch('/api/stats').then(function(stats){
-        var delta=stats.contatti_mese_scorso>0?Math.round((stats.contatti_questo_mese-stats.contatti_mese_scorso)/stats.contatti_mese_scorso*100):0;
-        var deltaStr=delta>=0?'+'+delta+'% vs mese scorso':delta+'% vs mese scorso';
-        document.getElementById('dashKpi').innerHTML=
-            kpiCard('Richieste questo mese',stats.contatti_questo_mese,deltaStr,delta>=0?'up':'down')+
-            kpiCard('Studenti attivi',stats.studenti_attivi,'—','neutral')+
-            kpiCard('Incasso corsi mese','&euro; '+stats.incasso_questo_mese.toFixed(2),'—','neutral')+
-            kpiCard('Visite settimana','...','caricamento','neutral');
-
-        // Carica visite settimana dalla API analytics
-        apiFetch('/api/analytics?periodo=7d').then(function(ad){
-            var el=document.querySelectorAll('#dashKpi .kpi-card');
-            if(el[3]){
-                el[3].querySelector('.kpi-value').textContent=ad.visite_totali;
-                var tStr=ad.trend>=0?'+'+ad.trend+'% vs sett. prec.':ad.trend+'% vs sett. prec.';
-                var tDir=ad.trend>0?'up':ad.trend<0?'down':'neutral';
-                var tEl=el[3].querySelector('.kpi-trend');
-                tEl.textContent=tStr;tEl.className='kpi-trend '+tDir;
-            }
-        }).catch(function(){
-            var el=document.querySelectorAll('#dashKpi .kpi-card');
-            if(el[3])el[3].querySelector('.kpi-value').textContent='0';
-        });
-
-        var rhtml='';
-        stats.nuovi_contatti.forEach(function(c){
-            var d=c.created_at?c.created_at.substring(0,10):'';
-            rhtml+='<div class="panel-list-item"><div class="info"><h4>'+c.nome+' '+c.cognome+'</h4><p>'+(c.tipo_locale||'—')+' &mdash; '+fmtDateIT(d)+'</p></div><span class="badge badge-'+badgeClass(c.stato)+'">'+c.stato+'</span></div>';
-        });
-        document.getElementById('dashRequests').innerHTML=rhtml||'<p style="color:#5a5a5a;font-size:.85rem">Nessuna richiesta ancora.</p>';
-    }).catch(function(e){
-        console.error('Stats API error:',e);
-        // Fallback locale
-        var contatti=getData('contatti',[]);
-        var eventi=getData('eventi',[]);
-        document.getElementById('dashKpi').innerHTML=
-            kpiCard('Richieste questo mese',contatti.length,'API offline','neutral')+
-            kpiCard('Studenti attivi','—','API offline','neutral')+
-            kpiCard('Incasso corsi mese','—','API offline','neutral')+
-            kpiCard('Visite settimana','—','API offline','neutral');
-        document.getElementById('dashRequests').innerHTML='<p style="color:#5a5a5a;font-size:.85rem">API non raggiungibile.</p>';
+        if(kpiCards[1]){
+            kpiCards[1].querySelector('.kpi-value').textContent=stats.contatti_questo_mese||0;
+            var delta=stats.contatti_mese_scorso>0?Math.round((stats.contatti_questo_mese-stats.contatti_mese_scorso)/stats.contatti_mese_scorso*100):0;
+            kpiCards[1].querySelector('.kpi-trend').textContent=(delta>=0?'+':'')+delta+'% vs mese scorso';
+            kpiCards[1].querySelector('.kpi-trend').className='kpi-trend '+(delta>=0?'up':'down');
+        }
+        // Academy stats
+        var acEl=document.getElementById('dashAcademy');
+        if(acEl){
+            acEl.innerHTML=
+                '<div class="dash-stat-row"><span class="dash-stat-label">Studenti iscritti</span><span class="dash-stat-value">'+(stats.studenti_attivi||0)+'</span></div>'+
+                '<div class="dash-stat-row"><span class="dash-stat-label">Incasso Academy</span><span class="dash-stat-value">&euro; '+(stats.incasso_questo_mese||0).toFixed(2)+'</span></div>';
+        }
+    }).catch(function(){
+        if(kpiCards[1]){kpiCards[1].querySelector('.kpi-value').textContent='—';kpiCards[1].querySelector('.kpi-trend').textContent='offline';}
     });
 
-    // Calendario eventi (resta locale)
-    var eventi=getData('eventi',[]);
-    var now=new Date(),todayStr=fmtDate(now);
-    var upcoming=eventi.filter(function(e){return e.data>=todayStr}).sort(function(a,b){return a.data.localeCompare(b.data)||a.oraInizio.localeCompare(b.oraInizio)}).slice(0,3);
-    var ahtml='';
-    upcoming.forEach(function(e){
-        ahtml+='<div class="panel-list-item"><div class="info"><h4>'+e.titolo+'</h4><p>'+fmtDateIT(e.data)+' &mdash; '+e.oraInizio+'</p></div><span class="badge badge-'+badgeClass(e.tipo==='call'?'Contattato':e.tipo==='consulenza'?'In trattativa':'Nuovo')+'">'+e.tipo+'</span></div>';
+    // --- KPI 3 & 4: Acquisti e Incasso (pagamenti) + Academy pie chart ---
+    apiFetch('/api/pagamenti').then(function(pagamenti){
+        var now=new Date();
+        var meseCorrente=pagamenti.filter(function(p){
+            if(!p.created_at)return false;
+            var d=new Date(p.created_at);
+            return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&p.stato==='completato';
+        });
+        var mesePrecedente=pagamenti.filter(function(p){
+            if(!p.created_at)return false;
+            var d=new Date(p.created_at);
+            var pm=new Date(now.getFullYear(),now.getMonth()-1,1);
+            return d.getMonth()===pm.getMonth()&&d.getFullYear()===pm.getFullYear()&&p.stato==='completato';
+        });
+
+        var acquisti=meseCorrente.length;
+        var acquistiPrec=mesePrecedente.length;
+        var incasso=meseCorrente.reduce(function(s,p){return s+parseFloat(p.importo||0)},0);
+        var incassoPrec=mesePrecedente.reduce(function(s,p){return s+parseFloat(p.importo||0)},0);
+
+        // KPI Acquisti
+        if(kpiCards[2]){
+            kpiCards[2].querySelector('.kpi-value').textContent=acquisti;
+            var dA=acquistiPrec>0?Math.round((acquisti-acquistiPrec)/acquistiPrec*100):0;
+            kpiCards[2].querySelector('.kpi-trend').textContent=(dA>=0?'+':'')+dA+'% vs mese scorso';
+            kpiCards[2].querySelector('.kpi-trend').className='kpi-trend '+(dA>=0?'up':'down');
+        }
+        // KPI Incasso
+        if(kpiCards[3]){
+            kpiCards[3].querySelector('.kpi-value').innerHTML='&euro; '+incasso.toFixed(2);
+            var dI=incassoPrec>0?Math.round((incasso-incassoPrec)/incassoPrec*100):0;
+            kpiCards[3].querySelector('.kpi-trend').textContent=(dI>=0?'+':'')+dI+'% vs mese scorso';
+            kpiCards[3].querySelector('.kpi-trend').className='kpi-trend '+(dI>=0?'up':'down');
+        }
+
+        // Modulo piu acquistato + pie chart
+        var completati=pagamenti.filter(function(p){return p.stato==='completato'});
+        var modCounts={};
+        completati.forEach(function(p){
+            var m=p.prodotto||'Altro';
+            modCounts[m]=(modCounts[m]||0)+1;
+        });
+        var moduli=Object.keys(modCounts).map(function(k){return {nome:k,count:modCounts[k]}}).sort(function(a,b){return b.count-a.count});
+
+        // Insert "modulo piu acquistato" into Academy section
+        var acEl=document.getElementById('dashAcademy');
+        if(acEl&&moduli.length>0){
+            var existing=acEl.innerHTML;
+            // Insert after first stat row
+            var insertAfterFirst=existing.replace(/(class="dash-stat-row">.*?<\/div>)/,
+                '$1<div class="dash-stat-row"><span class="dash-stat-label">Modulo pi&ugrave; acquistato</span><span class="dash-stat-value" style="font-size:.95rem">'+moduli[0].nome+'</span></div>');
+            acEl.innerHTML=insertAfterFirst;
+        }
+
+        // Pie chart moduli
+        var pieCtx=document.getElementById('dashModuliChart');
+        if(pieCtx&&typeof Chart!=='undefined'&&moduli.length>0){
+            var pieColors=['#c4622d','#37393f','#27ae60','#2e6bc4','#b7950b','#888'];
+            if(window._dashModuliChart)window._dashModuliChart.destroy();
+            window._dashModuliChart=new Chart(pieCtx,{
+                type:'doughnut',
+                data:{
+                    labels:moduli.map(function(m){return m.nome}),
+                    datasets:[{data:moduli.map(function(m){return m.count}),backgroundColor:pieColors.slice(0,moduli.length),borderWidth:2,borderColor:'#fff'}]
+                },
+                options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:12}}}}
+            });
+        }
+    }).catch(function(){
+        if(kpiCards[2]){kpiCards[2].querySelector('.kpi-value').textContent='—';kpiCards[2].querySelector('.kpi-trend').textContent='offline';}
+        if(kpiCards[3]){kpiCards[3].querySelector('.kpi-value').textContent='—';kpiCards[3].querySelector('.kpi-trend').textContent='offline';}
     });
-    document.getElementById('dashAppointments').innerHTML=ahtml||'<p style="color:#5a5a5a;font-size:.85rem">Nessun appuntamento.</p>';
+
+    // --- RIGA 2 LEFT: Grafico visite 7gg + top 3 pagine ---
+    apiFetch('/api/analytics?periodo=7d').then(function(data){
+        // Line chart
+        var ctx=document.getElementById('dashVisitChart');
+        if(ctx&&typeof Chart!=='undefined'){
+            var labels=[];var chartData=[];
+            data.visite_giornaliere.forEach(function(v){
+                var parts=v.data.split('-');
+                labels.push(parts[2]+'/'+parts[1]);
+                chartData.push(v.visite);
+            });
+            if(window._dashVisitChart)window._dashVisitChart.destroy();
+            window._dashVisitChart=new Chart(ctx,{
+                type:'line',
+                data:{labels:labels,datasets:[{label:'Visite',data:chartData,borderColor:'#c4622d',backgroundColor:'rgba(196,98,45,0.08)',tension:0.3,fill:true,pointRadius:3,pointHoverRadius:6,borderWidth:2}]},
+                options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#f0ece7'}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+            });
+        }
+        // Top 3 pagine con barra
+        var topPages=data.pagine_top?data.pagine_top.slice(0,3):[];
+        var maxVisite=topPages.length?topPages[0].visite:1;
+        var barColors=['#c4622d','#37393f','#27ae60'];
+        var tpHtml='';
+        topPages.forEach(function(p,i){
+            var pct=Math.round(p.visite/maxVisite*100);
+            tpHtml+='<div class="dash-page-bar"><div class="page-info"><span class="page-name">'+nomePagina(p.pagina)+'</span><span class="page-count">'+p.visite+' visite</span></div><div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%;background:'+barColors[i%3]+'"></div></div></div>';
+        });
+        document.getElementById('dashTopPages').innerHTML=tpHtml||'<p style="color:#a0a0a0;font-size:.85rem">Nessun dato disponibile</p>';
+    }).catch(function(){
+        document.getElementById('dashTopPages').innerHTML='<p style="color:#a0a0a0;font-size:.85rem">Dati non disponibili</p>';
+    });
+
+    // --- RIGA 3: Ultimi 5 contatti ---
+    apiFetch('/api/contatti').then(function(contatti){
+        var ultimi=contatti.slice(0,5);
+        var html='';
+        if(ultimi.length===0){
+            html='<tr><td colspan="5" style="text-align:center;padding:24px;color:#5a5a5a;font-size:.85rem">Nessun contatto ancora.</td></tr>';
+        } else {
+            ultimi.forEach(function(c){
+                var d=c.created_at?c.created_at.substring(0,10):'';
+                var statoDisplay=(c.stato||'nuovo').charAt(0).toUpperCase()+(c.stato||'nuovo').slice(1).replace('_',' ');
+                html+='<tr>'+
+                    '<td><strong>'+c.nome+' '+(c.cognome||'')+'</strong></td>'+
+                    '<td>'+(c.tipo_locale||'—')+'</td>'+
+                    '<td>'+fmtDateIT(d)+'</td>'+
+                    '<td><span class="badge badge-'+badgeClass(c.stato||'nuovo')+'">'+statoDisplay+'</span></td>'+
+                    '<td><a href="mailto:'+c.email+'" class="btn-action" style="text-decoration:none">Contatta</a></td>'+
+                '</tr>';
+            });
+        }
+        document.getElementById('dashLastContacts').innerHTML=html;
+    }).catch(function(){
+        document.getElementById('dashLastContacts').innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:#5a5a5a">API non raggiungibile</td></tr>';
+    });
+
+    // Auto-genera consigli AI al caricamento
+    generaConsigliAI();
 }
 function kpiCard(label,value,trend,dir){
     return '<div class="kpi-card"><div class="kpi-label">'+label+'</div><div class="kpi-value">'+value+'</div><div class="kpi-trend '+dir+'">'+trend+'</div></div>';
 }
+// ============ CONSIGLI AI ============
+async function generaConsigliAI(){
+    var container=document.getElementById('ai-consigli');
+    if(!container)return;
+    container.innerHTML='<p style="color:#a0a0a0;font-size:0.85rem">Analisi in corso...</p>';
+    try{
+        var results=await Promise.all([
+            apiFetch('/api/stats'),
+            apiFetch('/api/pagamenti'),
+            apiFetch('/api/analytics?periodo=7d'),
+            apiFetch('/api/contatti')
+        ]);
+        var stats=results[0],pagamenti=results[1],analytics=results[2],contatti=results[3];
+        var totaleIncasso=pagamenti.filter(function(p){return p.stato==='completato'}).reduce(function(s,p){return s+parseFloat(p.importo||0)},0);
+        var contattiNuovi=contatti.filter(function(c){return c.stato==='nuovo'}).length;
+        var paginaTop=(analytics.pagine_top&&analytics.pagine_top[0])?analytics.pagine_top[0].pagina:'/';
+        var prompt='Sei un consulente di marketing digitale per SB Food Consulting, una societa di consulenza per ristoranti italiani che vende anche corsi online (SB Food Academy).\n\nDati attuali del sito:\n- Visitatori ultimi 7 giorni: '+(analytics.visite_totali||0)+'\n- Pagina piu visitata: '+paginaTop+'\n- Contatti ricevuti questo mese: '+(stats.contatti_questo_mese||0)+'\n- Contatti non ancora gestiti: '+contattiNuovi+'\n- Acquisti Academy questo mese: '+(stats.acquisti_mese||pagamenti.length)+'\n- Incasso totale: '+totaleIncasso.toFixed(2)+'EUR\n- Studenti attivi: '+(stats.studenti_attivi||0)+'\n\nDammi esattamente 3 consigli pratici e specifici basati su questi dati reali. Ogni consiglio deve essere concreto e applicabile subito.\n\nFormato risposta JSON:\n{"consigli":[{"categoria":"Marketing|Academy|Contatti","titolo":"titolo breve","testo":"consiglio pratico in 2 righe max","priorita":"alta|media|bassa"}]}';
+
+        var response=await apiFetch('/api/ai/consigli',{
+            method:'POST',
+            body:JSON.stringify({prompt:prompt})
+        });
+        var parsed=response;
+        if(response.consigli){
+            parsed=response;
+        } else if(response.text){
+            var clean=response.text.replace(/```json|```/g,'').trim();
+            parsed=JSON.parse(clean);
+        }
+
+        var colori={'alta':'#c4622d','media':'#37393f','bassa':'#a0a0a0'};
+        var icone={'Marketing':'\uD83D\uDCE3','Academy':'\uD83C\uDF93','Contatti':'\uD83D\uDCDE'};
+        container.innerHTML=parsed.consigli.map(function(c){
+            return '<div style="padding:16px;border-radius:4px;background:#fafaf8;border-left:3px solid '+colori[c.priorita]+';margin-bottom:12px">'+
+                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+                    '<span>'+(icone[c.categoria]||'\u2726')+'</span>'+
+                    '<span style="font-size:0.75rem;font-weight:600;color:'+colori[c.priorita]+';text-transform:uppercase;letter-spacing:0.05em">'+c.categoria+'</span>'+
+                    '<span style="margin-left:auto;font-size:0.7rem;background:'+colori[c.priorita]+'22;color:'+colori[c.priorita]+';padding:2px 8px;border-radius:10px">'+c.priorita+'</span>'+
+                '</div>'+
+                '<p style="margin:0 0 4px;font-size:0.9rem;font-weight:600;color:#1a1a1a">'+c.titolo+'</p>'+
+                '<p style="margin:0;font-size:0.85rem;color:#5a5a5a;line-height:1.6">'+c.testo+'</p>'+
+            '</div>';
+        }).join('');
+    }catch(e){
+        console.error('Errore AI:',e);
+        container.innerHTML='<p style="color:#c4622d;font-size:0.85rem">Errore nella generazione dei consigli. Riprova tra qualche secondo.</p>';
+    }
+}
+
 function badgeClass(stato){
     var map={'Nuovo':'nuovo','Contattato':'contattato','In trattativa':'trattativa','Chiuso vinto':'vinto','Chiuso perso':'perso','Attivo':'attivo','Scaduto':'scaduto','Completato':'completato','Fallito':'fallito','Rimborsato':'rimborsato','call':'contattato','consulenza':'trattativa','evento':'nuovo','altro':'perso'};
     return map[stato]||'nuovo';
