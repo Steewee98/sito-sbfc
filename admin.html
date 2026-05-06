@@ -365,7 +365,7 @@ tr:hover td{background:#fafaf8}
         <h2>Pagamenti Stripe</h2>
         <p>Transazioni e incassi</p>
     </div>
-    <div class="note-box">I dati mostrati sono simulati. Collega il tuo account Stripe tramite API per dati in tempo reale.</div>
+    <div class="note-box">Dati in tempo reale da Stripe.</div>
     <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px" id="payKpi"></div>
     <div class="table-wrap">
         <div class="table-filters">
@@ -504,6 +504,8 @@ document.querySelectorAll('.sidebar-item').forEach(function(el){
         el.classList.add('active');
         document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});
         document.getElementById('sec-'+el.dataset.section).classList.add('active');
+        if(el.dataset.section==='pagamenti') renderPagamenti();
+        if(el.dataset.section==='studenti') renderStudenti();
     });
 });
 
@@ -694,27 +696,50 @@ function exportCSV(){
 }
 
 // ============ STUDENTI ============
-function renderStudenti(){
-    var studenti=getData('studenti',[]);
-    var nomiModuli={1:'Controllo ristorante',2:'Risultati giusti',3:'Blocchi crescita',4:'Arte accoglienza',5:'Lancio locale'};
-    var html='';
-    if(studenti.length===0){
-        html='<tr><td colspan="7" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuno studente registrato ancora.</td></tr>';
-    } else {
-        studenti.forEach(function(s){
-            var mods=s.moduli.map(function(m){return 'M'+m}).join(', ');
-            html+='<tr>'+
-                '<td><strong>'+s.nome+'</strong></td>'+
-                '<td>'+s.email+'</td>'+
+async function renderStudenti(filtered){
+    var container=document.getElementById('studentiBody');
+    if(!container) return;
+    try {
+        var data=filtered||await apiFetch('/api/studenti');
+        if(!data||data.length===0){
+            container.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuno studente registrato ancora.</td></tr>';
+            return;
+        }
+        container.innerHTML=data.map(function(s){
+            var mods=Array.isArray(s.moduli_acquistati)?s.moduli_acquistati.map(function(m){return '<span class="badge badge-dark">M'+m+'</span>'}).join(' '):'';
+            var dataIscr=s.data_iscrizione?new Date(s.data_iscrizione).toLocaleDateString('it-IT'):'—';
+            var statoClass=s.attivo?'green':'gray';
+            var statoLabel=s.attivo?'Attivo':'Inattivo';
+            return '<tr>'+
+                '<td><strong>'+(s.nome||'')+'</strong></td>'+
+                '<td>'+(s.email||'')+'</td>'+
                 '<td>'+mods+'</td>'+
-                '<td>'+fmtDateIT(s.iscrizione)+'</td>'+
-                '<td>'+fmtDateIT(s.ultimoAccesso)+'</td>'+
-                '<td><span class="badge badge-'+badgeClass(s.stato)+'">'+s.stato+'</span></td>'+
-                '<td><button class="btn-action" onclick="viewStudent('+s.id+')">Dettagli</button></td>'+
+                '<td>'+dataIscr+'</td>'+
+                '<td>—</td>'+
+                '<td><span class="badge badge-'+statoClass+'">'+statoLabel+'</span></td>'+
+                '<td><button class="btn-action" onclick="viewStudentAPI('+s.id+')">Dettagli</button></td>'+
             '</tr>';
-        });
+        }).join('');
+    } catch(e){
+        console.error('Errore studenti:',e);
+        container.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:#c4622d">Errore nel caricamento.</td></tr>';
     }
-    document.getElementById('studentiBody').innerHTML=html;
+}
+function viewStudentAPI(id){
+    apiFetch('/api/studenti').then(function(data){
+        var s=data.find(function(x){return x.id===id});
+        if(!s)return;
+        var nomiModuli={1:'Controllo ristorante',2:'Risultati giusti',3:'Blocchi crescita',4:'Arte accoglienza',5:'Lancio locale'};
+        var html='<h3>'+(s.nome||'')+'</h3>'+
+            '<div class="detail-row"><label>Email</label><p>'+s.email+'</p></div>'+
+            '<div class="detail-row"><label>Stato</label><p><span class="badge badge-'+(s.attivo?'green':'gray')+'">'+(s.attivo?'Attivo':'Inattivo')+'</span></p></div>'+
+            '<div class="detail-row"><label>Data iscrizione</label><p>'+(s.data_iscrizione?new Date(s.data_iscrizione).toLocaleDateString('it-IT'):'—')+'</p></div>'+
+            '<div class="detail-row"><label>Moduli acquistati</label>';
+        if(Array.isArray(s.moduli_acquistati))s.moduli_acquistati.forEach(function(m){html+='<p style="font-size:.85rem">Modulo '+m+' — '+(nomiModuli[m]||'')+'</p>'});
+        html+='</div>';
+        document.getElementById('sidePanelBody').innerHTML=html;
+        document.getElementById('sidePanel').classList.add('open');
+    });
 }
 function viewStudent(id){
     var s=getData('studenti',[]).find(function(x){return x.id===id});
@@ -886,44 +911,55 @@ function deleteEvent(id){
 }
 
 // ============ PAGAMENTI ============
-function renderPagamenti(filtered){
-    var pagamenti=filtered||getData('pagamenti',[]);
-    var completati=pagamenti.filter(function(p){return p.stato==='Completato'});
-    var totale=completati.reduce(function(a,b){return a+b.importo},0);
-    var ticket=completati.length?totale/completati.length:0;
-    document.getElementById('payKpi').innerHTML=
-        kpiCard('Totale incassato','&euro; '+totale.toFixed(2),'—','neutral')+
-        kpiCard('Transazioni',completati.length,'completate','neutral')+
-        kpiCard('Ticket medio','&euro; '+ticket.toFixed(2),'per transazione','neutral');
+var _pagamentiCache=null;
+async function renderPagamenti(filtered){
+    var container=document.getElementById('pagamentiBody');
+    if(!container) return;
+    try {
+        var data=filtered||await apiFetch('/api/pagamenti');
+        if(!filtered) _pagamentiCache=data;
 
-    var html='';
-    if(pagamenti.length===0){
-        html='<tr><td colspan="7" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuna transazione registrata ancora.</td></tr>';
-    } else {
-        pagamenti.forEach(function(p){
-            html+='<tr>'+
-                '<td>'+fmtDateIT(p.data)+'</td>'+
-                '<td>'+p.nome+'</td>'+
-                '<td>'+p.email+'</td>'+
-                '<td>'+p.prodotto+'</td>'+
-                '<td>&euro; '+p.importo.toFixed(2)+'</td>'+
-                '<td><span class="badge badge-'+badgeClass(p.stato)+'">'+p.stato+'</span></td>'+
-                '<td style="font-size:.75rem;font-family:monospace;color:#888">'+p.txId+'</td>'+
+        var completati=(data||[]).filter(function(p){return p.stato==='completato'});
+        var totale=completati.reduce(function(a,p){return a+parseFloat(p.importo||0)},0);
+        var ticket=completati.length?totale/completati.length:0;
+        document.getElementById('payKpi').innerHTML=
+            kpiCard('Totale incassato','&euro; '+totale.toFixed(2),'—','neutral')+
+            kpiCard('Transazioni',completati.length,'completate','neutral')+
+            kpiCard('Ticket medio','&euro; '+ticket.toFixed(2),'per transazione','neutral');
+
+        if(!data||data.length===0){
+            container.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuna transazione registrata ancora.</td></tr>';
+            return;
+        }
+        container.innerHTML=data.map(function(p){
+            var dataFmt=p.created_at?new Date(p.created_at).toLocaleDateString('it-IT'):'—';
+            var stati={'completato':'green','fallito':'red','rimborsato':'gray'};
+            var stripeShort=(p.stripe_id||'').substring(0,16);
+            return '<tr>'+
+                '<td>'+dataFmt+'</td>'+
+                '<td>'+(p.nome||'')+'</td>'+
+                '<td>'+(p.email||'')+'</td>'+
+                '<td>'+(p.prodotto||'')+'</td>'+
+                '<td><strong>'+parseFloat(p.importo||0).toFixed(2)+'&euro;</strong></td>'+
+                '<td><span class="badge badge-'+(stati[p.stato]||'gray')+'">'+(p.stato||'')+'</span></td>'+
+                '<td style="font-size:.75rem;font-family:monospace;color:#888">'+stripeShort+'</td>'+
             '</tr>';
-        });
+        }).join('');
+    } catch(e){
+        console.error('Errore pagamenti:',e);
+        container.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:#c4622d">Errore nel caricamento.</td></tr>';
     }
-    document.getElementById('pagamentiBody').innerHTML=html;
 }
 function filterPagamenti(){
-    var pagamenti=getData('pagamenti',[]);
+    if(!_pagamentiCache) return;
     var periodo=parseInt(document.getElementById('filterPeriodo').value);
     var prodotto=document.getElementById('filterProdotto').value;
     var stato=document.getElementById('filterStatoPay').value;
-    var cutoff=fmtDate(daysAgo(periodo));
-    var filtered=pagamenti.filter(function(p){
-        if(p.data<cutoff)return false;
-        if(prodotto&&p.prodotto!==prodotto)return false;
-        if(stato&&p.stato!==stato)return false;
+    var cutoff=new Date();cutoff.setDate(cutoff.getDate()-periodo);
+    var filtered=_pagamentiCache.filter(function(p){
+        if(p.created_at&&new Date(p.created_at)<cutoff)return false;
+        if(prodotto&&(p.prodotto||'').indexOf(prodotto)===-1)return false;
+        if(stato&&p.stato!==stato.toLowerCase())return false;
         return true;
     });
     renderPagamenti(filtered);
