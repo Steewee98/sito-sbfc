@@ -393,6 +393,60 @@
     </div>
 </div>
 
+<!-- ═══════ LEAD MAGNET CHECKLIST ═══════ -->
+<section class="lead-magnet-section">
+    <div class="container">
+        <div class="lead-magnet-inner">
+
+            <!-- Colonna sinistra — testo -->
+            <div class="lead-magnet-text">
+                <p class="section-label">GRATUITO</p>
+                <h2 class="lead-magnet-title">
+                    La Checklist del<br>
+                    <em>Ristoratore Consapevole</em>
+                </h2>
+                <p class="lead-magnet-desc">
+                    20 domande per capire se il tuo locale
+                    è davvero sotto controllo. Food cost,
+                    personale, menu, comunicazione, numeri —
+                    tutto quello che dovresti sapere
+                    sul tuo ristorante.
+                </p>
+                <ul class="lead-magnet-list">
+                    <li>&#10003; Valutazione immediata del tuo locale</li>
+                    <li>&#10003; 5 aree operative fondamentali</li>
+                    <li>&#10003; Punteggio e prossimi passi consigliati</li>
+                    <li>&#10003; Estratto dal metodo SB Food Academy</li>
+                </ul>
+            </div>
+
+            <!-- Colonna destra — form -->
+            <div class="lead-magnet-form-box">
+                <p style="font-size:0.85rem;color:#a0a0a0;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 8px">Scarica gratis</p>
+                <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:#1a1a1a;margin:0 0 24px">Inserisci la tua email<br>per ricevere la checklist</h3>
+
+                <div id="lead-form">
+                    <input type="text" id="lead-nome" placeholder="Il tuo nome" style="width:100%;padding:14px 16px;border:1px solid #d9d4cc;border-radius:4px;font-size:0.95rem;margin-bottom:12px;box-sizing:border-box;font-family:'Inter',sans-serif;color:#37393f;background:#fff">
+
+                    <input type="email" id="lead-email" placeholder="La tua email" style="width:100%;padding:14px 16px;border:1px solid #d9d4cc;border-radius:4px;font-size:0.95rem;margin-bottom:16px;box-sizing:border-box;font-family:'Inter',sans-serif;color:#37393f;background:#fff">
+
+                    <button onclick="scaricaChecklist()" id="lead-btn" style="width:100%;padding:16px;background:#c4622d;color:#fff;border:none;border-radius:4px;font-size:0.95rem;font-weight:600;cursor:pointer;letter-spacing:0.03em;font-family:'Inter',sans-serif">Scarica la checklist gratuita &rarr;</button>
+
+                    <p style="font-size:0.75rem;color:#a0a0a0;text-align:center;margin:12px 0 0">Nessuno spam. Solo contenuti utili sulla gestione del tuo ristorante.</p>
+                </div>
+
+                <div id="lead-success" style="display:none;text-align:center;padding:24px 0">
+                    <p style="font-size:2rem;margin:0 0 12px">&#10003;</p>
+                    <h4 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#1a1a1a;margin:0 0 8px">Checklist in arrivo!</h4>
+                    <p style="font-size:0.9rem;color:#5a5a5a;margin:0 0 20px">Controlla la tua email. Abbiamo inviato la checklist a <strong id="lead-email-shown"></strong></p>
+                    <a href="assets/pdf/checklist-ristoratore.pdf" download style="display:inline-block;background:#37393f;color:#fff;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.9rem;font-weight:600">&darr; Scarica subito</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 <!-- ═══════ CTA ═══════ -->
 <section class="ed-cta">
     <div class="ed-cta-bg" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=80')"></div>
@@ -428,6 +482,43 @@
 
 <script src="main.js"></script>
 <script>
+/* ═══════ LEAD MAGNET ═══════ */
+async function scaricaChecklist() {
+    var nome = document.getElementById('lead-nome').value.trim();
+    var email = document.getElementById('lead-email').value.trim();
+    var btn = document.getElementById('lead-btn');
+
+    if (!nome) { alert('Inserisci il tuo nome.'); return; }
+    if (!email || !email.includes('@')) { alert('Inserisci una email valida.'); return; }
+
+    btn.textContent = 'Invio in corso...';
+    btn.disabled = true;
+
+    try {
+        await fetch('https://web-production-f3794.up.railway.app/api/contatti', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nome: nome,
+                cognome: '',
+                email: email,
+                telefono: '',
+                tipo_locale: 'Lead magnet checklist',
+                messaggio: 'Ha scaricato la checklist gratuita'
+            })
+        });
+    } catch(e) { console.log('Backend non raggiunto:', e); }
+
+    document.getElementById('lead-form').style.display = 'none';
+    document.getElementById('lead-success').style.display = 'block';
+    document.getElementById('lead-email-shown').textContent = email;
+
+    var link = document.createElement('a');
+    link.href = 'assets/pdf/checklist-ristoratore.pdf';
+    link.download = 'checklist-ristoratore-sbfood.pdf';
+    link.click();
+}
+
 /* ═══════ STRIPE CHECKOUT ═══════ */
 
 async function avviaCheckout(prodottoId) {
