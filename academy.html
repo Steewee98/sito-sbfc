@@ -481,7 +481,7 @@ async function scaricaChecklist() {
     btn.disabled = true;
 
     try {
-        await fetch('https://web-production-f3794.up.railway.app/api/contatti', {
+        const res = await fetch('https://web-production-f3794.up.railway.app/api/contatti', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -493,6 +493,8 @@ async function scaricaChecklist() {
                 messaggio: 'Ha scaricato la checklist gratuita'
             })
         });
+        const data = await res.json();
+        console.log('Lead salvato:', data);
     } catch(e) { console.log('Backend non raggiunto:', e); }
 
     document.getElementById('lead-form').style.display = 'none';
