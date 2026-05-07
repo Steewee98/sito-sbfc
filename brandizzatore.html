@@ -530,53 +530,66 @@ function rimuoviFile(tipo) {
 
 // ── BRANDIZZA ──
 async function brandizzaFile(tipo) {
-    var inputId = tipo === 'word' ? 'file-word' : 'file-pptx';
-    var endpoint = tipo === 'word' ? 'word' : 'pptx';
-    var file = document.getElementById(inputId).files[0];
+    const inputId = tipo === 'word' ? 'file-word' : 'file-pptx';
+    const endpoint = tipo === 'word' ? 'word' : 'pptx';
 
-    if (!file) {
+    const input = document.getElementById(inputId);
+    if (!input || !input.files || !input.files[0]) {
         alert('Carica prima un file.');
         return;
     }
 
-    var btn = event.target;
-    var testoOriginale = btn.textContent;
+    const file = input.files[0];
+    const btn = event.currentTarget;
+    const testoOriginale = btn.textContent;
     btn.textContent = 'Elaborazione...';
     btn.disabled = true;
 
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append('file', file);
 
     try {
-        var res = await fetch(
-            BACKEND + '/api/brandizza/' + endpoint,
+        const res = await fetch(
+            'https://web-production-f3794.up.railway.app/api/brandizza/' + endpoint,
             { method: 'POST', body: formData }
         );
 
+        console.log('Status:', res.status);
+        console.log('Content-Type:', res.headers.get('Content-Type'));
+
         if (!res.ok) {
-            var err = await res.json().catch(function() { return {}; });
-            throw new Error(err.error || 'Errore server');
+            const errText = await res.text();
+            console.error('Errore server:', errText);
+            throw new Error('Errore server: ' + errText);
         }
 
-        var blob = await res.blob();
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
+        const blob = await res.blob();
+        console.log('Blob size:', blob.size);
+
+        if (blob.size === 0) {
+            throw new Error('File vuoto ricevuto');
+        }
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
         a.href = url;
         a.download = tipo === 'word'
             ? 'contratto-sbfood-brandizzato.docx'
             : 'presentazione-sbfood-brandizzata.pptx';
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
         btn.textContent = 'Scaricato!';
-        setTimeout(function() {
+        setTimeout(() => {
             btn.textContent = testoOriginale;
             btn.disabled = false;
         }, 3000);
 
     } catch(e) {
-        console.error('Errore brandizzazione:', e);
-        alert('Errore nell\'elaborazione. Riprova.');
+        console.error('Errore completo:', e);
+        alert('Errore: ' + e.message);
         btn.textContent = testoOriginale;
         btn.disabled = false;
     }
