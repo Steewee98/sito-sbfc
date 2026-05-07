@@ -2141,77 +2141,187 @@ ul { list-style: none; }
    LEAD MAGNET SECTION
    ════════════════════════════════════════════════════ */
 .lead-magnet-section {
-    background: #f5f2ee;
-    padding: 100px 0;
+    background: var(--ivory);
+    padding: 100px 0 120px;
 }
 
-.lead-magnet-inner {
+.lead-magnet-header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.lead-magnet-subtitle {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 440px;
+    margin: 16px auto 0;
+    line-height: 1.7;
+}
+
+.lead-magnet-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
+    background: var(--dark);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(55, 57, 63, 0.18);
 }
 
-.lead-magnet-text .section-label {
-    font-size: 0.75rem;
+.lead-magnet-card-left {
+    padding: 56px 48px;
+}
+
+.lead-magnet-badge {
+    display: inline-block;
+    font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.15em;
-    color: var(--accent);
-    margin: 0 0 16px;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--accent);
+    padding: 5px 14px;
+    border-radius: 3px;
+    margin-bottom: 24px;
 }
 
-.lead-magnet-title {
+.lead-magnet-card-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 2.8rem);
-    color: var(--ink);
-    line-height: 1.2;
-    margin: 0 0 24px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--ivory);
+    line-height: 1.25;
+    margin: 0 0 20px;
 }
 
-.lead-magnet-title em {
+.lead-magnet-card-title em {
     font-style: italic;
     color: var(--accent);
 }
 
-.lead-magnet-desc {
-    font-size: 1rem;
-    color: var(--ink-soft);
-    line-height: 1.8;
-    margin: 0 0 24px;
-}
-
-.lead-magnet-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.lead-magnet-list li {
+.lead-magnet-card-desc {
     font-size: 0.9rem;
-    color: var(--ink);
-    padding: 8px 0;
-    border-bottom: 1px solid #edeae5;
-    line-height: 1.6;
+    color: rgba(245, 242, 238, 0.55);
+    line-height: 1.75;
+    margin: 0 0 32px;
 }
 
-.lead-magnet-list li:last-child {
-    border-bottom: none;
+.lead-magnet-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
 }
 
-.lead-magnet-form-box {
-    background: #fff;
-    border-radius: 6px;
-    padding: 40px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+.lead-magnet-feat {
+    font-size: 0.82rem;
+    color: rgba(245, 242, 238, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lead-magnet-feat-icon {
+    color: var(--accent);
+    font-size: 0.6rem;
+}
+
+.lead-magnet-card-right {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid rgba(245, 242, 238, 0.06);
+}
+
+.lead-magnet-form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--ivory);
+    margin: 0 0 28px;
+    font-weight: 500;
+}
+
+.lead-magnet-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(245, 242, 238, 0.12);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: var(--ivory);
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    transition: border-color 0.25s ease;
+}
+
+.lead-magnet-input::placeholder {
+    color: rgba(245, 242, 238, 0.35);
+}
+
+.lead-magnet-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.lead-magnet-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.lead-magnet-btn:hover {
+    background: #b5562a;
+    transform: translateY(-1px);
+}
+
+.lead-magnet-privacy {
+    font-size: 0.72rem;
+    color: rgba(245, 242, 238, 0.3);
+    text-align: center;
+    margin: 14px 0 0;
+}
+
+.lead-magnet-download-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.25s ease;
+}
+
+.lead-magnet-download-btn:hover {
+    background: #b5562a;
 }
 
 @media (max-width: 768px) {
-    .lead-magnet-inner {
+    .lead-magnet-card {
         grid-template-columns: 1fr;
-        gap: 40px;
     }
-    .lead-magnet-form-box {
+    .lead-magnet-card-left {
+        padding: 36px 28px 28px;
+    }
+    .lead-magnet-card-right {
         padding: 28px;
+        border-left: none;
+        border-top: 1px solid rgba(245, 242, 238, 0.06);
+    }
+    .lead-magnet-features {
+        grid-template-columns: 1fr;
     }
 }
 

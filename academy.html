@@ -192,6 +192,46 @@
     </div>
 </section>
 
+<!-- ═══════ LEAD MAGNET CHECKLIST ═══════ -->
+<section class="lead-magnet-section">
+    <div class="container">
+        <div class="lead-magnet-header" data-reveal>
+            <span class="label" style="color:var(--accent)">Risorsa gratuita</span>
+            <h2 class="ed-heading">Prima di scegliere,<br><em>mettiti alla prova.</em></h2>
+            <p class="lead-magnet-subtitle">Scopri in 5 minuti quanto controllo hai davvero sul tuo locale.</p>
+        </div>
+
+        <div class="lead-magnet-card" data-reveal data-reveal-delay="100">
+            <div class="lead-magnet-card-left">
+                <div class="lead-magnet-badge">PDF gratuito</div>
+                <h3 class="lead-magnet-card-title">La Checklist del<br><em>Ristoratore Consapevole</em></h3>
+                <p class="lead-magnet-card-desc">20 domande su 5 aree operative fondamentali: food cost, personale, menu, comunicazione e numeri. Con punteggio finale e prossimi passi consigliati.</p>
+                <div class="lead-magnet-features">
+                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> Valutazione immediata</div>
+                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> 5 aree operative</div>
+                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> Punteggio e consigli</div>
+                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> Metodo SB Food</div>
+                </div>
+            </div>
+            <div class="lead-magnet-card-right">
+                <div id="lead-form">
+                    <h4 class="lead-magnet-form-title">Scarica gratis la checklist</h4>
+                    <input type="text" id="lead-nome" class="lead-magnet-input" placeholder="Il tuo nome">
+                    <input type="email" id="lead-email" class="lead-magnet-input" placeholder="La tua email">
+                    <button onclick="scaricaChecklist()" id="lead-btn" class="lead-magnet-btn">Scarica ora &rarr;</button>
+                    <p class="lead-magnet-privacy">Nessuno spam. Solo contenuti utili per il tuo ristorante.</p>
+                </div>
+                <div id="lead-success" style="display:none;text-align:center;padding:20px 0">
+                    <div style="width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 0 16px">&#10003;</div>
+                    <h4 style="font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--ivory);margin:0 0 8px">Checklist in arrivo!</h4>
+                    <p style="font-size:0.85rem;color:rgba(245,242,238,0.6);margin:0 0 20px">Controlla la tua email. L'abbiamo inviata a <strong id="lead-email-shown" style="color:var(--ivory)"></strong></p>
+                    <a href="assets/pdf/checklist-ristoratore.pdf" download class="lead-magnet-download-btn">&darr; Scarica subito il PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ═══════ PRICING ═══════ -->
 <section class="ac-pricing">
     <div class="container">
@@ -392,60 +432,6 @@
         <div id="modal-contenuto" style="padding:40px 32px;min-height:300px;color:var(--ink);line-height:1.8"></div>
     </div>
 </div>
-
-<!-- ═══════ LEAD MAGNET CHECKLIST ═══════ -->
-<section class="lead-magnet-section">
-    <div class="container">
-        <div class="lead-magnet-inner">
-
-            <!-- Colonna sinistra — testo -->
-            <div class="lead-magnet-text">
-                <p class="section-label">GRATUITO</p>
-                <h2 class="lead-magnet-title">
-                    La Checklist del<br>
-                    <em>Ristoratore Consapevole</em>
-                </h2>
-                <p class="lead-magnet-desc">
-                    20 domande per capire se il tuo locale
-                    è davvero sotto controllo. Food cost,
-                    personale, menu, comunicazione, numeri —
-                    tutto quello che dovresti sapere
-                    sul tuo ristorante.
-                </p>
-                <ul class="lead-magnet-list">
-                    <li>&#10003; Valutazione immediata del tuo locale</li>
-                    <li>&#10003; 5 aree operative fondamentali</li>
-                    <li>&#10003; Punteggio e prossimi passi consigliati</li>
-                    <li>&#10003; Estratto dal metodo SB Food Academy</li>
-                </ul>
-            </div>
-
-            <!-- Colonna destra — form -->
-            <div class="lead-magnet-form-box">
-                <p style="font-size:0.85rem;color:#a0a0a0;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 8px">Scarica gratis</p>
-                <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:#1a1a1a;margin:0 0 24px">Inserisci la tua email<br>per ricevere la checklist</h3>
-
-                <div id="lead-form">
-                    <input type="text" id="lead-nome" placeholder="Il tuo nome" style="width:100%;padding:14px 16px;border:1px solid #d9d4cc;border-radius:4px;font-size:0.95rem;margin-bottom:12px;box-sizing:border-box;font-family:'Inter',sans-serif;color:#37393f;background:#fff">
-
-                    <input type="email" id="lead-email" placeholder="La tua email" style="width:100%;padding:14px 16px;border:1px solid #d9d4cc;border-radius:4px;font-size:0.95rem;margin-bottom:16px;box-sizing:border-box;font-family:'Inter',sans-serif;color:#37393f;background:#fff">
-
-                    <button onclick="scaricaChecklist()" id="lead-btn" style="width:100%;padding:16px;background:#c4622d;color:#fff;border:none;border-radius:4px;font-size:0.95rem;font-weight:600;cursor:pointer;letter-spacing:0.03em;font-family:'Inter',sans-serif">Scarica la checklist gratuita &rarr;</button>
-
-                    <p style="font-size:0.75rem;color:#a0a0a0;text-align:center;margin:12px 0 0">Nessuno spam. Solo contenuti utili sulla gestione del tuo ristorante.</p>
-                </div>
-
-                <div id="lead-success" style="display:none;text-align:center;padding:24px 0">
-                    <p style="font-size:2rem;margin:0 0 12px">&#10003;</p>
-                    <h4 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#1a1a1a;margin:0 0 8px">Checklist in arrivo!</h4>
-                    <p style="font-size:0.9rem;color:#5a5a5a;margin:0 0 20px">Controlla la tua email. Abbiamo inviato la checklist a <strong id="lead-email-shown"></strong></p>
-                    <a href="assets/pdf/checklist-ristoratore.pdf" download style="display:inline-block;background:#37393f;color:#fff;text-decoration:none;padding:12px 24px;border-radius:4px;font-size:0.9rem;font-weight:600">&darr; Scarica subito</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
 
 <!-- ═══════ CTA ═══════ -->
 <section class="ed-cta">
