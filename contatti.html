@@ -150,41 +150,47 @@
 const BACKEND_URL = 'https://web-production-f3794.up.railway.app';
 
 async function inviaContatto() {
-    var btn = document.querySelector('[onclick="inviaContatto()"]');
-    var nome = (document.getElementById('name') || {}).value || '';
-    var cognome = (document.getElementById('surname') || {}).value || '';
-    var email = (document.getElementById('email') || {}).value || '';
-    var telefono = (document.getElementById('phone') || {}).value || '';
-    var tipo_locale = (document.getElementById('type') || {}).value || '';
-    var messaggio = (document.getElementById('message') || {}).value || '';
+    const btn = document.querySelector('[onclick="inviaContatto()"]');
 
-    nome = nome.trim(); cognome = cognome.trim(); email = email.trim();
-    telefono = telefono.trim(); messaggio = messaggio.trim();
+    const nome = document.getElementById('name')?.value?.trim();
+    const cognome = document.getElementById('surname')?.value?.trim();
+    const email = document.getElementById('email')?.value?.trim();
+    const telefono = document.getElementById('phone')?.value?.trim();
+    const tipo_locale = document.getElementById('type')?.value;
+    const messaggio = document.getElementById('message')?.value?.trim();
 
     if (!nome || !email || !messaggio) {
         alert('Compila almeno nome, email e messaggio.');
         return;
     }
 
+    const testoOriginale = btn.textContent;
     btn.textContent = 'Invio in corso...';
     btn.disabled = true;
 
     try {
-        var res = await fetch(BACKEND_URL + '/api/contatti', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome: nome, cognome: cognome, email: email, telefono: telefono, tipo_locale: tipo_locale, messaggio: messaggio })
-        });
-        var data = await res.json();
-        if (data.success) {
+        const res = await fetch(
+            'https://web-production-f3794.up.railway.app/api/contatti',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome, cognome, email, telefono,
+                    tipo_locale, messaggio
+                })
+            }
+        );
+        const data = await res.json();
+        if (data.success || data.id) {
             document.getElementById('contactForm').style.display = 'none';
             document.getElementById('form-success').style.display = 'block';
         } else {
             throw new Error('Errore server');
         }
     } catch(e) {
-        alert("Errore nell'invio. Riprova o scrivici a info@sbfoodconsulting.com");
-        btn.textContent = 'Invia messaggio';
+        console.error('Errore invio:', e);
+        alert('Errore nell\'invio. Riprova o scrivici a info@sbfoodconsulting.com');
+        btn.textContent = testoOriginale;
         btn.disabled = false;
     }
 }
