@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brandizzatore | SB Food Consulting</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-dark-32x32.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-dark-16x16.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png" media="(prefers-color-scheme: dark)">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --dark: #37393f;
+            --ivory: #f5f2ee;
+            --accent: #c4622d;
+            --ink: #1a1a1a;
+            --ink-soft: #5a5a5a;
+            --surface: #fff;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--ivory);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* ── LOGIN OVERLAY ── */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--dark);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            background: var(--surface);
+            padding: 48px 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+        }
+
+        .login-box h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .login-box p {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            margin-bottom: 28px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d9d4cc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            margin-bottom: 16px;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.25s;
+        }
+
+        .login-btn:hover { background: #b5562a; }
+
+        .login-error {
+            color: var(--accent);
+            font-size: 0.8rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ── MAIN APP ── */
+        .app { display: none; }
+
+        .topbar {
+            background: var(--dark);
+            padding: 20px 0;
+        }
+
+        .topbar-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--ivory);
+            font-weight: 600;
+        }
+
+        .topbar-brand em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .topbar-logout {
+            background: none;
+            border: 1px solid rgba(245,242,238,0.2);
+            color: rgba(245,242,238,0.6);
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.25s;
+        }
+
+        .topbar-logout:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 32px 80px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+        }
+
+        .page-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .page-header h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .page-header p {
+            font-size: 0.9rem;
+            color: var(--ink-soft);
+            line-height: 1.7;
+        }
+
+        /* ── CARDS GRID ── */
+        .brand-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .brand-card {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 40px;
+            border: 1px solid #e8e4df;
+            transition: box-shadow 0.3s;
+        }
+
+        .brand-card:hover {
+            box-shadow: 0 8px 32px rgba(55,57,63,0.08);
+        }
+
+        .brand-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .brand-card-icon.word {
+            background: rgba(196,98,45,0.1);
+            color: var(--accent);
+        }
+
+        .brand-card-icon.pptx {
+            background: rgba(55,57,63,0.08);
+            color: var(--dark);
+        }
+
+        .brand-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .brand-card .card-desc {
+            font-size: 0.82rem;
+            color: var(--ink-soft);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        /* ── DROP ZONE ── */
+        .drop-zone {
+            border: 2px dashed #d9d4cc;
+            border-radius: 6px;
+            padding: 40px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: var(--accent);
+            background: rgba(196,98,45,0.03);
+        }
+
+        .drop-zone-text {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            line-height: 1.7;
+        }
+
+        .drop-zone-text strong {
+            color: var(--accent);
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* ── FILE PREVIEW ── */
+        .file-preview {
+            display: none;
+            background: rgba(196,98,45,0.06);
+            border: 1px solid rgba(196,98,45,0.15);
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 0.82rem;
+            color: var(--dark);
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-preview.visible {
+            display: flex;
+        }
+
+        .file-preview-name {
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-preview-remove {
+            background: none;
+            border: none;
+            color: var(--ink-soft);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0 0 0 12px;
+            flex-shrink: 0;
+        }
+
+        .file-preview-remove:hover { color: var(--accent); }
+
+        /* ── BUTTONS ── */
+        .brand-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--dark);
+            color: var(--ivory);
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+            transition: background 0.25s, transform 0.2s;
+        }
+
+        .brand-btn:hover:not(:disabled) {
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .brand-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ── FEATURES LIST ── */
+        .card-features {
+            list-style: none;
+            margin: 0 0 24px;
+            padding: 16px 0 0;
+            border-top: 1px solid #edeae5;
+        }
+
+        .card-features li {
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+            padding: 4px 0;
+            line-height: 1.6;
+        }
+
+        .card-features li::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .brand-grid { grid-template-columns: 1fr; }
+            .brand-card { padding: 28px; }
+            .main { padding: 32px 20px 60px; }
+            .topbar-inner { padding: 0 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+        <h1>Brandizzatore</h1>
+        <p>Accesso riservato a SB Food Consulting</p>
+        <input type="password" id="loginPassword" class="login-input" placeholder="Password" onkeydown="if(event.key==='Enter')tentaLogin()">
+        <button class="login-btn" onclick="tentaLogin()">Accedi</button>
+        <p class="login-error" id="loginError">Password non corretta.</p>
+    </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="topbar-brand">SB Food <em>Brandizzatore</em></div>
+            <button class="topbar-logout" onclick="logout()">Esci</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="page-header">
+            <h2>Brandizza i tuoi <em>documenti.</em></h2>
+            <p>Carica un file Word o PowerPoint e scaricalo con il brand SB Food Consulting applicato.</p>
+        </div>
+
+        <div class="brand-grid">
+            <!-- WORD -->
+            <div class="brand-card">
+                <div class="brand-card-icon word">W</div>
+                <h3>Brandizza Contratto</h3>
+                <p class="card-desc">Carica un file .docx per applicare header, footer e colori SB Food.</p>
+
+                <div class="drop-zone" id="dropzone-word">
+                    <input type="file" id="file-word" accept=".docx" onchange="mostraPreview('word')">
+                    <div class="drop-zone-text">
+                        Trascina qui il file <strong>.docx</strong><br>oppure clicca per selezionarlo
+                    </div>
+                </div>
+
+                <div class="file-preview" id="preview-word">
+                    <span class="file-preview-name" id="filename-word"></span>
+                    <button class="file-preview-remove" onclick="rimuoviFile('word')">&times;</button>
+                </div>
+
+                <ul class="card-features">
+                    <li>Header con logo SB Food su ogni pagina</li>
+                    <li>Titoli in terracotta, testo in grigio scuro</li>
+                    <li>Footer con email e sito web</li>
+                    <li>Contenuto originale preservato</li>
+                </ul>
+
+                <button class="brand-btn" onclick="brandizzaFile('word')">Brandizza e scarica .docx</button>
+            </div>
+
+            <!-- PPTX -->
+            <div class="brand-card">
+                <div class="brand-card-icon pptx">P</div>
+                <h3>Brandizza Presentazione</h3>
+                <p class="card-desc">Carica un file .pptx per applicare sfondi, colori e slide CTA SB Food.</p>
+
+                <div class="drop-zone" id="dropzone-pptx">
+                    <input type="file" id="file-pptx" accept=".pptx" onchange="mostraPreview('pptx')">
+                    <div class="drop-zone-text">
+                        Trascina qui il file <strong>.pptx</strong><br>oppure clicca per selezionarlo
+                    </div>
+                </div>
+
+                <div class="file-preview" id="preview-pptx">
+                    <span class="file-preview-name" id="filename-pptx"></span>
+                    <button class="file-preview-remove" onclick="rimuoviFile('pptx')">&times;</button>
+                </div>
+
+                <ul class="card-features">
+                    <li>Slide copertina con logo e titolo</li>
+                    <li>Sfondi alternati scuro / avorio</li>
+                    <li>Logo in alto a destra su ogni slide</li>
+                    <li>Slide finale con CTA Calendly</li>
+                    <li>Contenuto originale preservato</li>
+                </ul>
+
+                <button class="brand-btn" onclick="brandizzaFile('pptx')">Brandizza e scarica .pptx</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const BRAND_PASSWORD = 'simone2025brand';
+const BACKEND = 'https://web-production-f3794.up.railway.app';
+
+// ── AUTH ──
+function checkAuth() {
+    if (localStorage.getItem('sb_brand_logged') === 'true') {
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+    }
+}
+
+function tentaLogin() {
+    var pwd = document.getElementById('loginPassword').value;
+    if (pwd === BRAND_PASSWORD) {
+        localStorage.setItem('sb_brand_logged', 'true');
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+    } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('loginPassword').value = '';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('sb_brand_logged');
+    location.reload();
+}
+
+checkAuth();
+
+// ── DRAG & DROP ──
+['word', 'pptx'].forEach(function(tipo) {
+    var zone = document.getElementById('dropzone-' + tipo);
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', function() {
+        zone.classList.remove('dragover');
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        var input = document.getElementById('file-' + tipo);
+        input.files = e.dataTransfer.files;
+        mostraPreview(tipo);
+    });
+});
+
+// ── FILE PREVIEW ──
+function mostraPreview(tipo) {
+    var input = document.getElementById('file-' + tipo);
+    var preview = document.getElementById('preview-' + tipo);
+    var filename = document.getElementById('filename-' + tipo);
+    var dropzone = document.getElementById('dropzone-' + tipo);
+
+    if (input.files && input.files[0]) {
+        filename.textContent = input.files[0].name;
+        preview.classList.add('visible');
+        dropzone.style.display = 'none';
+    }
+}
+
+function rimuoviFile(tipo) {
+    var input = document.getElementById('file-' + tipo);
+    var preview = document.getElementById('preview-' + tipo);
+    var dropzone = document.getElementById('dropzone-' + tipo);
+
+    input.value = '';
+    preview.classList.remove('visible');
+    dropzone.style.display = 'block';
+}
+
+// ── BRANDIZZA ──
+async function brandizzaFile(tipo) {
+    var inputId = tipo === 'word' ? 'file-word' : 'file-pptx';
+    var endpoint = tipo === 'word' ? 'word' : 'pptx';
+    var file = document.getElementById(inputId).files[0];
+
+    if (!file) {
+        alert('Carica prima un file.');
+        return;
+    }
+
+    var btn = event.target;
+    var testoOriginale = btn.textContent;
+    btn.textContent = 'Elaborazione...';
+    btn.disabled = true;
+
+    var formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        var res = await fetch(
+            BACKEND + '/api/brandizza/' + endpoint,
+            { method: 'POST', body: formData }
+        );
+
+        if (!res.ok) {
+            var err = await res.json().catch(function() { return {}; });
+            throw new Error(err.error || 'Errore server');
+        }
+
+        var blob = await res.blob();
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = tipo === 'word'
+            ? 'contratto-sbfood-brandizzato.docx'
+            : 'presentazione-sbfood-brandizzata.pptx';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        btn.textContent = 'Scaricato!';
+        setTimeout(function() {
+            btn.textContent = testoOriginale;
+            btn.disabled = false;
+        }, 3000);
+
+    } catch(e) {
+        console.error('Errore brandizzazione:', e);
+        alert('Errore nell\'elaborazione. Riprova.');
+        btn.textContent = testoOriginale;
+        btn.disabled = false;
+    }
+}
+</script>
+</body>
+</html>
