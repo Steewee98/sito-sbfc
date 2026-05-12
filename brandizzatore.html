@@ -560,22 +560,28 @@ async function brandizzaFile(tipo) {
     formData.append('file', file);
 
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+
         const res = await fetch(
             'https://web-production-f3794.up.railway.app/api/brandizza/' + endpoint,
-            { method: 'POST', body: formData }
+            {
+                method: 'POST',
+                body: formData,
+                signal: controller.signal
+            }
         );
 
-        console.log('Status:', res.status);
-        console.log('Content-Type:', res.headers.get('Content-Type'));
+        clearTimeout(timeoutId);
+
+        alert('Status: ' + res.status + ' - Content-Type: ' + res.headers.get('Content-Type'));
 
         if (!res.ok) {
             const errText = await res.text();
-            console.error('Errore server:', errText);
-            throw new Error('Errore server: ' + errText);
+            throw new Error('Errore ' + res.status + ': ' + errText);
         }
 
         const blob = await res.blob();
-        console.log('Blob size:', blob.size);
 
         if (blob.size === 0) {
             throw new Error('File vuoto ricevuto');
@@ -599,8 +605,11 @@ async function brandizzaFile(tipo) {
         }, 3000);
 
     } catch(e) {
-        console.error('Errore completo:', e);
-        alert('Errore: ' + e.message);
+        if (e.name === 'AbortError') {
+            alert('Timeout — il server non risponde entro 30 secondi');
+        } else {
+            alert('Errore tipo: ' + e.name + '\nMessaggio: ' + e.message);
+        }
         btn.textContent = testoOriginale;
         btn.disabled = false;
     }
