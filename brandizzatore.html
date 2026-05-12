@@ -530,16 +530,27 @@ function rimuoviFile(tipo) {
 
 // ── BRANDIZZA ──
 async function brandizzaFile(tipo) {
+    console.log('brandizzaFile chiamata con tipo:', tipo);
+
     const inputId = tipo === 'word' ? 'file-word' : 'file-pptx';
     const endpoint = tipo === 'word' ? 'word' : 'pptx';
 
     const input = document.getElementById(inputId);
+
+    console.log('Input element:', input);
+    console.log('Files:', input?.files);
+    console.log('File[0]:', input?.files?.[0]);
+
     if (!input || !input.files || !input.files[0]) {
         alert('Carica prima un file.');
         return;
     }
 
     const file = input.files[0];
+    console.log('File name:', file.name);
+    console.log('File size:', file.size);
+    console.log('File type:', file.type);
+
     const btn = event.currentTarget;
     const testoOriginale = btn.textContent;
     btn.textContent = 'Elaborazione...';
