@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-dark-16x16.png" media="(prefers-color-scheme: light)">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png" media="(prefers-color-scheme: dark)">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png" media="(prefers-color-scheme: dark)">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -26,11 +27,8 @@
             --ivory-30: rgba(245,242,238,0.3);
             --surface: #ffffff;
             --green: #2d8a4e;
-            --green-soft: rgba(45,138,78,0.12);
             --yellow: #c49a2d;
-            --yellow-soft: rgba(196,154,45,0.12);
             --red: #c43d2d;
-            --red-soft: rgba(196,61,45,0.12);
         }
 
         body {
@@ -42,9 +40,6 @@
             overflow-x: hidden;
         }
 
-        /* ══════════════════════════════════
-           SCREENS
-           ══════════════════════════════════ */
         .screen { display: none; min-height: 100vh; min-height: 100dvh; }
         .screen.active { display: flex; }
 
@@ -62,7 +57,6 @@
             overflow: hidden;
         }
 
-        /* Ghost "20" decorativo */
         .reg-ghost {
             position: absolute;
             top: 50%;
@@ -78,7 +72,6 @@
             white-space: nowrap;
         }
 
-        /* Linea decorativa terracotta */
         .reg-line {
             width: 48px;
             height: 2px;
@@ -173,7 +166,6 @@
             cursor: pointer;
             margin-top: 4px;
             transition: background .25s, transform .2s, box-shadow .3s;
-            letter-spacing: 0.01em;
         }
         .reg-btn:hover {
             background: var(--terracotta-hover);
@@ -259,7 +251,7 @@
            SCHERMATA 2 — QUESTIONARIO
            ══════════════════════════════════ */
         #screen-quiz {
-            background: var(--ivory);
+            background: var(--dark);
             flex-direction: column;
         }
 
@@ -269,9 +261,10 @@
             left: 0;
             right: 0;
             z-index: 100;
-            background: rgba(255,255,255,0.95);
+            background: rgba(55,57,63,0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .quiz-header-inner {
             display: flex;
@@ -285,12 +278,12 @@
         .quiz-counter {
             font-size: 0.82rem;
             font-weight: 600;
-            color: var(--dark);
+            color: var(--ivory-60);
             letter-spacing: 0.02em;
         }
         .quiz-progress-wrap {
             height: 3px;
-            background: rgba(55,57,63,0.06);
+            background: rgba(255,255,255,0.06);
         }
         .quiz-progress-bar {
             height: 100%;
@@ -309,28 +302,41 @@
         }
 
         .quiz-card-wrapper {
-            max-width: 620px;
+            max-width: 580px;
             width: 100%;
             position: relative;
             overflow: hidden;
         }
         .quiz-card {
             background: #fff;
-            border-radius: 16px;
-            box-shadow:
-                0 1px 2px rgba(0,0,0,0.04),
-                0 4px 16px rgba(0,0,0,0.06),
-                0 12px 40px rgba(0,0,0,0.05);
-            padding: 56px 48px 48px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 48px;
             width: 100%;
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
         .quiz-card.slide-out {
             animation: slideOut .3s cubic-bezier(.4,0,1,1) forwards;
         }
         .quiz-card.slide-in {
-            animation: slideIn .4s cubic-bezier(.0,0,.2,1) forwards;
+            animation: slideIn .35s cubic-bezier(.0,0,.2,1) forwards;
+        }
+
+        /* Ghost numero domanda */
+        .quiz-ghost-num {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -55%);
+            font-family: 'Playfair Display', serif;
+            font-size: 120px;
+            font-weight: 700;
+            color: rgba(196,98,45,0.04);
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
         }
 
         .quiz-cat-pill {
@@ -342,78 +348,97 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--terracotta);
-            background: rgba(196,98,45,0.08);
+            background: rgba(196,98,45,0.12);
             padding: 7px 16px;
             border-radius: 99px;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
+            position: relative;
         }
-        .quiz-cat-pill-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--terracotta);
+        .quiz-cat-pill-icon {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quiz-cat-pill-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: var(--terracotta);
         }
 
         .quiz-question {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.3rem, 3.2vw, 1.6rem);
-            font-weight: 500;
-            color: var(--dark);
-            line-height: 1.45;
-            margin-bottom: 44px;
-            min-height: 2.9em;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.4;
+            margin-bottom: 36px;
+            min-height: 2.8em;
+            position: relative;
         }
 
         .quiz-answers {
             display: flex;
-            gap: 16px;
-            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
         }
         .quiz-ans-btn {
-            flex: 1;
-            max-width: 200px;
-            padding: 20px 28px;
-            border: 2px solid transparent;
-            border-radius: 12px;
+            width: 100%;
+            height: 64px;
+            border: none;
+            border-radius: 8px;
             font-family: 'Inter', sans-serif;
-            font-size: 1.05rem;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform .25s cubic-bezier(.4,0,.2,1), box-shadow .3s, background .2s, border-color .2s;
+            transition: transform .2s ease, box-shadow .2s ease;
             position: relative;
             overflow: hidden;
         }
-        .quiz-ans-btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.15);
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity .2s;
-        }
-        .quiz-ans-btn:hover::after { opacity: 1; }
         .quiz-ans-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: scale(1.02);
         }
         .quiz-ans-btn:active {
-            transform: translateY(0) scale(.97);
+            transform: scale(0.98);
             transition-duration: .1s;
         }
 
         .btn-si {
-            background: var(--terracotta);
+            background: linear-gradient(135deg, #c4622d, #d4733e);
             color: #fff;
         }
-        .btn-si:hover { box-shadow: 0 8px 24px rgba(196,98,45,0.3); }
+        .btn-si:hover { box-shadow: 0 8px 28px rgba(196,98,45,0.35); }
         .btn-no {
             background: var(--dark);
             color: #fff;
         }
+        .btn-no:hover { box-shadow: 0 8px 28px rgba(55,57,63,0.35); }
 
         .quiz-ans-btn.pulse {
-            animation: btnPulse .4s ease;
+            animation: btnPulse .35s ease;
+        }
+
+        /* Pallini progresso categoria */
+        .quiz-cat-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 28px;
+        }
+        .quiz-cat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(55,57,63,0.12);
+            transition: background .3s, transform .3s;
+        }
+        .quiz-cat-dot.answered {
+            background: var(--terracotta);
+            transform: scale(1.15);
+        }
+        .quiz-cat-dot.current {
+            background: rgba(196,98,45,0.35);
         }
 
         /* ══════════════════════════════════
@@ -472,7 +497,6 @@
             animation: fadeUp .6s ease .15s forwards;
         }
 
-        /* Barra 3 zone */
         .result-bar-wrap {
             width: 100%;
             margin-bottom: 36px;
@@ -485,7 +509,6 @@
             border-radius: 99px;
             overflow: hidden;
             margin-bottom: 10px;
-            position: relative;
         }
         .zone-red { flex: 8; background: var(--red); opacity: .8; }
         .zone-yellow { flex: 6; background: var(--yellow); opacity: .8; }
@@ -500,10 +523,7 @@
         .result-bar-labels span:nth-child(2) { flex: 6; text-align: center; }
         .result-bar-labels span:last-child { flex: 6; text-align: right; }
 
-        .result-bar-marker {
-            position: relative;
-            height: 0;
-        }
+        .result-bar-marker { position: relative; height: 0; }
         .result-marker-dot {
             position: absolute;
             top: -20px;
@@ -542,10 +562,7 @@
             line-height: 1.7;
         }
 
-        /* Grafico a barre orizzontali */
-        .result-chart {
-            margin-bottom: 48px;
-        }
+        .result-chart { margin-bottom: 48px; }
         .result-chart-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.1rem;
@@ -582,7 +599,6 @@
             background: rgba(55,57,63,0.05);
             border-radius: 8px;
             overflow: hidden;
-            position: relative;
         }
         .result-bar-fill {
             height: 100%;
@@ -654,6 +670,25 @@
             border-color: var(--dark);
             transform: translateY(-2px);
         }
+        .cta-pdf {
+            background: none;
+            border: 2px solid var(--terracotta);
+            color: var(--terracotta);
+            padding: 14px 28px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .25s, color .25s, transform .2s;
+            width: 100%;
+            max-width: 400px;
+        }
+        .cta-pdf:hover {
+            background: var(--terracotta);
+            color: #fff;
+            transform: translateY(-1px);
+        }
 
         /* ══════════════════════════════════
            ANIMAZIONI
@@ -684,7 +719,7 @@
         }
         @keyframes btnPulse {
             0%   { transform: scale(1); }
-            40%  { transform: scale(.93); }
+            40%  { transform: scale(.96); }
             100% { transform: scale(1); }
         }
         @keyframes barRowIn {
@@ -696,9 +731,10 @@
            RESPONSIVE
            ══════════════════════════════════ */
         @media (max-width: 520px) {
-            .quiz-card { padding: 44px 24px 36px; border-radius: 14px; }
-            .quiz-answers { gap: 12px; }
-            .quiz-ans-btn { padding: 18px 16px; font-size: 1rem; border-radius: 10px; }
+            .quiz-card { padding: 36px 24px; }
+            .quiz-question { font-size: 20px; }
+            .quiz-ans-btn { height: 58px; font-size: 15px; }
+            .quiz-ghost-num { font-size: 90px; }
             .result-bar-label { width: 90px; font-size: 0.75rem; }
             .result-bar-track { height: 28px; }
             .result-message { padding: 24px 20px; }
@@ -742,7 +778,7 @@
 <div id="screen-quiz" class="screen">
     <div class="quiz-header">
         <div class="quiz-header-inner">
-            <img src="assets/logo/logo-blu.png" alt="SB Food Consulting" class="quiz-logo">
+            <img src="assets/logo/logo-bianco.png" alt="SB Food Consulting" class="quiz-logo">
             <span class="quiz-counter" id="quiz-counter">Domanda 1 di 20</span>
         </div>
         <div class="quiz-progress-wrap">
@@ -752,8 +788,9 @@
     <div class="quiz-body">
         <div class="quiz-card-wrapper">
             <div class="quiz-card" id="quiz-card">
+                <div class="quiz-ghost-num" id="quiz-ghost-num" aria-hidden="true"></div>
                 <div class="quiz-cat-pill" id="quiz-cat-pill">
-                    <span class="quiz-cat-pill-dot"></span>
+                    <span class="quiz-cat-pill-icon"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3"/></svg></span>
                     <span id="quiz-cat-label"></span>
                 </div>
                 <div class="quiz-question" id="quiz-question"></div>
@@ -761,6 +798,7 @@
                     <button class="quiz-ans-btn btn-si" id="btn-si" onclick="rispondi(true)">Si</button>
                     <button class="quiz-ans-btn btn-no" id="btn-no" onclick="rispondi(false)">No</button>
                 </div>
+                <div class="quiz-cat-dots" id="quiz-cat-dots"></div>
             </div>
         </div>
     </div>
@@ -802,32 +840,42 @@
         <div class="result-ctas">
             <a href="academy.html" class="cta-primary">Scopri SB Food Academy &rarr;</a>
             <a href="https://calendly.com/sbfoodconsulting-info/30min" target="_blank" rel="noopener" class="cta-outline">Prenota una call gratuita &rarr;</a>
+            <button onclick="scaricaResoconto()" class="cta-pdf">&darr; Scarica il tuo resoconto PDF</button>
         </div>
     </div>
 </div>
 
 <script>
-/* ═══════ DATI ═══════ */
+/* ═══════ DATI GLOBALI ═══════ */
 var userName = '';
 var userEmail = '';
 var currentQuestion = 0;
 var risposte = [];
+var punteggioFinale = 0;
+var punteggiCategorie = {};
 var isAnimating = false;
+
+var catIcons = [
+    '<svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 2.5a1 1 0 110 2 1 1 0 010-2zM6.5 7h1V6h1v1h1v1h-1v3.5h-1V8h-1V7z"/></svg>',
+    '<svg viewBox="0 0 16 16"><circle cx="8" cy="4" r="2.5"/><path d="M3.5 14v-2.5A3.5 3.5 0 017 8h2a3.5 3.5 0 013.5 3.5V14"/></svg>',
+    '<svg viewBox="0 0 16 16"><path d="M2 3h12v10H2V3zm2 2v2h8V5H4zm0 4v2h5V9H4z"/></svg>',
+    '<svg viewBox="0 0 16 16"><path d="M14 10l-4 4-2-2-4 4H2V2h12v8zM5 5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>',
+    '<svg viewBox="0 0 16 16"><path d="M2 13V5l4-3h4l4 3v8H2zm5-8v3h2V5H7zm-3 5h8v1H4v-1z"/></svg>'
+];
 
 var categorie = [
     { nome: 'Food Cost', num: '01', count: 4, desc: 'Quanto conosci davvero i costi del tuo locale? Margini, sprechi, e numeri che contano.' },
     { nome: 'Personale', num: '02', count: 4, desc: 'Il tuo team lavora con autonomia e standard chiari, o dipende tutto da te?' },
-    { nome: 'Menu', num: '03', count: 4, desc: 'Il menu è il tuo strumento di vendita più potente. Lo stai usando bene?' },
+    { nome: 'Menu', num: '03', count: 4, desc: 'Il menu \u00e8 il tuo strumento di vendita pi\u00f9 potente. Lo stai usando bene?' },
     { nome: 'Comunicazione', num: '04', count: 4, desc: 'Marketing e comunicazione: stai investendo o stai solo spendendo?' },
     { nome: 'Numeri', num: '05', count: 4, desc: 'I numeri che ogni ristoratore dovrebbe conoscere a memoria.' }
 ];
 
-var catColors = ['var(--terracotta)', '#6b5ce7', '#2d8a4e', '#c49a2d', '#3a7bd5'];
 var catBgColors = ['rgba(196,98,45,0.85)', 'rgba(107,92,231,0.85)', 'rgba(45,138,78,0.85)', 'rgba(196,154,45,0.85)', 'rgba(58,123,213,0.85)'];
 
 var domande = [
     { cat: 0, catPos: 1, testo: 'Conosci il tuo food cost reale questa settimana?' },
-    { cat: 0, catPos: 2, testo: 'Sai quale piatto del menu ha il margine più alto?' },
+    { cat: 0, catPos: 2, testo: 'Sai quale piatto del menu ha il margine pi\u00f9 alto?' },
     { cat: 0, catPos: 3, testo: 'Confronti il food cost teorico con quello reale ogni mese?' },
     { cat: 0, catPos: 4, testo: 'Hai una soglia di allerta oltre la quale intervieni subito?' },
     { cat: 1, catPos: 1, testo: 'Ogni membro del team sa cosa deve fare senza che tu lo ripeta?' },
@@ -835,21 +883,20 @@ var domande = [
     { cat: 1, catPos: 3, testo: 'Il locale funziona correttamente anche quando non sei presente?' },
     { cat: 1, catPos: 4, testo: 'Hai standard operativi scritti che il personale segue davvero?' },
     { cat: 2, catPos: 1, testo: 'Il tuo menu ha meno di 35 voci?' },
-    { cat: 2, catPos: 2, testo: 'Sai quali sono i 3 piatti più redditizi e li stai valorizzando?' },
+    { cat: 2, catPos: 2, testo: 'Sai quali sono i 3 piatti pi\u00f9 redditizi e li stai valorizzando?' },
     { cat: 2, catPos: 3, testo: 'Aggiorni il menu almeno una volta all\'anno in base ai costi?' },
     { cat: 2, catPos: 4, testo: 'Il layout del menu guida il cliente verso i piatti con margine maggiore?' },
     { cat: 3, catPos: 1, testo: 'Sai quanti clienti ti ha portato Instagram nell\'ultimo mese?' },
     { cat: 3, catPos: 2, testo: 'Hai un sistema per raccogliere le email dei tuoi clienti?' },
     { cat: 3, catPos: 3, testo: 'Le tue campagne social hanno un obiettivo misurabile?' },
-    { cat: 3, catPos: 4, testo: 'Sai qual è il tuo costo di acquisizione per ogni nuovo cliente?' },
+    { cat: 3, catPos: 4, testo: 'Sai qual \u00e8 il tuo costo di acquisizione per ogni nuovo cliente?' },
     { cat: 4, catPos: 1, testo: 'Conosci il tuo punto di pareggio mensile?' },
-    { cat: 4, catPos: 2, testo: 'Sai qual è la tua percentuale di costo del lavoro sul fatturato?' },
+    { cat: 4, catPos: 2, testo: 'Sai qual \u00e8 la tua percentuale di costo del lavoro sul fatturato?' },
     { cat: 4, catPos: 3, testo: 'Hai un report settimanale che leggi davvero ogni settimana?' },
     { cat: 4, catPos: 4, testo: 'Sei in grado di prevedere il fatturato del mese prossimo con margine di errore del 15%?' }
 ];
 
 /* ═══════ SCHERMATA 1 — REGISTRAZIONE ═══════ */
-/* Animazione entrata campi */
 setTimeout(function() {
     document.querySelectorAll('.reg-field').forEach(function(el) {
         el.classList.add('visible');
@@ -883,7 +930,6 @@ function mostraTransizione(catIndex) {
     document.getElementById('trans-desc').textContent = cat.desc;
     document.getElementById('trans-count').textContent = cat.count + ' domande';
 
-    /* Reset animazioni */
     var transEls = document.querySelectorAll('#screen-transition .trans-number, #screen-transition .trans-line, #screen-transition .trans-name, #screen-transition .trans-desc, #screen-transition .trans-count');
     transEls.forEach(function(el) {
         el.style.animation = 'none';
@@ -908,6 +954,23 @@ function mostraDomanda(isFirst) {
     document.getElementById('quiz-progress').style.width = ((currentQuestion + 1) / 20 * 100) + '%';
     document.getElementById('quiz-cat-label').textContent = cat.nome.toUpperCase() + ' \u00B7 ' + d.catPos + ' di ' + cat.count;
     document.getElementById('quiz-question').textContent = d.testo;
+    document.getElementById('quiz-ghost-num').textContent = (currentQuestion + 1);
+
+    /* Icona categoria nella pill */
+    var iconEl = document.querySelector('.quiz-cat-pill-icon');
+    if (iconEl) iconEl.innerHTML = catIcons[d.cat];
+
+    /* Pallini progresso categoria */
+    var dotsHtml = '';
+    var catStart = d.cat * 4;
+    for (var i = 0; i < cat.count; i++) {
+        var qIdx = catStart + i;
+        var cls = 'quiz-cat-dot';
+        if (qIdx < currentQuestion) cls += ' answered';
+        else if (qIdx === currentQuestion) cls += ' current';
+        dotsHtml += '<div class="' + cls + '"></div>';
+    }
+    document.getElementById('quiz-cat-dots').innerHTML = dotsHtml;
 
     var card = document.getElementById('quiz-card');
     card.classList.remove('slide-out', 'slide-in');
@@ -927,14 +990,18 @@ function rispondi(valore) {
     if (isAnimating) return;
     isAnimating = true;
 
-    /* Button pulse feedback */
     var btnId = valore ? 'btn-si' : 'btn-no';
     var btn = document.getElementById(btnId);
     btn.classList.remove('pulse');
     btn.offsetHeight;
     btn.classList.add('pulse');
 
-    risposte.push(valore ? 1 : 0);
+    var d = domande[currentQuestion];
+    risposte.push({
+        domanda: d.testo,
+        risposta: valore,
+        categoria: categorie[d.cat].nome.toUpperCase()
+    });
     currentQuestion++;
 
     if (currentQuestion >= 20) {
@@ -942,7 +1009,6 @@ function rispondi(valore) {
         return;
     }
 
-    /* Slide out current card, then show next */
     var card = document.getElementById('quiz-card');
     card.classList.add('slide-out');
 
@@ -961,36 +1027,33 @@ function rispondi(valore) {
 
 /* ═══════ SCHERMATA 3 — RISULTATO ═══════ */
 function mostraRisultato() {
-    var punteggio = risposte.reduce(function(a, b) { return a + b; }, 0);
+    var scores = risposte.map(function(r) { return r.risposta ? 1 : 0; });
+    punteggioFinale = scores.reduce(function(a, b) { return a + b; }, 0);
 
-    var punteggi = {
-        food_cost: risposte.slice(0, 4).reduce(function(a, b) { return a + b; }, 0),
-        personale: risposte.slice(4, 8).reduce(function(a, b) { return a + b; }, 0),
-        menu: risposte.slice(8, 12).reduce(function(a, b) { return a + b; }, 0),
-        comunicazione: risposte.slice(12, 16).reduce(function(a, b) { return a + b; }, 0),
-        numeri: risposte.slice(16, 20).reduce(function(a, b) { return a + b; }, 0)
+    punteggiCategorie = {
+        food_cost: scores.slice(0, 4).reduce(function(a, b) { return a + b; }, 0),
+        personale: scores.slice(4, 8).reduce(function(a, b) { return a + b; }, 0),
+        menu: scores.slice(8, 12).reduce(function(a, b) { return a + b; }, 0),
+        comunicazione: scores.slice(12, 16).reduce(function(a, b) { return a + b; }, 0),
+        numeri: scores.slice(16, 20).reduce(function(a, b) { return a + b; }, 0)
     };
 
     document.getElementById('result-title').textContent = 'Il tuo punteggio, ' + userName;
-
     mostraSchermata('screen-result');
 
-    /* Conteggio animato del punteggio */
     var scoreEl = document.getElementById('result-score');
-    animateCount(scoreEl, 0, punteggio, 1200);
+    animateCount(scoreEl, 0, punteggioFinale, 1200);
 
-    /* Marker posizione sulla barra */
-    var pct = (punteggio / 20) * 100;
+    var pct = (punteggioFinale / 20) * 100;
     setTimeout(function() {
         document.getElementById('result-marker').style.left = pct + '%';
     }, 200);
 
-    /* Messaggio per fascia */
     var msgHtml = '';
-    if (punteggio <= 8) {
+    if (punteggioFinale <= 8) {
         msgHtml = '<div class="result-msg-title">Il tuo locale ha bisogno di una ristrutturazione operativa</div>' +
                   '<div class="result-msg-text">Stai lavorando senza strumenti. Ogni giorno perdi margine senza accorgertene.</div>';
-    } else if (punteggio <= 14) {
+    } else if (punteggioFinale <= 14) {
         msgHtml = '<div class="result-msg-title">Ci sono aree critiche da affrontare subito</div>' +
                   '<div class="result-msg-text">Hai delle basi ma mancano sistemi fondamentali. Il rischio \u00e8 crescere in modo instabile.</div>';
     } else {
@@ -999,13 +1062,12 @@ function mostraRisultato() {
     }
     document.getElementById('result-message').innerHTML = msgHtml;
 
-    /* Grafico a barre orizzontali */
     var barData = [
-        { nome: 'Food Cost', score: punteggi.food_cost, idx: 0 },
-        { nome: 'Personale', score: punteggi.personale, idx: 1 },
-        { nome: 'Menu', score: punteggi.menu, idx: 2 },
-        { nome: 'Comunicazione', score: punteggi.comunicazione, idx: 3 },
-        { nome: 'Numeri', score: punteggi.numeri, idx: 4 }
+        { nome: 'Food Cost', score: punteggiCategorie.food_cost, idx: 0 },
+        { nome: 'Personale', score: punteggiCategorie.personale, idx: 1 },
+        { nome: 'Menu', score: punteggiCategorie.menu, idx: 2 },
+        { nome: 'Comunicazione', score: punteggiCategorie.comunicazione, idx: 3 },
+        { nome: 'Numeri', score: punteggiCategorie.numeri, idx: 4 }
     ];
 
     var barsHtml = '';
@@ -1021,21 +1083,19 @@ function mostraRisultato() {
     });
     document.getElementById('result-bars').innerHTML = barsHtml;
 
-    /* Anima le barre una per una */
     barData.forEach(function(b, i) {
         setTimeout(function() {
             var row = document.getElementById('bar-row-' + b.idx);
             row.classList.add('visible');
-
             setTimeout(function() {
                 var fill = document.getElementById('bar-fill-' + b.idx);
-                var pctBar = Math.max((b.score / 4) * 100, 12);
-                fill.style.width = pctBar + '%';
+                fill.style.width = Math.max((b.score / 4) * 100, 12) + '%';
             }, 100);
         }, 450 + (i * 120));
     });
 
     /* Invio dati al backend */
+    var scoresOnly = risposte.map(function(r) { return r.risposta ? 1 : 0; });
     try {
         fetch('https://web-production-f3794.up.railway.app/api/checklist', {
             method: 'POST',
@@ -1043,18 +1103,163 @@ function mostraRisultato() {
             body: JSON.stringify({
                 nome: userName,
                 email: userEmail,
-                punteggio_totale: punteggio,
-                punteggio_food_cost: punteggi.food_cost,
-                punteggio_personale: punteggi.personale,
-                punteggio_menu: punteggi.menu,
-                punteggio_comunicazione: punteggi.comunicazione,
-                punteggio_numeri: punteggi.numeri,
-                risposte: risposte
+                punteggio_totale: punteggioFinale,
+                punteggio_food_cost: punteggiCategorie.food_cost,
+                punteggio_personale: punteggiCategorie.personale,
+                punteggio_menu: punteggiCategorie.menu,
+                punteggio_comunicazione: punteggiCategorie.comunicazione,
+                punteggio_numeri: punteggiCategorie.numeri,
+                risposte: scoresOnly
             })
         }).then(function(r) { return r.json(); })
           .then(function(d) { console.log('Checklist salvata:', d); })
           .catch(function(e) { console.log('Backend non raggiunto:', e); });
     } catch(e) { console.log('Errore invio:', e); }
+}
+
+/* ═══════ PDF RESOCONTO ═══════ */
+function scaricaResoconto() {
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF();
+
+    var SCURO = [55, 57, 63];
+    var TERRACOTTA = [196, 98, 45];
+    var AVORIO = [245, 242, 238];
+    var nome = userName;
+    var punteggio = punteggioFinale;
+    var punteggi = punteggiCategorie;
+
+    /* HEADER */
+    doc.setFillColor(SCURO[0], SCURO[1], SCURO[2]);
+    doc.rect(0, 0, 210, 45, 'F');
+
+    doc.setTextColor(TERRACOTTA[0], TERRACOTTA[1], TERRACOTTA[2]);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('SB FOOD CONSULTING', 20, 18);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('La tua Checklist Operativa', 20, 30);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(200, 195, 188);
+    doc.text(new Date().toLocaleDateString('it-IT'), 20, 40);
+
+    /* NOME E PUNTEGGIO */
+    doc.setTextColor(SCURO[0], SCURO[1], SCURO[2]);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Risultato di ' + nome, 20, 65);
+
+    doc.setFontSize(32);
+    doc.setTextColor(TERRACOTTA[0], TERRACOTTA[1], TERRACOTTA[2]);
+    doc.text(punteggio + '/20', 20, 82);
+
+    /* Fascia risultato */
+    doc.setFontSize(11);
+    doc.setTextColor(SCURO[0], SCURO[1], SCURO[2]);
+    var fasciaText = '';
+    if (punteggio <= 8)
+        fasciaText = 'Il tuo locale ha bisogno di una ristrutturazione operativa';
+    else if (punteggio <= 14)
+        fasciaText = 'Ci sono aree critiche da affrontare subito';
+    else
+        fasciaText = 'Buona base \u2014 ma c\'\u00e8 sempre margine di miglioramento';
+
+    var fasciaLines = doc.splitTextToSize(fasciaText, 170);
+    doc.text(fasciaLines, 20, 95);
+
+    /* PUNTEGGI PER CATEGORIA */
+    doc.setFillColor(AVORIO[0], AVORIO[1], AVORIO[2]);
+    doc.rect(15, 108, 180, 8, 'F');
+    doc.setTextColor(TERRACOTTA[0], TERRACOTTA[1], TERRACOTTA[2]);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PUNTEGGI PER AREA', 20, 114);
+
+    var catList = [
+        { nome: 'Food Cost', score: punteggi.food_cost },
+        { nome: 'Personale', score: punteggi.personale },
+        { nome: 'Menu', score: punteggi.menu },
+        { nome: 'Comunicazione', score: punteggi.comunicazione },
+        { nome: 'Numeri', score: punteggi.numeri }
+    ];
+
+    var y = 125;
+    catList.forEach(function(cat) {
+        doc.setTextColor(SCURO[0], SCURO[1], SCURO[2]);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(cat.nome, 20, y);
+
+        doc.setFillColor(220, 215, 210);
+        doc.rect(70, y - 5, 100, 6, 'F');
+
+        var width = (cat.score / 4) * 100;
+        var color = cat.score >= 3 ? [46, 204, 113] :
+                    cat.score >= 2 ? [212, 167, 23] :
+                    [204, 68, 68];
+        doc.setFillColor(color[0], color[1], color[2]);
+        doc.rect(70, y - 5, width, 6, 'F');
+
+        doc.setTextColor(SCURO[0], SCURO[1], SCURO[2]);
+        doc.setFont('helvetica', 'bold');
+        doc.text(cat.score + '/4', 178, y);
+
+        y += 14;
+    });
+
+    /* DETTAGLIO RISPOSTE */
+    y += 6;
+    doc.setFillColor(AVORIO[0], AVORIO[1], AVORIO[2]);
+    doc.rect(15, y, 180, 8, 'F');
+    doc.setTextColor(TERRACOTTA[0], TERRACOTTA[1], TERRACOTTA[2]);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DETTAGLIO RISPOSTE', 20, y + 6);
+    y += 16;
+
+    risposte.forEach(function(r, i) {
+        if (y > 270) {
+            doc.addPage();
+            y = 20;
+        }
+        var colore = r.risposta ? [46, 204, 113] : [204, 68, 68];
+        doc.setFillColor(colore[0], colore[1], colore[2]);
+        doc.circle(22, y - 1, 2, 'F');
+
+        doc.setTextColor(SCURO[0], SCURO[1], SCURO[2]);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        var lines = doc.splitTextToSize((i + 1) + '. ' + r.domanda, 155);
+        doc.text(lines, 28, y);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(colore[0], colore[1], colore[2]);
+        doc.text(r.risposta ? 'SI' : 'NO', 188, y);
+
+        y += lines.length * 5 + 4;
+    });
+
+    /* FOOTER */
+    var pageCount = doc.internal.getNumberOfPages();
+    for (var p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFillColor(SCURO[0], SCURO[1], SCURO[2]);
+        doc.rect(0, 282, 210, 15, 'F');
+        doc.setTextColor(TERRACOTTA[0], TERRACOTTA[1], TERRACOTTA[2]);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text('SB Food Consulting', 20, 291);
+        doc.setTextColor(200, 195, 188);
+        doc.setFont('helvetica', 'normal');
+        doc.text('sbfoodconsulting.com  |  info@sbfoodconsulting.com', 70, 291);
+    }
+
+    doc.save('checklist-sbfood-' + nome.toLowerCase().replace(/\s/g, '-') + '.pdf');
 }
 
 /* ═══════ UTILITY ═══════ */
