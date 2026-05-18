@@ -313,7 +313,7 @@ tr:hover td{background:#fafaf8}
         <div class="kpi-card"><div class="kpi-label">Contatti questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
         <div class="kpi-card"><div class="kpi-label">Acquisti questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
         <div class="kpi-card"><div class="kpi-label">Incasso questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
-        <div class="kpi-card"><div class="kpi-label">Checklist scaricate</div><div class="kpi-value" id="kpi-leads">...</div><div class="kpi-trend neutral" id="kpi-leads-trend">caricamento</div></div>
+        <div class="kpi-card"><div class="kpi-label">Checklist completate</div><div class="kpi-value" id="kpi-leads">...</div><div class="kpi-trend neutral" id="kpi-leads-trend">caricamento</div></div>
     </div>
 
     <!-- RIGA 2 — DUE COLONNE -->
@@ -800,14 +800,17 @@ function renderDashboard(){
         }
         document.getElementById('dashLastContacts').innerHTML=html;
 
-        // KPI Lead magnet
-        var leads=contatti.filter(function(c){return c.tipo_locale==='Lead magnet checklist'}).length;
-        var kpiLeads=document.getElementById('kpi-leads');
-        var kpiLeadsTrend=document.getElementById('kpi-leads-trend');
-        if(kpiLeads){kpiLeads.textContent=leads;}
-        if(kpiLeadsTrend){kpiLeadsTrend.textContent='download totali';kpiLeadsTrend.className='kpi-trend neutral';}
     }).catch(function(){
         document.getElementById('dashLastContacts').innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:#5a5a5a">API non raggiungibile</td></tr>';
+    });
+
+    // --- KPI 5: Checklist completate ---
+    apiFetch('/api/checklist').then(function(data){
+        var kpiLeads=document.getElementById('kpi-leads');
+        var kpiLeadsTrend=document.getElementById('kpi-leads-trend');
+        if(kpiLeads){kpiLeads.textContent=data.length;}
+        if(kpiLeadsTrend){kpiLeadsTrend.textContent='completate';kpiLeadsTrend.className='kpi-trend neutral';}
+    }).catch(function(){
         var kpiLeads=document.getElementById('kpi-leads');if(kpiLeads)kpiLeads.textContent='—';
     });
 
