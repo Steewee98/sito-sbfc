@@ -203,7 +203,7 @@
 
         <div class="lead-magnet-card" data-reveal data-reveal-delay="100">
             <div class="lead-magnet-card-left">
-                <div class="lead-magnet-badge">PDF gratuito</div>
+                <div class="lead-magnet-badge" id="checklist-counter">Checklist interattiva</div>
                 <h3 class="lead-magnet-card-title">La Checklist del<br><em>Ristoratore Consapevole</em></h3>
                 <p class="lead-magnet-card-desc">20 domande su 5 aree operative fondamentali: food cost, personale, menu, comunicazione e numeri. Con punteggio finale e prossimi passi consigliati.</p>
                 <div class="lead-magnet-features">
@@ -586,6 +586,19 @@ if (urlParams.get('pagamento') === 'successo') {
 if (urlParams.get('pagamento') === 'annullato') {
     alert('Pagamento annullato. Puoi riprovare quando vuoi.');
 }
+
+/* ═══════ CONTATORE CHECKLIST COMPLETATE ═══════ */
+(function() {
+    fetch('https://web-production-f3794.up.railway.app/api/checklist')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            var count = Array.isArray(data) ? data.length : 0;
+            if (count > 0) {
+                document.getElementById('checklist-counter').textContent = count + ' checklist completate';
+            }
+        })
+        .catch(function() {});
+})();
 </script>
 <script type="application/ld+json">
 {
