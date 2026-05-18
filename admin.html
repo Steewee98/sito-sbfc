@@ -290,6 +290,10 @@ tr:hover td{background:#fafaf8}
             <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             Traffico sito
         </div>
+        <div class="sidebar-item" data-section="checklist">
+            <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Checklist
+        </div>
     </div>
 </aside>
 
@@ -493,6 +497,33 @@ tr:hover td{background:#fafaf8}
     </div>
 </section>
 
+<!-- ========== CHECKLIST ========== -->
+<section class="admin-section" id="sec-checklist">
+    <div class="section-header">
+        <h2>Checklist</h2>
+        <p>Risultati delle checklist compilate dal sito</p>
+    </div>
+    <div class="kpi-grid" id="checklistKpi" style="grid-template-columns:repeat(2,1fr)"></div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Punteggio</th>
+                    <th>Food Cost</th>
+                    <th>Personale</th>
+                    <th>Menu</th>
+                    <th>Comunicazione</th>
+                    <th>Numeri</th>
+                </tr>
+            </thead>
+            <tbody id="checklistBody"></tbody>
+        </table>
+    </div>
+</section>
+
 </main>
 </div>
 
@@ -561,6 +592,7 @@ document.querySelectorAll('.sidebar-item').forEach(function(el){
         document.getElementById('sec-'+el.dataset.section).classList.add('active');
         if(el.dataset.section==='pagamenti') renderPagamenti();
         if(el.dataset.section==='studenti') renderStudenti();
+        if(el.dataset.section==='checklist') renderChecklist();
     });
 });
 
@@ -1347,6 +1379,94 @@ document.addEventListener('DOMContentLoaded', () => {
         trafficoBtn.addEventListener('click', aggiornaRealtime);
     }
 });
+
+// ============ CHECKLIST ============
+async function renderChecklist(){
+    var container=document.getElementById('checklistBody');
+    var kpiEl=document.getElementById('checklistKpi');
+    if(!container)return;
+    try{
+        var data=await apiFetch('/api/checklist');
+        // KPI
+        var totale=data.length;
+        var media=totale>0?Math.round(data.reduce(function(s,r){return s+(r.punteggio_totale||0)},0)/totale*10)/10:0;
+        kpiEl.innerHTML=
+            kpiCard('Checklist compilate',totale,'totale','neutral')+
+            kpiCard('Punteggio medio',media+'/20','su tutte le compilazioni','neutral');
+
+        if(totale===0){
+            container.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuna checklist compilata ancora.</td></tr>';
+            return;
+        }
+        container.innerHTML=data.map(function(r){
+            var dataFmt=r.created_at?new Date(r.created_at).toLocaleDateString('it-IT'):'—';
+            return '<tr style="cursor:pointer" onclick="viewChecklist('+r.id+')">'+
+                '<td>'+dataFmt+'</td>'+
+                '<td><strong>'+(r.nome||'—')+'</strong></td>'+
+                '<td>'+(r.email||'—')+'</td>'+
+                '<td><strong>'+r.punteggio_totale+'/20</strong></td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_food_cost,4)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_personale,4)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_menu,4)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_comunicazione,4)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_numeri,4)+'</td>'+
+            '</tr>';
+        }).join('');
+    }catch(e){
+        console.error('Errore checklist:',e);
+        container.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:#c4622d">Errore nel caricamento.</td></tr>';
+    }
+}
+
+function checklistScoreBadge(score,max){
+    var pct=score/max;
+    var color=pct>=0.75?'#1e8449':pct>=0.5?'#b7950b':'#c0392b';
+    var bg=pct>=0.75?'#e8f8f0':pct>=0.5?'#fef9e7':'#fde8e8';
+    return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;background:'+bg+';color:'+color+'">'+score+'/'+max+'</span>';
+}
+
+var _checklistCache=[];
+async function viewChecklist(id){
+    if(!_checklistCache.length){
+        try{_checklistCache=await apiFetch('/api/checklist')}catch(e){return}
+    }
+    var r=_checklistCache.find(function(x){return x.id===id});
+    if(!r)return;
+    var html='<h3>Checklist di '+(r.nome||'—')+'</h3>'+
+        '<div class="detail-row"><label>Email</label><p>'+r.email+'</p></div>'+
+        '<div class="detail-row"><label>Data</label><p>'+new Date(r.created_at).toLocaleString('it-IT')+'</p></div>'+
+        '<div class="detail-row"><label>Punteggio totale</label><p><strong>'+r.punteggio_totale+'/20</strong></p></div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">'+
+            '<div class="detail-row"><label>Food Cost</label><p>'+checklistScoreBadge(r.punteggio_food_cost,4)+'</p></div>'+
+            '<div class="detail-row"><label>Personale</label><p>'+checklistScoreBadge(r.punteggio_personale,4)+'</p></div>'+
+            '<div class="detail-row"><label>Menu</label><p>'+checklistScoreBadge(r.punteggio_menu,4)+'</p></div>'+
+            '<div class="detail-row"><label>Comunicazione</label><p>'+checklistScoreBadge(r.punteggio_comunicazione,4)+'</p></div>'+
+            '<div class="detail-row"><label>Numeri</label><p>'+checklistScoreBadge(r.punteggio_numeri,4)+'</p></div>'+
+        '</div>';
+    if(r.risposte&&r.risposte.length>0){
+        html+='<div class="detail-row"><label>Risposte complete</label>';
+        r.risposte.forEach(function(risposta,i){
+            if(typeof risposta==='object'){
+                html+='<div style="padding:10px 0;border-bottom:1px solid #f0ece7;font-size:.85rem">'+
+                    '<strong>'+(risposta.domanda||'Domanda '+(i+1))+'</strong><br>'+
+                    '<span style="color:#5a5a5a">'+(risposta.risposta||risposta.valore||JSON.stringify(risposta))+'</span>'+
+                '</div>';
+            } else {
+                html+='<p style="font-size:.85rem;padding:4px 0;color:#5a5a5a">'+(i+1)+'. '+risposta+'</p>';
+            }
+        });
+        html+='</div>';
+    }
+    document.getElementById('sidePanelBody').innerHTML=html;
+    document.getElementById('sidePanel').classList.add('open');
+}
+
+// Cache checklist data when rendering
+var _origRenderChecklist=renderChecklist;
+renderChecklist=async function(){
+    await _origRenderChecklist();
+    try{_checklistCache=await apiFetch('/api/checklist')}catch(e){}
+};
 </script>
 </body>
 </html>
