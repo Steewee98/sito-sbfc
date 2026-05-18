@@ -246,6 +246,27 @@
             opacity: 0;
             animation: fadeUp .5s cubic-bezier(.4,0,.2,1) .35s forwards;
         }
+        .btn-continua-categoria {
+            background: var(--terracotta);
+            color: #fff;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 32px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.03em;
+            opacity: 0;
+            animation: fadeUp .5s cubic-bezier(.4,0,.2,1) .45s forwards;
+        }
+        .btn-continua-categoria:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(196,98,45,0.4);
+        }
+        .btn-continua-categoria:active { transform: translateY(0); }
 
         /* ══════════════════════════════════
            SCHERMATA 2 — QUESTIONARIO
@@ -415,6 +436,19 @@
             margin-bottom: 36px;
             min-height: 2.8em;
             position: relative;
+        }
+
+        .domanda-descrizione {
+            font-size: 0.88rem;
+            color: #7a7a7a;
+            line-height: 1.7;
+            margin: 12px 0 28px;
+            padding: 12px 16px;
+            background: #f9f7f5;
+            border-radius: 6px;
+            border-left: 3px solid rgba(196,98,45,0.3);
+            font-style: italic;
+            text-align: left;
         }
 
         .quiz-answers {
@@ -798,6 +832,7 @@
     <div class="trans-name" id="trans-name"></div>
     <div class="trans-desc" id="trans-desc"></div>
     <div class="trans-count" id="trans-count"></div>
+    <button onclick="iniziaCategoria()" class="btn-continua-categoria">Inizia &rarr;</button>
 </div>
 
 <!-- ═══════ SCHERMATA 2 — QUESTIONARIO ═══════ -->
@@ -864,6 +899,7 @@
                     <span id="quiz-cat-label"></span>
                 </div>
                 <div class="quiz-question" id="quiz-question"></div>
+                <p class="domanda-descrizione" id="quiz-descrizione"></p>
                 <div class="quiz-answers">
                     <button class="quiz-ans-btn btn-si" id="btn-si" onclick="rispondi(true)">Si</button>
                     <button class="quiz-ans-btn btn-no" id="btn-no" onclick="rispondi(false)">No</button>
@@ -943,26 +979,26 @@ var categorie = [
 var catBgColors = ['rgba(196,98,45,0.85)', 'rgba(107,92,231,0.85)', 'rgba(45,138,78,0.85)', 'rgba(196,154,45,0.85)', 'rgba(58,123,213,0.85)'];
 
 var domande = [
-    { cat: 0, catPos: 1, testo: 'Conosci il tuo food cost reale questa settimana?' },
-    { cat: 0, catPos: 2, testo: 'Sai quale piatto del menu ha il margine pi\u00f9 alto?' },
-    { cat: 0, catPos: 3, testo: 'Confronti il food cost teorico con quello reale ogni mese?' },
-    { cat: 0, catPos: 4, testo: 'Hai una soglia di allerta oltre la quale intervieni subito?' },
-    { cat: 1, catPos: 1, testo: 'Ogni membro del team sa cosa deve fare senza che tu lo ripeta?' },
-    { cat: 1, catPos: 2, testo: 'Hai un processo di onboarding per i nuovi assunti?' },
-    { cat: 1, catPos: 3, testo: 'Il locale funziona correttamente anche quando non sei presente?' },
-    { cat: 1, catPos: 4, testo: 'Hai standard operativi scritti che il personale segue davvero?' },
-    { cat: 2, catPos: 1, testo: 'Il tuo menu ha meno di 35 voci?' },
-    { cat: 2, catPos: 2, testo: 'Sai quali sono i 3 piatti pi\u00f9 redditizi e li stai valorizzando?' },
-    { cat: 2, catPos: 3, testo: 'Aggiorni il menu almeno una volta all\'anno in base ai costi?' },
-    { cat: 2, catPos: 4, testo: 'Il layout del menu guida il cliente verso i piatti con margine maggiore?' },
-    { cat: 3, catPos: 1, testo: 'Sai quanti clienti ti ha portato Instagram nell\'ultimo mese?' },
-    { cat: 3, catPos: 2, testo: 'Hai un sistema per raccogliere le email dei tuoi clienti?' },
-    { cat: 3, catPos: 3, testo: 'Le tue campagne social hanno un obiettivo misurabile?' },
-    { cat: 3, catPos: 4, testo: 'Sai qual \u00e8 il tuo costo di acquisizione per ogni nuovo cliente?' },
-    { cat: 4, catPos: 1, testo: 'Conosci il tuo punto di pareggio mensile?' },
-    { cat: 4, catPos: 2, testo: 'Sai qual \u00e8 la tua percentuale di costo del lavoro sul fatturato?' },
-    { cat: 4, catPos: 3, testo: 'Hai un report settimanale che leggi davvero ogni settimana?' },
-    { cat: 4, catPos: 4, testo: 'Sei in grado di prevedere il fatturato del mese prossimo con margine di errore del 15%?' }
+    { cat: 0, catPos: 1, testo: 'Conosci il tuo food cost reale questa settimana?', descrizione: 'Il food cost reale \u00e8 la percentuale di costo degli ingredienti sul fatturato, calcolata ogni settimana \u2014 non stimata a inizio anno.' },
+    { cat: 0, catPos: 2, testo: 'Sai quale piatto del menu ha il margine pi\u00f9 alto?', descrizione: 'Non il piatto pi\u00f9 ordinato, ma quello che ti lascia pi\u00f9 guadagno netto dopo aver sottratto il costo degli ingredienti.' },
+    { cat: 0, catPos: 3, testo: 'Confronti il food cost teorico con quello reale ogni mese?', descrizione: 'Il food cost teorico \u00e8 quello calcolato sulle ricette. Quello reale include sprechi, porzioni irregolari e furti. La differenza ti dice dove perdi soldi.' },
+    { cat: 0, catPos: 4, testo: 'Hai una soglia di allerta oltre la quale intervieni subito?', descrizione: 'Es: se il food cost supera il 32% scatta un controllo immediato. Avere una soglia definita significa gestire invece di subire.' },
+    { cat: 1, catPos: 1, testo: 'Ogni membro del team sa cosa deve fare senza che tu lo ripeta?', descrizione: 'Ruoli chiari e responsabilit\u00e0 scritte eliminano la dipendenza dal titolare e riducono gli errori operativi quotidiani.' },
+    { cat: 1, catPos: 2, testo: 'Hai un processo di onboarding per i nuovi assunti?', descrizione: 'Un onboarding strutturato riduce il tempo di formazione, abbassa il turnover e garantisce standard coerenti da subito.' },
+    { cat: 1, catPos: 3, testo: 'Il locale funziona correttamente anche quando non sei presente?', descrizione: 'Se il locale dipende dalla tua presenza fisica per funzionare, non hai un\'attivit\u00e0 \u2014 hai un lavoro che non puoi lasciare.' },
+    { cat: 1, catPos: 4, testo: 'Hai standard operativi scritti che il personale segue davvero?', descrizione: 'Non basta avere regole verbali. Standard scritti, accessibili e aggiornati sono la base di un team che lavora in autonomia.' },
+    { cat: 2, catPos: 1, testo: 'Il tuo menu ha meno di 35 voci?', descrizione: 'Oltre le 35 voci il cliente entra in paradosso della scelta, rallenta il servizio e aumenta la complessit\u00e0 operativa in cucina.' },
+    { cat: 2, catPos: 2, testo: 'Sai quali sono i 3 piatti pi\u00f9 redditizi e li stai valorizzando?', descrizione: 'Valorizzare significa posizionarli visivamente nel menu, formare il personale a suggerirli e garantirne la disponibilit\u00e0 costante.' },
+    { cat: 2, catPos: 3, testo: 'Aggiorni il menu almeno una volta all\'anno in base ai costi?', descrizione: 'I costi delle materie prime cambiano. Un menu che non si aggiorna erode i margini silenziosamente mese dopo mese.' },
+    { cat: 2, catPos: 4, testo: 'Il layout del menu guida il cliente verso i piatti con margine maggiore?', descrizione: 'La posizione, la dimensione del testo e le descrizioni influenzano le scelte. Il menu engineering \u00e8 uno strumento di revenue management.' },
+    { cat: 3, catPos: 1, testo: 'Sai quanti clienti ti ha portato Instagram nell\'ultimo mese?', descrizione: 'Follower e like non pagano i fornitori. La metrica che conta \u00e8 quante prenotazioni o ingressi sono arrivati dal canale social.' },
+    { cat: 3, catPos: 2, testo: 'Hai un sistema per raccogliere le email dei tuoi clienti?', descrizione: 'L\'email \u00e8 l\'unico canale che non dipende da algoritmi. Una lista di clienti abituali \u00e8 un asset che vale quanto la location.' },
+    { cat: 3, catPos: 3, testo: 'Le tue campagne social hanno un obiettivo misurabile?', descrizione: 'Un obiettivo misurabile \u00e8: X prenotazioni, X coperti, X ordini online. Non "aumentare la visibilit\u00e0" o "crescere su Instagram".' },
+    { cat: 3, catPos: 4, testo: 'Sai qual \u00e8 il tuo costo di acquisizione per ogni nuovo cliente?', descrizione: 'Quanto spendi in marketing diviso per i nuovi clienti acquisiti. Se non lo sai, non puoi decidere quanto investire in comunicazione.' },
+    { cat: 4, catPos: 1, testo: 'Conosci il tuo punto di pareggio mensile?', descrizione: 'Il break-even \u00e8 il fatturato minimo per coprire tutti i costi fissi. Sotto quella soglia perdi soldi, sopra guadagni. \u00c8 il numero pi\u00f9 importante del tuo locale.' },
+    { cat: 4, catPos: 2, testo: 'Sai qual \u00e8 la tua percentuale di costo del lavoro sul fatturato?', descrizione: 'Il benchmark medio per la ristorazione \u00e8 30-35%. Sopra il 40% il modello fatica a reggere. \u00c8 un indicatore che va monitorato ogni mese.' },
+    { cat: 4, catPos: 3, testo: 'Hai un report settimanale che leggi davvero ogni settimana?', descrizione: 'Non basta avere i dati \u2014 bisogna leggerli con regolarit\u00e0 e agire di conseguenza. Un report che non si usa \u00e8 solo burocrazia.' },
+    { cat: 4, catPos: 4, testo: 'Sei in grado di prevedere il fatturato del mese prossimo con margine di errore del 15%?', descrizione: 'La capacit\u00e0 di previsione \u00e8 il segnale pi\u00f9 chiaro di un controllo di gestione maturo. Se non puoi prevedere, non puoi pianificare.' }
 ];
 
 /* ═══════ SCHERMATA 1 — REGISTRAZIONE ═══════ */
@@ -999,7 +1035,7 @@ function mostraTransizione(catIndex) {
     document.getElementById('trans-desc').textContent = cat.desc;
     document.getElementById('trans-count').textContent = cat.count + ' domande';
 
-    var transEls = document.querySelectorAll('#screen-transition .trans-number, #screen-transition .trans-line, #screen-transition .trans-name, #screen-transition .trans-desc, #screen-transition .trans-count');
+    var transEls = document.querySelectorAll('#screen-transition .trans-number, #screen-transition .trans-line, #screen-transition .trans-name, #screen-transition .trans-desc, #screen-transition .trans-count, #screen-transition .btn-continua-categoria');
     transEls.forEach(function(el) {
         el.style.animation = 'none';
         el.offsetHeight;
@@ -1007,11 +1043,11 @@ function mostraTransizione(catIndex) {
     });
 
     mostraSchermata('screen-transition');
+}
 
-    setTimeout(function() {
-        mostraSchermata('screen-quiz');
-        mostraDomanda(true);
-    }, 1800);
+function iniziaCategoria() {
+    mostraSchermata('screen-quiz');
+    mostraDomanda(true);
 }
 
 /* ═══════ PROGRESS BAR ═══════ */
@@ -1044,6 +1080,7 @@ function mostraDomanda(isFirst) {
 
     document.getElementById('quiz-cat-label').textContent = cat.nome.toUpperCase() + ' \u00B7 ' + d.catPos + ' di ' + cat.count;
     document.getElementById('quiz-question').textContent = d.testo;
+    document.getElementById('quiz-descrizione').textContent = d.descrizione;
     document.getElementById('quiz-ghost-num').textContent = qNum;
 
     /* Icona categoria nella pill */
