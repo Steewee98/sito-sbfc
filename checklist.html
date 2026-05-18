@@ -255,42 +255,81 @@
             flex-direction: column;
         }
 
-        .quiz-header {
+        .progress-container {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
+            background: rgba(30,32,36,0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 12px 24px;
             z-index: 100;
-            background: rgba(55,57,63,0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        .quiz-header-inner {
+        .progress-track {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 16px 24px;
-            max-width: 800px;
+            justify-content: center;
+            gap: 8px;
+            max-width: 700px;
             margin: 0 auto;
         }
-        .quiz-logo { height: 30px; width: auto; }
-        .quiz-counter {
-            font-size: 0.82rem;
+        .progress-category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+        .prog-cat-label {
+            font-size: 0.65rem;
             font-weight: 600;
-            color: var(--ivory-60);
-            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.3);
+            transition: color 0.3s;
+            white-space: nowrap;
         }
-        .quiz-progress-wrap {
-            height: 3px;
-            background: rgba(255,255,255,0.06);
+        .progress-category.active .prog-cat-label {
+            color: var(--terracotta);
         }
-        .quiz-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--terracotta), #d4793f);
-            width: 0%;
-            transition: width .6s cubic-bezier(.4,0,.2,1);
-            border-radius: 0 2px 2px 0;
+        .progress-category.completed .prog-cat-label {
+            color: rgba(255,255,255,0.6);
+        }
+        .prog-dots {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .prog-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .prog-dot.answered-yes {
+            background: var(--terracotta);
+            border-color: var(--terracotta);
+            box-shadow: 0 0 6px rgba(196,98,45,0.5);
+        }
+        .prog-dot.answered-no {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .prog-dot.current {
+            background: rgba(196,98,45,0.4);
+            border-color: var(--terracotta);
+            transform: scale(1.3);
+            box-shadow: 0 0 8px rgba(196,98,45,0.4);
+        }
+        .progress-divider {
+            width: 20px;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            flex-shrink: 0;
         }
 
         .quiz-body {
@@ -298,7 +337,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 110px 24px 50px;
+            padding: 80px 24px 50px;
         }
 
         .quiz-card-wrapper {
@@ -419,27 +458,7 @@
             animation: btnPulse .35s ease;
         }
 
-        /* Pallini progresso categoria */
-        .quiz-cat-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 28px;
-        }
-        .quiz-cat-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(55,57,63,0.12);
-            transition: background .3s, transform .3s;
-        }
-        .quiz-cat-dot.answered {
-            background: var(--terracotta);
-            transform: scale(1.15);
-        }
-        .quiz-cat-dot.current {
-            background: rgba(196,98,45,0.35);
-        }
+        /* Old quiz-cat-dots removed — now in progress-container */
 
         /* ══════════════════════════════════
            SCHERMATA 3 — RISULTATO
@@ -730,6 +749,13 @@
         /* ══════════════════════════════════
            RESPONSIVE
            ══════════════════════════════════ */
+        @media (max-width: 600px) {
+            .prog-cat-label { font-size: 0.55rem; }
+            .prog-dot { width: 6px; height: 6px; }
+            .progress-divider { width: 10px; }
+            .progress-container { padding: 10px 12px; }
+            .quiz-body { padding: 72px 24px 40px; }
+        }
         @media (max-width: 520px) {
             .quiz-card { padding: 36px 24px; }
             .quiz-question { font-size: 20px; }
@@ -776,13 +802,57 @@
 
 <!-- ═══════ SCHERMATA 2 — QUESTIONARIO ═══════ -->
 <div id="screen-quiz" class="screen">
-    <div class="quiz-header">
-        <div class="quiz-header-inner">
-            <img src="assets/logo/logo-bianco.png" alt="SB Food Consulting" class="quiz-logo">
-            <span class="quiz-counter" id="quiz-counter">Domanda 1 di 20</span>
-        </div>
-        <div class="quiz-progress-wrap">
-            <div class="quiz-progress-bar" id="quiz-progress"></div>
+    <div class="progress-container">
+        <div class="progress-track">
+            <div class="progress-category" id="prog-1">
+                <div class="prog-cat-label">Food Cost</div>
+                <div class="prog-dots">
+                    <div class="prog-dot" id="dot-1"></div>
+                    <div class="prog-dot" id="dot-2"></div>
+                    <div class="prog-dot" id="dot-3"></div>
+                    <div class="prog-dot" id="dot-4"></div>
+                </div>
+            </div>
+            <div class="progress-divider"></div>
+            <div class="progress-category" id="prog-2">
+                <div class="prog-cat-label">Personale</div>
+                <div class="prog-dots">
+                    <div class="prog-dot" id="dot-5"></div>
+                    <div class="prog-dot" id="dot-6"></div>
+                    <div class="prog-dot" id="dot-7"></div>
+                    <div class="prog-dot" id="dot-8"></div>
+                </div>
+            </div>
+            <div class="progress-divider"></div>
+            <div class="progress-category" id="prog-3">
+                <div class="prog-cat-label">Menu</div>
+                <div class="prog-dots">
+                    <div class="prog-dot" id="dot-9"></div>
+                    <div class="prog-dot" id="dot-10"></div>
+                    <div class="prog-dot" id="dot-11"></div>
+                    <div class="prog-dot" id="dot-12"></div>
+                </div>
+            </div>
+            <div class="progress-divider"></div>
+            <div class="progress-category" id="prog-4">
+                <div class="prog-cat-label">Comunicazione</div>
+                <div class="prog-dots">
+                    <div class="prog-dot" id="dot-13"></div>
+                    <div class="prog-dot" id="dot-14"></div>
+                    <div class="prog-dot" id="dot-15"></div>
+                    <div class="prog-dot" id="dot-16"></div>
+                </div>
+            </div>
+            <div class="progress-divider"></div>
+            <div class="progress-category" id="prog-5">
+                <div class="prog-cat-label">Numeri</div>
+                <div class="prog-dots">
+                    <div class="prog-dot" id="dot-17"></div>
+                    <div class="prog-dot" id="dot-18"></div>
+                    <div class="prog-dot" id="dot-19"></div>
+                    <div class="prog-dot" id="dot-20"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="quiz-body">
@@ -798,7 +868,6 @@
                     <button class="quiz-ans-btn btn-si" id="btn-si" onclick="rispondi(true)">Si</button>
                     <button class="quiz-ans-btn btn-no" id="btn-no" onclick="rispondi(false)">No</button>
                 </div>
-                <div class="quiz-cat-dots" id="quiz-cat-dots"></div>
             </div>
         </div>
     </div>
@@ -945,32 +1014,44 @@ function mostraTransizione(catIndex) {
     }, 1800);
 }
 
+/* ═══════ PROGRESS BAR ═══════ */
+function aggiornaDot(numeroDomanda, risposta) {
+    var dot = document.getElementById('dot-' + numeroDomanda);
+    if (!dot) return;
+    dot.classList.remove('current', 'answered-yes', 'answered-no');
+    if (risposta === true) dot.classList.add('answered-yes');
+    else if (risposta === false) dot.classList.add('answered-no');
+}
+
+function aggiornaCategoria(numeroDomanda) {
+    var catIndex = Math.ceil(numeroDomanda / 4);
+    document.querySelectorAll('.progress-category').forEach(function(el, i) {
+        el.classList.remove('active', 'completed');
+        if (i + 1 === catIndex) el.classList.add('active');
+        else if (i + 1 < catIndex) el.classList.add('completed');
+    });
+    /* Segna il dot corrente */
+    document.querySelectorAll('.prog-dot').forEach(function(d) { d.classList.remove('current'); });
+    var dotCorrente = document.getElementById('dot-' + numeroDomanda);
+    if (dotCorrente) dotCorrente.classList.add('current');
+}
+
 /* ═══════ SCHERMATA 2 — QUESTIONARIO ═══════ */
 function mostraDomanda(isFirst) {
     var d = domande[currentQuestion];
     var cat = categorie[d.cat];
+    var qNum = currentQuestion + 1;
 
-    document.getElementById('quiz-counter').textContent = 'Domanda ' + (currentQuestion + 1) + ' di 20';
-    document.getElementById('quiz-progress').style.width = ((currentQuestion + 1) / 20 * 100) + '%';
     document.getElementById('quiz-cat-label').textContent = cat.nome.toUpperCase() + ' \u00B7 ' + d.catPos + ' di ' + cat.count;
     document.getElementById('quiz-question').textContent = d.testo;
-    document.getElementById('quiz-ghost-num').textContent = (currentQuestion + 1);
+    document.getElementById('quiz-ghost-num').textContent = qNum;
 
     /* Icona categoria nella pill */
     var iconEl = document.querySelector('.quiz-cat-pill-icon');
     if (iconEl) iconEl.innerHTML = catIcons[d.cat];
 
-    /* Pallini progresso categoria */
-    var dotsHtml = '';
-    var catStart = d.cat * 4;
-    for (var i = 0; i < cat.count; i++) {
-        var qIdx = catStart + i;
-        var cls = 'quiz-cat-dot';
-        if (qIdx < currentQuestion) cls += ' answered';
-        else if (qIdx === currentQuestion) cls += ' current';
-        dotsHtml += '<div class="' + cls + '"></div>';
-    }
-    document.getElementById('quiz-cat-dots').innerHTML = dotsHtml;
+    /* Aggiorna progress bar */
+    aggiornaCategoria(qNum);
 
     var card = document.getElementById('quiz-card');
     card.classList.remove('slide-out', 'slide-in');
@@ -997,11 +1078,13 @@ function rispondi(valore) {
     btn.classList.add('pulse');
 
     var d = domande[currentQuestion];
+    var qNum = currentQuestion + 1;
     risposte.push({
         domanda: d.testo,
         risposta: valore,
         categoria: categorie[d.cat].nome.toUpperCase()
     });
+    aggiornaDot(qNum, valore);
     currentQuestion++;
 
     if (currentQuestion >= 20) {
