@@ -60,23 +60,38 @@
     <div class="scroll-indicator">Scroll</div>
 </section>
 
-<!-- ═══════ PER CHI E ═══════ -->
-<section class="ac-target">
-    <div class="container">
-        <div class="ac-target-grid">
-            <div data-reveal>
-                <span class="label">A chi si rivolge</span>
-                <h2 class="ed-heading">Per chi è<br>questo <em>corso.</em></h2>
+<!-- ═══════ CHECKLIST PROMO ═══════ -->
+<section style="background:#37393f;padding:100px 0;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-60px;right:-40px;font-family:'Playfair Display',serif;font-size:clamp(180px,22vw,320px);font-weight:700;color:rgba(245,242,238,0.03);line-height:0.85;pointer-events:none;user-select:none" aria-hidden="true">?</div>
+    <div class="container" style="max-width:900px;text-align:center">
+        <span class="label" data-reveal style="color:var(--accent)">Risorsa gratuita</span>
+        <h2 data-reveal data-reveal-delay="50" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.2rem);color:var(--ivory);margin:16px 0 20px;font-weight:600;line-height:1.15">Prima di iniziare,<br>scopri dove sei.</h2>
+        <p data-reveal data-reveal-delay="100" style="font-family:'Inter',sans-serif;font-size:1.05rem;color:rgba(245,242,238,0.65);max-width:560px;margin:0 auto 48px;line-height:1.7">20 domande, 5 aree operative, un punteggio chiaro.<br>La checklist che ogni ristoratore dovrebbe fare prima di investire in formazione.</p>
+
+        <div data-reveal data-reveal-delay="150" style="display:flex;justify-content:center;gap:48px;margin-bottom:48px;flex-wrap:wrap">
+            <div style="text-align:center">
+                <div style="width:48px;height:48px;border-radius:50%;background:rgba(196,98,45,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4622d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <span style="font-family:'Inter',sans-serif;font-size:0.85rem;color:rgba(245,242,238,0.7);font-weight:500">5 minuti</span>
             </div>
-            <div class="ac-target-list" data-reveal data-reveal-delay="100">
-                <div class="ac-target-item">Ristoratori che vogliono capire i numeri del proprio locale</div>
-                <div class="ac-target-item">Chi sta aprendo un locale e vuole partire con metodo</div>
-                <div class="ac-target-item">Manager di sala che vogliono crescere professionalmente</div>
-                <div class="ac-target-item">Gestori di bar e caffetterie che vogliono strutturarsi</div>
-                <div class="ac-target-item">Chi sente di lavorare tanto senza vedere risultati</div>
-                <div class="ac-target-item">Imprenditori food che vogliono smettere di improvvisare</div>
+            <div style="text-align:center">
+                <div style="width:48px;height:48px;border-radius:50%;background:rgba(196,98,45,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4622d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </div>
+                <span style="font-family:'Inter',sans-serif;font-size:0.85rem;color:rgba(245,242,238,0.7);font-weight:500">Punteggio immediato</span>
+            </div>
+            <div style="text-align:center">
+                <div style="width:48px;height:48px;border-radius:50%;background:rgba(196,98,45,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4622d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <span style="font-family:'Inter',sans-serif;font-size:0.85rem;color:rgba(245,242,238,0.7);font-weight:500">PDF scaricabile</span>
             </div>
         </div>
+
+        <a href="checklist.html" data-reveal data-reveal-delay="200" style="display:inline-block;background:#c4622d;color:#fff;padding:18px 52px;border-radius:4px;font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:600;text-decoration:none;letter-spacing:0.3px;transition:background 0.3s ease,transform 0.2s ease" onmouseover="this.style.background='#d4732d';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#c4622d';this.style.transform='translateY(0)'">Fai la checklist gratuita &rarr;</a>
+
+        <p data-reveal data-reveal-delay="250" id="checklist-counter" style="font-family:'Inter',sans-serif;font-size:0.8rem;color:rgba(245,242,238,0.4);margin-top:20px">Checklist interattiva</p>
     </div>
 </section>
 
@@ -189,38 +204,6 @@
             </div>
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
-    </div>
-</section>
-
-<!-- ═══════ LEAD MAGNET CHECKLIST ═══════ -->
-<section class="lead-magnet-section">
-    <div class="container">
-        <div class="lead-magnet-header" data-reveal>
-            <span class="label" style="color:var(--accent)">Risorsa gratuita</span>
-            <h2 class="ed-heading">Prima di scegliere,<br><em>mettiti alla prova.</em></h2>
-            <p class="lead-magnet-subtitle">Scopri in 5 minuti quanto controllo hai davvero sul tuo locale.</p>
-        </div>
-
-        <div class="lead-magnet-card" data-reveal data-reveal-delay="100">
-            <div class="lead-magnet-card-left">
-                <div class="lead-magnet-badge" id="checklist-counter">Checklist interattiva</div>
-                <h3 class="lead-magnet-card-title">La Checklist del<br><em>Ristoratore Consapevole</em></h3>
-                <p class="lead-magnet-card-desc">20 domande su 5 aree operative fondamentali: food cost, personale, menu, comunicazione e numeri. Con punteggio finale e prossimi passi consigliati.</p>
-                <div class="lead-magnet-features">
-                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> Valutazione immediata</div>
-                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> 5 aree operative</div>
-                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> Punteggio e consigli</div>
-                    <div class="lead-magnet-feat"><span class="lead-magnet-feat-icon">&#9673;</span> Metodo SB Food</div>
-                </div>
-            </div>
-            <div class="lead-magnet-card-right" style="display:flex;align-items:center;justify-content:center;padding:40px 32px">
-                <div style="text-align:center">
-                    <h4 style="font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--ivory);margin:0 0 8px">Scopri il tuo punteggio</h4>
-                    <p style="font-size:0.85rem;color:rgba(245,242,238,0.6);margin:0 0 24px">20 domande, 5 minuti. Risultato immediato.</p>
-                    <a href="checklist.html" style="display:inline-block;background:#c4622d;color:#fff;padding:16px 40px;border-radius:4px;font-size:1rem;font-weight:600;text-decoration:none">Fai la checklist gratuita &rarr;</a>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 
@@ -460,45 +443,6 @@
 
 <script src="main.js"></script>
 <script>
-/* ═══════ LEAD MAGNET ═══════ */
-async function scaricaChecklist() {
-    var nome = document.getElementById('lead-nome').value.trim();
-    var email = document.getElementById('lead-email').value.trim();
-    var btn = document.getElementById('lead-btn');
-
-    if (!nome) { alert('Inserisci il tuo nome.'); return; }
-    if (!email || !email.includes('@')) { alert('Inserisci una email valida.'); return; }
-
-    btn.textContent = 'Invio in corso...';
-    btn.disabled = true;
-
-    try {
-        const res = await fetch('https://web-production-f3794.up.railway.app/api/contatti', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nome: nome,
-                cognome: '',
-                email: email,
-                telefono: '',
-                tipo_locale: 'Lead magnet checklist',
-                messaggio: 'Ha scaricato la checklist gratuita'
-            })
-        });
-        const data = await res.json();
-        console.log('Lead salvato:', data);
-    } catch(e) { console.log('Backend non raggiunto:', e); }
-
-    document.getElementById('lead-form').style.display = 'none';
-    document.getElementById('lead-success').style.display = 'block';
-    document.getElementById('lead-email-shown').textContent = email;
-
-    var link = document.createElement('a');
-    link.href = 'assets/pdf/checklist-ristoratore.pdf';
-    link.download = 'checklist-ristoratore-sbfood.pdf';
-    link.click();
-}
-
 /* ═══════ STRIPE CHECKOUT ═══════ */
 
 async function avviaCheckout(prodottoId) {
