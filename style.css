@@ -1640,6 +1640,7 @@ ul { list-style: none; }
 }
 .cs-hero-line--accent {
     font-size: clamp(4.5rem, 10vw, 9rem);
+    white-space: nowrap;
 }
 .cs-hero-line--accent .line-inner {
     display: inline-block;
@@ -2337,7 +2338,7 @@ ul { list-style: none; }
 .team-header {
     text-align: center;
     max-width: 600px;
-    margin: 0 auto 64px;
+    margin: 0 auto 72px;
 }
 
 .team-intro {
@@ -2349,75 +2350,91 @@ ul { list-style: none; }
 
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 48px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 48px;
+    max-width: 880px;
+    margin: 0 auto 56px;
 }
 
 .team-card {
-    background: #fff;
-    border-radius: 4px;
-    padding: 28px 24px;
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    transition: transform 0.3s,
-                box-shadow 0.3s;
-    border-bottom: 2px solid transparent;
+    text-align: center;
+    padding: 40px 24px 36px;
+    background: none;
+    border: none;
+    border-radius: 0;
+    transition: none;
 }
 
-.team-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
-    border-bottom-color: #c4622d;
+.team-card:nth-child(even) {
+    margin-top: 48px;
 }
 
-.team-initial {
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    background: #37393f;
-    color: #c4622d;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.85rem;
-    font-weight: 700;
+.team-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--dark);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 3px;
-    letter-spacing: 0.05em;
+    margin: 0 auto 22px;
+    transition: transform 0.4s var(--ease-out),
+                background 0.3s;
+}
+
+.team-card:hover .team-icon {
+    transform: scale(1.12);
+    background: var(--accent);
+}
+
+.team-icon svg {
+    width: 30px;
+    height: 30px;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.3s;
+}
+
+.team-card:hover .team-icon svg {
+    stroke: #fff;
 }
 
 .team-info h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    color: #1a1a1a;
-    margin: 0 0 4px;
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin: 0 0 6px;
     font-weight: 700;
 }
 
 .team-role {
-    font-size: 0.75rem;
-    color: #c4622d;
+    font-size: 0.7rem;
+    color: var(--accent);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0 0 8px;
+    letter-spacing: 0.08em;
+    margin: 0 0 12px;
 }
 
 .team-desc {
-    font-size: 0.83rem;
+    font-size: 0.85rem;
     color: #5a5a5a;
-    line-height: 1.6;
+    line-height: 1.65;
     margin: 0;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .team-network {
-    margin-top: 16px;
+    margin-top: 24px;
 }
 
 .team-network-inner {
-    background: #37393f;
+    background: var(--dark);
     border-radius: 4px;
     padding: 32px 40px;
     display: flex;
@@ -2427,7 +2444,7 @@ ul { list-style: none; }
 
 .team-network-icon {
     font-size: 2.5rem;
-    color: #c4622d;
+    color: var(--accent);
     font-weight: 300;
     line-height: 1;
     flex-shrink: 0;
@@ -2444,7 +2461,14 @@ ul { list-style: none; }
 @media (max-width: 768px) {
     .team-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 8px;
+        max-width: 360px;
+    }
+    .team-card:nth-child(even) {
+        margin-top: 0;
+    }
+    .team-card {
+        padding: 32px 16px 28px;
     }
     .team-network-inner {
         flex-direction: column;
