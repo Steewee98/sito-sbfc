@@ -1485,9 +1485,11 @@ async function previewChecklistEmail(id){
     try{
         var resp=await fetch(BACKEND_URL+'/api/checklist/'+id+'/email-preview',{headers:{'X-Admin-Token':ADMIN_TOKEN}});
         var htmlContent=await resp.text();
-        var w=window.open('','_blank','width=700,height=800');
-        w.document.write(htmlContent);
-        w.document.close();
+        document.getElementById('modalBody').innerHTML=
+            '<h3>Anteprima email</h3>'+
+            '<iframe srcdoc="'+htmlContent.replace(/"/g,'&quot;')+'" style="width:100%;height:60vh;border:1px solid #edeae5;border-radius:4px"></iframe>';
+        document.getElementById('modalContent').style.maxWidth='700px';
+        document.getElementById('modal').classList.add('show');
     }catch(e){alert('Errore anteprima: '+e.message)}
 }
 
