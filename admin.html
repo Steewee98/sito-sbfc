@@ -1483,8 +1483,7 @@ async function viewChecklist(id){
 
 async function previewChecklistEmail(id){
     try{
-        var token=localStorage.getItem('adminToken');
-        var resp=await fetch(API_BASE+'/api/checklist/'+id+'/email-preview',{headers:{'X-Admin-Token':token}});
+        var resp=await fetch(BACKEND_URL+'/api/checklist/'+id+'/email-preview',{headers:{'X-Admin-Token':ADMIN_TOKEN}});
         var htmlContent=await resp.text();
         var w=window.open('','_blank','width=700,height=800');
         w.document.write(htmlContent);
@@ -1495,8 +1494,7 @@ async function previewChecklistEmail(id){
 async function inviaChecklistEmail(id){
     if(!confirm('Vuoi inviare (o reinviare) la email per questa checklist?'))return;
     try{
-        var token=localStorage.getItem('adminToken');
-        var resp=await fetch(API_BASE+'/api/checklist/'+id+'/invia-email',{method:'POST',headers:{'X-Admin-Token':token}});
+        var resp=await fetch(BACKEND_URL+'/api/checklist/'+id+'/invia-email',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':ADMIN_TOKEN}});
         var data=await resp.json();
         if(data.success){
             alert('Email inviata!');
