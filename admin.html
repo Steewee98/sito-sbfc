@@ -1457,6 +1457,12 @@ async function viewChecklist(id){
             '<div class="detail-row"><label>Comunicazione</label><p>'+checklistScoreBadge(r.punteggio_comunicazione,4)+'</p></div>'+
             '<div class="detail-row"><label>Numeri</label><p>'+checklistScoreBadge(r.punteggio_numeri,4)+'</p></div>'+
         '</div>';
+    // Bottoni email
+    html+='<div style="display:flex;gap:10px;margin:20px 0 16px">';
+    html+='<button onclick="previewChecklistEmail('+r.id+')" style="flex:1;background:#37393f;color:#fff;border:none;padding:10px 16px;border-radius:4px;font-size:.82rem;font-weight:600;cursor:pointer">Vedi email</button>';
+    html+='<button onclick="inviaChecklistEmail('+r.id+')" style="flex:1;background:#c4622d;color:#fff;border:none;padding:10px 16px;border-radius:4px;font-size:.82rem;font-weight:600;cursor:pointer">'+(r.email_inviata?'Reinvia email':'Invia email')+'</button>';
+    html+='</div>';
+
     if(r.risposte&&r.risposte.length>0){
         html+='<div class="detail-row"><label>Risposte complete</label>';
         r.risposte.forEach(function(risposta,i){
@@ -1473,6 +1479,34 @@ async function viewChecklist(id){
     }
     document.getElementById('sidePanelBody').innerHTML=html;
     document.getElementById('sidePanel').classList.add('open');
+}
+
+async function previewChecklistEmail(id){
+    try{
+        var token=localStorage.getItem('adminToken');
+        var resp=await fetch(API_BASE+'/api/checklist/'+id+'/email-preview',{headers:{'X-Admin-Token':token}});
+        var htmlContent=await resp.text();
+        var w=window.open('','_blank','width=700,height=800');
+        w.document.write(htmlContent);
+        w.document.close();
+    }catch(e){alert('Errore anteprima: '+e.message)}
+}
+
+async function inviaChecklistEmail(id){
+    if(!confirm('Vuoi inviare (o reinviare) la email per questa checklist?'))return;
+    try{
+        var token=localStorage.getItem('adminToken');
+        var resp=await fetch(API_BASE+'/api/checklist/'+id+'/invia-email',{method:'POST',headers:{'X-Admin-Token':token}});
+        var data=await resp.json();
+        if(data.success){
+            alert('Email inviata!');
+            _checklistCache=[];
+            renderChecklist();
+            document.getElementById('sidePanel').classList.remove('open');
+        }else{
+            alert('Errore: '+(data.error||'invio fallito'));
+        }
+    }catch(e){alert('Errore invio: '+e.message)}
 }
 
 // Cache checklist data when rendering
