@@ -104,6 +104,8 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .badge-completato{background:#e8f8f0;color:#1e8449}
 .badge-fallito{background:#fde8e8;color:#c0392b}
 .badge-rimborsato{background:#f0ece7;color:#888}
+.badge-inviato{background:#e8f8f0;color:#1e8449}
+.badge-errore{background:#fde8e8;color:#c0392b}
 
 /* TABLE */
 .table-wrap{background:#fff;border-radius:6px;border:1px solid #e8e4df;overflow:hidden}
@@ -293,6 +295,10 @@ tr:hover td{background:#fafaf8}
         <div class="sidebar-item" data-section="checklist">
             <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
             Checklist
+        </div>
+        <div class="sidebar-item" data-section="whatsapp">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            WhatsApp
         </div>
     </div>
 </aside>
@@ -525,6 +531,39 @@ tr:hover td{background:#fafaf8}
     </div>
 </section>
 
+<!-- ========== WHATSAPP ========== -->
+<section class="admin-section" id="sec-whatsapp">
+    <div class="section-header">
+        <h2>WhatsApp</h2>
+        <p>Messaggi WhatsApp inviati dal sistema</p>
+    </div>
+    <div class="kpi-grid" id="whatsappKpi" style="grid-template-columns:repeat(3,1fr)"></div>
+    <div class="table-wrap">
+        <div class="table-filters">
+            <select id="whatsappFiltroTipo" onchange="renderWhatsapp()">
+                <option value="">Tutti i tipi</option>
+                <option value="form_contatti">form_contatti</option>
+                <option value="meta_leads">meta_leads</option>
+                <option value="batch">batch</option>
+                <option value="manuale">manuale</option>
+            </select>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefono</th>
+                    <th>Tipo</th>
+                    <th>Stato</th>
+                    <th>Data</th>
+                    <th>Messaggio</th>
+                </tr>
+            </thead>
+            <tbody id="whatsappBody"></tbody>
+        </table>
+    </div>
+</section>
+
 </main>
 </div>
 
@@ -594,6 +633,7 @@ document.querySelectorAll('.sidebar-item').forEach(function(el){
         if(el.dataset.section==='pagamenti') renderPagamenti();
         if(el.dataset.section==='studenti') renderStudenti();
         if(el.dataset.section==='checklist') renderChecklist();
+        if(el.dataset.section==='whatsapp') renderWhatsapp();
     });
 });
 
@@ -1515,6 +1555,41 @@ renderChecklist=async function(){
     await _origRenderChecklist();
     try{_checklistCache=await apiFetch('/api/checklist')}catch(e){}
 };
+
+// ============ WHATSAPP ============
+async function renderWhatsapp(){
+    var data=await apiFetch('/api/whatsapp');
+    var msgs=data.messages||data||[];
+    var filtro=document.getElementById('whatsappFiltroTipo').value;
+    if(filtro) msgs=msgs.filter(function(m){return m.tipo===filtro});
+
+    var oggi=new Date().toISOString().slice(0,10);
+    var totale=msgs.length;
+    var oggiCount=msgs.filter(function(m){return (m.data||m.created_at||'').slice(0,10)===oggi}).length;
+    var errori=msgs.filter(function(m){return m.stato==='errore'}).length;
+
+    document.getElementById('whatsappKpi').innerHTML=
+        '<div class="kpi-card"><div class="kpi-label">Totale messaggi</div><div class="kpi-value">'+totale+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">Inviati oggi</div><div class="kpi-value">'+oggiCount+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">Errori</div><div class="kpi-value" style="color:'+(errori>0?'#c0392b':'#1e8449')+'">'+errori+'</div></div>';
+
+    var html='';
+    msgs.forEach(function(m){
+        var badgeClass=m.stato==='inviato'?'badge-inviato':'badge-errore';
+        var preview=(m.messaggio||m.message||'').substring(0,50);
+        if((m.messaggio||m.message||'').length>50) preview+='...';
+        var dataFmt=m.data||m.created_at||'-';
+        html+='<tr>'+
+            '<td>'+(m.nome||'-')+'</td>'+
+            '<td>'+(m.telefono||m.phone||'-')+'</td>'+
+            '<td>'+(m.tipo||'-')+'</td>'+
+            '<td><span class="badge '+badgeClass+'">'+(m.stato||'-')+'</span></td>'+
+            '<td>'+dataFmt+'</td>'+
+            '<td><span class="msg-truncate">'+preview+'</span></td>'+
+            '</tr>';
+    });
+    document.getElementById('whatsappBody').innerHTML=html||'<tr><td colspan="6" style="text-align:center;color:#5a5a5a;padding:32px">Nessun messaggio</td></tr>';
+}
 </script>
 </body>
 </html>
