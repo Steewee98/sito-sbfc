@@ -322,6 +322,12 @@ tr:hover td{background:#fafaf8}
         <div class="kpi-card"><div class="kpi-label">Checklist completate</div><div class="kpi-value" id="kpi-leads">...</div><div class="kpi-trend neutral" id="kpi-leads-trend">caricamento</div></div>
     </div>
 
+    <!-- SYNC LEAD META -->
+    <div style="margin-bottom:24px">
+        <button onclick="sincronizzaLead()" style="background:#c4622d;color:#fff;border:none;padding:10px 20px;border-radius:4px;cursor:pointer;font-size:0.85rem;font-weight:600">&#8595; Sincronizza lead Meta</button>
+        <div id="sync-result" style="margin-top:8px;font-size:0.85rem;color:#5a5a5a"></div>
+    </div>
+
     <!-- RIGA 2 — DUE COLONNE -->
     <div class="dash-two-col">
         <!-- Colonna sinistra 60% — TRAFFICO -->
@@ -1555,6 +1561,21 @@ renderChecklist=async function(){
     await _origRenderChecklist();
     try{_checklistCache=await apiFetch('/api/checklist')}catch(e){}
 };
+
+// ============ SYNC LEAD META ============
+async function sincronizzaLead(){
+    var btn=document.querySelector('[onclick="sincronizzaLead()"]');
+    btn.textContent='Sincronizzando...';
+    btn.disabled=true;
+    try{
+        var res=await apiFetch('/api/sync-leads',{method:'POST'});
+        document.getElementById('sync-result').textContent='\u2713 '+res.nuovi+' nuovi contatti importati, '+res.già_presenti+' già presenti';
+    }catch(e){
+        document.getElementById('sync-result').textContent='Errore nella sincronizzazione';
+    }
+    btn.textContent='\u2193 Sincronizza lead Meta';
+    btn.disabled=false;
+}
 
 // ============ WHATSAPP ============
 async function renderWhatsapp(){
