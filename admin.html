@@ -571,6 +571,7 @@ tr:hover td{background:#fafaf8}
                     <th>Confermato</th>
                     <th>Reminder 2gg</th>
                     <th>Reminder 2h</th>
+                    <th>Azioni</th>
                 </tr>
             </thead>
             <tbody id="prenotazioniBody"></tbody>
@@ -1659,6 +1660,14 @@ async function renderPrenotazioni(){
             dataApp=d.toLocaleDateString('it-IT')+' '+d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
         }
 
+        var azioni='';
+        if(!p.confermato){
+            azioni='<button onclick="confermaPrenotazione('+p.id+')" style="background:#1e8449;color:#fff;border:none;padding:5px 12px;border-radius:4px;cursor:pointer;font-size:0.8rem">Conferma</button>';
+        }
+        if(p.stato!=='cancellato'){
+            azioni+=' <button onclick="cancellaPrenotazione('+p.id+')" style="background:#c0392b;color:#fff;border:none;padding:5px 12px;border-radius:4px;cursor:pointer;font-size:0.8rem;margin-left:4px">Cancella</button>';
+        }
+
         html+='<tr>'+
             '<td>'+(p.nome||'-')+'</td>'+
             '<td>'+(p.telefono||'<span style="color:#999">mancante</span>')+'</td>'+
@@ -1667,9 +1676,22 @@ async function renderPrenotazioni(){
             '<td>'+confIcon+'</td>'+
             '<td>'+r2d+'</td>'+
             '<td>'+r2h+'</td>'+
+            '<td>'+azioni+'</td>'+
             '</tr>';
     });
-    document.getElementById('prenotazioniBody').innerHTML=html||'<tr><td colspan="7" style="text-align:center;color:#5a5a5a;padding:32px">Nessuna prenotazione</td></tr>';
+    document.getElementById('prenotazioniBody').innerHTML=html||'<tr><td colspan="8" style="text-align:center;color:#5a5a5a;padding:32px">Nessuna prenotazione</td></tr>';
+}
+
+async function confermaPrenotazione(id){
+    if(!confirm('Confermare questa prenotazione?')) return;
+    await apiFetch('/api/prenotazioni/'+id,{method:'PATCH',body:JSON.stringify({confermato:true})});
+    renderPrenotazioni();
+}
+
+async function cancellaPrenotazione(id){
+    if(!confirm('Cancellare questa prenotazione?')) return;
+    await apiFetch('/api/prenotazioni/'+id,{method:'PATCH',body:JSON.stringify({stato:'cancellato',confermato:false})});
+    renderPrenotazioni();
 }
 
 // ============ WHATSAPP ============
