@@ -180,24 +180,30 @@ document.addEventListener('DOMContentLoaded', function () {
 var BACKEND_URL = 'https://web-production-f3794.up.railway.app';
 
 /* ═══════ PAGE TRACKING ═══════ */
-async function trackPagina() {
-    try {
-        const res = await fetch(
-            'https://web-production-f3794.up.railway.app/api/track',
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    pagina: window.location.pathname,
-                    referrer: document.referrer
-                })
-            }
-        );
-        const data = await res.json();
-        console.log('Track OK:', data, window.location.pathname);
-    } catch(e) {
-        console.error('Track ERRORE:', e);
+function trackPagina() {
+    var payload = JSON.stringify({
+        pagina: window.location.pathname || '/',
+        referrer: document.referrer || ''
+    });
+    var url = 'https://web-production-f3794.up.railway.app/api/track';
+
+    // sendBeacon is more reliable in in-app browsers (Instagram, Facebook)
+    // and fires even when the user navigates away immediately
+    if (navigator.sendBeacon) {
+        var blob = new Blob([payload], { type: 'application/json' });
+        var sent = navigator.sendBeacon(url, blob);
+        if (sent) return;
     }
+
+    // Fallback to fetch for older browsers
+    try {
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload,
+            keepalive: true
+        }).catch(function() {});
+    } catch(e) {}
 }
 
 document.addEventListener('DOMContentLoaded', trackPagina);
