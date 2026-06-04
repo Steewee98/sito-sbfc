@@ -189,8 +189,9 @@ function trackPagina() {
 
     // sendBeacon is more reliable in in-app browsers (Instagram, Facebook)
     // and fires even when the user navigates away immediately
+    // Use text/plain to avoid CORS preflight (backend parses JSON with force=True)
     if (navigator.sendBeacon) {
-        var blob = new Blob([payload], { type: 'application/json' });
+        var blob = new Blob([payload], { type: 'text/plain' });
         var sent = navigator.sendBeacon(url, blob);
         if (sent) return;
     }
