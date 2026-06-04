@@ -671,22 +671,39 @@ function showDashboard(){
     document.getElementById('adminNav').style.display='flex';
     document.getElementById('adminWrap').style.display='flex';
     initAll();
+    startAutoRefresh();
 }
 document.getElementById('adminPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
 if(localStorage.getItem('sb_admin_logged')==='true') showDashboard();
 
 // ============ NAVIGATION ============
+var _currentSection='dashboard';
+var _autoRefreshTimer=null;
+
+function refreshCurrentSection(){
+    if(_currentSection==='dashboard') renderDashboard();
+    else if(_currentSection==='contatti') renderContatti();
+    else if(_currentSection==='pagamenti') renderPagamenti();
+    else if(_currentSection==='studenti') renderStudenti();
+    else if(_currentSection==='checklist') renderChecklist();
+    else if(_currentSection==='prenotazioni') renderPrenotazioni();
+    else if(_currentSection==='whatsapp') renderWhatsapp();
+}
+
+function startAutoRefresh(){
+    if(_autoRefreshTimer) clearInterval(_autoRefreshTimer);
+    _autoRefreshTimer=setInterval(refreshCurrentSection,30000);
+}
+
 document.querySelectorAll('.sidebar-item').forEach(function(el){
     el.addEventListener('click',function(){
         document.querySelectorAll('.sidebar-item').forEach(function(s){s.classList.remove('active')});
         el.classList.add('active');
         document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});
         document.getElementById('sec-'+el.dataset.section).classList.add('active');
-        if(el.dataset.section==='pagamenti') renderPagamenti();
-        if(el.dataset.section==='studenti') renderStudenti();
-        if(el.dataset.section==='checklist') renderChecklist();
-        if(el.dataset.section==='prenotazioni') renderPrenotazioni();
-        if(el.dataset.section==='whatsapp') renderWhatsapp();
+        _currentSection=el.dataset.section;
+        refreshCurrentSection();
+        startAutoRefresh();
     });
 });
 
