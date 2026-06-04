@@ -106,6 +106,7 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .badge-rimborsato{background:#f0ece7;color:#888}
 .badge-inviato{background:#e8f8f0;color:#1e8449}
 .badge-errore{background:#fde8e8;color:#c0392b}
+.badge-pending{background:#fef3e2;color:#c4622d}
 
 /* TABLE */
 .table-wrap{background:#fff;border-radius:6px;border:1px solid #e8e4df;overflow:hidden}
@@ -295,6 +296,10 @@ tr:hover td{background:#fafaf8}
         <div class="sidebar-item" data-section="checklist">
             <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
             Checklist
+        </div>
+        <div class="sidebar-item" data-section="prenotazioni">
+            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Prenotazioni
         </div>
         <div class="sidebar-item" data-section="whatsapp">
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -537,6 +542,42 @@ tr:hover td{background:#fafaf8}
     </div>
 </section>
 
+<!-- ========== PRENOTAZIONI ========== -->
+<section class="admin-section" id="sec-prenotazioni">
+    <div class="section-header">
+        <h2>Prenotazioni</h2>
+        <p>Chiamate prenotate via Calendly — reminder e conferme automatiche</p>
+    </div>
+    <div class="kpi-grid" id="prenotazioniKpi" style="grid-template-columns:repeat(4,1fr)"></div>
+    <div class="table-wrap">
+        <div class="table-filters">
+            <select id="prenotazioniFiltroStato" onchange="renderPrenotazioni()">
+                <option value="">Tutti gli stati</option>
+                <option value="pending">In attesa</option>
+                <option value="reminder_2d">Reminder 2gg inviato</option>
+                <option value="reminder_2h">Reminder 2h inviato</option>
+                <option value="confermato">Confermato</option>
+                <option value="non_confermato">Non confermato</option>
+                <option value="cancellato">Cancellato</option>
+            </select>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefono</th>
+                    <th>Data chiamata</th>
+                    <th>Stato</th>
+                    <th>Confermato</th>
+                    <th>Reminder 2gg</th>
+                    <th>Reminder 2h</th>
+                </tr>
+            </thead>
+            <tbody id="prenotazioniBody"></tbody>
+        </table>
+    </div>
+</section>
+
 <!-- ========== WHATSAPP ========== -->
 <section class="admin-section" id="sec-whatsapp">
     <div class="section-header">
@@ -550,6 +591,10 @@ tr:hover td{background:#fafaf8}
                 <option value="">Tutti i tipi</option>
                 <option value="form_contatti">form_contatti</option>
                 <option value="meta_leads">meta_leads</option>
+                <option value="conferma_prenotazione">conferma_prenotazione</option>
+                <option value="reminder_2d">reminder_2d</option>
+                <option value="reminder_2h">reminder_2h</option>
+                <option value="conferma_notifica">conferma_notifica</option>
                 <option value="batch">batch</option>
                 <option value="manuale">manuale</option>
             </select>
@@ -639,6 +684,7 @@ document.querySelectorAll('.sidebar-item').forEach(function(el){
         if(el.dataset.section==='pagamenti') renderPagamenti();
         if(el.dataset.section==='studenti') renderStudenti();
         if(el.dataset.section==='checklist') renderChecklist();
+        if(el.dataset.section==='prenotazioni') renderPrenotazioni();
         if(el.dataset.section==='whatsapp') renderWhatsapp();
     });
 });
@@ -1575,6 +1621,55 @@ async function sincronizzaLead(){
     }
     btn.textContent='\u2193 Sincronizza lead Meta';
     btn.disabled=false;
+}
+
+// ============ PRENOTAZIONI ============
+async function renderPrenotazioni(){
+    var data=await apiFetch('/api/prenotazioni');
+    var lista=data||[];
+    var filtro=document.getElementById('prenotazioniFiltroStato').value;
+    if(filtro) lista=lista.filter(function(p){return p.stato===filtro});
+
+    var totale=lista.length;
+    var confermati=lista.filter(function(p){return p.confermato}).length;
+    var inAttesa=lista.filter(function(p){return p.stato==='pending'||p.stato==='reminder_2d'||p.stato==='reminder_2h'}).length;
+    var nonConf=lista.filter(function(p){return p.stato==='non_confermato'}).length;
+
+    document.getElementById('prenotazioniKpi').innerHTML=
+        '<div class="kpi-card"><div class="kpi-label">Totale</div><div class="kpi-value">'+totale+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">Confermati</div><div class="kpi-value" style="color:#1e8449">'+confermati+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">In attesa</div><div class="kpi-value" style="color:#c4622d">'+inAttesa+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">Non confermati</div><div class="kpi-value" style="color:#c0392b">'+nonConf+'</div></div>';
+
+    var html='';
+    lista.forEach(function(p){
+        var statoBadge='badge-inviato';
+        if(p.stato==='confermato') statoBadge='badge-inviato';
+        else if(p.stato==='non_confermato'||p.stato==='cancellato') statoBadge='badge-errore';
+        else statoBadge='badge-pending';
+
+        var confIcon=p.confermato?'<span style="color:#1e8449;font-weight:bold">Si</span>':'<span style="color:#c0392b">No</span>';
+        var r2d=p.reminder_2d_inviato?'<span style="color:#1e8449">Inviato</span>':'<span style="color:#999">—</span>';
+        var r2h=p.reminder_2h_inviato?'<span style="color:#1e8449">Inviato</span>':'<span style="color:#999">—</span>';
+
+        var dataApp=p.data_appuntamento||'';
+        if(dataApp){
+            var d=new Date(dataApp+'Z');
+            d.setHours(d.getHours()+2);
+            dataApp=d.toLocaleDateString('it-IT')+' '+d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+        }
+
+        html+='<tr>'+
+            '<td>'+(p.nome||'-')+'</td>'+
+            '<td>'+(p.telefono||'<span style="color:#999">mancante</span>')+'</td>'+
+            '<td>'+dataApp+'</td>'+
+            '<td><span class="badge '+statoBadge+'">'+p.stato+'</span></td>'+
+            '<td>'+confIcon+'</td>'+
+            '<td>'+r2d+'</td>'+
+            '<td>'+r2h+'</td>'+
+            '</tr>';
+    });
+    document.getElementById('prenotazioniBody').innerHTML=html||'<tr><td colspan="7" style="text-align:center;color:#5a5a5a;padding:32px">Nessuna prenotazione</td></tr>';
 }
 
 // ============ WHATSAPP ============
