@@ -269,7 +269,7 @@ tr:hover td{background:#fafaf8}
     .panel{padding:16px;border-radius:10px}
     .chart-wrap{padding:14px;border-radius:10px;margin-bottom:16px}
     .chart-wrap h3{font-size:.88rem;margin-bottom:0}
-    .chart-wrap canvas{min-height:200px}
+    .chart-wrap canvas{min-height:140px;max-height:180px}
     .dash-two-col{grid-template-columns:1fr;gap:12px}
     .two-col-layout{grid-template-columns:1fr;gap:12px}
 
@@ -1547,7 +1547,7 @@ function renderTraffico(){
             window._visitChart=new Chart(ctx,{
                 type:'line',
                 data:{labels:labels,datasets:[{label:'Visite',data:chartData,borderColor:'#c4622d',backgroundColor:'rgba(196,98,45,0.1)',tension:0.3,fill:true,pointRadius:pointR,pointHoverRadius:6,borderWidth:2}]},
-                options:{responsive:true,maintainAspectRatio:!isMobile,aspectRatio:isMobile?1.4:2.5,plugins:{legend:{display:false},tooltip:{backgroundColor:'#37393f',titleFont:{size:13},bodyFont:{size:13},padding:10,cornerRadius:8}},scales:{y:{beginAtZero:true,grid:{color:'#f0ece7'},ticks:{font:{size:isMobile?11:12}}},x:{grid:{display:false},ticks:{maxTicksLimit:maxTicks,maxRotation:0,font:{size:isMobile?10:11}}}}}
+                options:{responsive:true,maintainAspectRatio:true,aspectRatio:isMobile?2:2.5,plugins:{legend:{display:false},tooltip:{backgroundColor:'#37393f',titleFont:{size:13},bodyFont:{size:13},padding:10,cornerRadius:8}},scales:{y:{beginAtZero:true,grid:{color:'#f0ece7'},ticks:{font:{size:isMobile?10:12}}},x:{grid:{display:false},ticks:{maxTicksLimit:maxTicks,maxRotation:0,font:{size:isMobile?9:11}}}}}
             });
         }
 
