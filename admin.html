@@ -431,10 +431,9 @@ tr:hover td{background:#fafaf8}
 
     <!-- RIGA 1 — KPI PRINCIPALI -->
     <div class="kpi-grid" id="dashKpi">
-        <div class="kpi-card"><div class="kpi-label">Visitatori oggi</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
+        <div class="kpi-card"><div class="kpi-label">Visite oggi</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
         <div class="kpi-card"><div class="kpi-label">Contatti questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
         <div class="kpi-card"><div class="kpi-label">Acquisti questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
-        <div class="kpi-card"><div class="kpi-label">Incasso questo mese</div><div class="kpi-value">...</div><div class="kpi-trend neutral">caricamento</div></div>
         <div class="kpi-card"><div class="kpi-label">Checklist completate</div><div class="kpi-value" id="kpi-leads">...</div><div class="kpi-trend neutral" id="kpi-leads-trend">caricamento</div></div>
     </div>
 
@@ -889,12 +888,26 @@ function initAll(){
 function renderDashboard(){
     var kpiCards=document.querySelectorAll('#dashKpi .kpi-card');
 
-    // --- KPI 1: Visitatori oggi (realtime) ---
-    apiFetch('/api/analytics/realtime').then(function(rt){
+    // --- KPI 1: Visite oggi (da analytics 7d, prendi il giorno corrente) ---
+    apiFetch('/api/analytics?periodo=7d').then(function(data){
         if(kpiCards[0]){
-            kpiCards[0].querySelector('.kpi-value').textContent=rt.visitatori_attivi||0;
-            kpiCards[0].querySelector('.kpi-trend').textContent='in tempo reale';
-            kpiCards[0].querySelector('.kpi-trend').className='kpi-trend neutral';
+            var oggi=new Date().toISOString().slice(0,10);
+            var visiteOggi=0;
+            var visiteIeri=0;
+            data.visite_giornaliere.forEach(function(v){
+                if(v.data===oggi) visiteOggi=v.visite;
+                var ieri=new Date();ieri.setDate(ieri.getDate()-1);
+                if(v.data===ieri.toISOString().slice(0,10)) visiteIeri=v.visite;
+            });
+            kpiCards[0].querySelector('.kpi-value').textContent=visiteOggi;
+            if(visiteIeri>0){
+                var delta=Math.round((visiteOggi-visiteIeri)/visiteIeri*100);
+                kpiCards[0].querySelector('.kpi-trend').textContent=(delta>=0?'+':'')+delta+'% vs ieri';
+                kpiCards[0].querySelector('.kpi-trend').className='kpi-trend '+(delta>=0?'up':'down');
+            } else {
+                kpiCards[0].querySelector('.kpi-trend').textContent=visiteIeri===0&&visiteOggi>0?'nessuna visita ieri':'aggiornato';
+                kpiCards[0].querySelector('.kpi-trend').className='kpi-trend neutral';
+            }
         }
     }).catch(function(){
         if(kpiCards[0]){kpiCards[0].querySelector('.kpi-value').textContent='—';kpiCards[0].querySelector('.kpi-trend').textContent='offline';}
@@ -946,13 +959,6 @@ function renderDashboard(){
             kpiCards[2].querySelector('.kpi-trend').textContent=(dA>=0?'+':'')+dA+'% vs mese scorso';
             kpiCards[2].querySelector('.kpi-trend').className='kpi-trend '+(dA>=0?'up':'down');
         }
-        // KPI Incasso
-        if(kpiCards[3]){
-            kpiCards[3].querySelector('.kpi-value').innerHTML='&euro; '+incasso.toFixed(2);
-            var dI=incassoPrec>0?Math.round((incasso-incassoPrec)/incassoPrec*100):0;
-            kpiCards[3].querySelector('.kpi-trend').textContent=(dI>=0?'+':'')+dI+'% vs mese scorso';
-            kpiCards[3].querySelector('.kpi-trend').className='kpi-trend '+(dI>=0?'up':'down');
-        }
 
         // Modulo piu acquistato + pie chart
         var completati=pagamenti.filter(function(p){return p.stato==='completato'});
@@ -989,7 +995,6 @@ function renderDashboard(){
         }
     }).catch(function(){
         if(kpiCards[2]){kpiCards[2].querySelector('.kpi-value').textContent='—';kpiCards[2].querySelector('.kpi-trend').textContent='offline';}
-        if(kpiCards[3]){kpiCards[3].querySelector('.kpi-value').textContent='—';kpiCards[3].querySelector('.kpi-trend').textContent='offline';}
     });
 
     // --- RIGA 2 LEFT: Grafico visite 7gg + top 3 pagine ---
