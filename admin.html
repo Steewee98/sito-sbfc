@@ -2004,7 +2004,7 @@ async function renderCallCenter(){
                 '<td style="text-align:center">'+c.totale_chiamate+'</td>'+
                 '<td>'+ultimoEsito+'</td>'+
                 '<td>'+
-                    '<button class="btn-action" onclick="apriNotaChiamata('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\',\''+c.telefono+'\')">Registra chiamata</button> '+
+                    '<button class="btn-action" onclick="apriNotaChiamata('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\',\''+c.telefono+'\')">Esito chiamata</button> '+
                     '<button class="btn-action" onclick="vediStorico('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\')">Storico</button>'+
                 '</td>'+
             '</tr>';
@@ -2029,7 +2029,7 @@ async function renderCallCenter(){
             '<div class="mobile-card-row"><span class="mobile-card-label">Data arrivo</span><span class="mobile-card-value">'+dataArr+'</span></div>'+
             '<div class="mobile-card-row"><span class="mobile-card-label">Ultimo esito</span><span class="mobile-card-value">'+ultimoEsito+'</span></div>'+
             '<div class="mobile-card-actions">'+
-                '<button class="btn-confirm" onclick="apriNotaChiamata('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\',\''+c.telefono+'\')">Registra</button>'+
+                '<button class="btn-confirm" onclick="apriNotaChiamata('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\',\''+c.telefono+'\')">Esito</button>'+
                 '<button class="btn-cancel" style="background:#37393f" onclick="vediStorico('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\')">Storico</button>'+
             '</div>'+
         '</div>';
@@ -2038,7 +2038,7 @@ async function renderCallCenter(){
 }
 
 function apriNotaChiamata(contattoId,nome,telefono){
-    var html='<h3>Registra chiamata</h3>'+
+    var html='<h3>Esito chiamata</h3>'+
         '<p style="margin-bottom:16px;color:#5a5a5a"><strong>'+nome+'</strong> &mdash; <a href="tel:'+telefono+'" style="color:#c4622d">'+telefono+'</a></p>'+
         '<div class="form-group">'+
             '<label>Esito della chiamata</label>'+
