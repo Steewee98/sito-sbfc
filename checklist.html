@@ -816,7 +816,7 @@
             <input type="text" id="reg-nome" class="reg-input" placeholder="Il tuo nome" autocomplete="given-name">
         </div>
         <div class="reg-field">
-            <input type="email" id="reg-email" class="reg-input" placeholder="La tua email" autocomplete="email">
+            <input type="email" id="reg-email" class="reg-input" placeholder="La tua email (opzionale)" autocomplete="email">
         </div>
         <div class="reg-field">
             <button onclick="iniziaChecklist()" class="reg-btn">Inizia &rarr;</button>
@@ -1016,7 +1016,7 @@ function iniziaChecklist() {
     userEmail = document.getElementById('reg-email').value.trim();
 
     if (!userName) { document.getElementById('reg-nome').focus(); return; }
-    if (!userEmail || !userEmail.includes('@')) { document.getElementById('reg-email').focus(); return; }
+    if (userEmail && !userEmail.includes('@')) { document.getElementById('reg-email').focus(); return; }
 
     currentQuestion = 0;
     risposte = [];
