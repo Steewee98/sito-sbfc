@@ -412,6 +412,10 @@ tr:hover td{background:#fafaf8}
             <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Prenotazioni
         </div>
+        <div class="sidebar-item" data-section="callcenter">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call Center
+        </div>
         <div class="sidebar-item" data-section="whatsapp">
             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             WhatsApp
@@ -698,6 +702,41 @@ tr:hover td{background:#fafaf8}
     </div>
 </section>
 
+<!-- ========== CALL CENTER ========== -->
+<section class="admin-section" id="sec-callcenter">
+    <div class="section-header">
+        <h2>Call Center</h2>
+        <p>Contatti da chiamare — dal piu' vecchio al piu' recente</p>
+    </div>
+    <div class="kpi-grid" id="callcenterKpi" style="grid-template-columns:repeat(4,1fr)"></div>
+    <div class="table-wrap">
+        <div class="table-filters">
+            <select id="callcenterFiltro" onchange="renderCallCenter()">
+                <option value="">Tutti</option>
+                <option value="mai_chiamato">Mai chiamati</option>
+                <option value="richiamare">Da richiamare</option>
+                <option value="non_risponde">Non risponde</option>
+            </select>
+            <input type="text" id="callcenterSearch" placeholder="Cerca nome o telefono..." oninput="renderCallCenter()" style="min-width:200px">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefono</th>
+                    <th>Tipo</th>
+                    <th>Data arrivo</th>
+                    <th>Chiamate</th>
+                    <th>Ultimo esito</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody id="callcenterBody"></tbody>
+        </table>
+        <div class="mobile-card-list" id="callcenterCards"></div>
+    </div>
+</section>
+
 <!-- ========== WHATSAPP ========== -->
 <section class="admin-section" id="sec-whatsapp">
     <div class="section-header">
@@ -817,6 +856,7 @@ function refreshCurrentSection(){
     else if(_currentSection==='studenti') renderStudenti();
     else if(_currentSection==='checklist') renderChecklist();
     else if(_currentSection==='prenotazioni') renderPrenotazioni();
+    else if(_currentSection==='callcenter') renderCallCenter();
     else if(_currentSection==='whatsapp') renderWhatsapp();
 }
 
@@ -1903,6 +1943,161 @@ async function cancellaPrenotazione(id){
     if(!confirm('Cancellare questa prenotazione?')) return;
     await apiFetch('/api/prenotazioni/'+id,{method:'PATCH',body:JSON.stringify({stato:'cancellato',confermato:false})});
     renderPrenotazioni();
+}
+
+// ============ CALL CENTER ============
+var _callcenterCache=[];
+async function renderCallCenter(){
+    try{
+        var data=await apiFetch('/api/callcenter/coda');
+        _callcenterCache=data||[];
+    }catch(e){
+        console.error('CallCenter API error:',e);
+        _callcenterCache=[];
+    }
+
+    var lista=_callcenterCache.slice();
+    var filtro=document.getElementById('callcenterFiltro').value;
+    var search=(document.getElementById('callcenterSearch').value||'').toLowerCase();
+
+    if(filtro==='mai_chiamato') lista=lista.filter(function(c){return c.totale_chiamate===0});
+    else if(filtro==='richiamare') lista=lista.filter(function(c){return c.ultima_nota&&c.ultima_nota.esito==='richiamare'});
+    else if(filtro==='non_risponde') lista=lista.filter(function(c){return c.ultima_nota&&c.ultima_nota.esito==='non_risponde'});
+
+    if(search) lista=lista.filter(function(c){
+        return ((c.nome||'')+' '+(c.cognome||'')).toLowerCase().indexOf(search)>=0||(c.telefono||'').indexOf(search)>=0;
+    });
+
+    var totale=_callcenterCache.length;
+    var maiChiamati=_callcenterCache.filter(function(c){return c.totale_chiamate===0}).length;
+    var daRichiamare=_callcenterCache.filter(function(c){return c.ultima_nota&&c.ultima_nota.esito==='richiamare'}).length;
+    var nonRisponde=_callcenterCache.filter(function(c){return c.ultima_nota&&c.ultima_nota.esito==='non_risponde'}).length;
+
+    document.getElementById('callcenterKpi').innerHTML=
+        '<div class="kpi-card"><div class="kpi-label">In coda</div><div class="kpi-value">'+totale+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">Mai chiamati</div><div class="kpi-value" style="color:#c4622d">'+maiChiamati+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">Da richiamare</div><div class="kpi-value" style="color:#2e6bc4">'+daRichiamare+'</div></div>'+
+        '<div class="kpi-card"><div class="kpi-label">Non risponde</div><div class="kpi-value" style="color:#5a5a5a">'+nonRisponde+'</div></div>';
+
+    // Table
+    var html='';
+    if(lista.length===0){
+        html='<tr><td colspan="7" style="text-align:center;padding:40px;color:#5a5a5a">Nessun contatto da chiamare</td></tr>';
+    } else {
+        lista.forEach(function(c){
+            var nomeCompleto=(c.nome||'')+' '+(c.cognome||'');
+            var dataArr=c.created_at?fmtDateIT(c.created_at.substring(0,10)):'';
+            var ultimoEsito='—';
+            var esitoBadge='';
+            if(c.ultima_nota){
+                var e=c.ultima_nota.esito;
+                var esitoLabels={risposto:'Risposto',non_risponde:'Non risponde',richiamare:'Da richiamare',non_interessato:'Non interessato',appuntamento:'Appuntamento'};
+                var esitoColors={risposto:'badge-inviato',non_risponde:'badge-errore',richiamare:'badge-pending',non_interessato:'badge-errore',appuntamento:'badge-inviato'};
+                ultimoEsito='<span class="badge '+(esitoColors[e]||'')+'">'+( esitoLabels[e]||e)+'</span>';
+            }
+
+            html+='<tr>'+
+                '<td><strong>'+nomeCompleto+'</strong></td>'+
+                '<td><a href="tel:'+c.telefono+'" style="color:#c4622d;font-weight:600">'+c.telefono+'</a></td>'+
+                '<td>'+(c.tipo_locale||'—')+'</td>'+
+                '<td>'+dataArr+'</td>'+
+                '<td style="text-align:center">'+c.totale_chiamate+'</td>'+
+                '<td>'+ultimoEsito+'</td>'+
+                '<td>'+
+                    '<button class="btn-action" onclick="apriNotaChiamata('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\',\''+c.telefono+'\')">Registra chiamata</button> '+
+                    '<button class="btn-action" onclick="vediStorico('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\')">Storico</button>'+
+                '</td>'+
+            '</tr>';
+        });
+    }
+    document.getElementById('callcenterBody').innerHTML=html;
+
+    // Mobile cards
+    var cards='';
+    lista.forEach(function(c){
+        var nomeCompleto=(c.nome||'')+' '+(c.cognome||'');
+        var dataArr=c.created_at?fmtDateIT(c.created_at.substring(0,10)):'';
+        var ultimoEsito='Nessuna chiamata';
+        if(c.ultima_nota){
+            var esitoLabels={risposto:'Risposto',non_risponde:'Non risponde',richiamare:'Da richiamare',non_interessato:'Non interessato',appuntamento:'Appuntamento'};
+            ultimoEsito=esitoLabels[c.ultima_nota.esito]||c.ultima_nota.esito;
+        }
+        cards+='<div class="mobile-card">'+
+            '<div class="mobile-card-header"><span class="mobile-card-name">'+nomeCompleto+'</span><span class="badge badge-pending">'+c.totale_chiamate+' chiamate</span></div>'+
+            '<div class="mobile-card-row"><span class="mobile-card-label">Telefono</span><span class="mobile-card-value"><a href="tel:'+c.telefono+'" style="color:#c4622d;font-weight:600">'+c.telefono+'</a></span></div>'+
+            '<div class="mobile-card-row"><span class="mobile-card-label">Tipo</span><span class="mobile-card-value">'+(c.tipo_locale||'—')+'</span></div>'+
+            '<div class="mobile-card-row"><span class="mobile-card-label">Data arrivo</span><span class="mobile-card-value">'+dataArr+'</span></div>'+
+            '<div class="mobile-card-row"><span class="mobile-card-label">Ultimo esito</span><span class="mobile-card-value">'+ultimoEsito+'</span></div>'+
+            '<div class="mobile-card-actions">'+
+                '<button class="btn-confirm" onclick="apriNotaChiamata('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\',\''+c.telefono+'\')">Registra</button>'+
+                '<button class="btn-cancel" style="background:#37393f" onclick="vediStorico('+c.id+',\''+nomeCompleto.replace(/'/g,"\\'")+'\')">Storico</button>'+
+            '</div>'+
+        '</div>';
+    });
+    document.getElementById('callcenterCards').innerHTML=cards||'<div style="text-align:center;color:#999;padding:40px">Nessun contatto</div>';
+}
+
+function apriNotaChiamata(contattoId,nome,telefono){
+    var html='<h3>Registra chiamata</h3>'+
+        '<p style="margin-bottom:16px;color:#5a5a5a"><strong>'+nome+'</strong> &mdash; <a href="tel:'+telefono+'" style="color:#c4622d">'+telefono+'</a></p>'+
+        '<div class="form-group">'+
+            '<label>Esito della chiamata</label>'+
+            '<select id="notaEsito" style="width:100%;padding:10px 12px;border:1px solid #d9d4cc;border-radius:4px;font-size:.88rem;background:#f5f2ee">'+
+                '<option value="risposto">Ha risposto</option>'+
+                '<option value="non_risponde">Non risponde</option>'+
+                '<option value="richiamare">Da richiamare</option>'+
+                '<option value="appuntamento">Fissato appuntamento</option>'+
+                '<option value="non_interessato">Non interessato</option>'+
+            '</select>'+
+        '</div>'+
+        '<div class="form-group">'+
+            '<label>Note</label>'+
+            '<textarea id="notaTesto" placeholder="Come e\' andata la telefonata..." style="width:100%;min-height:100px;padding:10px 12px;border:1px solid #d9d4cc;border-radius:4px;font-size:.88rem;background:#f5f2ee;resize:vertical"></textarea>'+
+        '</div>'+
+        '<button class="btn-primary" onclick="salvaNota('+contattoId+')">Salva</button>';
+    openModal(html);
+}
+
+async function salvaNota(contattoId){
+    var esito=document.getElementById('notaEsito').value;
+    var note=document.getElementById('notaTesto').value;
+    try{
+        await apiFetch('/api/callcenter/note',{
+            method:'POST',
+            body:JSON.stringify({contatto_id:contattoId,esito:esito,note:note})
+        });
+        closeModal();
+        renderCallCenter();
+    }catch(e){
+        alert('Errore nel salvataggio: '+e.message);
+    }
+}
+
+async function vediStorico(contattoId,nome){
+    try{
+        var note=await apiFetch('/api/callcenter/note/'+contattoId);
+        var esitoLabels={risposto:'Risposto',non_risponde:'Non risponde',richiamare:'Da richiamare',non_interessato:'Non interessato',appuntamento:'Appuntamento'};
+        var esitoColors={risposto:'#1e8449',non_risponde:'#c0392b',richiamare:'#c4622d',non_interessato:'#888',appuntamento:'#1e8449'};
+        var html='<h3>Storico chiamate — '+nome+'</h3>';
+        if(note.length===0){
+            html+='<p style="color:#5a5a5a;padding:20px 0">Nessuna chiamata registrata.</p>';
+        } else {
+            note.forEach(function(n){
+                var data=n.created_at?new Date(n.created_at+'Z'):null;
+                var dataStr=data?data.toLocaleDateString('it-IT')+' '+data.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}):'';
+                html+='<div style="padding:14px 0;border-bottom:1px solid #f0ece7">'+
+                    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
+                        '<span style="font-weight:600;color:'+(esitoColors[n.esito]||'#1a1a1a')+'">'+(esitoLabels[n.esito]||n.esito)+'</span>'+
+                        '<span style="font-size:.78rem;color:#999">'+dataStr+'</span>'+
+                    '</div>'+
+                    (n.note?'<p style="font-size:.88rem;color:#5a5a5a;line-height:1.6">'+n.note+'</p>':'')+
+                '</div>';
+            });
+        }
+        openModal(html);
+    }catch(e){
+        alert('Errore: '+e.message);
+    }
 }
 
 // ============ WHATSAPP ============
