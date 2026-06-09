@@ -44,9 +44,9 @@
         .screen.active { display: flex; }
 
         /* ══════════════════════════════════
-           SCHERMATA 1 — REGISTRAZIONE
+           SCHERMATA 1 — LANDING
            ══════════════════════════════════ */
-        #screen-register {
+        #screen-landing {
             background: var(--dark);
             align-items: center;
             justify-content: center;
@@ -114,47 +114,16 @@
             animation: fadeUp .7s cubic-bezier(.4,0,.2,1) .24s forwards;
         }
 
-        .reg-form {
-            width: 100%;
-            max-width: 380px;
-            position: relative;
-        }
-        .reg-field {
+        .landing-cta {
             opacity: 0;
-            transform: translateY(20px);
-        }
-        .reg-field.visible {
-            animation: fieldIn .5s cubic-bezier(.4,0,.2,1) forwards;
-        }
-        .reg-field:nth-child(1).visible { animation-delay: .4s; }
-        .reg-field:nth-child(2).visible { animation-delay: .5s; }
-        .reg-field:nth-child(3).visible { animation-delay: .6s; }
-
-        .reg-input {
-            display: block;
-            width: 100%;
-            padding: 18px 22px;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            margin-bottom: 14px;
-            transition: border-color .3s, background .3s, box-shadow .3s;
-            outline: none;
-            -webkit-appearance: none;
-        }
-        .reg-input::placeholder { color: rgba(255,255,255,0.3); }
-        .reg-input:focus {
-            border-color: var(--terracotta);
-            background: rgba(255,255,255,0.08);
-            box-shadow: 0 0 0 3px var(--terracotta-glow);
+            animation: fadeUp .7s cubic-bezier(.4,0,.2,1) .45s forwards;
+            position: relative;
         }
 
         .reg-btn {
             display: block;
             width: 100%;
+            max-width: 320px;
             padding: 18px 24px;
             background: var(--terracotta);
             color: #fff;
@@ -179,7 +148,7 @@
             color: rgba(255,255,255,0.25);
             margin-top: 20px;
             opacity: 0;
-            animation: fadeUp .5s ease .75s forwards;
+            animation: fadeUp .5s ease .6s forwards;
             position: relative;
         }
 
@@ -384,7 +353,6 @@
             animation: slideIn .35s cubic-bezier(.0,0,.2,1) forwards;
         }
 
-        /* Ghost numero domanda */
         .quiz-ghost-num {
             position: absolute;
             top: 50%;
@@ -491,8 +459,6 @@
         .quiz-ans-btn.pulse {
             animation: btnPulse .35s ease;
         }
-
-        /* Old quiz-cat-dots removed — now in progress-container */
 
         /* ══════════════════════════════════
            SCHERMATA 3 — RISULTATO
@@ -670,13 +636,104 @@
             color: #fff;
         }
 
+        /* ── Email capture box ── */
+        .email-capture {
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px 36px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.04);
+            border: 2px solid rgba(196,98,45,0.15);
+            opacity: 0;
+            animation: fadeUp .6s ease .8s forwards;
+        }
+        .email-capture.hidden { display: none; }
+        .email-capture-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        .email-capture-text {
+            font-size: 0.88rem;
+            color: rgba(55,57,63,0.6);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+        .email-capture-input {
+            display: block;
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid rgba(55,57,63,0.15);
+            border-radius: 8px;
+            background: var(--ivory);
+            color: var(--dark);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            transition: border-color .3s, box-shadow .3s;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .email-capture-input::placeholder { color: rgba(55,57,63,0.35); }
+        .email-capture-input:focus {
+            border-color: var(--terracotta);
+            box-shadow: 0 0 0 3px var(--terracotta-glow);
+        }
+        .email-capture-btn {
+            display: block;
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--terracotta);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: background .25s, transform .2s, box-shadow .3s;
+        }
+        .email-capture-btn:hover {
+            background: var(--terracotta-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(196,98,45,0.3);
+        }
+        .email-capture-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .email-capture-skip {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.82rem;
+            color: rgba(55,57,63,0.4);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            font-family: 'Inter', sans-serif;
+        }
+        .email-capture-skip:hover { color: var(--dark); }
+        .email-capture-success {
+            font-size: 0.95rem;
+            color: var(--green);
+            font-weight: 600;
+            padding: 16px 0;
+        }
+
         .result-ctas {
             display: flex;
             flex-direction: column;
             gap: 12px;
             align-items: center;
             opacity: 0;
-            animation: fadeUp .6s ease .7s forwards;
+            animation: fadeUp .6s ease .9s forwards;
         }
         .cta-primary {
             display: inline-block;
@@ -750,10 +807,6 @@
             from { opacity: 0; transform: translateY(16px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes fieldIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
         @keyframes lineExpand {
             from { opacity: 0; transform: scaleX(0); }
             to   { opacity: 1; transform: scaleX(1); }
@@ -798,29 +851,22 @@
             .result-bar-label { width: 90px; font-size: 0.75rem; }
             .result-bar-track { height: 28px; }
             .result-message { padding: 24px 20px; }
+            .email-capture { padding: 24px 20px; }
             .reg-ghost { font-size: clamp(12rem, 45vw, 18rem); }
         }
     </style>
 </head>
 <body>
 
-<!-- ═══════ SCHERMATA 1 — REGISTRAZIONE ═══════ -->
-<div id="screen-register" class="screen active">
+<!-- ═══════ SCHERMATA 1 — LANDING ═══════ -->
+<div id="screen-landing" class="screen active">
     <div class="reg-ghost" aria-hidden="true">20</div>
     <img src="assets/logo/logo-bianco.png" alt="SB Food Consulting" class="reg-logo">
     <h1 class="reg-title">La Checklist del<br>Ristoratore Consapevole</h1>
-    <p class="reg-subtitle">20 domande per capire se il tuo locale<br>è davvero sotto controllo</p>
+    <p class="reg-subtitle">20 domande per capire se il tuo locale<br>&egrave; davvero sotto controllo</p>
     <div class="reg-line"></div>
-    <div class="reg-form" id="reg-form">
-        <div class="reg-field">
-            <input type="text" id="reg-nome" class="reg-input" placeholder="Il tuo nome" autocomplete="given-name">
-        </div>
-        <div class="reg-field">
-            <input type="email" id="reg-email" class="reg-input" placeholder="La tua email (opzionale)" autocomplete="email">
-        </div>
-        <div class="reg-field">
-            <button onclick="iniziaChecklist()" class="reg-btn">Inizia &rarr;</button>
-        </div>
+    <div class="landing-cta">
+        <button onclick="iniziaChecklist()" class="reg-btn">Inizia &rarr;</button>
     </div>
     <p class="reg-note">Gratuito. 5 minuti. Risultato immediato.</p>
 </div>
@@ -932,9 +978,9 @@
                 <div class="zone-green"></div>
             </div>
             <div class="result-bar-labels">
-                <span>0 — 8</span>
-                <span>9 — 14</span>
-                <span>15 — 20</span>
+                <span>0 &mdash; 8</span>
+                <span>9 &mdash; 14</span>
+                <span>15 &mdash; 20</span>
             </div>
         </div>
 
@@ -943,6 +989,16 @@
         <div class="result-chart">
             <div class="result-chart-title">I tuoi risultati per area</div>
             <div id="result-bars"></div>
+        </div>
+
+        <!-- Email capture (optional) -->
+        <div class="email-capture" id="email-capture">
+            <div class="email-capture-title">Vuoi ricevere i consigli personalizzati?</div>
+            <p class="email-capture-text">Ti inviamo il resoconto completo via email con le indicazioni specifiche per la tua fascia.</p>
+            <input type="text" id="capture-nome" class="email-capture-input" placeholder="Il tuo nome" autocomplete="given-name">
+            <input type="email" id="capture-email" class="email-capture-input" placeholder="La tua email" autocomplete="email">
+            <button onclick="inviaEmailCapture()" class="email-capture-btn" id="capture-btn">Invia</button>
+            <button onclick="chiudiEmailCapture()" class="email-capture-skip">No grazie, continua senza</button>
         </div>
 
         <div class="result-ctas">
@@ -954,6 +1010,43 @@
 </div>
 
 <script>
+/* ═══════ CONFIG ═══════ */
+var BACKEND = 'https://web-production-f3794.up.railway.app';
+
+/* ═══════ SESSION & TRACKING ═══════ */
+var sessionId = sessionStorage.getItem('ck_session');
+if (!sessionId) {
+    sessionId = (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    }));
+    sessionStorage.setItem('ck_session', sessionId);
+}
+
+function trackEvento(evento, dettaglio) {
+    try {
+        var payload = JSON.stringify({
+            session_id: sessionId,
+            evento: evento,
+            dettaglio: dettaglio || null,
+            referrer: document.referrer || ''
+        });
+        if (navigator.sendBeacon) {
+            navigator.sendBeacon(BACKEND + '/api/checklist/evento', new Blob([payload], {type: 'application/json'}));
+        } else {
+            fetch(BACKEND + '/api/checklist/evento', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: payload,
+                keepalive: true
+            }).catch(function() {});
+        }
+    } catch(e) {}
+}
+
+// Track page view
+trackEvento('vista');
+
 /* ═══════ DATI GLOBALI ═══════ */
 var userName = '';
 var userEmail = '';
@@ -1004,30 +1097,13 @@ var domande = [
     { cat: 4, catPos: 4, testo: 'Sei in grado di prevedere il fatturato del mese prossimo con margine di errore del 15%?', descrizione: 'La capacit\u00e0 di previsione \u00e8 il segnale pi\u00f9 chiaro di un controllo di gestione maturo. Se non puoi prevedere, non puoi pianificare.' }
 ];
 
-/* ═══════ SCHERMATA 1 — REGISTRAZIONE ═══════ */
-setTimeout(function() {
-    document.querySelectorAll('.reg-field').forEach(function(el) {
-        el.classList.add('visible');
-    });
-}, 100);
-
+/* ═══════ SCHERMATA 1 — LANDING ═══════ */
 function iniziaChecklist() {
-    userName = document.getElementById('reg-nome').value.trim();
-    userEmail = document.getElementById('reg-email').value.trim();
-
-    if (!userName) { document.getElementById('reg-nome').focus(); return; }
-    if (userEmail && !userEmail.includes('@')) { document.getElementById('reg-email').focus(); return; }
-
+    trackEvento('iniziata');
     currentQuestion = 0;
     risposte = [];
     mostraTransizione(0);
 }
-
-document.querySelectorAll('.reg-input').forEach(function(input) {
-    input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') iniziaChecklist();
-    });
-});
 
 /* ═══════ TRANSIZIONE CATEGORIA ═══════ */
 function mostraTransizione(catIndex) {
@@ -1069,7 +1145,6 @@ function aggiornaCategoria(numeroDomanda) {
         if (i + 1 === catIndex) el.classList.add('active');
         else if (i + 1 < catIndex) el.classList.add('completed');
     });
-    /* Segna il dot corrente */
     document.querySelectorAll('.prog-dot').forEach(function(d) { d.classList.remove('current'); });
     var dotCorrente = document.getElementById('dot-' + numeroDomanda);
     if (dotCorrente) dotCorrente.classList.add('current');
@@ -1086,11 +1161,9 @@ function mostraDomanda(isFirst) {
     document.getElementById('quiz-descrizione').textContent = d.descrizione;
     document.getElementById('quiz-ghost-num').textContent = qNum;
 
-    /* Icona categoria nella pill */
     var iconEl = document.querySelector('.quiz-cat-pill-icon');
     if (iconEl) iconEl.innerHTML = catIcons[d.cat];
 
-    /* Aggiorna progress bar */
     aggiornaCategoria(qNum);
 
     var card = document.getElementById('quiz-card');
@@ -1127,6 +1200,11 @@ function rispondi(valore) {
     aggiornaDot(qNum, valore);
     currentQuestion++;
 
+    // Track every 5 questions
+    if (currentQuestion === 5 || currentQuestion === 10 || currentQuestion === 15 || currentQuestion === 20) {
+        trackEvento('domanda', currentQuestion);
+    }
+
     if (currentQuestion >= 20) {
         setTimeout(function() { mostraRisultato(); }, 300);
         return;
@@ -1161,8 +1239,10 @@ function mostraRisultato() {
         numeri: scores.slice(16, 20).reduce(function(a, b) { return a + b; }, 0)
     };
 
-    document.getElementById('result-title').textContent = 'Il tuo punteggio, ' + userName;
+    document.getElementById('result-title').textContent = 'Il tuo punteggio';
     mostraSchermata('screen-result');
+
+    trackEvento('completata');
 
     var scoreEl = document.getElementById('result-score');
     animateCount(scoreEl, 0, punteggioFinale, 1200);
@@ -1217,15 +1297,14 @@ function mostraRisultato() {
         }, 450 + (i * 120));
     });
 
-    /* Invio dati al backend */
+    // Save result to backend (without email)
     var scoresOnly = risposte.map(function(r) { return r.risposta ? 1 : 0; });
     try {
-        fetch('https://web-production-f3794.up.railway.app/api/checklist', {
+        fetch(BACKEND + '/api/checklist', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                nome: userName,
-                email: userEmail,
+                session_id: sessionId,
                 punteggio_totale: punteggioFinale,
                 punteggio_food_cost: punteggiCategorie.food_cost,
                 punteggio_personale: punteggiCategorie.personale,
@@ -1240,15 +1319,72 @@ function mostraRisultato() {
     } catch(e) { console.log('Errore invio:', e); }
 }
 
+/* ═══════ EMAIL CAPTURE ═══════ */
+function inviaEmailCapture() {
+    var nome = document.getElementById('capture-nome').value.trim();
+    var email = document.getElementById('capture-email').value.trim();
+
+    if (!email || !email.includes('@')) {
+        document.getElementById('capture-email').focus();
+        return;
+    }
+
+    userName = nome;
+    userEmail = email;
+
+    var btn = document.getElementById('capture-btn');
+    btn.disabled = true;
+    btn.textContent = 'Invio in corso...';
+
+    fetch(BACKEND + '/api/checklist/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            session_id: sessionId,
+            nome: nome,
+            email: email
+        })
+    }).then(function(r) { return r.json(); })
+      .then(function(d) {
+        trackEvento('email_lasciata');
+        var box = document.getElementById('email-capture');
+        box.innerHTML = '<div class="email-capture-success">Fatto! Riceverai il resoconto a breve.</div>';
+        // Update result title with name
+        if (nome) {
+            document.getElementById('result-title').textContent = 'Il tuo punteggio, ' + nome;
+        }
+    }).catch(function(e) {
+        btn.disabled = false;
+        btn.textContent = 'Invia';
+        console.log('Errore invio email:', e);
+    });
+}
+
+function chiudiEmailCapture() {
+    document.getElementById('email-capture').classList.add('hidden');
+}
+
+/* Enter key on email inputs */
+document.addEventListener('DOMContentLoaded', function() {
+    var captureInputs = document.querySelectorAll('.email-capture-input');
+    captureInputs.forEach(function(input) {
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') inviaEmailCapture();
+        });
+    });
+});
+
 /* ═══════ PDF RESOCONTO ═══════ */
 function scaricaResoconto() {
+    trackEvento('pdf_scaricato');
+
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF();
 
     var SCURO = [55, 57, 63];
     var TERRACOTTA = [196, 98, 45];
     var AVORIO = [245, 242, 238];
-    var nome = userName;
+    var nome = userName || 'Ristoratore';
     var punteggio = punteggioFinale;
     var punteggi = punteggiCategorie;
 
@@ -1382,7 +1518,9 @@ function scaricaResoconto() {
         doc.text('sbfoodconsulting.com  |  info@sbfoodconsulting.com', 70, 291);
     }
 
-    doc.save('checklist-sbfood-' + nome.toLowerCase().replace(/\s/g, '-') + '.pdf');
+    var filename = 'checklist-sbfood';
+    if (userName) filename += '-' + userName.toLowerCase().replace(/\s/g, '-');
+    doc.save(filename + '.pdf');
 }
 
 /* ═══════ UTILITY ═══════ */

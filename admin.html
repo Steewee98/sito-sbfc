@@ -642,6 +642,22 @@ tr:hover td{background:#fafaf8}
         <h2>Checklist</h2>
         <p>Risultati delle checklist compilate dal sito</p>
     </div>
+
+    <!-- Funnel KPIs -->
+    <div style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+            <h3 style="margin:0;font-size:1rem;color:#37393f;font-weight:600">Funnel</h3>
+            <select id="funnelGiorni" onchange="renderChecklistFunnel()" style="padding:6px 12px;border:1px solid #e0dcd7;border-radius:6px;font-size:.82rem;background:#fff;color:#37393f;cursor:pointer">
+                <option value="7">7 giorni</option>
+                <option value="14" selected>14 giorni</option>
+                <option value="30">30 giorni</option>
+                <option value="90">90 giorni</option>
+            </select>
+        </div>
+        <div id="checklistFunnel" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"></div>
+        <div id="checklistFunnelExtra" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px"></div>
+    </div>
+
     <div class="kpi-grid" id="checklistKpi" style="grid-template-columns:repeat(2,1fr)"></div>
     <div class="table-wrap">
         <table>
@@ -1747,12 +1763,39 @@ function checklistScoreBadge(score,max){
     return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;background:'+bg+';color:'+color+'">'+score+'/'+max+'</span>';
 }
 function checklistEmailBadge(r){
+    if(!r.email)return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;background:#f0ece7;color:#bbb">&mdash;</span>';
     if(!r.email_inviata)return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;background:#f0ece7;color:#999">Non inviata</span>';
     var labels={'critico':'Critico','medio':'Aree critiche','buono':'Buona base'};
     var colors={'critico':'#c0392b','medio':'#b7950b','buono':'#1e8449'};
     var bgs={'critico':'#fde8e8','medio':'#fef9e7','buono':'#e8f8f0'};
     var t=r.tipo_email||'medio';
     return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;background:'+bgs[t]+';color:'+colors[t]+'">'+labels[t]+'</span>';
+}
+
+async function renderChecklistFunnel(){
+    var el=document.getElementById('checklistFunnel');
+    var elExtra=document.getElementById('checklistFunnelExtra');
+    if(!el)return;
+    var giorni=document.getElementById('funnelGiorni').value||14;
+    try{
+        var d=await apiFetch('/api/checklist/funnel?giorni='+giorni);
+        var pctInizia=d.viste>0?Math.round(d.iniziate/d.viste*100):0;
+        var pctCompleta=d.iniziate>0?Math.round(d.completate/d.iniziate*100):0;
+        var pctEmail=d.completate>0?Math.round(d.email_lasciate/d.completate*100):0;
+        el.innerHTML=
+            kpiCard('Viste',d.viste,'sessioni uniche','neutral')+
+            kpiCard('Iniziate',d.iniziate,pctInizia+'% delle viste','neutral')+
+            kpiCard('Completate',d.completate,pctCompleta+'% di chi inizia','neutral')+
+            kpiCard('Email lasciate',d.email_lasciate,pctEmail+'% di chi completa','neutral');
+        var mob=d.dispositivi||{};
+        var abb=d.abbandoni||{};
+        elExtra.innerHTML=
+            '<div class="kpi-card"><div class="kpi-label">Dispositivi</div><div style="font-size:.85rem;color:#37393f;margin-top:8px">Mobile: <strong>'+(mob.mobile||0)+'</strong> &middot; Desktop: <strong>'+(mob.desktop||0)+'</strong></div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">Abbandoni per step</div><div style="font-size:.85rem;color:#37393f;margin-top:8px">D5: <strong>'+(abb.domanda_5||0)+'</strong> &middot; D10: <strong>'+(abb.domanda_10||0)+'</strong> &middot; D15: <strong>'+(abb.domanda_15||0)+'</strong></div></div>';
+    }catch(e){
+        el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:#999;font-size:.85rem">Funnel non disponibile</div>';
+        elExtra.innerHTML='';
+    }
 }
 
 var _checklistCache=[];
@@ -1777,7 +1820,11 @@ async function viewChecklist(id){
     // Bottoni email
     html+='<div style="display:flex;gap:10px;margin:20px 0 16px">';
     html+='<button onclick="previewChecklistEmail('+r.id+')" style="flex:1;background:#37393f;color:#fff;border:none;padding:10px 16px;border-radius:4px;font-size:.82rem;font-weight:600;cursor:pointer">Vedi email</button>';
-    html+='<button onclick="inviaChecklistEmail('+r.id+')" style="flex:1;background:#c4622d;color:#fff;border:none;padding:10px 16px;border-radius:4px;font-size:.82rem;font-weight:600;cursor:pointer">'+(r.email_inviata?'Reinvia email':'Invia email')+'</button>';
+    if(r.email){
+        html+='<button onclick="inviaChecklistEmail('+r.id+')" style="flex:1;background:#c4622d;color:#fff;border:none;padding:10px 16px;border-radius:4px;font-size:.82rem;font-weight:600;cursor:pointer">'+(r.email_inviata?'Reinvia email':'Invia email')+'</button>';
+    }else{
+        html+='<span style="flex:1;text-align:center;padding:10px 16px;font-size:.82rem;color:#999">Nessuna email</span>';
+    }
     html+='</div>';
 
     if(r.risposte&&r.risposte.length>0){
@@ -1831,6 +1878,7 @@ var _origRenderChecklist=renderChecklist;
 renderChecklist=async function(){
     await _origRenderChecklist();
     try{_checklistCache=await apiFetch('/api/checklist')}catch(e){}
+    renderChecklistFunnel();
 };
 
 // ============ SYNC LEAD META ============
