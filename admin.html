@@ -655,7 +655,7 @@ tr:hover td{background:#fafaf8}
             </select>
         </div>
         <div id="checklistFunnel" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"></div>
-        <div id="checklistFunnelExtra" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px"></div>
+        <div id="checklistFunnelExtra" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px"></div>
     </div>
 
     <div class="kpi-grid" id="checklistKpi" style="grid-template-columns:repeat(2,1fr)"></div>
@@ -1789,9 +1789,12 @@ async function renderChecklistFunnel(){
             kpiCard('Email lasciate',d.email_lasciate,pctEmail+'% di chi completa','neutral');
         var mob=d.dispositivi||{};
         var abb=d.abbandoni||{};
+        var spon=d.sponsorizzata||{};
+        var pctSponCompleta=(spon.sessioni>0)?Math.round((spon.completate||0)/spon.sessioni*100):0;
         elExtra.innerHTML=
             '<div class="kpi-card"><div class="kpi-label">Dispositivi</div><div style="font-size:.85rem;color:#37393f;margin-top:8px">Mobile: <strong>'+(mob.mobile||0)+'</strong> &middot; Desktop: <strong>'+(mob.desktop||0)+'</strong></div></div>'+
-            '<div class="kpi-card"><div class="kpi-label">Abbandoni per step</div><div style="font-size:.85rem;color:#37393f;margin-top:8px">D5: <strong>'+(abb.domanda_5||0)+'</strong> &middot; D10: <strong>'+(abb.domanda_10||0)+'</strong> &middot; D15: <strong>'+(abb.domanda_15||0)+'</strong></div></div>';
+            '<div class="kpi-card"><div class="kpi-label">Abbandoni per step</div><div style="font-size:.85rem;color:#37393f;margin-top:8px">D5: <strong>'+(abb.domanda_5||0)+'</strong> &middot; D10: <strong>'+(abb.domanda_10||0)+'</strong> &middot; D15: <strong>'+(abb.domanda_15||0)+'</strong></div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">Da sponsorizzata</div><div style="font-size:.85rem;color:#37393f;margin-top:8px">Sessioni: <strong>'+(spon.sessioni||0)+'</strong> &middot; Completate: <strong>'+(spon.completate||0)+'</strong> ('+pctSponCompleta+'%)</div></div>';
     }catch(e){
         el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:20px;color:#999;font-size:.85rem">Funnel non disponibile</div>';
         elExtra.innerHTML='';

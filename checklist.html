@@ -854,6 +854,25 @@
             .email-capture { padding: 24px 20px; }
             .reg-ghost { font-size: clamp(12rem, 45vw, 18rem); }
         }
+
+        /* Landing interamente above-the-fold su mobile (390x844 e inferiori) */
+        @media (max-width: 600px) {
+            #screen-landing { padding: 32px 22px; justify-content: center; }
+            .reg-logo { height: 38px; margin-bottom: 28px; }
+            .reg-title { font-size: clamp(1.85rem, 7.5vw, 2.4rem); margin-bottom: 14px; }
+            .reg-subtitle { margin-bottom: 16px; }
+            .reg-line { margin: 0 auto 26px; }
+            .reg-btn { padding: 16px 24px; }
+            .reg-note { margin-top: 16px; }
+        }
+        /* Schermi bassi: comprime ancora per evitare scroll */
+        @media (max-height: 720px) {
+            #screen-landing { padding: 20px 22px; }
+            .reg-logo { margin-bottom: 18px; }
+            .reg-line { margin: 0 auto 18px; }
+            .reg-subtitle { margin-bottom: 12px; }
+            .reg-note { margin-top: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -1543,6 +1562,24 @@ function animateCount(el, from, to, duration) {
     }
     requestAnimationFrame(step);
 }
+
+/* ═══════ AUTO-START — traffico sponsorizzato (?start=1) ═══════ */
+/* La sponsorizzata punta a /checklist.html?start=1: salta la landing e
+   mostra subito la domanda 1. "iniziata" parte insieme a "vista", e
+   "auto_start" marca la sessione come proveniente da sponsorizzata.
+   Il link organico dal sito (senza ?start=1) mantiene la landing. */
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('start') !== '1') return;
+
+    trackEvento('auto_start');
+    trackEvento('iniziata');
+
+    currentQuestion = 0;
+    risposte = [];
+    mostraSchermata('screen-quiz');
+    mostraDomanda(true);
+})();
 </script>
 <script src="main.js"></script>
 </body>
