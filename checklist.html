@@ -873,6 +873,96 @@
             .reg-subtitle { margin-bottom: 12px; }
             .reg-note { margin-top: 12px; }
         }
+
+        /* ── MODULO A SCHERMATA SINGOLA ── */
+        #screen-quiz .quiz-body { align-items: flex-start; }
+        .module-wrapper { max-width: 620px; width: 100%; }
+        .module-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 36px;
+            width: 100%;
+        }
+        .module-card.slide-in { animation: slideIn .35s cubic-bezier(0,0,.2,1) forwards; }
+        .module-head { text-align: center; margin-bottom: 20px; }
+        .module-head .quiz-cat-pill { margin-bottom: 16px; }
+        .module-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.25;
+        }
+        .module-desc {
+            font-size: 0.88rem;
+            color: #7a7a7a;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+        .q-item { padding: 22px 0; border-top: 1px solid #efeae4; text-align: left; }
+        .q-item:first-child { border-top: none; padding-top: 6px; }
+        .q-text { font-size: 1rem; font-weight: 600; color: #1a1a1a; line-height: 1.45; }
+        .q-desc {
+            font-size: 0.8rem;
+            color: #9a948b;
+            line-height: 1.55;
+            margin-top: 6px;
+            font-style: italic;
+        }
+        .q-answers { display: flex; gap: 10px; margin-top: 14px; }
+        .q-btn {
+            flex: 1;
+            height: 50px;
+            border: 1.5px solid #e3ddd4;
+            border-radius: 8px;
+            background: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            transition: border-color .18s, background .18s, color .18s, transform .12s;
+        }
+        .q-btn:hover { border-color: var(--terracotta); }
+        .q-btn:active { transform: scale(0.98); }
+        .q-btn.q-si.sel {
+            background: linear-gradient(135deg, #c4622d, #d4733e);
+            border-color: transparent;
+            color: #fff;
+        }
+        .q-btn.q-no.sel { background: var(--dark); border-color: transparent; color: #fff; }
+        .module-next {
+            width: 100%;
+            margin-top: 28px;
+            padding: 17px 24px;
+            background: var(--terracotta);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .25s, transform .2s, box-shadow .3s, opacity .2s;
+        }
+        .module-next:hover:not(:disabled) {
+            background: var(--terracotta-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(196,98,45,0.3);
+        }
+        .module-next:disabled { opacity: 0.45; cursor: not-allowed; }
+        .module-hint {
+            text-align: center;
+            font-size: 0.78rem;
+            color: rgba(55,57,63,0.45);
+            margin-top: 12px;
+        }
+        @media (max-width: 520px) {
+            .module-card { padding: 28px 20px; }
+            .module-title { font-size: 1.3rem; }
+            .q-btn { height: 46px; font-size: 14px; }
+        }
     </style>
 </head>
 <body>
@@ -956,19 +1046,19 @@
         </div>
     </div>
     <div class="quiz-body">
-        <div class="quiz-card-wrapper">
-            <div class="quiz-card" id="quiz-card">
-                <div class="quiz-ghost-num" id="quiz-ghost-num" aria-hidden="true"></div>
-                <div class="quiz-cat-pill" id="quiz-cat-pill">
-                    <span class="quiz-cat-pill-icon"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3"/></svg></span>
-                    <span id="quiz-cat-label"></span>
+        <div class="module-wrapper">
+            <div class="module-card slide-in" id="module-card">
+                <div class="module-head">
+                    <div class="quiz-cat-pill">
+                        <span class="quiz-cat-pill-icon" id="module-icon"></span>
+                        <span id="module-pill-label"></span>
+                    </div>
+                    <h2 class="module-title" id="module-title"></h2>
+                    <p class="module-desc" id="module-desc"></p>
                 </div>
-                <div class="quiz-question" id="quiz-question"></div>
-                <p class="domanda-descrizione" id="quiz-descrizione"></p>
-                <div class="quiz-answers">
-                    <button class="quiz-ans-btn btn-si" id="btn-si" onclick="rispondi(true)">Si</button>
-                    <button class="quiz-ans-btn btn-no" id="btn-no" onclick="rispondi(false)">No</button>
-                </div>
+                <div class="module-questions" id="module-questions"></div>
+                <button class="module-next" id="module-next" onclick="avantiModulo()" disabled>Avanti →</button>
+                <p class="module-hint" id="module-hint">Rispondi a tutte le domande per continuare</p>
             </div>
         </div>
     </div>
@@ -1117,11 +1207,122 @@ var domande = [
 ];
 
 /* ═══════ SCHERMATA 1 — LANDING ═══════ */
+var currentModule = 0;
+var risposteMap = {}; // indice globale domanda (0-19) -> true/false
+
 function iniziaChecklist() {
     trackEvento('iniziata');
-    currentQuestion = 0;
+    avviaModuli();
+}
+
+function avviaModuli() {
+    currentModule = 0;
+    risposteMap = {};
     risposte = [];
-    mostraTransizione(0);
+    mostraSchermata('screen-quiz');
+    renderModulo(true);
+}
+
+function domandeModulo(catIndex) {
+    var out = [];
+    for (var i = 0; i < domande.length; i++) {
+        if (domande[i].cat === catIndex) out.push(i);
+    }
+    return out;
+}
+
+function renderModulo(isFirst) {
+    var cat = categorie[currentModule];
+    document.getElementById('module-icon').innerHTML = catIcons[currentModule];
+    document.getElementById('module-pill-label').textContent =
+        'Modulo ' + cat.num + ' di 05';
+    document.getElementById('module-title').textContent = cat.nome;
+    document.getElementById('module-desc').textContent = cat.desc;
+
+    var idxs = domandeModulo(currentModule);
+    var html = '';
+    idxs.forEach(function(idx) {
+        var d = domande[idx];
+        var sel = risposteMap[idx];
+        html += '<div class="q-item" id="q-item-' + idx + '">' +
+            '<p class="q-text">' + d.testo + '</p>' +
+            '<p class="q-desc">' + d.descrizione + '</p>' +
+            '<div class="q-answers">' +
+                '<button class="q-btn q-si' + (sel === true ? ' sel' : '') + '" onclick="seleziona(' + idx + ',true)">Sì</button>' +
+                '<button class="q-btn q-no' + (sel === false ? ' sel' : '') + '" onclick="seleziona(' + idx + ',false)">No</button>' +
+            '</div>' +
+        '</div>';
+    });
+    document.getElementById('module-questions').innerHTML = html;
+
+    document.getElementById('module-next').innerHTML =
+        (currentModule >= 4 ? 'Vedi il risultato →' : 'Avanti →');
+
+    aggiornaProgressModulo();
+    aggiornaStatoAvanti();
+
+    var card = document.getElementById('module-card');
+    card.classList.remove('slide-in');
+    card.offsetHeight;
+    card.classList.add('slide-in');
+    window.scrollTo(0, 0);
+}
+
+function seleziona(idx, valore) {
+    risposteMap[idx] = valore;
+    var item = document.getElementById('q-item-' + idx);
+    if (item) {
+        item.querySelector('.q-si').classList.toggle('sel', valore === true);
+        item.querySelector('.q-no').classList.toggle('sel', valore === false);
+    }
+    var dot = document.getElementById('dot-' + (idx + 1));
+    if (dot) {
+        dot.classList.remove('answered-yes', 'answered-no', 'current');
+        dot.classList.add(valore ? 'answered-yes' : 'answered-no');
+    }
+    aggiornaStatoAvanti();
+}
+
+function aggiornaStatoAvanti() {
+    var idxs = domandeModulo(currentModule);
+    var completo = idxs.every(function(i) { return risposteMap[i] !== undefined; });
+    document.getElementById('module-next').disabled = !completo;
+    document.getElementById('module-hint').style.visibility =
+        completo ? 'hidden' : 'visible';
+}
+
+function aggiornaProgressModulo() {
+    document.querySelectorAll('.progress-category').forEach(function(el, i) {
+        el.classList.remove('active', 'completed');
+        if (i === currentModule) el.classList.add('active');
+        else if (i < currentModule) el.classList.add('completed');
+    });
+}
+
+function avantiModulo() {
+    var idxs = domandeModulo(currentModule);
+    var completo = idxs.every(function(i) { return risposteMap[i] !== undefined; });
+    if (!completo) { aggiornaStatoAvanti(); return; }
+
+    trackEvento('domanda', (currentModule + 1) * 4);
+
+    if (currentModule >= 4) {
+        costruisciRisposte();
+        mostraRisultato();
+        return;
+    }
+    currentModule++;
+    renderModulo(false);
+}
+
+function costruisciRisposte() {
+    risposte = domande.map(function(d, idx) {
+        return {
+            domanda: d.testo,
+            risposta: risposteMap[idx] === true,
+            categoria: categorie[d.cat].nome.toUpperCase()
+        };
+    });
 }
 
 /* ═══════ TRANSIZIONE CATEGORIA ═══════ */
@@ -1575,10 +1776,11 @@ function animateCount(el, from, to, duration) {
     trackEvento('auto_start');
     trackEvento('iniziata');
 
-    currentQuestion = 0;
+    currentModule = 0;
+    risposteMap = {};
     risposte = [];
     mostraSchermata('screen-quiz');
-    mostraDomanda(true);
+    renderModulo(true);
 })();
 </script>
 <script src="main.js"></script>
