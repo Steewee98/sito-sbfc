@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Checklist del Ristoratore Consapevole | SB Food Consulting</title>
-    <meta name="description" content="20 domande per capire se il tuo locale e davvero sotto controllo. Checklist gratuita interattiva di SB Food Consulting.">
+    <meta name="description" content="15 domande per capire se il tuo locale e davvero sotto controllo. Checklist gratuita interattiva di SB Food Consulting.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
@@ -529,18 +529,18 @@
             overflow: hidden;
             margin-bottom: 10px;
         }
-        .zone-red { flex: 8; background: var(--red); opacity: .8; }
-        .zone-yellow { flex: 6; background: var(--yellow); opacity: .8; }
-        .zone-green { flex: 6; background: var(--green); opacity: .8; }
+        .zone-red { flex: 6; background: var(--red); opacity: .8; }
+        .zone-yellow { flex: 4; background: var(--yellow); opacity: .8; }
+        .zone-green { flex: 5; background: var(--green); opacity: .8; }
         .result-bar-labels {
             display: flex;
             font-size: 0.7rem;
             color: rgba(55,57,63,0.4);
             font-weight: 500;
         }
-        .result-bar-labels span:first-child { flex: 8; text-align: left; }
-        .result-bar-labels span:nth-child(2) { flex: 6; text-align: center; }
-        .result-bar-labels span:last-child { flex: 6; text-align: right; }
+        .result-bar-labels span:first-child { flex: 6; text-align: left; }
+        .result-bar-labels span:nth-child(2) { flex: 4; text-align: center; }
+        .result-bar-labels span:last-child { flex: 5; text-align: right; }
 
         .result-bar-marker { position: relative; height: 0; }
         .result-marker-dot {
@@ -969,10 +969,10 @@
 
 <!-- ═══════ SCHERMATA 1 — LANDING ═══════ -->
 <div id="screen-landing" class="screen active">
-    <div class="reg-ghost" aria-hidden="true">20</div>
+    <div class="reg-ghost" aria-hidden="true">15</div>
     <img src="assets/logo/logo-bianco.png" alt="SB Food Consulting" class="reg-logo">
     <h1 class="reg-title">La Checklist del<br>Ristoratore Consapevole</h1>
-    <p class="reg-subtitle">20 domande per capire se il tuo locale<br>&egrave; davvero sotto controllo</p>
+    <p class="reg-subtitle">15 domande per capire se il tuo locale<br>&egrave; davvero sotto controllo</p>
     <div class="reg-line"></div>
     <div class="landing-cta">
         <button onclick="iniziaChecklist()" class="reg-btn">Inizia &rarr;</button>
@@ -991,47 +991,42 @@
                     <div class="prog-dot" id="dot-1"></div>
                     <div class="prog-dot" id="dot-2"></div>
                     <div class="prog-dot" id="dot-3"></div>
-                    <div class="prog-dot" id="dot-4"></div>
                 </div>
             </div>
             <div class="progress-divider"></div>
             <div class="progress-category" id="prog-2">
                 <div class="prog-cat-label">Personale</div>
                 <div class="prog-dots">
+                    <div class="prog-dot" id="dot-4"></div>
                     <div class="prog-dot" id="dot-5"></div>
                     <div class="prog-dot" id="dot-6"></div>
-                    <div class="prog-dot" id="dot-7"></div>
-                    <div class="prog-dot" id="dot-8"></div>
                 </div>
             </div>
             <div class="progress-divider"></div>
             <div class="progress-category" id="prog-3">
                 <div class="prog-cat-label">Menu</div>
                 <div class="prog-dots">
+                    <div class="prog-dot" id="dot-7"></div>
+                    <div class="prog-dot" id="dot-8"></div>
                     <div class="prog-dot" id="dot-9"></div>
-                    <div class="prog-dot" id="dot-10"></div>
-                    <div class="prog-dot" id="dot-11"></div>
-                    <div class="prog-dot" id="dot-12"></div>
                 </div>
             </div>
             <div class="progress-divider"></div>
             <div class="progress-category" id="prog-4">
                 <div class="prog-cat-label">Comunicazione</div>
                 <div class="prog-dots">
-                    <div class="prog-dot" id="dot-13"></div>
-                    <div class="prog-dot" id="dot-14"></div>
-                    <div class="prog-dot" id="dot-15"></div>
-                    <div class="prog-dot" id="dot-16"></div>
+                    <div class="prog-dot" id="dot-10"></div>
+                    <div class="prog-dot" id="dot-11"></div>
+                    <div class="prog-dot" id="dot-12"></div>
                 </div>
             </div>
             <div class="progress-divider"></div>
             <div class="progress-category" id="prog-5">
                 <div class="prog-cat-label">Numeri</div>
                 <div class="prog-dots">
-                    <div class="prog-dot" id="dot-17"></div>
-                    <div class="prog-dot" id="dot-18"></div>
-                    <div class="prog-dot" id="dot-19"></div>
-                    <div class="prog-dot" id="dot-20"></div>
+                    <div class="prog-dot" id="dot-13"></div>
+                    <div class="prog-dot" id="dot-14"></div>
+                    <div class="prog-dot" id="dot-15"></div>
                 </div>
             </div>
         </div>
@@ -1066,7 +1061,7 @@
         <div class="result-score-wrap">
             <div class="result-score" id="result-score">0</div>
         </div>
-        <div class="result-score-sub">su 20</div>
+        <div class="result-score-sub">su 15</div>
 
         <div class="result-bar-wrap">
             <div class="result-bar-marker">
@@ -1078,9 +1073,9 @@
                 <div class="zone-green"></div>
             </div>
             <div class="result-bar-labels">
-                <span>0 &mdash; 8</span>
-                <span>9 &mdash; 14</span>
-                <span>15 &mdash; 20</span>
+                <span>0 &mdash; 6</span>
+                <span>7 &mdash; 10</span>
+                <span>11 &mdash; 15</span>
             </div>
         </div>
 
@@ -1165,44 +1160,39 @@ var catIcons = [
 ];
 
 var categorie = [
-    { nome: 'Food Cost', num: '01', count: 4, desc: 'Quanto conosci davvero i costi del tuo locale? Margini, sprechi, e numeri che contano.' },
-    { nome: 'Personale', num: '02', count: 4, desc: 'Il tuo team lavora con autonomia e standard chiari, o dipende tutto da te?' },
-    { nome: 'Menu', num: '03', count: 4, desc: 'Il menu \u00e8 il tuo strumento di vendita pi\u00f9 potente. Lo stai usando bene?' },
-    { nome: 'Comunicazione', num: '04', count: 4, desc: 'Marketing e comunicazione: stai investendo o stai solo spendendo?' },
-    { nome: 'Numeri', num: '05', count: 4, desc: 'I numeri che ogni ristoratore dovrebbe conoscere a memoria.' }
+    { nome: 'Food Cost', num: '01', count: 3, desc: 'Quanto conosci davvero i costi del tuo locale? Margini, sprechi, e numeri che contano.' },
+    { nome: 'Personale', num: '02', count: 3, desc: 'Il tuo team lavora con autonomia e standard chiari, o dipende tutto da te?' },
+    { nome: 'Menu', num: '03', count: 3, desc: 'Il menu \u00e8 il tuo strumento di vendita pi\u00f9 potente. Lo stai usando bene?' },
+    { nome: 'Comunicazione', num: '04', count: 3, desc: 'Marketing e comunicazione: stai investendo o stai solo spendendo?' },
+    { nome: 'Numeri', num: '05', count: 3, desc: 'I numeri che ogni ristoratore dovrebbe conoscere a memoria.' }
 ];
 
 var catBgColors = ['rgba(196,98,45,0.85)', 'rgba(107,92,231,0.85)', 'rgba(45,138,78,0.85)', 'rgba(196,154,45,0.85)', 'rgba(58,123,213,0.85)'];
 
 var domande = [
-    { cat: 0, catPos: 1, testo: 'Conosci il tuo food cost reale questa settimana?', descrizione: 'Il food cost reale \u00e8 la percentuale di costo degli ingredienti sul fatturato, calcolata ogni settimana \u2014 non stimata a inizio anno.' },
-    { cat: 0, catPos: 2, testo: 'Sai quale piatto del menu ha il margine pi\u00f9 alto?', descrizione: 'Non il piatto pi\u00f9 ordinato, ma quello che ti lascia pi\u00f9 guadagno netto dopo aver sottratto il costo degli ingredienti.' },
-    { cat: 0, catPos: 3, testo: 'Confronti il food cost teorico con quello reale ogni mese?', descrizione: 'Il food cost teorico \u00e8 quello calcolato sulle ricette. Quello reale include sprechi, porzioni irregolari e furti. La differenza ti dice dove perdi soldi.' },
-    { cat: 0, catPos: 4, testo: 'Hai una soglia di allerta oltre la quale intervieni subito?', descrizione: 'Es: se il food cost supera il 32% scatta un controllo immediato. Avere una soglia definita significa gestire invece di subire.' },
-    { cat: 1, catPos: 1, testo: 'Ogni membro del team sa cosa deve fare senza che tu lo ripeta?', descrizione: 'Ruoli chiari e responsabilit\u00e0 scritte eliminano la dipendenza dal titolare e riducono gli errori operativi quotidiani.' },
-    { cat: 1, catPos: 2, testo: 'Hai un processo di onboarding per i nuovi assunti?', descrizione: 'Un onboarding strutturato riduce il tempo di formazione, abbassa il turnover e garantisce standard coerenti da subito.' },
-    { cat: 1, catPos: 3, testo: 'Il locale funziona correttamente anche quando non sei presente?', descrizione: 'Se il locale dipende dalla tua presenza fisica per funzionare, non hai un\'attivit\u00e0 \u2014 hai un lavoro che non puoi lasciare.' },
-    { cat: 1, catPos: 4, testo: 'Hai standard operativi scritti che il personale segue davvero?', descrizione: 'Non basta avere regole verbali. Standard scritti, accessibili e aggiornati sono la base di un team che lavora in autonomia.' },
-    { cat: 2, catPos: 1, testo: 'Il tuo menu ha meno di 35 voci?', descrizione: 'Oltre le 35 voci il cliente entra in paradosso della scelta, rallenta il servizio e aumenta la complessit\u00e0 operativa in cucina.' },
-    { cat: 2, catPos: 2, testo: 'Sai quali sono i 3 piatti pi\u00f9 redditizi e li stai valorizzando?', descrizione: 'Valorizzare significa posizionarli visivamente nel menu, formare il personale a suggerirli e garantirne la disponibilit\u00e0 costante.' },
+    { cat: 0, catPos: 1, testo: 'Conosci il tuo food cost reale aggiornato, non una stima di inizio anno?', descrizione: 'Il food cost reale \u00e8 la percentuale di costo degli ingredienti sul fatturato, calcolata con regolarit\u00e0 sui dati veri \u2014 non stimata una volta all\'anno.' },
+    { cat: 0, catPos: 2, testo: 'Sai quali piatti ti lasciano pi\u00f9 margine e quali meno?', descrizione: 'Non i pi\u00f9 ordinati, ma quelli che ti lasciano pi\u00f9 guadagno netto dopo il costo degli ingredienti. \u00c8 la base per spingere i piatti giusti.' },
+    { cat: 0, catPos: 3, testo: 'Confronti food cost teorico e reale e hai una soglia oltre cui intervieni?', descrizione: 'Il teorico \u00e8 calcolato sulle ricette, il reale include sprechi e porzioni irregolari. Una soglia di allerta (es. oltre il 32%) significa gestire invece di subire.' },
+    { cat: 1, catPos: 1, testo: 'Il locale funziona correttamente anche quando non sei presente?', descrizione: 'Se dipende dalla tua presenza fisica per funzionare, non hai un\'attivit\u00e0 \u2014 hai un lavoro che non puoi lasciare.' },
+    { cat: 1, catPos: 2, testo: 'Ogni membro del team, anche i nuovi, sa cosa fare senza che tu lo ripeta?', descrizione: 'Ruoli chiari e un onboarding strutturato eliminano la dipendenza dal titolare, riducono gli errori e abbassano il turnover.' },
+    { cat: 1, catPos: 3, testo: 'Hai standard operativi scritti che il personale segue davvero?', descrizione: 'Non bastano le regole verbali. Standard scritti, accessibili e aggiornati sono la base di un team che lavora in autonomia.' },
+    { cat: 2, catPos: 1, testo: 'Il tuo menu \u00e8 essenziale e costruito per guidare la scelta del cliente?', descrizione: 'Poche voci ben scelte e un layout studiato (posizione, descrizioni) orientano il cliente verso i piatti giusti. Il menu engineering \u00e8 uno strumento di vendita.' },
+    { cat: 2, catPos: 2, testo: 'Sai quali sono i piatti pi\u00f9 redditizi e li stai valorizzando?', descrizione: 'Valorizzare significa posizionarli bene nel menu, formare il personale a suggerirli e garantirne sempre la disponibilit\u00e0.' },
     { cat: 2, catPos: 3, testo: 'Aggiorni il menu almeno una volta all\'anno in base ai costi?', descrizione: 'I costi delle materie prime cambiano. Un menu che non si aggiorna erode i margini silenziosamente mese dopo mese.' },
-    { cat: 2, catPos: 4, testo: 'Il layout del menu guida il cliente verso i piatti con margine maggiore?', descrizione: 'La posizione, la dimensione del testo e le descrizioni influenzano le scelte. Il menu engineering \u00e8 uno strumento di revenue management.' },
-    { cat: 3, catPos: 1, testo: 'Sai quanti clienti ti ha portato Instagram nell\'ultimo mese?', descrizione: 'Follower e like non pagano i fornitori. La metrica che conta \u00e8 quante prenotazioni o ingressi sono arrivati dal canale social.' },
-    { cat: 3, catPos: 2, testo: 'Hai un sistema per raccogliere le email dei tuoi clienti?', descrizione: 'L\'email \u00e8 l\'unico canale che non dipende da algoritmi. Una lista di clienti abituali \u00e8 un asset che vale quanto la location.' },
-    { cat: 3, catPos: 3, testo: 'Le tue campagne social hanno un obiettivo misurabile?', descrizione: 'Un obiettivo misurabile \u00e8: X prenotazioni, X coperti, X ordini online. Non "aumentare la visibilit\u00e0" o "crescere su Instagram".' },
-    { cat: 3, catPos: 4, testo: 'Sai qual \u00e8 il tuo costo di acquisizione per ogni nuovo cliente?', descrizione: 'Quanto spendi in marketing diviso per i nuovi clienti acquisiti. Se non lo sai, non puoi decidere quanto investire in comunicazione.' },
-    { cat: 4, catPos: 1, testo: 'Conosci il tuo punto di pareggio mensile?', descrizione: 'Il break-even \u00e8 il fatturato minimo per coprire tutti i costi fissi. Sotto quella soglia perdi soldi, sopra guadagni. \u00c8 il numero pi\u00f9 importante del tuo locale.' },
-    { cat: 4, catPos: 2, testo: 'Sai qual \u00e8 la tua percentuale di costo del lavoro sul fatturato?', descrizione: 'Il benchmark medio per la ristorazione \u00e8 30-35%. Sopra il 40% il modello fatica a reggere. \u00c8 un indicatore che va monitorato ogni mese.' },
-    { cat: 4, catPos: 3, testo: 'Hai un report settimanale che leggi davvero ogni settimana?', descrizione: 'Non basta avere i dati \u2014 bisogna leggerli con regolarit\u00e0 e agire di conseguenza. Un report che non si usa \u00e8 solo burocrazia.' },
-    { cat: 4, catPos: 4, testo: 'Sei in grado di prevedere il fatturato del mese prossimo con margine di errore del 15%?', descrizione: 'La capacit\u00e0 di previsione \u00e8 il segnale pi\u00f9 chiaro di un controllo di gestione maturo. Se non puoi prevedere, non puoi pianificare.' }
+    { cat: 3, catPos: 1, testo: 'Sai quanti clienti reali ti porta ogni mese la tua comunicazione?', descrizione: 'Follower e like non pagano i fornitori. La metrica che conta \u00e8 quante prenotazioni o ingressi arrivano davvero dai tuoi canali.' },
+    { cat: 3, catPos: 2, testo: 'Le tue campagne hanno un obiettivo misurabile e conosci il costo per acquisire un cliente?', descrizione: 'Un obiettivo misurabile \u00e8 X prenotazioni o X coperti, non "pi\u00f9 visibilit\u00e0". Sapere quanto ti costa un nuovo cliente ti dice quanto puoi investire.' },
+    { cat: 3, catPos: 3, testo: 'Hai un sistema per raccogliere e ricontattare i tuoi clienti?', descrizione: 'Una lista di contatti (es. email) \u00e8 l\'unico canale che non dipende dagli algoritmi: un asset che vale quanto la location.' },
+    { cat: 4, catPos: 1, testo: 'Conosci il tuo punto di pareggio mensile?', descrizione: 'Il break-even \u00e8 il fatturato minimo per coprire tutti i costi fissi. \u00c8 il numero pi\u00f9 importante del tuo locale: sotto perdi, sopra guadagni.' },
+    { cat: 4, catPos: 2, testo: 'Sai qual \u00e8 la tua percentuale di costo del lavoro sul fatturato?', descrizione: 'Il benchmark medio \u00e8 30-35%. Sopra il 40% il modello fatica a reggere. Va monitorato ogni mese.' },
+    { cat: 4, catPos: 3, testo: 'Leggi numeri aggiornati ogni settimana, al punto da prevedere il fatturato del mese?', descrizione: 'Un report letto davvero ogni settimana e la capacit\u00e0 di prevedere il fatturato (con ~15% di errore) sono il segno di un controllo di gestione maturo.' }
 ];
 
 /* ═══════ SCHERMATA 1 — LANDING ═══════ */
 var currentModule = 0;
-var risposteMap = {}; // indice globale domanda (0-19) -> true/false
+var risposteMap = {}; // indice globale domanda (0-14) -> true/false
+var quizIniziato = false; // true dopo il primo tap-risposta reale
 
 function iniziaChecklist() {
-    trackEvento('iniziata');
     avviaModuli();
 }
 
@@ -1210,6 +1200,7 @@ function avviaModuli() {
     currentModule = 0;
     risposteMap = {};
     risposte = [];
+    quizIniziato = false;
     mostraSchermata('screen-quiz');
     renderModulo(true);
 }
@@ -1260,6 +1251,7 @@ function renderModulo(isFirst) {
 }
 
 function seleziona(idx, valore) {
+    var primaVolta = (risposteMap[idx] === undefined);
     risposteMap[idx] = valore;
     var item = document.getElementById('q-item-' + idx);
     if (item) {
@@ -1270,6 +1262,16 @@ function seleziona(idx, valore) {
     if (dot) {
         dot.classList.remove('answered-yes', 'answered-no', 'current');
         dot.classList.add(valore ? 'answered-yes' : 'answered-no');
+    }
+    if (primaVolta) {
+        // Primo tap reale dell'intero quiz: l'utente ha iniziato davvero
+        if (!quizIniziato) {
+            quizIniziato = true;
+            trackEvento('iniziata');
+            trackEvento('prima_risposta');
+        }
+        // Evento per OGNI domanda: dettaglio = numero domanda (1..15)
+        trackEvento('domanda', idx + 1);
     }
     aggiornaStatoAvanti();
 }
@@ -1294,8 +1296,6 @@ function avantiModulo() {
     var idxs = domandeModulo(currentModule);
     var completo = idxs.every(function(i) { return risposteMap[i] !== undefined; });
     if (!completo) { aggiornaStatoAvanti(); return; }
-
-    trackEvento('domanda', (currentModule + 1) * 4);
 
     if (currentModule >= 4) {
         costruisciRisposte();
@@ -1323,11 +1323,11 @@ function mostraRisultato() {
     punteggioFinale = scores.reduce(function(a, b) { return a + b; }, 0);
 
     punteggiCategorie = {
-        food_cost: scores.slice(0, 4).reduce(function(a, b) { return a + b; }, 0),
-        personale: scores.slice(4, 8).reduce(function(a, b) { return a + b; }, 0),
-        menu: scores.slice(8, 12).reduce(function(a, b) { return a + b; }, 0),
-        comunicazione: scores.slice(12, 16).reduce(function(a, b) { return a + b; }, 0),
-        numeri: scores.slice(16, 20).reduce(function(a, b) { return a + b; }, 0)
+        food_cost: scores.slice(0, 3).reduce(function(a, b) { return a + b; }, 0),
+        personale: scores.slice(3, 6).reduce(function(a, b) { return a + b; }, 0),
+        menu: scores.slice(6, 9).reduce(function(a, b) { return a + b; }, 0),
+        comunicazione: scores.slice(9, 12).reduce(function(a, b) { return a + b; }, 0),
+        numeri: scores.slice(12, 15).reduce(function(a, b) { return a + b; }, 0)
     };
 
     document.getElementById('result-title').textContent = 'Il tuo punteggio';
@@ -1338,16 +1338,16 @@ function mostraRisultato() {
     var scoreEl = document.getElementById('result-score');
     animateCount(scoreEl, 0, punteggioFinale, 1200);
 
-    var pct = (punteggioFinale / 20) * 100;
+    var pct = (punteggioFinale / 15) * 100;
     setTimeout(function() {
         document.getElementById('result-marker').style.left = pct + '%';
     }, 200);
 
     var msgHtml = '';
-    if (punteggioFinale <= 8) {
+    if (punteggioFinale <= 6) {
         msgHtml = '<div class="result-msg-title">Il tuo locale ha bisogno di una ristrutturazione operativa</div>' +
                   '<div class="result-msg-text">Stai lavorando senza strumenti. Ogni giorno perdi margine senza accorgertene.</div>';
-    } else if (punteggioFinale <= 14) {
+    } else if (punteggioFinale <= 10) {
         msgHtml = '<div class="result-msg-title">Ci sono aree critiche da affrontare subito</div>' +
                   '<div class="result-msg-text">Hai delle basi ma mancano sistemi fondamentali. Il rischio \u00e8 crescere in modo instabile.</div>';
     } else {
@@ -1370,7 +1370,7 @@ function mostraRisultato() {
             '<span class="result-bar-label">' + b.nome + '</span>' +
             '<div class="result-bar-track">' +
                 '<div class="result-bar-fill" id="bar-fill-' + b.idx + '" style="background:' + catBgColors[b.idx] + '">' +
-                    '<span class="result-bar-val">' + b.score + '/4</span>' +
+                    '<span class="result-bar-val">' + b.score + '/3</span>' +
                 '</div>' +
             '</div>' +
         '</div>';
@@ -1383,7 +1383,7 @@ function mostraRisultato() {
             row.classList.add('visible');
             setTimeout(function() {
                 var fill = document.getElementById('bar-fill-' + b.idx);
-                fill.style.width = Math.max((b.score / 4) * 100, 12) + '%';
+                fill.style.width = Math.max((b.score / 3) * 100, 12) + '%';
             }, 100);
         }, 450 + (i * 120));
     });
@@ -1506,15 +1506,15 @@ function scaricaResoconto() {
 
     doc.setFontSize(32);
     doc.setTextColor(TERRACOTTA[0], TERRACOTTA[1], TERRACOTTA[2]);
-    doc.text(punteggio + '/20', 20, 82);
+    doc.text(punteggio + '/15', 20, 82);
 
     /* Fascia risultato */
     doc.setFontSize(11);
     doc.setTextColor(SCURO[0], SCURO[1], SCURO[2]);
     var fasciaText = '';
-    if (punteggio <= 8)
+    if (punteggio <= 6)
         fasciaText = 'Il tuo locale ha bisogno di una ristrutturazione operativa';
-    else if (punteggio <= 14)
+    else if (punteggio <= 10)
         fasciaText = 'Ci sono aree critiche da affrontare subito';
     else
         fasciaText = 'Buona base \u2014 ma c\'\u00e8 sempre margine di miglioramento';
@@ -1548,7 +1548,7 @@ function scaricaResoconto() {
         doc.setFillColor(220, 215, 210);
         doc.rect(70, y - 5, 100, 6, 'F');
 
-        var width = (cat.score / 4) * 100;
+        var width = (cat.score / 3) * 100;
         var color = cat.score >= 3 ? [46, 204, 113] :
                     cat.score >= 2 ? [212, 167, 23] :
                     [204, 68, 68];
@@ -1557,7 +1557,7 @@ function scaricaResoconto() {
 
         doc.setTextColor(SCURO[0], SCURO[1], SCURO[2]);
         doc.setFont('helvetica', 'bold');
-        doc.text(cat.score + '/4', 178, y);
+        doc.text(cat.score + '/3', 178, y);
 
         y += 14;
     });
@@ -1645,11 +1645,11 @@ function animateCount(el, from, to, duration) {
     if (params.get('start') !== '1') return;
 
     trackEvento('auto_start');
-    trackEvento('iniziata');
 
     currentModule = 0;
     risposteMap = {};
     risposte = [];
+    quizIniziato = false;
     mostraSchermata('screen-quiz');
     renderModulo(true);
 })();

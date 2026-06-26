@@ -678,6 +678,35 @@ tr:hover td{background:#fafaf8}
             <tbody id="checklistBody"></tbody>
         </table>
     </div>
+
+    <!-- Sessioni iniziate (tutte, anche non completate) -->
+    <div style="margin-top:32px">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+            <h3 style="margin:0;font-size:1rem;color:#37393f;font-weight:600">Sessioni iniziate</h3>
+            <select id="sessioniGiorni" onchange="renderSessioni()" style="padding:6px 12px;border:1px solid #e0dcd7;border-radius:6px;font-size:.82rem;background:#fff;color:#37393f;cursor:pointer">
+                <option value="7">7 giorni</option>
+                <option value="30" selected>30 giorni</option>
+                <option value="90">90 giorni</option>
+            </select>
+        </div>
+        <div id="sessioniRiepilogo" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px"></div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data/ora</th>
+                        <th>Dispositivo</th>
+                        <th>Fonte</th>
+                        <th>Avanzamento</th>
+                        <th>Stato</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="sessioniBody"></tbody>
+            </table>
+            <div class="mobile-card-list" id="sessioniCards"></div>
+        </div>
+    </div>
 </section>
 
 <!-- ========== PRENOTAZIONI ========== -->
@@ -1729,7 +1758,7 @@ async function renderChecklist(){
         var media=totale>0?Math.round(data.reduce(function(s,r){return s+(r.punteggio_totale||0)},0)/totale*10)/10:0;
         kpiEl.innerHTML=
             kpiCard('Checklist compilate',totale,'totale','neutral')+
-            kpiCard('Punteggio medio',media+'/20','su tutte le compilazioni','neutral');
+            kpiCard('Punteggio medio',media+'/15','su tutte le compilazioni','neutral');
 
         if(totale===0){
             container.innerHTML='<tr><td colspan="10" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuna checklist compilata ancora.</td></tr>';
@@ -1741,12 +1770,12 @@ async function renderChecklist(){
                 '<td>'+dataFmt+'</td>'+
                 '<td><strong>'+(r.nome||'—')+'</strong></td>'+
                 '<td>'+(r.email||'—')+'</td>'+
-                '<td><strong>'+r.punteggio_totale+'/20</strong></td>'+
-                '<td>'+checklistScoreBadge(r.punteggio_food_cost,4)+'</td>'+
-                '<td>'+checklistScoreBadge(r.punteggio_personale,4)+'</td>'+
-                '<td>'+checklistScoreBadge(r.punteggio_menu,4)+'</td>'+
-                '<td>'+checklistScoreBadge(r.punteggio_comunicazione,4)+'</td>'+
-                '<td>'+checklistScoreBadge(r.punteggio_numeri,4)+'</td>'+
+                '<td><strong>'+r.punteggio_totale+'/15</strong></td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_food_cost,3)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_personale,3)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_menu,3)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_comunicazione,3)+'</td>'+
+                '<td>'+checklistScoreBadge(r.punteggio_numeri,3)+'</td>'+
                 '<td>'+checklistEmailBadge(r)+'</td>'+
             '</tr>';
         }).join('');
@@ -1811,14 +1840,14 @@ async function viewChecklist(id){
     var html='<h3>Checklist di '+(r.nome||'—')+'</h3>'+
         '<div class="detail-row"><label>Email</label><p>'+r.email+'</p></div>'+
         '<div class="detail-row"><label>Data</label><p>'+new Date(r.created_at).toLocaleString('it-IT')+'</p></div>'+
-        '<div class="detail-row"><label>Punteggio totale</label><p><strong>'+r.punteggio_totale+'/20</strong></p></div>'+
+        '<div class="detail-row"><label>Punteggio totale</label><p><strong>'+r.punteggio_totale+'/15</strong></p></div>'+
         '<div class="detail-row"><label>Email inviata</label><p>'+checklistEmailBadge(r)+'</p></div>'+
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">'+
-            '<div class="detail-row"><label>Food Cost</label><p>'+checklistScoreBadge(r.punteggio_food_cost,4)+'</p></div>'+
-            '<div class="detail-row"><label>Personale</label><p>'+checklistScoreBadge(r.punteggio_personale,4)+'</p></div>'+
-            '<div class="detail-row"><label>Menu</label><p>'+checklistScoreBadge(r.punteggio_menu,4)+'</p></div>'+
-            '<div class="detail-row"><label>Comunicazione</label><p>'+checklistScoreBadge(r.punteggio_comunicazione,4)+'</p></div>'+
-            '<div class="detail-row"><label>Numeri</label><p>'+checklistScoreBadge(r.punteggio_numeri,4)+'</p></div>'+
+            '<div class="detail-row"><label>Food Cost</label><p>'+checklistScoreBadge(r.punteggio_food_cost,3)+'</p></div>'+
+            '<div class="detail-row"><label>Personale</label><p>'+checklistScoreBadge(r.punteggio_personale,3)+'</p></div>'+
+            '<div class="detail-row"><label>Menu</label><p>'+checklistScoreBadge(r.punteggio_menu,3)+'</p></div>'+
+            '<div class="detail-row"><label>Comunicazione</label><p>'+checklistScoreBadge(r.punteggio_comunicazione,3)+'</p></div>'+
+            '<div class="detail-row"><label>Numeri</label><p>'+checklistScoreBadge(r.punteggio_numeri,3)+'</p></div>'+
         '</div>';
     // Bottoni email
     html+='<div style="display:flex;gap:10px;margin:20px 0 16px">';
@@ -1882,7 +1911,81 @@ renderChecklist=async function(){
     await _origRenderChecklist();
     try{_checklistCache=await apiFetch('/api/checklist')}catch(e){}
     renderChecklistFunnel();
+    renderSessioni();
 };
+
+// ============ SESSIONI INIZIATE ============
+function sessFmtData(iso){
+    try{return new Date(iso).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(e){return iso}
+}
+function sessStatoBadge(stato){
+    var map={
+        'completata':['Completata','#1e8449','#e8f8f0'],
+        'abbandonata':['Abbandonata','#b7950b','#fef9e7'],
+        'nessuna_risposta':['Nessuna risposta','#c0392b','#fde8e8']
+    };
+    var m=map[stato]||['—','#999','#f0ece7'];
+    return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;background:'+m[2]+';color:'+m[1]+'">'+m[0]+'</span>';
+}
+function sessFonteBadge(fonte){
+    var spon=fonte==='sponsorizzata';
+    var c=spon?'#c4622d':'#5a5a5a',bg=spon?'#fdf0e8':'#f0ece7',t=spon?'Sponsorizzata':'Organica';
+    return '<span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;background:'+bg+';color:'+c+'">'+t+'</span>';
+}
+function sessAvanz(s){
+    if(s.stato==='completata')return '<strong>'+s.totale_domande+'/'+s.totale_domande+'</strong>';
+    if(s.stato==='nessuna_risposta')return '<span style="color:#999">—</span>';
+    return 'fermo a <strong>'+s.ultima_domanda+'/'+s.totale_domande+'</strong>';
+}
+async function renderSessioni(){
+    var body=document.getElementById('sessioniBody');
+    var cards=document.getElementById('sessioniCards');
+    var ries=document.getElementById('sessioniRiepilogo');
+    if(!body)return;
+    var sel=document.getElementById('sessioniGiorni');
+    var giorni=sel?sel.value:30;
+    try{
+        var d=await apiFetch('/api/checklist/sessioni?giorni='+giorni);
+        var r=d.riepilogo||{};
+        if(ries)ries.innerHTML=
+            kpiCard('Sessioni',r.totale||0,'totale periodo','neutral')+
+            kpiCard('Nessuna risposta',r.nessuna_risposta||0,'apre, 0 risposte','neutral')+
+            kpiCard('Abbandonate',r.abbandonate||0,'inizia e molla','neutral')+
+            kpiCard('Completate',r.completate||0,'fino in fondo','neutral');
+        var rows=d.sessioni||[];
+        if(!rows.length){
+            body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessuna sessione nel periodo.</td></tr>';
+            if(cards)cards.innerHTML='';
+            return;
+        }
+        body.innerHTML=rows.map(function(s){
+            var disp=s.dispositivo==='mobile'?'Mobile':'Desktop';
+            var email=s.email_lasciata?'<span style="color:#1e8449;font-weight:600">Sì</span>':'<span style="color:#bbb">—</span>';
+            return '<tr>'+
+                '<td>'+sessFmtData(s.inizio)+'</td>'+
+                '<td>'+disp+'</td>'+
+                '<td>'+sessFonteBadge(s.fonte)+'</td>'+
+                '<td>'+sessAvanz(s)+'</td>'+
+                '<td>'+sessStatoBadge(s.stato)+'</td>'+
+                '<td>'+email+'</td>'+
+            '</tr>';
+        }).join('');
+        if(cards)cards.innerHTML=rows.map(function(s){
+            var disp=s.dispositivo==='mobile'?'Mobile':'Desktop';
+            return '<div class="mobile-card">'+
+                '<div class="mobile-card-header"><span class="mobile-card-name">'+sessFmtData(s.inizio)+'</span>'+sessStatoBadge(s.stato)+'</div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Avanzamento</span><span class="mobile-card-value">'+sessAvanz(s)+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Fonte</span><span class="mobile-card-value">'+sessFonteBadge(s.fonte)+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Dispositivo</span><span class="mobile-card-value">'+disp+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Email</span><span class="mobile-card-value">'+(s.email_lasciata?'Sì':'—')+'</span></div>'+
+            '</div>';
+        }).join('');
+    }catch(e){
+        body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:#c4622d">Errore nel caricamento.</td></tr>';
+        if(ries)ries.innerHTML='';
+        if(cards)cards.innerHTML='';
+    }
+}
 
 // ============ SYNC LEAD META ============
 async function sincronizzaLead(){
