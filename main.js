@@ -179,35 +179,145 @@ document.addEventListener('DOMContentLoaded', function () {
 
 var BACKEND_URL = 'https://web-production-f3794.up.railway.app';
 
-/* ═══════ PAGE TRACKING ═══════ */
+/* ═══════ PAGE TRACKING (anonimo, aggregato — sempre attivo) ═══════ */
 function trackPagina() {
     var payload = JSON.stringify({
         pagina: window.location.pathname || '/',
         referrer: document.referrer || ''
     });
-    var url = 'https://web-production-f3794.up.railway.app/api/track';
-
-    // sendBeacon is more reliable in in-app browsers (Instagram, Facebook)
-    // and fires even when the user navigates away immediately
-    // Use text/plain to avoid CORS preflight (backend parses JSON with force=True)
+    var url = BACKEND_URL + '/api/track';
     if (navigator.sendBeacon) {
         var blob = new Blob([payload], { type: 'text/plain' });
-        var sent = navigator.sendBeacon(url, blob);
-        if (sent) return;
+        if (navigator.sendBeacon(url, blob)) return;
     }
-
-    // Fallback to fetch for older browsers
     try {
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: payload,
-            keepalive: true
-        }).catch(function() {});
+        fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: payload, keepalive: true }).catch(function() {});
     } catch(e) {}
 }
 
-document.addEventListener('DOMContentLoaded', trackPagina);
+/* ═══════ CONSENSO COOKIE + TRACKING PER-VISITATORE ═══════ */
+var SB_CONSENT_KEY = 'sb_consent';
+var META_PIXEL_ID = '802862849322298'; // dataset "SB food consulting"
+function sbConsent() { try { return localStorage.getItem(SB_CONSENT_KEY); } catch(e){ return null; } }
+function sbUuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c){
+        var r = Math.random()*16|0; return (c==='x'?r:(r&0x3|0x8)).toString(16); });
+}
+function sbVisitorId() {
+    try { var v = localStorage.getItem('sb_vid'); if(!v){v=sbUuid();localStorage.setItem('sb_vid',v);} return v; }
+    catch(e){ return null; }
+}
+function sbSessionId() {
+    try { var s = sessionStorage.getItem('sb_sid'); if(!s){s=sbUuid();sessionStorage.setItem('sb_sid',s);} return s; }
+    catch(e){ return null; }
+}
+function sbSend(tipo, valore) {
+    if (sbConsent() !== 'accepted') return;
+    var vid = sbVisitorId(); if (!vid) return;
+    var payload = JSON.stringify({
+        visitor_id: vid, session_id: sbSessionId(), tipo: tipo,
+        pagina: window.location.pathname || '/',
+        valore: (valore == null ? '' : String(valore)).slice(0,300),
+        referrer: document.referrer || ''
+    });
+    var url = BACKEND_URL + '/api/traffico/track';
+    if (navigator.sendBeacon) { if (navigator.sendBeacon(url, new Blob([payload],{type:'text/plain'}))) return; }
+    try { fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:payload,keepalive:true}).catch(function(){}); } catch(e){}
+}
+// Identità: le pagine la chiamano quando l'utente lascia i dati (form, email checklist)
+window.sbIdentify = function(email, nome) {
+    if (sbConsent() !== 'accepted' || !email) return;
+    var vid = sbVisitorId(); if (!vid) return;
+    try {
+        fetch(BACKEND_URL + '/api/traffico/identifica', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ visitor_id: vid, session_id: sbSessionId(), email: email, nome: nome||'', pagina: window.location.pathname }),
+            keepalive: true
+        }).catch(function(){});
+    } catch(e){}
+};
+var _sbStart = Date.now();
+var _sbScrollHits = {};
+
+/* Meta Pixel — caricato SOLO con consenso (consent-gated). Aggiuntivo al
+   funnel interno: se manca il consenso resta tutto un no-op, il funnel gira. */
+function sbLoadPixel() {
+    if (sbConsent() !== 'accepted' || !META_PIXEL_ID || window.__sbPixelLoaded) return;
+    window.__sbPixelLoaded = true;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', META_PIXEL_ID);
+    fbq('track', 'PageView');
+}
+// Evento custom Meta. No-op se non c'è consenso/pixel. fbq accoda gli eventi
+// anche prima che fbevents.js finisca di caricare (ok in in-app browser).
+window.sbPixel = function(evento, params) {
+    try { if (window.fbq) window.fbq('trackCustom', evento, params || {}); } catch(e) {}
+};
+
+function sbInitTracking() {
+    if (sbConsent() !== 'accepted') return;
+    sbLoadPixel();
+    sbSend('pageview');
+    document.addEventListener('click', function(e){
+        var el = e.target.closest && e.target.closest('a, button, [data-track]');
+        if (!el) return;
+        var label = el.getAttribute('data-track') || (el.textContent||'').trim() || el.getAttribute('aria-label') || el.getAttribute('href') || el.tagName;
+        sbSend('click', String(label).slice(0,120));
+    }, true);
+    window.addEventListener('scroll', function(){
+        var h = document.documentElement;
+        if (h.scrollHeight <= window.innerHeight) return;
+        var perc = Math.round((h.scrollTop + window.innerHeight) / h.scrollHeight * 100);
+        [25,50,75,100].forEach(function(m){ if (perc >= m && !_sbScrollHits[m]){ _sbScrollHits[m]=true; sbSend('scroll', m); } });
+    }, { passive: true });
+    function sendTime(){ var sec = Math.round((Date.now()-_sbStart)/1000); if (sec>0 && sec<7200) sbSend('tempo', sec); }
+    document.addEventListener('visibilitychange', function(){ if (document.visibilityState==='hidden') sendTime(); });
+    window.addEventListener('pagehide', sendTime);
+}
+
+/* ═══════ BANNER CONSENSO ═══════ */
+function sbInjectBannerStyle() {
+    if (document.getElementById('sb-cb-style')) return;
+    var css = '#sb-cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;max-width:560px;margin:0 auto;background:#37393f;color:#f5f2ee;border-radius:14px;padding:18px 20px;box-shadow:0 12px 40px rgba(0,0,0,.35);z-index:9999;font-family:Inter,-apple-system,sans-serif;display:flex;flex-direction:column;gap:14px;animation:sbcbup .4s cubic-bezier(.4,0,.2,1)}'+
+    '@keyframes sbcbup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}'+
+    '#sb-cookie-banner .sb-cb-text{font-size:.84rem;line-height:1.55;color:rgba(245,242,238,.85)}'+
+    '#sb-cookie-banner a{color:#e08a4f;text-decoration:underline}'+
+    '#sb-cookie-banner .sb-cb-actions{display:flex;gap:10px;justify-content:flex-end}'+
+    '#sb-cookie-banner button{padding:10px 22px;border:none;border-radius:8px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer}'+
+    '#sb-cookie-banner .sb-cb-reject{background:transparent;color:#f5f2ee;border:1px solid rgba(245,242,238,.3)}'+
+    '#sb-cookie-banner .sb-cb-accept{background:#c4622d;color:#fff}'+
+    '@media(max-width:520px){#sb-cookie-banner .sb-cb-actions{flex-direction:column-reverse}#sb-cookie-banner button{width:100%}}';
+    var s = document.createElement('style'); s.id='sb-cb-style'; s.textContent=css; document.head.appendChild(s);
+}
+window.sbSetConsent = function(val) {
+    try { localStorage.setItem(SB_CONSENT_KEY, val); } catch(e){}
+    var b = document.getElementById('sb-cookie-banner'); if (b) b.remove();
+    if (val === 'accepted') sbInitTracking();
+};
+function sbShowBanner() {
+    if (sbConsent()) return;
+    sbInjectBannerStyle();
+    var b = document.createElement('div');
+    b.id = 'sb-cookie-banner';
+    b.setAttribute('role','dialog');
+    b.setAttribute('aria-label','Consenso cookie');
+    b.innerHTML =
+        '<div class="sb-cb-text">Usiamo cookie tecnici e, con il tuo consenso, cookie di analisi per capire come navighi e migliorare il sito. '+
+        '<a href="/cookie-policy.html">Cookie policy</a> &middot; <a href="/privacy-policy.html">Privacy</a></div>'+
+        '<div class="sb-cb-actions">'+
+            '<button class="sb-cb-reject" onclick="sbSetConsent(\'rejected\')">Rifiuta</button>'+
+            '<button class="sb-cb-accept" onclick="sbSetConsent(\'accepted\')">Accetta</button>'+
+        '</div>';
+    document.body.appendChild(b);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    trackPagina();
+    if (sbConsent() === 'accepted') sbInitTracking();
+    sbShowBanner();
+});
 
 function handleLogin() {
     var email = document.getElementById('login-email');

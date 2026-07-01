@@ -1269,6 +1269,8 @@ function seleziona(idx, valore) {
             quizIniziato = true;
             trackEvento('iniziata');
             trackEvento('prima_risposta');
+            // Pixel Meta (aggiuntivo, solo con consenso) — una volta per sessione
+            if (window.sbPixel) window.sbPixel('PrimaRisposta');
         }
         // Evento per OGNI domanda: dettaglio = numero domanda (1..15)
         trackEvento('domanda', idx + 1);
@@ -1334,6 +1336,8 @@ function mostraRisultato() {
     mostraSchermata('screen-result');
 
     trackEvento('completata');
+    // Pixel Meta (aggiuntivo, solo con consenso) — una volta per completamento
+    if (window.sbPixel) window.sbPixel('ChecklistCompletata');
 
     var scoreEl = document.getElementById('result-score');
     animateCount(scoreEl, 0, punteggioFinale, 1200);
@@ -1438,6 +1442,8 @@ function inviaEmailCapture() {
     }).then(function(r) { return r.json(); })
       .then(function(d) {
         trackEvento('email_lasciata');
+        // Lega il percorso di navigazione a questa identità (se c'è consenso)
+        if (window.sbIdentify) window.sbIdentify(email, nome);
         var box = document.getElementById('email-capture');
         box.innerHTML = '<div class="email-capture-success">Fatto! Riceverai il resoconto a breve.</div>';
         // Update result title with name

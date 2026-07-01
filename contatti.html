@@ -182,6 +182,7 @@ async function inviaContatto() {
         );
         const data = await res.json();
         if (data.success || data.id) {
+            if (window.sbIdentify) window.sbIdentify(email, nome);
             document.getElementById('contactForm').style.display = 'none';
             document.getElementById('form-success').style.display = 'block';
         } else {

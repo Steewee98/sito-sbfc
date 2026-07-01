@@ -634,6 +634,27 @@ tr:hover td{background:#fafaf8}
             </div>
         </div>
     </div>
+
+    <!-- Percorso dei visitatori (con consenso cookie) -->
+    <div style="margin-top:32px">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;flex-wrap:wrap">
+            <h3 style="margin:0;font-size:1rem;color:#37393f;font-weight:600">Percorso dei visitatori</h3>
+            <select id="visitatoriGiorni" onchange="renderVisitatori()" style="padding:6px 12px;border:1px solid #e0dcd7;border-radius:6px;font-size:.82rem;background:#fff;color:#37393f;cursor:pointer">
+                <option value="7">7 giorni</option>
+                <option value="30" selected>30 giorni</option>
+                <option value="90">90 giorni</option>
+            </select>
+        </div>
+        <p style="margin:0 0 16px;font-size:.8rem;color:#9a948b">Visitatori che hanno accettato i cookie di analisi. Clicca una riga per il percorso completo.</p>
+        <div id="visitatoriRiepilogo" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px"></div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Ultima attività</th><th>Identità</th><th>Dispositivo</th><th>Fonte</th><th>Pagine</th><th>Eventi</th></tr></thead>
+                <tbody id="visitatoriBody"></tbody>
+            </table>
+            <div class="mobile-card-list" id="visitatoriCards"></div>
+        </div>
+    </div>
 </section>
 
 <!-- ========== CHECKLIST ========== -->
@@ -1599,7 +1620,91 @@ function nomeReferrer(r){
     try{return new URL(r).hostname}catch(e){return r}
 }
 
+// ============ PERCORSO VISITATORI ============
+function sbEsc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function _sbDataOra(iso){try{return new Date(iso).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}catch(e){return iso}}
+function _sbDisp(d){return d==='mobile'?'Mobile':d==='tablet'?'Tablet':'Desktop'}
+
+async function renderVisitatori(){
+    var body=document.getElementById('visitatoriBody');
+    var cards=document.getElementById('visitatoriCards');
+    var ries=document.getElementById('visitatoriRiepilogo');
+    if(!body)return;
+    var sel=document.getElementById('visitatoriGiorni');
+    var giorni=sel?sel.value:30;
+    try{
+        var d=await apiFetch('/api/traffico/visitatori?giorni='+giorni);
+        var r=d.riepilogo||{};
+        if(ries)ries.innerHTML=
+            kpiCard('Visitatori',r.visitatori||0,'con consenso','neutral')+
+            kpiCard('Identificati',r.convertiti||0,'hanno lasciato i dati','neutral')+
+            kpiCard('Pagine viste',r.pageviews_totali||0,'totali','neutral')+
+            kpiCard('Eventi',r.eventi_totali||0,'click, scroll, tempo','neutral');
+        var rows=d.visitatori||[];
+        if(!rows.length){
+            body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessun visitatore tracciato (servono accettazioni cookie).</td></tr>';
+            if(cards)cards.innerHTML='';
+            return;
+        }
+        body.innerHTML=rows.map(function(v){
+            var ident=v.identita?('<strong>'+sbEsc(v.identita)+'</strong>'):'<span style="color:#bbb">anonimo</span>';
+            return '<tr style="cursor:pointer" onclick="viewVisitatore(\''+v.visitor_id+'\')">'+
+                '<td>'+_sbDataOra(v.ultima_attivita)+'</td>'+
+                '<td>'+ident+'</td>'+
+                '<td>'+_sbDisp(v.dispositivo)+'</td>'+
+                '<td>'+sbEsc(v.fonte||'—')+'</td>'+
+                '<td>'+v.pageviews+'</td>'+
+                '<td>'+v.eventi+'</td>'+
+            '</tr>';
+        }).join('');
+        if(cards)cards.innerHTML=rows.map(function(v){
+            var ident=v.identita?sbEsc(v.identita):'anonimo';
+            return '<div class="mobile-card" onclick="viewVisitatore(\''+v.visitor_id+'\')" style="cursor:pointer">'+
+                '<div class="mobile-card-header"><span class="mobile-card-name">'+ident+'</span><span class="mobile-card-value">'+_sbDisp(v.dispositivo)+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Ultima attività</span><span class="mobile-card-value">'+_sbDataOra(v.ultima_attivita)+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Fonte</span><span class="mobile-card-value">'+sbEsc(v.fonte||'—')+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Pagine / Eventi</span><span class="mobile-card-value">'+v.pageviews+' / '+v.eventi+'</span></div>'+
+            '</div>';
+        }).join('');
+    }catch(e){
+        body.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:#c4622d">Errore nel caricamento.</td></tr>';
+        if(ries)ries.innerHTML='';if(cards)cards.innerHTML='';
+    }
+}
+
+function _sbEventoRiga(e){
+    var ico={'pageview':'▣','click':'☞','scroll':'↕','tempo':'◷','identificazione':'✉'}[e.tipo]||'•';
+    var testo;
+    if(e.tipo==='pageview')testo='Pagina <strong>'+sbEsc(e.pagina||'/')+'</strong>';
+    else if(e.tipo==='click')testo='Click: '+sbEsc(e.valore||'');
+    else if(e.tipo==='scroll')testo='Scroll '+sbEsc(e.valore||'')+'%';
+    else if(e.tipo==='tempo')testo='Tempo: '+sbEsc(e.valore||'')+'s su '+sbEsc(e.pagina||'');
+    else if(e.tipo==='identificazione')testo='Identificato: <strong>'+sbEsc(e.valore||'')+'</strong>';
+    else testo=sbEsc(e.tipo);
+    return '<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0ece7;font-size:.85rem">'+
+        '<span style="flex-shrink:0;color:#c4622d">'+ico+'</span>'+
+        '<div><div style="color:#37393f">'+testo+'</div>'+
+        '<div style="color:#9a948b;font-size:.72rem;margin-top:2px">'+_sbDataOra(e.created_at)+'</div></div>'+
+    '</div>';
+}
+
+async function viewVisitatore(vid){
+    try{
+        var d=await apiFetch('/api/traffico/visitatore/'+encodeURIComponent(vid));
+        var evs=d.eventi||[];
+        var html='<h3>Percorso visitatore</h3>'+
+            '<div class="detail-row"><label>Identità</label><p>'+(d.identita?sbEsc(d.identita):'Anonimo')+'</p></div>'+
+            '<div class="detail-row"><label>Dispositivo</label><p>'+_sbDisp(d.dispositivo)+'</p></div>'+
+            '<div class="detail-row"><label>Fonte</label><p>'+sbEsc(d.fonte||'—')+'</p></div>'+
+            '<div class="detail-row"><label>Eventi ('+evs.length+')</label></div>'+
+            '<div style="margin-top:8px">'+evs.map(_sbEventoRiga).join('')+'</div>';
+        document.getElementById('sidePanelBody').innerHTML=html;
+        document.getElementById('sidePanel').classList.add('open');
+    }catch(e){alert('Errore: '+e.message)}
+}
+
 function renderTraffico(){
+    renderVisitatori();
     // Sincronizza i due selettori
     var sel1=document.getElementById('filterTrafficoPeriodo');
     var sel2=document.getElementById('filterTrafficoPeriodoChart');
