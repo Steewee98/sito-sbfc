@@ -695,6 +695,37 @@ if (urlParams.get('pagamento') === 'annullato') {
     alert('Pagamento annullato. Puoi riprovare quando vuoi.');
 }
 
+/* ═══════ FORZA DOWNLOAD SCHEDE (Safari ignora l'attributo download) ═══════ */
+(function() {
+    document.querySelectorAll('.risorsa-download').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            var url = link.getAttribute('href');
+            if (!url) return;
+            e.preventDefault();
+            var filename = url.split('/').pop().split('?')[0];
+            fetch(url)
+                .then(function(res) {
+                    if (!res.ok) throw new Error('fetch failed');
+                    return res.blob();
+                })
+                .then(function(blob) {
+                    var objectUrl = URL.createObjectURL(blob);
+                    var temp = document.createElement('a');
+                    temp.href = objectUrl;
+                    temp.download = filename;
+                    document.body.appendChild(temp);
+                    temp.click();
+                    document.body.removeChild(temp);
+                    setTimeout(function() { URL.revokeObjectURL(objectUrl); }, 2000);
+                })
+                .catch(function() {
+                    // Fallback: apri normalmente se il fetch fallisce
+                    window.location.href = url;
+                });
+        });
+    });
+})();
+
 /* ═══════ CONTATORE CHECKLIST COMPLETATE ═══════ */
 (function() {
     fetch('https://web-production-f3794.up.railway.app/api/checklist')
