@@ -196,6 +196,42 @@ function trackPagina() {
     } catch(e) {}
 }
 
+/* ═══════ SCHEDE OPERATIVE (Academy → Risorse) — conteggio sempre attivo ═══════
+   Il download/vista si conta sempre (anche senza consenso, in forma anonima);
+   il visitor_id (per legare l'identità) viene incluso solo con consenso. */
+function sbSchedaTrack(azione, slug) {
+    var payload = {
+        tipo: azione,
+        pagina: window.location.pathname || '/',
+        valore: String(slug).slice(0, 300),
+        referrer: document.referrer || ''
+    };
+    if (sbConsent() === 'accepted') {
+        payload.visitor_id = sbVisitorId();
+        payload.session_id = sbSessionId();
+    }
+    var body = JSON.stringify(payload);
+    var url = BACKEND_URL + '/api/traffico/track';
+    if (navigator.sendBeacon) {
+        if (navigator.sendBeacon(url, new Blob([body], { type: 'text/plain' }))) return;
+    }
+    try {
+        fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: body, keepalive: true }).catch(function() {});
+    } catch(e) {}
+}
+function sbInitSchede() {
+    document.addEventListener('click', function(e) {
+        var scheda = e.target.closest && e.target.closest('.risorsa-download, .risorsa-preview, .risorsa-esempio');
+        if (!scheda) return;
+        var href = scheda.getAttribute('href') || '';
+        var slug = href.split('/').pop().replace('.pdf', '').replace('-esempio', '');
+        if (!slug) return;
+        var azione = scheda.classList.contains('risorsa-download') ? 'scheda_download' : 'scheda_vista';
+        sbSchedaTrack(azione, slug);
+    }, true);
+}
+
 /* ═══════ CONSENSO COOKIE + TRACKING PER-VISITATORE ═══════ */
 var SB_CONSENT_KEY = 'sb_consent';
 var META_PIXEL_ID = '802862849322298'; // dataset "SB food consulting"
@@ -263,16 +299,6 @@ function sbInitTracking() {
     document.addEventListener('click', function(e){
         var el = e.target.closest && e.target.closest('a, button, [data-track]');
         if (!el) return;
-        // Schede operative (Academy → Risorse): traccia vista/download separati
-        var scheda = e.target.closest && e.target.closest('.risorsa-download, .risorsa-preview, .risorsa-esempio');
-        if (scheda) {
-            var href = scheda.getAttribute('href') || '';
-            var slug = href.split('/').pop().replace('.pdf','').replace('-esempio','');
-            if (slug) {
-                var azione = scheda.classList.contains('risorsa-download') ? 'scheda_download' : 'scheda_vista';
-                sbSend(azione, slug);
-            }
-        }
         var label = el.getAttribute('data-track') || (el.textContent||'').trim() || el.getAttribute('aria-label') || el.getAttribute('href') || el.tagName;
         sbSend('click', String(label).slice(0,120));
     }, true);
@@ -325,6 +351,7 @@ function sbShowBanner() {
 
 document.addEventListener('DOMContentLoaded', function() {
     trackPagina();
+    sbInitSchede();
     if (sbConsent() === 'accepted') sbInitTracking();
     sbShowBanner();
 });
