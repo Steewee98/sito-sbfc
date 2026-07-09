@@ -263,6 +263,16 @@ function sbInitTracking() {
     document.addEventListener('click', function(e){
         var el = e.target.closest && e.target.closest('a, button, [data-track]');
         if (!el) return;
+        // Schede operative (Academy → Risorse): traccia vista/download separati
+        var scheda = e.target.closest && e.target.closest('.risorsa-download, .risorsa-preview, .risorsa-esempio');
+        if (scheda) {
+            var href = scheda.getAttribute('href') || '';
+            var slug = href.split('/').pop().replace('.pdf','').replace('-esempio','');
+            if (slug) {
+                var azione = scheda.classList.contains('risorsa-download') ? 'scheda_download' : 'scheda_vista';
+                sbSend(azione, slug);
+            }
+        }
         var label = el.getAttribute('data-track') || (el.textContent||'').trim() || el.getAttribute('aria-label') || el.getAttribute('href') || el.tagName;
         sbSend('click', String(label).slice(0,120));
     }, true);

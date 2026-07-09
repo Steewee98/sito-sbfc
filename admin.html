@@ -655,6 +655,34 @@ tr:hover td{background:#fafaf8}
             <div class="mobile-card-list" id="visitatoriCards"></div>
         </div>
     </div>
+
+    <!-- Schede operative — chi ha visto e scaricato -->
+    <div style="margin-top:32px">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;flex-wrap:wrap">
+            <h3 style="margin:0;font-size:1rem;color:#37393f;font-weight:600">Schede operative</h3>
+            <select id="schedeGiorni" onchange="renderSchede()" style="padding:6px 12px;border:1px solid #e0dcd7;border-radius:6px;font-size:.82rem;background:#fff;color:#37393f;cursor:pointer">
+                <option value="7">7 giorni</option>
+                <option value="30" selected>30 giorni</option>
+                <option value="90">90 giorni</option>
+            </select>
+        </div>
+        <p style="margin:0 0 16px;font-size:.8rem;color:#9a948b">Chi ha visto l'esempio e scaricato le schede scaricabili dell'Academy. Tracciato solo per i visitatori che hanno accettato i cookie.</p>
+        <div id="schedeRiepilogo" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px"></div>
+        <div class="panel" style="margin-bottom:16px">
+            <h3 style="margin-bottom:12px">Per scheda</h3>
+            <table style="width:100%">
+                <thead><tr><th>Scheda</th><th>Viste esempio</th><th>Download</th><th>Download unici</th></tr></thead>
+                <tbody id="schedePerSchedaBody"></tbody>
+            </table>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Quando</th><th>Chi</th><th>Scheda</th><th>Azione</th><th>Dispositivo</th><th>Fonte</th></tr></thead>
+                <tbody id="schedeAccessiBody"></tbody>
+            </table>
+            <div class="mobile-card-list" id="schedeAccessiCards"></div>
+        </div>
+    </div>
 </section>
 
 <!-- ========== CHECKLIST ========== -->
@@ -920,6 +948,7 @@ function refreshCurrentSection(){
     else if(_currentSection==='contatti') renderContatti();
     else if(_currentSection==='pagamenti') renderPagamenti();
     else if(_currentSection==='studenti') renderStudenti();
+    else if(_currentSection==='traffico') renderTraffico();
     else if(_currentSection==='checklist') renderChecklist();
     else if(_currentSection==='prenotazioni') renderPrenotazioni();
     else if(_currentSection==='callcenter') renderCallCenter();
@@ -1703,8 +1732,62 @@ async function viewVisitatore(vid){
     }catch(e){alert('Errore: '+e.message)}
 }
 
+// ============ SCHEDE OPERATIVE ============
+async function renderSchede(){
+    var perScheda=document.getElementById('schedePerSchedaBody');
+    var accessi=document.getElementById('schedeAccessiBody');
+    var cards=document.getElementById('schedeAccessiCards');
+    var ries=document.getElementById('schedeRiepilogo');
+    if(!perScheda)return;
+    var sel=document.getElementById('schedeGiorni');
+    var giorni=sel?sel.value:30;
+    try{
+        var d=await apiFetch('/api/traffico/schede?giorni='+giorni);
+        var r=d.riepilogo||{};
+        if(ries)ries.innerHTML=
+            kpiCard('Download',r.download_totali||0,'schede scaricate','neutral')+
+            kpiCard('Viste esempio',r.viste_totali||0,'esempi aperti','neutral')+
+            kpiCard('Download unici',r.visitatori_download||0,'visitatori distinti','neutral')+
+            kpiCard('Schede attive',r.schede_attive||0,'con almeno un accesso','neutral');
+        var schede=d.schede||[];
+        perScheda.innerHTML=schede.length
+            ? schede.map(function(s){
+                return '<tr><td><strong>'+sbEsc(s.nome)+'</strong></td>'+
+                    '<td>'+s.viste+'</td><td>'+s.download+'</td><td>'+s.download_unici+'</td></tr>';
+            }).join('')
+            : '<tr><td colspan="4" style="text-align:center;padding:24px;color:#5a5a5a;font-size:.85rem">Nessun accesso alle schede ancora.</td></tr>';
+        var rows=d.accessi||[];
+        function badge(a){
+            return a==='download'
+                ? '<span style="background:#c4622d;color:#fff;padding:2px 8px;border-radius:10px;font-size:.72rem">Download</span>'
+                : '<span style="background:#eee7df;color:#8a6d52;padding:2px 8px;border-radius:10px;font-size:.72rem">Vista esempio</span>';
+        }
+        accessi.innerHTML=rows.length
+            ? rows.map(function(a){
+                var chi=a.identita?('<strong>'+sbEsc(a.identita)+'</strong>'):'<span style="color:#bbb">anonimo</span>';
+                return '<tr><td>'+_sbDataOra(a.quando)+'</td><td>'+chi+'</td>'+
+                    '<td>'+sbEsc(a.scheda)+'</td><td>'+badge(a.azione)+'</td>'+
+                    '<td>'+_sbDisp(a.dispositivo)+'</td><td>'+sbEsc(a.fonte||'—')+'</td></tr>';
+            }).join('')
+            : '<tr><td colspan="6" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Nessun accesso tracciato (servono accettazioni cookie).</td></tr>';
+        if(cards)cards.innerHTML=rows.map(function(a){
+            var chi=a.identita?sbEsc(a.identita):'anonimo';
+            return '<div class="mobile-card">'+
+                '<div class="mobile-card-header"><span class="mobile-card-name">'+chi+'</span><span class="mobile-card-value">'+(a.azione==='download'?'Download':'Vista')+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Scheda</span><span class="mobile-card-value">'+sbEsc(a.scheda)+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Quando</span><span class="mobile-card-value">'+_sbDataOra(a.quando)+'</span></div>'+
+                '<div class="mobile-card-row"><span class="mobile-card-label">Fonte</span><span class="mobile-card-value">'+sbEsc(a.fonte||'—')+'</span></div>'+
+            '</div>';
+        }).join('');
+    }catch(e){
+        perScheda.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:#c4622d">Errore nel caricamento.</td></tr>';
+        if(accessi)accessi.innerHTML='';if(cards)cards.innerHTML='';if(ries)ries.innerHTML='';
+    }
+}
+
 function renderTraffico(){
     renderVisitatori();
+    renderSchede();
     // Sincronizza i due selettori
     var sel1=document.getElementById('filterTrafficoPeriodo');
     var sel2=document.getElementById('filterTrafficoPeriodoChart');
