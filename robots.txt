@@ -1,4 +1,63 @@
+# SB Food Consulting — robots.txt
+# Consenti l'indicizzazione; escludi solo i tool interni.
+
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+# ─── Crawler AI generativi (GEO): consentiti esplicitamente ───
+# Alimentano le citazioni in ChatGPT, Claude, Perplexity, Gemini,
+# Google AI Overviews e Bing/Copilot.
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin.html
+Disallow: /brandizzatore.html
+
 Sitemap: https://www.sbfoodconsulting.com/sitemap.xml
