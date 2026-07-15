@@ -454,6 +454,16 @@ function apriLezione(moduloId, lezioneId) {
 
     if (!userData.moduli.includes(moduloId)) return;
 
+    // Challenge del modulo (contenuto statico da challenges.js)
+    if (lezioneId === 5) {
+        var ch = window.CHALLENGES ? window.CHALLENGES[moduloId] : null;
+        if (titoloEl) titoloEl.textContent = ch ? ch.nome : 'La Challenge del modulo';
+        if (contenutoEl) contenutoEl.innerHTML = window.renderChallengeHTML ? renderChallengeHTML(moduloId) : '<p>Contenuto non disponibile.</p>';
+        if (modal) modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        return;
+    }
+
     var cartelleModuli = { 1: 'controllo-ristorante', 2: 'risultati-giusti', 3: 'blocchi-crescita', 4: 'arte-accoglienza', 5: 'lancio-locale' };
     var nomiLezioni = { 1: 'Introduzione al modulo', 2: 'Slides esplicative', 3: 'Video di approfondimento', 4: 'Podcast \u2014 caso reale' };
     var cartella = cartelleModuli[moduloId];

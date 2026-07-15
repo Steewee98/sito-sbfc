@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Challenge — SB Food Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="chl-page-wrap">
+    <div class="no-print" style="text-align:center;margin-bottom:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button onclick="window.print()" style="background:var(--accent);color:#fff;border:none;padding:12px 24px;font-size:0.9rem;font-weight:600;border-radius:4px;cursor:pointer">Stampa / Salva come PDF</button>
+        <a href="academy.html" style="background:transparent;color:var(--dark);border:1px solid var(--border);padding:12px 24px;font-size:0.9rem;font-weight:600;border-radius:4px;text-decoration:none">Torna all'Academy</a>
+    </div>
+    <div id="print-target" class="chl-print-block"></div>
+</div>
+
+<script src="challenges.js"></script>
+<script>
+    (function () {
+        var params = new URLSearchParams(window.location.search);
+        var m = parseInt(params.get('m'), 10);
+        var target = document.getElementById('print-target');
+        if (!m || !window.CHALLENGES[m]) {
+            target.innerHTML = '<p style="text-align:center;color:#6b6560">Challenge non trovata.</p>';
+            return;
+        }
+        document.title = window.CHALLENGES[m].nome + ' — SB Food Academy';
+        target.innerHTML = renderChallengeHTML(m, { expandAll: true, forPrint: true });
+    })();
+</script>
+</body>
+</html>

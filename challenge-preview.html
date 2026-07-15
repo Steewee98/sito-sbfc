@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Anteprima Challenge — SB Food Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+    body { background: #f0ede8; }
+    .prev-topbar { background: var(--dark); color: var(--ivory); padding: 14px 24px; font-size: 0.82rem; text-align: center; letter-spacing: 0.02em; }
+    .prev-topbar strong { color: var(--accent); }
+    .prev-nav { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .prev-nav a { font-size: 0.78rem; color: var(--dark); text-decoration: none; padding: 7px 13px; border: 1px solid var(--border); border-radius: 20px; transition: all .2s; }
+    .prev-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .prev-block { max-width: 820px; margin: 0 auto 48px; }
+    .prev-block-head { padding: 40px 24px 8px; }
+    .prev-block-head .mod { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+    .prev-block-head .modtitle { font-family: 'Playfair Display', serif; color: var(--dark); font-size: 1.35rem; margin: 6px 0 0; }
+    .prev-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 40px 32px; margin: 16px 16px 0; box-shadow: 0 12px 32px rgba(0,0,0,.06); }
+    @media (max-width: 640px) { .prev-card { padding: 26px 18px; } }
+</style>
+</head>
+<body>
+<div class="prev-topbar">Anteprima interna · <strong>Challenge dei Moduli</strong> · così appaiono dentro il corso — pagina di sola revisione, non pubblica</div>
+<nav class="prev-nav">
+    <a href="#m1">01 · Controllo</a>
+    <a href="#m2">02 · Costi</a>
+    <a href="#m3">03 · Blocchi</a>
+    <a href="#m4">04 · Accoglienza</a>
+    <a href="#m5">05 · Lancio</a>
+</nav>
+
+<div id="preview-root"></div>
+
+<script src="challenges.js"></script>
+<script>
+    (function () {
+        var moduli = [
+            { id: 1, mod: 'Modulo 01', titolo: 'Hai davvero il controllo del tuo ristorante?' },
+            { id: 2, mod: 'Modulo 02', titolo: 'Stai pagando per i risultati giusti?' },
+            { id: 3, mod: 'Modulo 03', titolo: 'Cosa ti blocca dal crescere?' },
+            { id: 4, mod: 'Modulo 04', titolo: "L'Arte di Accogliere nel Food" },
+            { id: 5, mod: 'Modulo 05', titolo: 'Come prepararsi al lancio del tuo locale' }
+        ];
+        var root = document.getElementById('preview-root');
+        var html = '';
+        moduli.forEach(function (m) {
+            html += '<section class="prev-block" id="m' + m.id + '">';
+            html += '<div class="prev-block-head"><div class="mod">' + m.mod + '</div><h2 class="modtitle">' + m.titolo + '</h2></div>';
+            html += '<div class="prev-card">' + renderChallengeHTML(m.id, { expandAll: true }) + '</div>';
+            html += '</section>';
+        });
+        root.innerHTML = html;
+    })();
+</script>
+</body>
+</html>
