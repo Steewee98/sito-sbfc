@@ -18,9 +18,19 @@
 (function () {
   var DEFAULT_BACKEND = 'https://web-production-f3794.up.railway.app';
   function backendUrl() { return window.SBFC_BACKEND || DEFAULT_BACKEND; }
+  // I download passano dal backend, che forza Content-Disposition: attachment
+  // (il sito statico su Railway non riesce a settarlo -> su iOS aprirebbe l'anteprima).
+  function pdfUrl(tipo) { return backendUrl() + '/api/strumenti/' + cfg.slug + '/pdf?tipo=' + tipo; }
   var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
   var cfg = window.SBFC_TOOL || {};
   var pixelFired = false;
+
+  // iOS (iPhone/iPad) ignora l'attributo `download` e apre il PDF in anteprima:
+  // l'auto-download programmatico NON funziona. Su iOS mostriamo subito il
+  // pulsante grande: il salvataggio parte dal tap reale + Content-Disposition
+  // attachment (che nginx mette sui PDF modello).
+  var IS_IOS = /iP(hone|od|ad)/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
   function param(name) {
     try { return new URLSearchParams(location.search).get(name) || ''; } catch (e) { return ''; }
@@ -106,11 +116,11 @@
         '</div>' +
         '<div class="dlgate-done" id="dlgate-done" hidden>' +
           '<div class="dlgate-done-icon">&#10003;</div>' +
-          '<h3 class="dlgate-title">Il download è partito</h3>' +
-          '<p class="dlgate-sub">Se non è partito da solo, tocca qui sotto:</p>' +
+          '<h3 class="dlgate-title">Ecco la tua scheda</h3>' +
+          '<p class="dlgate-sub">Tocca il pulsante per scaricare il PDF:</p>' +
           '<div class="dlgate-fallback">' +
-            '<a class="dlgate-fb-primary" id="dlgate-fb-vuoto" href="#" download>Scarica il modello</a>' +
-            '<a class="dlgate-fb-secondary" id="dlgate-fb-esempio" href="#" target="_blank" rel="noopener">Apri l\'esempio compilato</a>' +
+            '<a class="dlgate-fb-primary" id="dlgate-fb-vuoto" href="#">&#8595; Scarica il modello (PDF)</a>' +
+            '<a class="dlgate-fb-secondary" id="dlgate-fb-esempio" href="#">Scarica l\'esempio compilato</a>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -170,23 +180,28 @@
       }
       errEl.hidden = true;
 
-      // 1) DOWNLOAD SINCRONO (dentro il gesto utente — cruciale per webview IG/FB)
-      triggerDownload(cfg.pdfVuoto, cfg.slug + '.pdf');
-      setTimeout(function () { triggerDownload(cfg.pdfEsempio, cfg.slug + '-esempio.pdf'); }, 600);
-
-      // 2) Pixel Meta (una sola volta)
-      firePixel();
-
-      // 3) Salvataggio lead in background (non blocca il download)
-      saveLead(email);
-
-      // 4) Pannello "fatto" con fallback tap-link (nessuna schermata di attesa)
+      // Prepara i link del pannello "fatto" (pulsanti reali da toccare).
+      // Puntano al backend che serve il PDF come attachment -> iOS lo scarica.
       var fbV = modal.querySelector('#dlgate-fb-vuoto');
       var fbE = modal.querySelector('#dlgate-fb-esempio');
-      fbV.href = cfg.pdfVuoto; fbV.setAttribute('download', cfg.slug + '.pdf');
-      fbE.href = cfg.pdfEsempio;
+      fbV.href = pdfUrl('vuoto');
+      fbE.href = pdfUrl('esempio');
+
+      // Pixel Meta (una sola volta) + salvataggio lead in background (sendBeacon)
+      firePixel();
+      saveLead(email);
+
+      // Mostra subito il pannello con i pulsanti di download
       formWrap.hidden = true;
       doneWrap.hidden = false;
+
+      // Auto-download SOLO dove funziona in modo affidabile (desktop/Android).
+      // Su iOS l'auto-download aprirebbe l'anteprima: lì il download parte dal
+      // tap dell'utente sul pulsante grande "Scarica il modello".
+      if (!IS_IOS) {
+        triggerDownload(pdfUrl('vuoto'), cfg.slug + '.pdf');
+        setTimeout(function () { triggerDownload(pdfUrl('esempio'), cfg.slug + '-esempio.pdf'); }, 600);
+      }
     });
   }
 
