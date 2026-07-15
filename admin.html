@@ -788,6 +788,7 @@ tr:hover td{background:#fafaf8}
                     <th>Consenso</th>
                     <th>Fonte</th>
                     <th>Dispositivo</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="leadStrumentiBody"></tbody>
@@ -1039,7 +1040,7 @@ function renderLeadStrumenti(){
         var body=document.getElementById('leadStrumentiBody');
         var cards=document.getElementById('leadStrumentiCards');
         if(!list.length){
-            body.innerHTML='<tr><td colspan="6" style="text-align:center;color:#999;padding:24px">Nessun lead ancora.</td></tr>';
+            body.innerHTML='<tr><td colspan="7" style="text-align:center;color:#999;padding:24px">Nessun lead ancora.</td></tr>';
             if(cards)cards.innerHTML='';return;
         }
         var html='',ch='';
@@ -1049,16 +1050,26 @@ function renderLeadStrumenti(){
             var cons=l.consenso_marketing
                 ?'<span class="badge badge-vinto">Sì</span>'
                 :'<span class="badge badge-perso">No</span>';
-            html+='<tr><td style="white-space:nowrap">'+dt+'</td><td>'+escLead(l.email)+'</td><td>'+escLead(nomeStrumento(l.strumento))+'</td><td>'+cons+'</td><td>'+escLead(fonte)+'</td><td>'+escLead(l.dispositivo||'—')+'</td></tr>';
+            var del='<button title="Elimina" onclick="deleteLeadStrumento('+l.id+',\''+escLead(l.email).replace(/'/g,"\\'")+'\')" style="background:none;border:none;cursor:pointer;color:#c0392b;font-size:1rem;padding:4px 8px">&#128465;</button>';
+            html+='<tr><td style="white-space:nowrap">'+dt+'</td><td>'+escLead(l.email)+'</td><td>'+escLead(nomeStrumento(l.strumento))+'</td><td>'+cons+'</td><td>'+escLead(fonte)+'</td><td>'+escLead(l.dispositivo||'—')+'</td><td style="text-align:right">'+del+'</td></tr>';
             ch+='<div class="mobile-card"><div class="mobile-card-row"><strong>'+escLead(l.email)+'</strong><span>'+dt+'</span></div>'+
                 '<div class="mobile-card-row"><span>'+escLead(nomeStrumento(l.strumento))+'</span>'+cons+'</div>'+
-                '<div class="mobile-card-row" style="color:#888;font-size:.8rem"><span>'+escLead(fonte)+'</span><span>'+escLead(l.dispositivo||'')+'</span></div></div>';
+                '<div class="mobile-card-row" style="color:#888;font-size:.8rem"><span>'+escLead(fonte)+'</span><span>'+escLead(l.dispositivo||'')+'</span></div>'+
+                '<div class="mobile-card-row" style="justify-content:flex-end">'+del+'</div></div>';
         });
         body.innerHTML=html;
         if(cards)cards.innerHTML=ch;
     }).catch(function(){
-        document.getElementById('leadStrumentiBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:#c0392b;padding:24px">API non raggiungibile</td></tr>';
+        document.getElementById('leadStrumentiBody').innerHTML='<tr><td colspan="7" style="text-align:center;color:#c0392b;padding:24px">API non raggiungibile</td></tr>';
     });
+}
+
+function deleteLeadStrumento(id,email){
+    if(!confirm('Eliminare il lead '+email+'? L\'operazione è definitiva.'))return;
+    fetch(BACKEND_URL+'/api/lead-strumenti/'+id,{method:'DELETE',headers:{'X-Admin-Token':ADMIN_TOKEN}})
+        .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+        .then(function(){renderLeadStrumenti();})
+        .catch(function(){alert('Eliminazione non riuscita. Riprova.');});
 }
 
 function exportLeadStrumentiCsv(){
