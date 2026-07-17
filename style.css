@@ -3195,18 +3195,51 @@ ul { list-style: none; }
 }
 .dlgate-tip strong { color: var(--accent-deep); }
 
-/* ── Download gate: cross-sell altre schede ── */
-.dlgate-cross { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
-.dlgate-cross-title { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); text-align: center; margin-bottom: 12px; }
-.dlgate-cross-list { display: flex; flex-direction: column; gap: 8px; }
-.dlgate-cross-btn {
-    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
-    background: var(--ivory); border: 1px solid var(--border); color: var(--dark);
-    padding: 12px 14px; border-radius: 4px; cursor: pointer; text-decoration: none;
-    font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
-    transition: border-color .2s var(--ease-out), color .2s var(--ease-out), background .2s var(--ease-out);
+/* ── Download gate: cross-sell altre schede (accattivante) ── */
+.dlgate-cross {
+    margin-top: 24px; padding: 18px 16px 16px; border-radius: 10px;
+    background: linear-gradient(160deg, #fdf0e8 0%, #fbf9f6 100%);
+    border: 1px solid rgba(196,98,45,0.18);
 }
-.dlgate-cross-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
-.dlgate-cross-btn .ico { color: var(--accent); font-weight: 700; }
-.dlgate-cross-btn.is-done { border-color: #58b384; color: #2e7d52; background: #f0f9f4; }
-.dlgate-cross-btn.is-done .ico { color: #58b384; }
+.dlgate-cross-title {
+    font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 700;
+    color: var(--dark); text-align: center; margin-bottom: 14px;
+}
+.dlgate-cross-list { display: flex; flex-direction: column; gap: 10px; }
+.dlgate-cross-btn {
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+    background: #fff; border: 1.5px solid var(--border); border-left: 3px solid var(--accent);
+    color: var(--dark); padding: 11px 14px; border-radius: 8px; cursor: pointer; text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 8px rgba(26,26,26,0.05);
+    transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), border-color .25s var(--ease-out), background .25s var(--ease-out);
+    opacity: 0; transform: translateY(10px);
+    animation: dlgateCrossIn .45s var(--ease-out) forwards;
+}
+@keyframes dlgateCrossIn { to { opacity: 1; transform: none; } }
+.dlgate-cross-btn:nth-child(1) { animation-delay: .06s; }
+.dlgate-cross-btn:nth-child(2) { animation-delay: .15s; }
+.dlgate-cross-btn:nth-child(3) { animation-delay: .24s; }
+.dlgate-cross-btn:hover {
+    border-color: var(--accent); background: #fffaf6;
+    transform: translateY(-2px); box-shadow: 0 10px 22px rgba(196,98,45,0.18);
+}
+.dlgate-cross-ic {
+    flex-shrink: 0; width: 36px; height: 36px; border-radius: 9px;
+    background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 700;
+    transition: transform .25s var(--ease-out);
+}
+.dlgate-cross-btn:hover .dlgate-cross-ic { transform: translateY(2px); }
+.dlgate-cross-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.dlgate-cross-txt strong { font-size: 0.92rem; font-weight: 600; color: var(--dark); }
+.dlgate-cross-txt em { font-style: normal; font-size: 0.72rem; font-weight: 600; color: var(--accent); letter-spacing: 0.01em; margin-top: 1px; }
+.dlgate-cross-go { flex-shrink: 0; color: var(--accent); font-size: 1.15rem; transition: transform .25s var(--ease-out); }
+.dlgate-cross-btn:hover .dlgate-cross-go { transform: translateX(5px); }
+.dlgate-cross-btn.is-done {
+    border-left-color: #58b384; border-color: #bfe6cf; background: #f0f9f4;
+    animation: none; opacity: 1; transform: none;
+}
+.dlgate-cross-btn.is-done .dlgate-cross-ic { background: #58b384; }
+.dlgate-cross-btn.is-done .dlgate-cross-txt em { color: #2e7d52; }
+.dlgate-cross-btn.is-done .dlgate-cross-go { color: #58b384; }

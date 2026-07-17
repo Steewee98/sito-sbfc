@@ -136,7 +136,7 @@
           '</div>' +
           '<p class="dlgate-tip" id="dlgate-tip" hidden>Si apre il PDF: tocca <strong>Condividi</strong> (l\'icona con la freccia in alto) e poi <strong>“Salva su File”</strong>.</p>' +
           '<div class="dlgate-cross" id="dlgate-cross" hidden>' +
-            '<div class="dlgate-cross-title">Prendi gratis anche le altre schede</div>' +
+            '<div class="dlgate-cross-title">&#127873; Prendi gratis anche le altre schede</div>' +
             '<div class="dlgate-cross-list" id="dlgate-cross-list"></div>' +
           '</div>' +
         '</div>' +
@@ -162,11 +162,18 @@
         el.type = 'button';
       }
       el.className = 'dlgate-cross-btn';
-      el.innerHTML = '<span class="ico">&#8595;</span> ' + t.label;
+      el.innerHTML =
+        '<span class="dlgate-cross-ic">&#8595;</span>' +
+        '<span class="dlgate-cross-txt"><strong>' + t.label + '</strong><em>Scarica gratis &middot; PDF</em></span>' +
+        '<span class="dlgate-cross-go">&rarr;</span>';
       el.addEventListener('click', function (e) {
         if (el.tagName === 'BUTTON') e.preventDefault();
+        if (el.classList.contains('is-done')) { deliver(t.slug, t.label); return; }
         deliver(t.slug, t.label);
         el.classList.add('is-done');
+        var em = el.querySelector('em'); if (em) em.textContent = 'Scaricata ✓';
+        var ic = el.querySelector('.dlgate-cross-ic'); if (ic) ic.innerHTML = '&#10003;';
+        var go = el.querySelector('.dlgate-cross-go'); if (go) go.innerHTML = '&#10003;';
       });
       list.appendChild(el);
     });
