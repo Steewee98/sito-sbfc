@@ -20,7 +20,11 @@
   function backendUrl() { return window.SBFC_BACKEND || DEFAULT_BACKEND; }
   // I download passano dal backend, che forza Content-Disposition: attachment
   // (il sito statico su Railway non riesce a settarlo -> su iOS aprirebbe l'anteprima).
-  function pdfUrl(tipo) { return backendUrl() + '/api/strumenti/' + cfg.slug + '/pdf?tipo=' + tipo; }
+  function pdfUrl(tipo) {
+    var u = backendUrl() + '/api/strumenti/' + cfg.slug + '/pdf?tipo=' + tipo;
+    if (IS_INAPP) u += '&inline=1';  // webview: PDF visualizzabile, poi Condividi → Salva
+    return u;
+  }
   var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
   var cfg = window.SBFC_TOOL || {};
   var pixelFired = false;
@@ -31,6 +35,12 @@
   // attachment (che nginx mette sui PDF modello).
   var IS_IOS = /iP(hone|od|ad)/.test(navigator.userAgent) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  // Browser in-app (Instagram/Facebook/…): NON hanno gestore download. Con
+  // l'header attachment non scaricano né mostrano nulla. Per loro apriamo il PDF
+  // in modalità inline (visualizzabile) in una nuova scheda: l'utente poi fa
+  // Condividi → Salva su File.
+  var IS_INAPP = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|Twitter|Snapchat|Pinterest|TikTok|musical_ly)/i.test(navigator.userAgent);
 
   function param(name) {
     try { return new URLSearchParams(location.search).get(name) || ''; } catch (e) { return ''; }
@@ -117,11 +127,14 @@
         '<div class="dlgate-done" id="dlgate-done" hidden>' +
           '<div class="dlgate-done-icon">&#10003;</div>' +
           '<h3 class="dlgate-title">Ecco la tua scheda</h3>' +
-          '<p class="dlgate-sub">Tocca il pulsante per scaricare il PDF:</p>' +
+          '<p class="dlgate-sub" id="dlgate-done-sub">Tocca il pulsante per scaricare il PDF:</p>' +
           '<div class="dlgate-fallback">' +
             '<a class="dlgate-fb-primary" id="dlgate-fb-vuoto" href="#">&#8595; Scarica il modello (PDF)</a>' +
             '<a class="dlgate-fb-secondary" id="dlgate-fb-esempio" href="#">Scarica l\'esempio compilato</a>' +
           '</div>' +
+          '<p class="dlgate-tip" id="dlgate-tip" hidden>Si apre il PDF: tocca <strong>Condividi</strong> ' +
+            '(l\'icona con la freccia) e poi <strong>“Salva su File”</strong>. ' +
+            'Oppure apri questa pagina in Safari/Chrome per scaricarlo direttamente.</p>' +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
@@ -180,25 +193,31 @@
       }
       errEl.hidden = true;
 
-      // Prepara i link del pannello "fatto" (pulsanti reali da toccare).
-      // Puntano al backend che serve il PDF come attachment -> iOS lo scarica.
+      // Prepara i link del pannello "fatto".
       var fbV = modal.querySelector('#dlgate-fb-vuoto');
       var fbE = modal.querySelector('#dlgate-fb-esempio');
       fbV.href = pdfUrl('vuoto');
       fbE.href = pdfUrl('esempio');
+      if (IS_INAPP) {
+        // webview: apri il PDF (inline) in una nuova scheda -> visualizzabile + Condividi/Salva
+        fbV.target = '_blank'; fbV.rel = 'noopener';
+        fbE.target = '_blank'; fbE.rel = 'noopener';
+        modal.querySelector('#dlgate-tip').hidden = false;
+        modal.querySelector('#dlgate-done-sub').textContent = 'Tocca per aprire il PDF:';
+        modal.querySelector('#dlgate-fb-vuoto').innerHTML = 'Apri il modello (PDF)';
+      }
 
       // Pixel Meta (una sola volta) + salvataggio lead in background (sendBeacon)
       firePixel();
       saveLead(email);
 
-      // Mostra subito il pannello con i pulsanti di download
+      // Mostra subito il pannello con i pulsanti
       formWrap.hidden = true;
       doneWrap.hidden = false;
 
-      // Auto-download SOLO dove funziona in modo affidabile (desktop/Android).
-      // Su iOS l'auto-download aprirebbe l'anteprima: lì il download parte dal
-      // tap dell'utente sul pulsante grande "Scarica il modello".
-      if (!IS_IOS) {
+      // Auto-download SOLO dove funziona in modo affidabile (desktop/Android non in-app).
+      // iOS e webview: parte dal tap dell'utente sul pulsante.
+      if (!IS_IOS && !IS_INAPP) {
         triggerDownload(pdfUrl('vuoto'), cfg.slug + '.pdf');
         setTimeout(function () { triggerDownload(pdfUrl('esempio'), cfg.slug + '-esempio.pdf'); }, 600);
       }

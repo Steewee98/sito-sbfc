@@ -3187,3 +3187,10 @@ ul { list-style: none; }
     .dlgate-card { padding: 34px 22px 26px; }
     .dlgate-title { font-size: 1.35rem; }
 }
+
+.dlgate-tip {
+    margin: 16px 0 0; padding: 12px 14px;
+    background: #fdf0e8; border-radius: 6px;
+    font-family: 'Inter', sans-serif; font-size: 0.82rem; line-height: 1.5; color: var(--ink);
+}
+.dlgate-tip strong { color: var(--accent-deep); }
