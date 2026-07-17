@@ -1,119 +1,112 @@
 /* ============================================================
    SB FOOD — Download gate per gli strumenti PDF dell'Academy
-   Flusso: click "Scarica" → modale (1 campo email + consenso) →
-   submit valido → download IMMEDIATO + salvataggio lead.
+   Flusso: click "Scarica" → modale (email + consenso) → submit →
+   download IMMEDIATO + salvataggio lead + cross-sell delle altre schede.
 
-   Download iOS-safe: NON navighiamo al PDF cross-dominio (iOS Safari ci
-   naviga sopra invece di scaricarlo). Il sito FETCHA i byte dal backend
-   (CORS ok) e li fa scaricare come blob STESSO-DOMINIO, forzato come dato
-   grezzo (octet-stream) così iOS lo salva invece di aprirlo in anteprima.
-   I byte sono pre-caricati all'apertura del modale → download istantaneo.
+   Download iOS-safe: il sito FETCHA i byte dal backend (CORS ok) e li fa
+   scaricare come blob STESSO-DOMINIO (octet-stream) così iOS li salva invece
+   di navigare al dominio del backend. PDF pre-caricati = download istantaneo.
 
-   Browser in-app (Instagram/FB): non hanno gestore download → apriamo il
-   PDF visualizzabile e l'utente fa Condividi → Salva su File.
+   Browser in-app (Instagram/FB): non hanno gestore download → apriamo il PDF
+   visualizzabile (Condividi → Salva su File).
 
-   Config per pagina (impostare prima di caricare questo file):
-     window.SBFC_TOOL = { slug, titolo, privacyHref };
+   Config per pagina: window.SBFC_TOOL = { slug, titolo, privacyHref };
    ============================================================ */
 (function () {
   var DEFAULT_BACKEND = 'https://web-production-f3794.up.railway.app';
   var cfg = window.SBFC_TOOL || {};
   var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-  var pixelFired = false;
 
-  // Browser in-app (Instagram/Facebook/…): niente gestore download.
+  // Schede scaricabili (per il cross-sell). Aggiungere qui i nuovi strumenti
+  // quando avranno PDF + pagina dedicata.
+  var TOOLS = window.SBFC_TOOLS || [
+    { slug: 'checklist-apertura-chiusura', label: 'Checklist Apertura & Chiusura' },
+    { slug: 'scheda-food-cost', label: 'Scheda Food Cost' },
+    { slug: 'scheda-ricetta', label: 'Scheda Ricetta' }
+  ];
+
   var IS_INAPP = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|Twitter|Snapchat|Pinterest|TikTok|musical_ly)/i.test(navigator.userAgent);
 
+  var leadEmail = '';          // email inserita (per il cross-sell senza reinserirla)
+  var pixelFired = {};         // slug -> true (un evento per scheda)
+
   function backendUrl() { return window.SBFC_BACKEND || DEFAULT_BACKEND; }
-  function pdfFetchUrl(tipo) { return backendUrl() + '/api/strumenti/' + cfg.slug + '/pdf?tipo=' + tipo; }
-  // URL visualizzabile (inline) per il webview
-  function pdfViewUrl(tipo) { return pdfFetchUrl(tipo) + '&inline=1'; }
+  function pdfFetchUrl(slug, tipo) { return backendUrl() + '/api/strumenti/' + slug + '/pdf?tipo=' + tipo; }
+  function pdfViewUrl(slug, tipo) { return pdfFetchUrl(slug, tipo) + '&inline=1'; }
 
   function param(name) {
     try { return new URLSearchParams(location.search).get(name) || ''; } catch (e) { return ''; }
   }
 
-  // ---- Pre-fetch dei PDF (così il download è istantaneo al submit) ----
-  var buffers = {};   // tipo -> ArrayBuffer
+  // ---- Pre-fetch / download stesso-dominio ----
+  var buffers = {};   // 'slug|tipo' -> ArrayBuffer
   var fetching = {};
-  function prefetch(tipo) {
-    if (IS_INAPP) return;                       // il webview usa la vista inline
-    if (buffers[tipo] || fetching[tipo]) return;
-    fetching[tipo] = true;
-    fetch(pdfFetchUrl(tipo)).then(function (r) { return r.ok ? r.arrayBuffer() : null; })
-      .then(function (b) { if (b) buffers[tipo] = b; fetching[tipo] = false; })
-      .catch(function () { fetching[tipo] = false; });
+  function prefetch(slug, tipo) {
+    if (IS_INAPP) return;
+    var k = slug + '|' + tipo;
+    if (buffers[k] || fetching[k]) return;
+    fetching[k] = true;
+    fetch(pdfFetchUrl(slug, tipo)).then(function (r) { return r.ok ? r.arrayBuffer() : null; })
+      .then(function (b) { if (b) buffers[k] = b; fetching[k] = false; })
+      .catch(function () { fetching[k] = false; });
   }
-
-  // Download stesso-dominio: blob octet-stream + attributo download.
-  function blobDownload(tipo, filename) {
-    var buf = buffers[tipo];
+  function blobDownload(slug, tipo, filename) {
+    var buf = buffers[slug + '|' + tipo];
     if (!buf) return false;
     try {
-      var blob = new Blob([buf], { type: 'application/octet-stream' });
-      var url = URL.createObjectURL(blob);
+      var url = URL.createObjectURL(new Blob([buf], { type: 'application/octet-stream' }));
       var a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.rel = 'noopener';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(function () {
-        if (a.parentNode) a.parentNode.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 3000);
+      a.href = url; a.download = filename; a.rel = 'noopener';
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { if (a.parentNode) a.parentNode.removeChild(a); URL.revokeObjectURL(url); }, 3000);
       return true;
     } catch (e) { return false; }
   }
-
-  // Scarica: se i byte non sono pronti, li recupera e poi scarica.
-  function doDownload(tipo, filename) {
-    if (blobDownload(tipo, filename)) return;
-    fetch(pdfFetchUrl(tipo)).then(function (r) { return r.ok ? r.arrayBuffer() : null; })
+  function doDownload(slug, tipo, filename) {
+    if (blobDownload(slug, tipo, filename)) return;
+    fetch(pdfFetchUrl(slug, tipo)).then(function (r) { return r.ok ? r.arrayBuffer() : null; })
       .then(function (b) {
-        if (b) { buffers[tipo] = b; if (blobDownload(tipo, filename)) return; }
-        window.location.href = pdfViewUrl(tipo);   // ultimo fallback
+        if (b) { buffers[slug + '|' + tipo] = b; if (blobDownload(slug, tipo, filename)) return; }
+        window.location.href = pdfViewUrl(slug, tipo);
       })
-      .catch(function () { window.location.href = pdfViewUrl(tipo); });
+      .catch(function () { window.location.href = pdfViewUrl(slug, tipo); });
   }
 
-  function saveLead(email) {
-    // Fire-and-forget via sendBeacon (text/plain) -> niente preflight CORS
-    // (inaffidabile nel webview IG/FB). Lato Flask: get_json(force=True).
+  function saveLead(email, slug) {
     var url = backendUrl() + '/api/lead-strumenti';
     var payload = JSON.stringify({
-      email: email,
-      strumento: cfg.slug,
-      consenso_marketing: true,
+      email: email, strumento: slug, consenso_marketing: true,
       referrer: document.referrer || '',
-      utm_source: param('utm_source'),
-      utm_medium: param('utm_medium'),
-      utm_campaign: param('utm_campaign')
+      utm_source: param('utm_source'), utm_medium: param('utm_medium'), utm_campaign: param('utm_campaign')
     });
     try {
-      if (navigator.sendBeacon) {
-        if (navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain' }))) return;
-      }
+      if (navigator.sendBeacon && navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain' }))) return;
     } catch (e) {}
-    try {
-      fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: payload, keepalive: true }).catch(function () {});
-    } catch (e) {}
+    try { fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: payload, keepalive: true }).catch(function () {}); } catch (e) {}
   }
 
-  function firePixel() {
-    if (pixelFired) return;
-    pixelFired = true;
-    try { if (window.fbq) window.fbq('trackCustom', 'DownloadStrumento', { strumento: cfg.slug }); } catch (e) {}
+  function firePixel(slug) {
+    if (pixelFired[slug]) return;
+    pixelFired[slug] = true;
+    try { if (window.fbq) window.fbq('trackCustom', 'DownloadStrumento', { strumento: slug }); } catch (e) {}
+  }
+
+  // Consegna una scheda: lead + pixel + download (o apertura nel webview)
+  function deliver(slug, label) {
+    if (leadEmail) saveLead(leadEmail, slug);
+    firePixel(slug);
+    if (IS_INAPP) {
+      try { window.open(pdfViewUrl(slug, 'vuoto'), '_blank'); } catch (e) {}
+    } else {
+      doDownload(slug, 'vuoto', slug + '.pdf');
+    }
   }
 
   function buildModal() {
     var privacyHref = (cfg.privacyHref || '../privacy-policy.html');
     var wrap = document.createElement('div');
-    wrap.id = 'dlgate';
-    wrap.className = 'dlgate';
-    wrap.setAttribute('role', 'dialog');
-    wrap.setAttribute('aria-modal', 'true');
-    wrap.setAttribute('aria-hidden', 'true');
+    wrap.id = 'dlgate'; wrap.className = 'dlgate';
+    wrap.setAttribute('role', 'dialog'); wrap.setAttribute('aria-modal', 'true'); wrap.setAttribute('aria-hidden', 'true');
     wrap.innerHTML =
       '<div class="dlgate-card">' +
         '<button type="button" class="dlgate-close" aria-label="Chiudi">&times;</button>' +
@@ -123,13 +116,11 @@
           '<p class="dlgate-sub">Inserisci l\'email e il PDF parte subito. Nessuna mail da controllare.</p>' +
           '<form id="dlgate-formEl" novalidate>' +
             '<div class="dlgate-field">' +
-              '<input type="email" id="dlgate-email" inputmode="email" autocomplete="email" ' +
-                'placeholder="La tua email" aria-label="La tua email" required>' +
+              '<input type="email" id="dlgate-email" inputmode="email" autocomplete="email" placeholder="La tua email" aria-label="La tua email" required>' +
             '</div>' +
             '<label class="dlgate-consent">' +
               '<input type="checkbox" id="dlgate-consent" required>' +
-              '<span>Acconsento a ricevere comunicazioni da SB Food Consulting ' +
-                '(<a href="' + privacyHref + '" target="_blank" rel="noopener">privacy</a>).</span>' +
+              '<span>Acconsento a ricevere comunicazioni da SB Food Consulting (<a href="' + privacyHref + '" target="_blank" rel="noopener">privacy</a>).</span>' +
             '</label>' +
             '<p class="dlgate-error" id="dlgate-error" hidden></p>' +
             '<button type="submit" class="dlgate-submit">Scarica ora &rarr;</button>' +
@@ -143,12 +134,43 @@
             '<a class="dlgate-fb-primary" id="dlgate-fb-vuoto" href="#">&#8595; Scarica il modello (PDF)</a>' +
             '<a class="dlgate-fb-secondary" id="dlgate-fb-esempio" href="#">Scarica l\'esempio compilato</a>' +
           '</div>' +
-          '<p class="dlgate-tip" id="dlgate-tip" hidden>Si apre il PDF: tocca <strong>Condividi</strong> ' +
-            '(l\'icona con la freccia in alto) e poi <strong>“Salva su File”</strong>.</p>' +
+          '<p class="dlgate-tip" id="dlgate-tip" hidden>Si apre il PDF: tocca <strong>Condividi</strong> (l\'icona con la freccia in alto) e poi <strong>“Salva su File”</strong>.</p>' +
+          '<div class="dlgate-cross" id="dlgate-cross" hidden>' +
+            '<div class="dlgate-cross-title">Prendi gratis anche le altre schede</div>' +
+            '<div class="dlgate-cross-list" id="dlgate-cross-list"></div>' +
+          '</div>' +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
     return wrap;
+  }
+
+  function renderCross(modal) {
+    var others = TOOLS.filter(function (t) { return t.slug !== cfg.slug; });
+    if (!others.length) return;
+    var box = modal.querySelector('#dlgate-cross');
+    var list = modal.querySelector('#dlgate-cross-list');
+    list.innerHTML = '';
+    others.forEach(function (t) {
+      prefetch(t.slug, 'vuoto');   // pronto per il click
+      var el;
+      if (IS_INAPP) {
+        el = document.createElement('a');
+        el.href = pdfViewUrl(t.slug, 'vuoto'); el.target = '_blank'; el.rel = 'noopener';
+      } else {
+        el = document.createElement('button');
+        el.type = 'button';
+      }
+      el.className = 'dlgate-cross-btn';
+      el.innerHTML = '<span class="ico">&#8595;</span> ' + t.label;
+      el.addEventListener('click', function (e) {
+        if (el.tagName === 'BUTTON') e.preventDefault();
+        deliver(t.slug, t.label);
+        el.classList.add('is-done');
+      });
+      list.appendChild(el);
+    });
+    box.hidden = false;
   }
 
   function init() {
@@ -164,20 +186,14 @@
     var fbE = modal.querySelector('#dlgate-fb-esempio');
 
     function open() {
-      formWrap.hidden = false;
-      doneWrap.hidden = true;
-      errEl.hidden = true;
-      modal.classList.add('is-open');
-      modal.setAttribute('aria-hidden', 'false');
+      formWrap.hidden = false; doneWrap.hidden = true; errEl.hidden = true;
+      modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      // pre-carica i PDF: al submit il download è istantaneo
-      prefetch('vuoto');
-      prefetch('esempio');
+      prefetch(cfg.slug, 'vuoto'); prefetch(cfg.slug, 'esempio');
       setTimeout(function () { emailEl.focus(); }, 60);
     }
     function close() {
-      modal.classList.remove('is-open');
-      modal.setAttribute('aria-hidden', 'true');
+      modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
     window.SBFCopenGate = open;
@@ -185,7 +201,6 @@
     Array.prototype.forEach.call(document.querySelectorAll('[data-open-gate]'), function (btn) {
       btn.addEventListener('click', function (e) { e.preventDefault(); open(); });
     });
-
     modal.querySelector('.dlgate-close').addEventListener('click', close);
     modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('is-open')) close(); });
@@ -193,38 +208,33 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var email = (emailEl.value || '').trim().toLowerCase();
-      if (!EMAIL_RE.test(email)) {
-        errEl.textContent = 'Inserisci un indirizzo email valido.';
-        errEl.hidden = false; emailEl.focus(); return;
-      }
-      if (!consentEl.checked) {
-        errEl.textContent = 'Serve il consenso per scaricare lo strumento.';
-        errEl.hidden = false; return;
-      }
+      if (!EMAIL_RE.test(email)) { errEl.textContent = 'Inserisci un indirizzo email valido.'; errEl.hidden = false; emailEl.focus(); return; }
+      if (!consentEl.checked) { errEl.textContent = 'Serve il consenso per scaricare lo strumento.'; errEl.hidden = false; return; }
       errEl.hidden = true;
+      leadEmail = email;
 
-      firePixel();
-      saveLead(email);
+      firePixel(cfg.slug);
+      saveLead(email, cfg.slug);
 
       formWrap.hidden = true;
       doneWrap.hidden = false;
 
       if (IS_INAPP) {
-        // Browser in-app: apre il PDF visualizzabile (il webview non scarica).
-        fbV.href = pdfViewUrl('vuoto'); fbV.target = '_blank'; fbV.rel = 'noopener';
-        fbE.href = pdfViewUrl('esempio'); fbE.target = '_blank'; fbE.rel = 'noopener';
+        fbV.href = pdfViewUrl(cfg.slug, 'vuoto'); fbV.target = '_blank'; fbV.rel = 'noopener';
+        fbE.href = pdfViewUrl(cfg.slug, 'esempio'); fbE.target = '_blank'; fbE.rel = 'noopener';
         modal.querySelector('#dlgate-tip').hidden = false;
         modal.querySelector('#dlgate-done-sub').textContent = 'Ho aperto il PDF in una nuova scheda:';
         fbV.innerHTML = 'Riapri il modello (PDF)';
         fbE.innerHTML = 'Apri l\'esempio compilato';
-        try { window.open(pdfViewUrl('vuoto'), '_blank'); } catch (e2) {}
+        try { window.open(pdfViewUrl(cfg.slug, 'vuoto'), '_blank'); } catch (e2) {}
       } else {
-        // Safari/desktop/Android: download stesso-dominio (blob) — parte da solo.
-        fbV.href = '#'; fbV.onclick = function (ev) { ev.preventDefault(); doDownload('vuoto', cfg.slug + '.pdf'); };
-        fbE.href = '#'; fbE.onclick = function (ev) { ev.preventDefault(); doDownload('esempio', cfg.slug + '-esempio.pdf'); };
-        doDownload('vuoto', cfg.slug + '.pdf');
-        setTimeout(function () { doDownload('esempio', cfg.slug + '-esempio.pdf'); }, 900);
+        fbV.href = '#'; fbV.onclick = function (ev) { ev.preventDefault(); doDownload(cfg.slug, 'vuoto', cfg.slug + '.pdf'); };
+        fbE.href = '#'; fbE.onclick = function (ev) { ev.preventDefault(); doDownload(cfg.slug, 'esempio', cfg.slug + '-esempio.pdf'); };
+        doDownload(cfg.slug, 'vuoto', cfg.slug + '.pdf');
+        setTimeout(function () { doDownload(cfg.slug, 'esempio', cfg.slug + '-esempio.pdf'); }, 900);
       }
+
+      renderCross(modal);
     });
   }
 

@@ -3194,3 +3194,19 @@ ul { list-style: none; }
     font-family: 'Inter', sans-serif; font-size: 0.82rem; line-height: 1.5; color: var(--ink);
 }
 .dlgate-tip strong { color: var(--accent-deep); }
+
+/* ── Download gate: cross-sell altre schede ── */
+.dlgate-cross { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+.dlgate-cross-title { font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); text-align: center; margin-bottom: 12px; }
+.dlgate-cross-list { display: flex; flex-direction: column; gap: 8px; }
+.dlgate-cross-btn {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+    background: var(--ivory); border: 1px solid var(--border); color: var(--dark);
+    padding: 12px 14px; border-radius: 4px; cursor: pointer; text-decoration: none;
+    font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
+    transition: border-color .2s var(--ease-out), color .2s var(--ease-out), background .2s var(--ease-out);
+}
+.dlgate-cross-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
+.dlgate-cross-btn .ico { color: var(--accent); font-weight: 700; }
+.dlgate-cross-btn.is-done { border-color: #58b384; color: #2e7d52; background: #f0f9f4; }
+.dlgate-cross-btn.is-done .ico { color: #58b384; }
