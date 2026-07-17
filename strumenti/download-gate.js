@@ -1,66 +1,85 @@
 /* ============================================================
    SB FOOD — Download gate per gli strumenti PDF dell'Academy
    Flusso: click "Scarica" → modale (1 campo email + consenso) →
-   submit valido → download IMMEDIATO nel browser + salvataggio lead.
+   submit valido → download IMMEDIATO + salvataggio lead.
 
-   NB webview Instagram/Facebook: il download DEVE partire dentro il
-   gesto utente (sincrono). Il salvataggio del lead e il pixel sono
-   fire-and-forget e NON bloccano il download.
+   Download iOS-safe: NON navighiamo al PDF cross-dominio (iOS Safari ci
+   naviga sopra invece di scaricarlo). Il sito FETCHA i byte dal backend
+   (CORS ok) e li fa scaricare come blob STESSO-DOMINIO, forzato come dato
+   grezzo (octet-stream) così iOS lo salva invece di aprirlo in anteprima.
+   I byte sono pre-caricati all'apertura del modale → download istantaneo.
+
+   Browser in-app (Instagram/FB): non hanno gestore download → apriamo il
+   PDF visualizzabile e l'utente fa Condividi → Salva su File.
 
    Config per pagina (impostare prima di caricare questo file):
-     window.SBFC_TOOL = {
-       slug: 'checklist-apertura-chiusura',
-       titolo: 'Checklist Apertura & Chiusura',
-       pdfVuoto: '../assets/pdf/risorse/checklist-apertura-chiusura.pdf',
-       pdfEsempio: '../assets/pdf/risorse/checklist-apertura-chiusura-esempio.pdf'
-     };
+     window.SBFC_TOOL = { slug, titolo, privacyHref };
    ============================================================ */
 (function () {
   var DEFAULT_BACKEND = 'https://web-production-f3794.up.railway.app';
-  function backendUrl() { return window.SBFC_BACKEND || DEFAULT_BACKEND; }
-  // I download passano dal backend, che forza Content-Disposition: attachment
-  // (il sito statico su Railway non riesce a settarlo -> su iOS aprirebbe l'anteprima).
-  function pdfUrl(tipo) {
-    var u = backendUrl() + '/api/strumenti/' + cfg.slug + '/pdf?tipo=' + tipo;
-    if (IS_INAPP) u += '&inline=1';  // webview: PDF visualizzabile, poi Condividi → Salva
-    return u;
-  }
-  var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
   var cfg = window.SBFC_TOOL || {};
+  var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
   var pixelFired = false;
 
-  // iOS (iPhone/iPad) ignora l'attributo `download` e apre il PDF in anteprima:
-  // l'auto-download programmatico NON funziona. Su iOS mostriamo subito il
-  // pulsante grande: il salvataggio parte dal tap reale + Content-Disposition
-  // attachment (che nginx mette sui PDF modello).
-  var IS_IOS = /iP(hone|od|ad)/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-  // Browser in-app (Instagram/Facebook/…): NON hanno gestore download. Con
-  // l'header attachment non scaricano né mostrano nulla. Per loro apriamo il PDF
-  // in modalità inline (visualizzabile) in una nuova scheda: l'utente poi fa
-  // Condividi → Salva su File.
+  // Browser in-app (Instagram/Facebook/…): niente gestore download.
   var IS_INAPP = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|Twitter|Snapchat|Pinterest|TikTok|musical_ly)/i.test(navigator.userAgent);
+
+  function backendUrl() { return window.SBFC_BACKEND || DEFAULT_BACKEND; }
+  function pdfFetchUrl(tipo) { return backendUrl() + '/api/strumenti/' + cfg.slug + '/pdf?tipo=' + tipo; }
+  // URL visualizzabile (inline) per il webview
+  function pdfViewUrl(tipo) { return pdfFetchUrl(tipo) + '&inline=1'; }
 
   function param(name) {
     try { return new URLSearchParams(location.search).get(name) || ''; } catch (e) { return ''; }
   }
 
-  function triggerDownload(url, filename) {
-    var a = document.createElement('a');
-    a.href = url;
-    a.setAttribute('download', filename || '');
-    a.rel = 'noopener';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () { if (a.parentNode) a.parentNode.removeChild(a); }, 0);
+  // ---- Pre-fetch dei PDF (così il download è istantaneo al submit) ----
+  var buffers = {};   // tipo -> ArrayBuffer
+  var fetching = {};
+  function prefetch(tipo) {
+    if (IS_INAPP) return;                       // il webview usa la vista inline
+    if (buffers[tipo] || fetching[tipo]) return;
+    fetching[tipo] = true;
+    fetch(pdfFetchUrl(tipo)).then(function (r) { return r.ok ? r.arrayBuffer() : null; })
+      .then(function (b) { if (b) buffers[tipo] = b; fetching[tipo] = false; })
+      .catch(function () { fetching[tipo] = false; });
+  }
+
+  // Download stesso-dominio: blob octet-stream + attributo download.
+  function blobDownload(tipo, filename) {
+    var buf = buffers[tipo];
+    if (!buf) return false;
+    try {
+      var blob = new Blob([buf], { type: 'application/octet-stream' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () {
+        if (a.parentNode) a.parentNode.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 3000);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  // Scarica: se i byte non sono pronti, li recupera e poi scarica.
+  function doDownload(tipo, filename) {
+    if (blobDownload(tipo, filename)) return;
+    fetch(pdfFetchUrl(tipo)).then(function (r) { return r.ok ? r.arrayBuffer() : null; })
+      .then(function (b) {
+        if (b) { buffers[tipo] = b; if (blobDownload(tipo, filename)) return; }
+        window.location.href = pdfViewUrl(tipo);   // ultimo fallback
+      })
+      .catch(function () { window.location.href = pdfViewUrl(tipo); });
   }
 
   function saveLead(email) {
-    // Fire-and-forget. IMPORTANTISSIMO per il webview Instagram/Facebook:
-    // usiamo sendBeacon con Blob text/plain -> richiesta "semplice", NIENTE
-    // preflight CORS (il preflight OPTIONS nel browser in-app è inaffidabile e
-    // faceva perdere gli eventi in silenzio). Lato Flask: get_json(force=True).
+    // Fire-and-forget via sendBeacon (text/plain) -> niente preflight CORS
+    // (inaffidabile nel webview IG/FB). Lato Flask: get_json(force=True).
     var url = backendUrl() + '/api/lead-strumenti';
     var payload = JSON.stringify({
       email: email,
@@ -73,25 +92,17 @@
     });
     try {
       if (navigator.sendBeacon) {
-        var blob = new Blob([payload], { type: 'text/plain' });
-        if (navigator.sendBeacon(url, blob)) return;
+        if (navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain' }))) return;
       }
     } catch (e) {}
-    // Fallback (browser desktop non-webview: il preflight qui funziona)
     try {
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: payload,
-        keepalive: true
-      }).catch(function () {});
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: payload, keepalive: true }).catch(function () {});
     } catch (e) {}
   }
 
   function firePixel() {
     if (pixelFired) return;
     pixelFired = true;
-    // Il pixel è consent-gated: window.fbq esiste solo dopo accettazione cookie.
     try { if (window.fbq) window.fbq('trackCustom', 'DownloadStrumento', { strumento: cfg.slug }); } catch (e) {}
   }
 
@@ -127,14 +138,13 @@
         '<div class="dlgate-done" id="dlgate-done" hidden>' +
           '<div class="dlgate-done-icon">&#10003;</div>' +
           '<h3 class="dlgate-title">Ecco la tua scheda</h3>' +
-          '<p class="dlgate-sub" id="dlgate-done-sub">Tocca il pulsante per scaricare il PDF:</p>' +
+          '<p class="dlgate-sub" id="dlgate-done-sub">Se il download non parte, tocca qui:</p>' +
           '<div class="dlgate-fallback">' +
             '<a class="dlgate-fb-primary" id="dlgate-fb-vuoto" href="#">&#8595; Scarica il modello (PDF)</a>' +
             '<a class="dlgate-fb-secondary" id="dlgate-fb-esempio" href="#">Scarica l\'esempio compilato</a>' +
           '</div>' +
           '<p class="dlgate-tip" id="dlgate-tip" hidden>Si apre il PDF: tocca <strong>Condividi</strong> ' +
-            '(l\'icona con la freccia) e poi <strong>“Salva su File”</strong>. ' +
-            'Oppure apri questa pagina in Safari/Chrome per scaricarlo direttamente.</p>' +
+            '(l\'icona con la freccia in alto) e poi <strong>“Salva su File”</strong>.</p>' +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
@@ -144,13 +154,14 @@
   function init() {
     if (!cfg.slug) return;
     var modal = buildModal();
-    var card = modal.querySelector('.dlgate-card');
     var formWrap = modal.querySelector('.dlgate-form');
     var doneWrap = modal.querySelector('#dlgate-done');
     var form = modal.querySelector('#dlgate-formEl');
     var emailEl = modal.querySelector('#dlgate-email');
     var consentEl = modal.querySelector('#dlgate-consent');
     var errEl = modal.querySelector('#dlgate-error');
+    var fbV = modal.querySelector('#dlgate-fb-vuoto');
+    var fbE = modal.querySelector('#dlgate-fb-esempio');
 
     function open() {
       formWrap.hidden = false;
@@ -159,6 +170,9 @@
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      // pre-carica i PDF: al submit il download è istantaneo
+      prefetch('vuoto');
+      prefetch('esempio');
       setTimeout(function () { emailEl.focus(); }, 60);
     }
     function close() {
@@ -168,7 +182,6 @@
     }
     window.SBFCopenGate = open;
 
-    // Aggancia tutti i bottoni "Scarica" della pagina
     Array.prototype.forEach.call(document.querySelectorAll('[data-open-gate]'), function (btn) {
       btn.addEventListener('click', function (e) { e.preventDefault(); open(); });
     });
@@ -182,49 +195,35 @@
       var email = (emailEl.value || '').trim().toLowerCase();
       if (!EMAIL_RE.test(email)) {
         errEl.textContent = 'Inserisci un indirizzo email valido.';
-        errEl.hidden = false;
-        emailEl.focus();
-        return;
+        errEl.hidden = false; emailEl.focus(); return;
       }
       if (!consentEl.checked) {
         errEl.textContent = 'Serve il consenso per scaricare lo strumento.';
-        errEl.hidden = false;
-        return;
+        errEl.hidden = false; return;
       }
       errEl.hidden = true;
 
-      // Link del pannello "fatto" (fallback manuale).
-      var fbV = modal.querySelector('#dlgate-fb-vuoto');
-      var fbE = modal.querySelector('#dlgate-fb-esempio');
-      fbV.href = pdfUrl('vuoto');
-      fbE.href = pdfUrl('esempio');
-
-      // Pixel + salvataggio lead (sendBeacon)
       firePixel();
       saveLead(email);
 
-      // Mostra il pannello (conferma + fallback)
       formWrap.hidden = true;
       doneWrap.hidden = false;
 
-      // DOWNLOAD SUBITO, senza secondo tap — dentro il gesto utente (submit):
       if (IS_INAPP) {
-        // Browser in-app (Instagram/FB): NON hanno gestore download. Apriamo il
-        // PDF visualizzabile: da lì Condividi -> Salva su File (limite del webview).
-        fbV.target = '_blank'; fbV.rel = 'noopener';
-        fbE.target = '_blank'; fbE.rel = 'noopener';
+        // Browser in-app: apre il PDF visualizzabile (il webview non scarica).
+        fbV.href = pdfViewUrl('vuoto'); fbV.target = '_blank'; fbV.rel = 'noopener';
+        fbE.href = pdfViewUrl('esempio'); fbE.target = '_blank'; fbE.rel = 'noopener';
         modal.querySelector('#dlgate-tip').hidden = false;
         modal.querySelector('#dlgate-done-sub').textContent = 'Ho aperto il PDF in una nuova scheda:';
-        modal.querySelector('#dlgate-fb-vuoto').innerHTML = 'Riapri il modello (PDF)';
-        try { window.open(pdfUrl('vuoto'), '_blank'); } catch (e) {}
-      } else if (IS_IOS) {
-        // Safari iOS: l'header attachment fa partire il download navigando all'URL
-        // (la pagina resta, compare la barra di download).
-        window.location.href = pdfUrl('vuoto');
+        fbV.innerHTML = 'Riapri il modello (PDF)';
+        fbE.innerHTML = 'Apri l\'esempio compilato';
+        try { window.open(pdfViewUrl('vuoto'), '_blank'); } catch (e2) {}
       } else {
-        // Desktop / Android
-        triggerDownload(pdfUrl('vuoto'), cfg.slug + '.pdf');
-        setTimeout(function () { triggerDownload(pdfUrl('esempio'), cfg.slug + '-esempio.pdf'); }, 600);
+        // Safari/desktop/Android: download stesso-dominio (blob) — parte da solo.
+        fbV.href = '#'; fbV.onclick = function (ev) { ev.preventDefault(); doDownload('vuoto', cfg.slug + '.pdf'); };
+        fbE.href = '#'; fbE.onclick = function (ev) { ev.preventDefault(); doDownload('esempio', cfg.slug + '-esempio.pdf'); };
+        doDownload('vuoto', cfg.slug + '.pdf');
+        setTimeout(function () { doDownload('esempio', cfg.slug + '-esempio.pdf'); }, 900);
       }
     });
   }
