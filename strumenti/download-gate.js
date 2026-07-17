@@ -193,31 +193,36 @@
       }
       errEl.hidden = true;
 
-      // Prepara i link del pannello "fatto".
+      // Link del pannello "fatto" (fallback manuale).
       var fbV = modal.querySelector('#dlgate-fb-vuoto');
       var fbE = modal.querySelector('#dlgate-fb-esempio');
       fbV.href = pdfUrl('vuoto');
       fbE.href = pdfUrl('esempio');
-      if (IS_INAPP) {
-        // webview: apri il PDF (inline) in una nuova scheda -> visualizzabile + Condividi/Salva
-        fbV.target = '_blank'; fbV.rel = 'noopener';
-        fbE.target = '_blank'; fbE.rel = 'noopener';
-        modal.querySelector('#dlgate-tip').hidden = false;
-        modal.querySelector('#dlgate-done-sub').textContent = 'Tocca per aprire il PDF:';
-        modal.querySelector('#dlgate-fb-vuoto').innerHTML = 'Apri il modello (PDF)';
-      }
 
-      // Pixel Meta (una sola volta) + salvataggio lead in background (sendBeacon)
+      // Pixel + salvataggio lead (sendBeacon)
       firePixel();
       saveLead(email);
 
-      // Mostra subito il pannello con i pulsanti
+      // Mostra il pannello (conferma + fallback)
       formWrap.hidden = true;
       doneWrap.hidden = false;
 
-      // Auto-download SOLO dove funziona in modo affidabile (desktop/Android non in-app).
-      // iOS e webview: parte dal tap dell'utente sul pulsante.
-      if (!IS_IOS && !IS_INAPP) {
+      // DOWNLOAD SUBITO, senza secondo tap — dentro il gesto utente (submit):
+      if (IS_INAPP) {
+        // Browser in-app (Instagram/FB): NON hanno gestore download. Apriamo il
+        // PDF visualizzabile: da lì Condividi -> Salva su File (limite del webview).
+        fbV.target = '_blank'; fbV.rel = 'noopener';
+        fbE.target = '_blank'; fbE.rel = 'noopener';
+        modal.querySelector('#dlgate-tip').hidden = false;
+        modal.querySelector('#dlgate-done-sub').textContent = 'Ho aperto il PDF in una nuova scheda:';
+        modal.querySelector('#dlgate-fb-vuoto').innerHTML = 'Riapri il modello (PDF)';
+        try { window.open(pdfUrl('vuoto'), '_blank'); } catch (e) {}
+      } else if (IS_IOS) {
+        // Safari iOS: l'header attachment fa partire il download navigando all'URL
+        // (la pagina resta, compare la barra di download).
+        window.location.href = pdfUrl('vuoto');
+      } else {
+        // Desktop / Android
         triggerDownload(pdfUrl('vuoto'), cfg.slug + '.pdf');
         setTimeout(function () { triggerDownload(pdfUrl('esempio'), cfg.slug + '-esempio.pdf'); }, 600);
       }
