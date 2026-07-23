@@ -7,12 +7,12 @@
     <title>SB Food Consulting | Consulenza Gestione Ristoranti Roma</title>
     <meta name="description" content="Consulenza operativa per ristoratori italiani. Food cost, menu management, avviamento locali, formazione personale. 35 anni di esperienza. Roma.">
     <meta name="keywords" content="consulenza ristorante, gestione ristorante, food cost, menu management, consulente ristorazione Roma, avviamento ristorante">
-    <link rel="canonical" href="https://www.sbfoodconsulting.com/index.html">
+    <link rel="canonical" href="https://www.sbfoodconsulting.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SB Food Consulting">
     <meta property="og:title" content="SB Food Consulting | Consulenza Gestione Ristoranti Roma">
     <meta property="og:description" content="Consulenza operativa per ristoratori italiani. Food cost, menu management, avviamento locali, formazione personale. 35 anni di esperienza. Roma.">
-    <meta property="og:url" content="https://www.sbfoodconsulting.com/index.html">
+    <meta property="og:url" content="https://www.sbfoodconsulting.com/">
     <meta property="og:image" content="https://www.sbfoodconsulting.com/assets/logo/logo-blu.png">
     <meta property="og:locale" content="it_IT">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -337,7 +337,7 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Organization",
+      "@type": ["Organization", "ProfessionalService"],
       "@id": "https://www.sbfoodconsulting.com/#organization",
       "name": "BRAGHETTA FOOD & CONSULTING S.R.L.",
       "alternateName": "SB Food Consulting",
@@ -354,7 +354,12 @@
         "addressRegion": "RM",
         "addressCountry": "IT"
       },
-      "areaServed": { "@type": "Country", "name": "Italia" },
+      "areaServed": [
+        { "@type": "Country", "name": "Italia" },
+        { "@type": "City", "name": "Roma" }
+      ],
+      "priceRange": "€€",
+      "serviceType": "Consulenza per ristoranti: avviamento, food cost, gestione del personale, formazione",
       "founder": { "@id": "https://www.sbfoodconsulting.com/#simone-braghetta" },
       "sameAs": [
         "https://www.instagram.com/sbfoodconsulting",
