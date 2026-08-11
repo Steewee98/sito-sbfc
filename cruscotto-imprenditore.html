@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Il Cruscotto dell'Imprenditore — la guida per imprenditori | SB Consulting</title>
+<meta name="description" content="La guida pratica per capire, in meno di 30 minuti al mese, se la tua attività sta davvero funzionando. 12 aree di gestione, test iniziale, azioni da 7 giorni. Per imprese di ogni settore. PDF, 25€.">
+<link rel="canonical" href="https://www.sbfoodconsulting.com/cruscotto-imprenditore">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Il Cruscotto dell'Imprenditore — la guida">
+<meta property="og:description" content="In meno di 30 minuti al mese sai dove stai guadagnando, dove stai perdendo e quale decisione prendere. Per imprese di ogni settore. Guida in PDF, 25€.">
+<meta property="og:url" content="https://www.sbfoodconsulting.com/cruscotto-imprenditore">
+<meta property="og:image" content="https://www.sbfoodconsulting.com/assets/img/cruscotto/cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   IL CRUSCOTTO DELL'IMPRENDITORE — landing SB Consulting
+   Brand autonomo (imprenditoria, non food). Concept: il "cruscotto"
+   — hero cinematografico con quadro strumenti animato. Playfair + Inter.
+   Stile isolato: nessuna dipendenza da style.css del sito food.
+   ============================================================ */
+:root{
+  --ink:#22222a;--ink-soft:#54545e;--ink-faint:#8a8a93;
+  --cream:#f4efe4;--paper:#fbf9f3;
+  --rust:#c0552d;--rust-2:#d5622f;--rust-deep:#8c3a1f;
+  --green:#3a7d5f;--gold:#d3a24a;
+  --dark:#1d1a19;--dark-2:#26211f;--dark-line:rgba(244,239,228,.12);
+  --line:rgba(34,34,42,.12);--line-soft:rgba(34,34,42,.07);
+  --shadow:0 30px 70px -28px rgba(34,18,8,.45);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Inter",system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;font-weight:700;line-height:1.06;margin:0;letter-spacing:-.012em}
+p{margin:0}a{color:inherit}
+.wrap{width:min(1140px,92vw);margin-inline:auto}
+.kicker{font-size:.72rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--rust);display:inline-flex;align-items:center;gap:.6em}
+.kicker::before{content:"";width:26px;height:2px;background:currentColor;display:inline-block}
+.kicker.on-dark{color:var(--gold)}
+
+/* ---------- Header ---------- */
+.hd{position:fixed;inset:0 0 auto;z-index:60;transition:background .35s,box-shadow .35s,border-color .35s;
+  border-bottom:1px solid transparent}
+.hd-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:baseline;gap:.55rem;text-decoration:none;color:#fff;transition:color .35s}
+.brand b{font-weight:800;letter-spacing:.16em;font-size:.82rem;text-transform:uppercase}
+.brand span{font-family:"Playfair Display";font-style:italic;font-size:.98rem;opacity:.8}
+.hd-cta{font-size:.85rem;font-weight:600;text-decoration:none;color:#1d1a19;background:var(--gold);
+  padding:.6rem 1.2rem;border-radius:999px;transition:transform .2s,background .2s;white-space:nowrap}
+.hd-cta:hover{transform:translateY(-1px);background:#e0b45c}
+.hd.solid{background:rgba(251,249,243,.9);backdrop-filter:saturate(150%) blur(12px);
+  border-bottom-color:var(--line-soft);box-shadow:0 8px 30px -20px rgba(0,0,0,.3)}
+.hd.solid .brand{color:var(--ink)}
+.hd.solid .hd-cta{background:var(--ink);color:#fff}
+@media(max-width:560px){.hd-cta{display:none}}
+
+/* ---------- HERO (dark, cinematic) ---------- */
+.hero{position:relative;background:var(--dark);color:#f4efe4;padding:clamp(7rem,12vw,9rem) 0 clamp(3rem,6vw,5rem);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(90% 70% at 88% 0%,rgba(213,98,47,.42),transparent 55%),
+    radial-gradient(70% 60% at 15% 100%,rgba(58,125,95,.16),transparent 60%),
+    linear-gradient(180deg,#211d1b,#171413)}
+.hero::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(rgba(244,239,228,.05) 1px,transparent 1px);background-size:4px 4px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.7),transparent 70%)}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
+.hero h1{font-size:clamp(2.7rem,6.6vw,5rem);margin:1.1rem 0 0;color:#fff}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-lead{font-size:clamp(1.06rem,1.7vw,1.32rem);color:rgba(244,239,228,.78);margin-top:1.4rem;max-width:36ch}
+.pills{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.9rem}
+.pill{font-size:.8rem;font-weight:500;color:rgba(244,239,228,.9);background:rgba(244,239,228,.06);
+  border:1px solid var(--dark-line);border-radius:999px;padding:.44rem .95rem;white-space:nowrap}
+.pill b{color:var(--gold);font-weight:700}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.3rem;margin-top:2.2rem}
+.btn{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;border:none;font-family:inherit;
+  font-size:1.03rem;font-weight:600;color:#fff;background:var(--rust);padding:1rem 1.8rem;border-radius:999px;
+  text-decoration:none;box-shadow:0 16px 30px -12px rgba(192,85,45,.65);
+  transition:transform .2s,background .2s,box-shadow .2s}
+.btn:hover{background:var(--rust-2);transform:translateY(-2px);box-shadow:0 22px 40px -14px rgba(213,98,47,.7)}
+.btn .arw{transition:transform .2s}.btn:hover .arw{transform:translateX(4px)}
+.btn[disabled]{opacity:.7;cursor:wait;transform:none}
+.cta-note{font-size:.86rem;color:rgba(244,239,228,.55)}
+.cta-note b{color:rgba(244,239,228,.85);font-weight:600}
+
+.price-tag{background:rgba(255,255,255,.22);border-radius:999px;padding:.08rem .55rem;font-weight:700;font-size:.92em;line-height:1.6}
+.price-block{margin-top:2.1rem;display:inline-flex;flex-direction:column;align-items:center;gap:1.1rem}
+.price-big{font-family:"Playfair Display";font-weight:800;font-size:clamp(2.6rem,6vw,3.8rem);color:#fff;line-height:1;
+  display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.price-big span{font-family:"Inter";font-weight:500;font-size:.9rem;color:rgba(244,239,228,.6);letter-spacing:.02em}
+
+/* ---- instrument cluster ---- */
+.cluster{position:relative}
+.cluster-card{position:relative;background:linear-gradient(160deg,rgba(46,40,38,.92),rgba(24,20,19,.92));
+  border:1px solid var(--dark-line);border-radius:22px;padding:1.6rem 1.6rem 1.4rem;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05)}
+.cluster-top{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(244,239,228,.5);margin-bottom:.4rem}
+.cluster-top .live{display:inline-flex;align-items:center;gap:.4rem}
+.cluster-top .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(58,125,95,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(58,125,95,.5)}70%{box-shadow:0 0 0 8px rgba(58,125,95,0)}100%{box-shadow:0 0 0 0 rgba(58,125,95,0)}}
+.gauge{display:flex;flex-direction:column;align-items:center;padding:.4rem 0 .2rem}
+.gauge svg{width:100%;max-width:280px;height:auto}
+.gauge-arc-bg{fill:none;stroke:rgba(244,239,228,.1);stroke-width:14;stroke-linecap:round}
+/* arco e lancetta sono pilotati dal JS (riempimento, colore, angolo sincronizzati) */
+.gauge-arc{fill:none;stroke:#3a7d5f;stroke-width:14;stroke-linecap:round}
+.needle{transform-box:fill-box;transform-origin:50% 100%;transform:rotate(-80deg);will-change:transform}
+.gauge-label{text-align:center;margin-top:-.6rem}
+.gauge-label .g-k{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,239,228,.5)}
+.gauge-label .g-v{font-family:"Playfair Display";font-style:italic;font-size:1.5rem;color:#fff;margin-top:.1rem}
+.gauge-label .g-v small{color:var(--green);font-style:normal;font-family:"Inter";font-weight:700;font-size:.9rem}
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-top:1.1rem}
+.kpi{background:rgba(244,239,228,.05);border:1px solid var(--dark-line);border-radius:12px;padding:.7rem .7rem}
+.kpi .k-l{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,239,228,.5)}
+.kpi .k-v{font-weight:700;font-size:1.05rem;color:#fff;margin-top:.2rem;font-variant-numeric:tabular-nums}
+.kpi .k-d{font-size:.68rem;font-weight:600;margin-top:.1rem}
+.kpi .k-d.up{color:#6cc39a}.kpi .k-d.dn{color:#e88b6a}
+.cluster-foot{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;
+  padding-top:.9rem;border-top:1px solid var(--dark-line);font-size:.7rem;color:rgba(244,239,228,.5)}
+.cluster-foot b{color:var(--gold)}
+.cluster::after{content:"Anteprima · programma interattivo";position:absolute;bottom:-14px;left:50%;
+  transform:translateX(-50%);background:var(--gold);color:#1d1a19;font-size:.68rem;font-weight:700;
+  letter-spacing:.02em;padding:.4rem .9rem;border-radius:999px;white-space:nowrap;box-shadow:0 10px 24px -10px rgba(0,0,0,.6)}
+@media(max-width:880px){
+  .hero-grid{grid-template-columns:1fr;gap:3rem}
+  .cluster{order:-1;max-width:420px;margin-inline:auto;width:100%}
+  .hero-lead{max-width:none}
+}
+
+/* ---------- stat strip ---------- */
+.strip{background:var(--rust);color:#fff}
+.strip-in{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding:1.6rem 0}
+.stat{text-align:center;padding:.2rem}
+.stat .s-n{font-family:"Playfair Display";font-weight:800;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1}
+.stat .s-l{font-size:.78rem;letter-spacing:.04em;color:rgba(255,255,255,.82);margin-top:.35rem}
+.strip .stat+.stat{border-left:1px solid rgba(255,255,255,.18)}
+@media(max-width:640px){.strip-in{grid-template-columns:1fr 1fr;gap:0}
+  .strip .stat{padding:1rem;border-top:1px solid rgba(255,255,255,.18)}
+  .strip .stat:nth-child(odd){border-left:none}
+  .strip .stat:nth-child(-n+2){border-top:none}}
+
+/* ---------- sections ---------- */
+section{padding:clamp(3.2rem,6.5vw,6rem) 0}
+.band{background:var(--cream)}
+.sec-head{max-width:58ch}
+.sec-head h2{font-size:clamp(2rem,3.8vw,3rem);margin-top:.8rem}
+.sec-head p{color:var(--ink-soft);margin-top:1rem;font-size:1.08rem}
+.center{text-align:center;margin-inline:auto}
+.center .kicker{justify-content:center}
+
+/* promise */
+.promise-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:clamp(2rem,5vw,4.5rem);align-items:start}
+.promise-quote{font-size:clamp(1.6rem,3.1vw,2.35rem);line-height:1.24;max-width:20ch;margin-top:1.1rem}
+.promise-quote em{font-style:italic;color:var(--rust)}
+.semaforo{display:grid;gap:.7rem;margin-top:2rem}
+.sem{display:flex;align-items:center;gap:.75rem;font-size:.93rem;color:var(--ink-soft);
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:.75rem 1rem;
+  box-shadow:0 10px 24px -20px rgba(0,0,0,.4)}
+.sem i{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:0 0 0 4px rgba(0,0,0,.03)}
+.sem.v i{background:var(--green)}.sem.g i{background:var(--gold)}.sem.r i{background:var(--rust)}
+.sem b{color:var(--ink)}
+.benefits{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.benefit{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.4rem;
+  transition:transform .25s,box-shadow .25s,border-color .25s}
+.benefit:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(192,85,45,.35)}
+.benefit .b-ic{font-family:"Playfair Display";font-style:italic;font-weight:700;color:var(--rust);font-size:1.1rem}
+.benefit h3{font-family:"Inter";font-weight:700;font-size:1.05rem;margin-top:.3rem}
+.benefit p{color:var(--ink-soft);font-size:.93rem;margin-top:.35rem}
+@media(max-width:820px){.promise-grid{grid-template-columns:1fr;gap:2.4rem}}
+@media(max-width:520px){.benefits{grid-template-columns:1fr}}
+
+/* 12 aree */
+.aree{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(2rem,4vw,4rem);margin-top:clamp(1.5rem,3vw,2.5rem)}
+.area{display:grid;grid-template-columns:auto 1fr;gap:1.1rem;align-items:baseline;
+  padding:1.15rem .4rem;border-top:1px solid var(--line);transition:background .2s}
+.area:hover{background:rgba(192,85,45,.04)}
+.area .num{font-family:"Playfair Display";font-weight:700;font-style:italic;font-size:1.6rem;color:var(--rust);min-width:1.5em}
+.area h3{font-family:"Inter";font-weight:600;font-size:1.05rem}
+.area p{color:var(--ink-soft);font-size:.92rem;margin-top:.15rem}
+@media(max-width:720px){.aree{grid-template-columns:1fr}}
+
+/* estratto */
+.extract{background:var(--dark);color:#f4efe4}
+.extract-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
+.extract h2{color:#fff;font-size:clamp(1.9rem,3.6vw,2.8rem)}
+.extract p{color:rgba(244,239,228,.75);margin-top:1rem;font-size:1.05rem}
+.extract .method{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.8rem}
+.chip{font-size:.82rem;background:rgba(244,239,228,.06);border:1px solid var(--dark-line);
+  border-radius:999px;padding:.5rem 1rem;color:rgba(244,239,228,.9)}
+.chip b{color:var(--gold)}
+.spread{position:relative;justify-self:center}
+.spread img{display:block;width:min(360px,88%);border-radius:10px;box-shadow:0 40px 90px -30px rgba(0,0,0,.8);
+  transform:rotate(-2deg);border:1px solid rgba(0,0,0,.3)}
+.spread::before{content:"Capitolo 01 · La salute reale dell'impresa";position:absolute;top:-16px;left:8%;z-index:2;
+  background:var(--rust);color:#fff;font-size:.7rem;font-weight:600;padding:.4rem .85rem;border-radius:999px;
+  box-shadow:0 12px 24px -10px rgba(0,0,0,.6)}
+@media(max-width:820px){.extract-grid{grid-template-columns:1fr;gap:2.8rem}.spread{order:-1}}
+
+/* percorso */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:clamp(1.5rem,3vw,2.5rem);counter-reset:s}
+.step{position:relative;padding:1.6rem 1.15rem 1.3rem;background:var(--paper);border:1px solid var(--line);
+  border-radius:16px;transition:transform .25s,box-shadow .25s}
+.step:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.step .s-n{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
+  background:var(--rust);color:#fff;font-weight:700;font-size:.9rem;margin-bottom:.7rem}
+.step h3{font-family:"Inter";font-weight:600;font-size:.98rem}
+@media(max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* CTA band + demo */
+.cta-band{position:relative;background:var(--dark-2);color:#f4efe4;text-align:center;overflow:hidden}
+.cta-band::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(70% 90% at 50% -10%,rgba(213,98,47,.35),transparent 60%)}
+.cta-band .wrap{position:relative;z-index:1}
+.cta-band h2{color:#fff;font-size:clamp(2rem,3.8vw,3rem);max-width:20ch;margin-inline:auto}
+.cta-band>.wrap>p{color:rgba(244,239,228,.72);margin:1.1rem auto 0;max-width:48ch}
+.cta-band .btn{margin-top:2.1rem}
+.cta-band .cta-note{margin-top:1rem}
+.demo{margin-top:2.8rem;max-width:580px;margin-inline:auto;background:rgba(244,239,228,.05);
+  border:1px solid var(--dark-line);border-radius:var(--radius);padding:1.9rem;text-align:left}
+.demo.is-hidden{display:none}
+.demo-tag{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.demo h3{color:#fff;font-size:1.4rem;margin:.5rem 0 .3rem}
+.demo>.demo-form>p{color:rgba(244,239,228,.7);font-size:.95rem}
+.demo form{display:grid;gap:.7rem;margin-top:1.2rem}
+.demo .row2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media(max-width:480px){.demo .row2{grid-template-columns:1fr}}
+.demo input{width:100%;font-family:inherit;font-size:.95rem;padding:.85rem .95rem;border-radius:10px;
+  border:1px solid rgba(244,239,228,.2);background:rgba(0,0,0,.25);color:#fff}
+.demo input::placeholder{color:rgba(244,239,228,.45)}
+.demo input:focus{outline:none;border-color:var(--rust)}
+.demo .consent{display:flex;gap:.6rem;align-items:flex-start;font-size:.8rem;color:rgba(244,239,228,.65);line-height:1.5}
+.demo .consent a{color:var(--gold)}.demo .consent input{width:auto;flex:none;margin-top:.2rem}
+.demo button{margin-top:.3rem;width:100%;justify-content:center}
+.demo-err{color:#f2a98d;font-size:.85rem;display:none}
+.demo-ok{display:none;text-align:center;padding:1rem 0}
+.demo-ok .ok-ic{width:50px;height:50px;border-radius:50%;background:var(--green);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 1rem}
+.demo-ok h3{color:#fff}.demo-ok p{color:rgba(244,239,228,.7);margin-top:.4rem}
+
+/* footer */
+.ft{background:var(--paper);border-top:1px solid var(--line);padding:2.6rem 0;font-size:.85rem;color:var(--ink-faint)}
+.ft-in{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center}
+.ft b{color:var(--ink-soft)}
+.ft a{color:var(--ink-soft);text-decoration:none}.ft a:hover{color:var(--rust)}
+.ft .ft-links{display:flex;gap:1.4rem}
+
+/* reveal */
+[data-reveal]{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-d="1"]{transition-delay:.08s}[data-reveal][data-d="2"]{transition-delay:.16s}
+[data-reveal][data-d="3"]{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;transition:none}
+  .needle,.gauge-arc{transition:none}.gauge.live .needle{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="hd" id="hd">
+  <div class="wrap hd-in">
+    <a class="brand" href="#top"><b>SB Consulting</b><span>Il Cruscotto</span></a>
+    <a class="hd-cta" href="#acquista-band" data-buy>Acquista · €25</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="kicker on-dark" data-reveal>Guida operativa · per imprese di ogni settore</span>
+        <h1 data-reveal data-d="1">Il Cruscotto<br>dell'<em>Imprenditore</em></h1>
+        <p class="hero-lead" data-reveal data-d="2">La guida pratica per capire, in meno di 30 minuti al mese, se la tua attività sta davvero funzionando.</p>
+        <div class="pills" data-reveal data-d="2">
+          <span class="pill"><b>12</b> aree di gestione</span>
+          <span class="pill">Test iniziale</span>
+          <span class="pill">Azioni da 7 giorni</span>
+          <span class="pill">Il semaforo aziendale</span>
+        </div>
+        <div class="cta-row" data-reveal data-d="3">
+          <a class="btn" href="#acquista-band" data-buy>
+            <span class="btn-label">Acquista la guida</span> <span class="price-tag">€25</span> <span class="arw">&rarr;</span>
+          </a>
+          <span class="cta-note"><b>Pagamento sicuro</b> · consegna subito dopo l'acquisto</span>
+        </div>
+      </div>
+
+      <!-- Quadro strumenti animato -->
+      <div class="cluster" data-reveal data-d="1">
+        <div class="cluster-card">
+          <div class="cluster-top">
+            <span>Cruscotto dell'impresa</span>
+            <span class="live"><span class="dot"></span> Live</span>
+          </div>
+          <div class="gauge" id="gauge">
+            <svg viewBox="0 0 240 140" aria-hidden="true">
+              <defs>
+                <linearGradient id="gg" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#d3a24a"/><stop offset="1" stop-color="#3a7d5f"/>
+                </linearGradient>
+              </defs>
+              <path class="gauge-arc-bg" d="M20 130 A100 100 0 0 1 220 130"/>
+              <path class="gauge-arc" id="arc" d="M20 130 A100 100 0 0 1 220 130"/>
+              <g class="needle" id="needle">
+                <rect x="118" y="52" width="4" height="80" rx="2" fill="#f4efe4"/>
+              </g>
+              <circle cx="120" cy="130" r="8" fill="#f4efe4"/>
+            </svg>
+            <div class="gauge-label">
+              <div class="g-k">Salute azienda</div>
+              <div class="g-v">Eccellente <small>▲</small></div>
+            </div>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><div class="k-l">Ricavi</div><div class="k-v" data-count="58750" data-prefix="€ ">€ 0</div><div class="k-d up">+12,4%</div></div>
+            <div class="kpi"><div class="k-l">Margine</div><div class="k-v" data-count="62" data-suffix="%">0%</div><div class="k-d up">+5,3%</div></div>
+            <div class="kpi"><div class="k-l">Obiettivo</div><div class="k-v" data-count="117" data-suffix="%">0%</div><div class="k-d up">raggiunto</div></div>
+          </div>
+          <div class="cluster-foot"><span>Obiettivo mensile · € 50.000</span><span><b>Focus</b> sul tuo successo</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAT STRIP -->
+  <section class="strip" style="padding:0">
+    <div class="wrap strip-in">
+      <div class="stat"><div class="s-n">30<span style="font-size:.5em">min</span></div><div class="s-l">al mese, non di più</div></div>
+      <div class="stat"><div class="s-n">12</div><div class="s-l">aree di gestione</div></div>
+      <div class="stat"><div class="s-n">24</div><div class="s-l">pagine, zero fuffa</div></div>
+      <div class="stat"><div class="s-n">90</div><div class="s-l">giorni, il tuo piano</div></div>
+    </div>
+  </section>
+
+  <!-- PROMESSA -->
+  <section class="band">
+    <div class="wrap promise-grid">
+      <div data-reveal>
+        <span class="kicker">La promessa</span>
+        <p class="promise-quote">In meno di 30 minuti al mese sai dove stai <em>guadagnando</em>, dove stai <em>perdendo</em> e quale decisione prendere.</p>
+        <div class="semaforo">
+          <span class="sem v"><i></i><span><b>Verde</b> — funziona</span></span>
+          <span class="sem g"><i></i><span><b>Giallo</b> — non è sotto controllo</span></span>
+          <span class="sem r"><i></i><span><b>Rosso</b> — sta già producendo perdite</span></span>
+        </div>
+      </div>
+      <div class="benefits" data-reveal data-d="1">
+        <div class="benefit"><span class="b-ic">i.</span><h3>Più controllo</h3><p>Una fotografia sintetica dell'attività, su pochi indicatori.</p></div>
+        <div class="benefit"><span class="b-ic">ii.</span><h3>Più redditività</h3><p>Prodotti, servizi e clienti che creano o distruggono margine.</p></div>
+        <div class="benefit"><span class="b-ic">iii.</span><h3>Più liquidità</h3><p>Previsione dei fabbisogni e distinzione tra utile e denaro.</p></div>
+        <div class="benefit"><span class="b-ic">iv.</span><h3>Più tempo utile</h3><p>Ciò che il titolare deve fare, delegare o eliminare.</p></div>
+        <div class="benefit"><span class="b-ic">v.</span><h3>Decisioni rapide</h3><p>Pochi numeri rilevanti al posto di molti dati senza priorità.</p></div>
+        <div class="benefit"><span class="b-ic">vi.</span><h3>Meno stress</h3><p>Problemi individuati prima, con più capacità di intervento.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 AREE -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="kicker">Cosa c'è dentro</span>
+        <h2>Dodici aree, una domanda ciascuna</h2>
+        <p>Il metodo trasforma ogni leva della gestione in un controllo semplice. Puoi partire dal problema più urgente, ma il consiglio è seguirle in ordine.</p>
+      </div>
+      <div class="aree" data-reveal data-d="1">
+        <div class="area"><span class="num">1</span><div><h3>Salute aziendale</h3><p>Sto guadagnando o sto soltanto lavorando molto?</p></div></div>
+        <div class="area"><span class="num">2</span><div><h3>Margini</h3><p>Quanto resta davvero di ogni vendita?</p></div></div>
+        <div class="area"><span class="num">3</span><div><h3>Cassa</h3><p>Quando entrano e quando escono i soldi?</p></div></div>
+        <div class="area"><span class="num">4</span><div><h3>Prezzi</h3><p>Il prezzo è sostenibile e coerente con il valore?</p></div></div>
+        <div class="area"><span class="num">5</span><div><h3>Clienti</h3><p>Quali clienti costruiscono l'impresa?</p></div></div>
+        <div class="area"><span class="num">6</span><div><h3>Vendite e marketing</h3><p>Quanto costa acquisire una vendita utile?</p></div></div>
+        <div class="area"><span class="num">7</span><div><h3>Persone</h3><p>Il team produce risultati chiari?</p></div></div>
+        <div class="area"><span class="num">8</span><div><h3>Tempo</h3><p>Il titolare lavora sulle priorità?</p></div></div>
+        <div class="area"><span class="num">9</span><div><h3>Processi</h3><p>Gli errori si ripetono o vengono eliminati?</p></div></div>
+        <div class="area"><span class="num">10</span><div><h3>Scorte e acquisti</h3><p>Quanti soldi sono fermi o sprecati?</p></div></div>
+        <div class="area"><span class="num">11</span><div><h3>Investimenti</h3><p>L'acquisto genera un ritorno misurabile?</p></div></div>
+        <div class="area"><span class="num">12</span><div><h3>Crescita</h3><p>La crescita è replicabile e sostenibile?</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTRATTO -->
+  <section class="extract">
+    <div class="wrap extract-grid">
+      <div data-reveal>
+        <span class="kicker on-dark">Uno sguardo dentro</span>
+        <h2>Ogni capitolo, cinque mosse</h2>
+        <p>Per ogni argomento trovi il concetto essenziale, un esempio concreto, l'indicatore da tenere d'occhio, una domanda scomoda e un'azione da compiere entro sette giorni. Niente teoria: solo ciò che cambia una decisione.</p>
+        <div class="method">
+          <span class="chip"><b>·</b> Concetto</span>
+          <span class="chip"><b>·</b> Esempio</span>
+          <span class="chip"><b>·</b> Indicatore</span>
+          <span class="chip"><b>·</b> Domanda scomoda</span>
+          <span class="chip"><b>·</b> Azione entro 7 giorni</span>
+        </div>
+      </div>
+      <div class="spread" data-reveal data-d="1">
+        <img src="assets/img/cruscotto/pag-ripetibilita.jpg" alt="Pagina interna della guida: il segnale più importante è la ripetibilità" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- PERCORSO -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head center" data-reveal>
+        <span class="kicker">Come funziona</span>
+        <h2>Un percorso in cinque passi</h2>
+      </div>
+      <div class="steps" data-reveal data-d="1">
+        <div class="step"><span class="s-n">1</span><h3>Test iniziale</h3></div>
+        <div class="step"><span class="s-n">2</span><h3>Lettura ed esercizi</h3></div>
+        <div class="step"><span class="s-n">3</span><h3>Scelta degli indicatori</h3></div>
+        <div class="step"><span class="s-n">4</span><h3>Applicazione pratica</h3></div>
+        <div class="step"><span class="s-n">5</span><h3>Cruscotto mensile e piano 90 giorni</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACQUISTO -->
+  <section class="cta-band" id="acquista-band">
+    <div class="wrap">
+      <span class="kicker on-dark" data-reveal>La guida completa</span>
+      <h2 data-reveal data-d="1">Portala in azienda oggi</h2>
+      <p data-reveal data-d="1">Ventiquattro pagine per smettere di gestire a sensazione. Pagamento sicuro con Stripe, guida disponibile subito dopo l'acquisto.</p>
+      <div class="price-block" data-reveal data-d="2">
+        <div class="price-big">€25<span>una tantum · IVA inclusa</span></div>
+        <a class="btn" href="#" data-buy>
+          <span class="btn-label">Acquista la guida</span> <span class="arw">&rarr;</span>
+        </a>
+        <div class="cta-note">Pagamento sicuro con Stripe · PDF 24 pagine · accesso alla demo dopo l'acquisto</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ft">
+  <div class="wrap ft-in">
+    <div>&copy; 2025 <b>SB Consulting</b> · P.IVA 17372881007</div>
+    <div class="ft-links">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="cookie-policy.html">Cookie</a>
+      <a href="https://www.sbfoodconsulting.com/">sbfoodconsulting.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // === Payment Link Stripe ===
+  // ↓↓↓ INCOLLA QUI il tuo Payment Link (es. 'https://buy.stripe.com/xxxxxxxx')
+  var STRIPE_URL='';
+  // ↑↑↑ Ricorda: nel Payment Link imposta la pagina di conferma (success URL) su
+  //     https://www.sbfoodconsulting.com/cruscotto-grazie
+
+  // ---- header solid on scroll ----
+  var hd=document.getElementById('hd');
+  function onScroll(){if(window.scrollY>40)hd.classList.add('solid');else hd.classList.remove('solid');}
+  onScroll();window.addEventListener('scroll',onScroll,{passive:true});
+
+  // ---- acquisto → checkout Stripe ----
+  function firePixel(){try{if(window.fbq)window.fbq('trackCustom','AcquistoCruscotto');}catch(e){}}
+  function buy(){
+    firePixel();
+    if(!STRIPE_URL||/INCOLLA|xxxx/i.test(STRIPE_URL)){
+      alert('Checkout non ancora attivo. (Da configurare: Payment Link Stripe in STRIPE_URL.)');
+      return;
+    }
+    var u=STRIPE_URL, qs=location.search.replace(/^\?/,''); // porta con sé eventuali UTM
+    if(qs) u += (u.indexOf('?')>-1?'&':'?')+qs;
+    window.location.href=u;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-buy]'),function(el){
+    el.addEventListener('click',function(e){e.preventDefault();buy();});});
+
+  // ---- reveal on scroll ----
+  var io=new IntersectionObserver(function(es){es.forEach(function(en){
+    if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.12});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-reveal]'),function(el){io.observe(el);});
+
+  // ---- tachimetro vivo: lancetta + colore arco + numeri, tutti sul valore v ----
+  (function(){
+    var g=document.getElementById('gauge');if(!g)return;
+    var arc=document.getElementById('arc'),needle=document.getElementById('needle');
+    var kv=[].slice.call(document.querySelectorAll('.kpi .k-v[data-count]'));
+    var len=arc.getTotalLength();
+    arc.style.strokeDasharray=len;arc.style.strokeDashoffset=len; // parte vuoto
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+    var BASE=0.80,AMP=0.13,VTOP=BASE+AMP;          // oscilla ~0.67 → 0.93
+    function lerp(a,b,t){return a+(b-a)*t;}
+    function arcColor(v){                          // rosso → oro → verde (semaforo)
+      var a,b,t;
+      if(v<0.5){a=[192,85,45];b=[211,162,74];t=v/0.5;}
+      else{a=[211,162,74];b=[58,125,95];t=(v-0.5)/0.5;}
+      return 'rgb('+Math.round(lerp(a[0],b[0],t))+','+Math.round(lerp(a[1],b[1],t))+','+Math.round(lerp(a[2],b[2],t))+')';
+    }
+    function fmt(n){return Math.round(n).toLocaleString('it-IT');}
+    function apply(v){
+      v=v<0?0:v>1?1:v;
+      arc.style.strokeDashoffset=len*(1-v);        // riempimento segue la lancetta
+      arc.style.stroke=arcColor(v);                // colore segue la posizione
+      needle.style.transform='rotate('+(v*160-80).toFixed(1)+'deg)'; // -80°(basso) → +80°(alto)
+      var f=v/VTOP;if(f>1)f=1;                      // numeri proporzionali (picco = valori copertina)
+      for(var i=0;i<kv.length;i++){var el=kv[i],tg=parseFloat(el.getAttribute('data-count'))||0;
+        el.textContent=(el.getAttribute('data-prefix')||'')+fmt(tg*f)+(el.getAttribute('data-suffix')||'');}
+    }
+    function start(){
+      if(reduce){apply(VTOP);return;}
+      var t0=null,INTRO=1700;
+      (function frame(ts){
+        if(t0===null)t0=ts;var e=ts-t0;
+        var env=Math.min(1,e/INTRO);env=1-Math.pow(1-env,3);   // salita iniziale morbida
+        var osc=BASE+AMP*Math.sin(e/1300);                     // dondolio continuo (~8s)
+        if(!document.hidden)apply(env*osc);
+        requestAnimationFrame(frame);
+      })(0);
+    }
+    var seen=false;
+    var gio=new IntersectionObserver(function(es){es.forEach(function(en){
+      if(en.isIntersecting&&!seen){seen=true;start();gio.disconnect();}});},{threshold:.4});
+    gio.observe(document.querySelector('.cluster')||g);
+  })();
+})();
+</script>
+</body>
+</html>

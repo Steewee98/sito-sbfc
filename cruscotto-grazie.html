@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grazie — Il Cruscotto dell'Imprenditore | SB Consulting</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#22222a;--cream:#f4efe4;--paper:#fbf9f3;--rust:#c0552d;--rust-2:#d5622f;
+  --green:#3a7d5f;--gold:#d3a24a;--dark:#1d1a19;--dark-2:#26211f;--dark-line:rgba(244,239,228,.14);--radius:18px}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--dark);color:#f4efe4;
+  font-family:"Inter",system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;font-weight:700;line-height:1.08;margin:0}
+p{margin:0}a{color:inherit}
+.top{position:relative;overflow:hidden;flex:1;display:flex;align-items:center;justify-content:center;padding:4rem 1rem}
+.top::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(80% 70% at 50% -10%,rgba(213,98,47,.4),transparent 60%),
+             radial-gradient(60% 60% at 15% 110%,rgba(58,125,95,.16),transparent 60%),
+             linear-gradient(180deg,#211d1b,#171413)}
+.card{position:relative;z-index:1;width:min(620px,92vw);text-align:center}
+.brand{display:inline-flex;align-items:baseline;gap:.5rem;text-decoration:none;color:#fff;margin-bottom:2rem;opacity:.85}
+.brand b{font-weight:800;letter-spacing:.16em;font-size:.8rem;text-transform:uppercase}
+.brand span{font-family:"Playfair Display";font-style:italic;font-size:.95rem;opacity:.8}
+.check{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;display:flex;
+  align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.4rem;
+  box-shadow:0 16px 40px -12px rgba(58,125,95,.6)}
+.kick{font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+h1{font-size:clamp(2rem,5vw,3rem);color:#fff;margin:.6rem 0 0}
+.lead{color:rgba(244,239,228,.75);margin:1.1rem auto 0;max-width:44ch}
+.btn{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;border:none;font-family:inherit;
+  font-size:1.05rem;font-weight:600;color:#fff;background:var(--rust);padding:1rem 1.9rem;border-radius:999px;
+  text-decoration:none;margin-top:2rem;box-shadow:0 16px 30px -12px rgba(192,85,45,.65);
+  transition:transform .2s,background .2s,box-shadow .2s}
+.btn:hover{background:var(--rust-2);transform:translateY(-2px)}
+.btn[disabled]{opacity:.7;cursor:wait;transform:none}
+.btn .arw{transition:transform .2s}.btn:hover .arw{transform:translateX(4px)}
+.note{font-size:.85rem;color:rgba(244,239,228,.5);margin-top:1rem}
+
+/* demo panel */
+.demo{margin:2.6rem auto 0;max-width:560px;background:rgba(244,239,228,.05);border:1px solid var(--dark-line);
+  border-radius:var(--radius);padding:1.9rem;text-align:left}
+.demo-tag{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.demo h3{color:#fff;font-size:1.35rem;margin:.5rem 0 .3rem}
+.demo>.demo-form>p{color:rgba(244,239,228,.7);font-size:.95rem}
+.demo form{display:grid;gap:.7rem;margin-top:1.2rem}
+.demo .row2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media(max-width:480px){.demo .row2{grid-template-columns:1fr}}
+.demo input{width:100%;font-family:inherit;font-size:.95rem;padding:.85rem .95rem;border-radius:10px;
+  border:1px solid rgba(244,239,228,.2);background:rgba(0,0,0,.25);color:#fff}
+.demo input::placeholder{color:rgba(244,239,228,.45)}
+.demo input:focus{outline:none;border-color:var(--rust)}
+.demo .consent{display:flex;gap:.6rem;align-items:flex-start;font-size:.8rem;color:rgba(244,239,228,.65);line-height:1.5}
+.demo .consent a{color:var(--gold)}.demo .consent input{width:auto;flex:none;margin-top:.2rem}
+.demo button{margin-top:.3rem;width:100%;justify-content:center}
+.demo-err{color:#f2a98d;font-size:.85rem;display:none}
+.demo-ok{display:none;text-align:center;padding:.5rem 0}
+.demo-ok .ok-ic{width:46px;height:46px;border-radius:50%;background:var(--green);color:#fff;display:flex;
+  align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto .9rem}
+.demo-ok h3{color:#fff}.demo-ok p{color:rgba(244,239,228,.7);margin-top:.4rem}
+.ft{background:var(--dark-2);border-top:1px solid var(--dark-line);padding:1.6rem;text-align:center;
+  font-size:.82rem;color:rgba(244,239,228,.5)}
+.ft a{color:rgba(244,239,228,.7);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="card">
+    <a class="brand" href="cruscotto-imprenditore.html"><b>SB Consulting</b><span>Il Cruscotto</span></a>
+    <div class="check">&#10003;</div>
+    <span class="kick">Acquisto completato</span>
+    <h1>Grazie! La tua guida è pronta.</h1>
+    <p class="lead">Ecco <strong>Il Cruscotto dell'Imprenditore</strong> in PDF. Conserva questa pagina: puoi riscaricarlo finché la tieni aperta.</p>
+
+    <button class="btn" id="dl" type="button">
+      <span class="btn-label">Scarica il PDF</span> <span class="arw">&darr;</span>
+    </button>
+    <div class="note" id="note">24 pagine · per imprese di ogni settore</div>
+
+    <!-- Accesso alla demo del programma -->
+    <div class="demo">
+      <div class="demo-form" id="demo-form-wrap">
+        <span class="demo-tag">Il programma dal vivo</span>
+        <h3>Vuoi anche la demo del programma?</h3>
+        <p>Il Cruscotto esiste come programma interattivo, con un'azienda d'esempio già compilata. Chiedi l'accesso: ti mandiamo il link.</p>
+        <form id="demo-form" novalidate>
+          <div class="row2">
+            <input type="text" id="d-nome" autocomplete="name" placeholder="Nome" aria-label="Nome" required>
+            <input type="text" id="d-azienda" autocomplete="organization" placeholder="Azienda (facoltativo)" aria-label="Azienda">
+          </div>
+          <input type="email" id="d-email" inputmode="email" autocomplete="email" placeholder="La tua email" aria-label="Email" required>
+          <label class="consent">
+            <input type="checkbox" id="d-consent" required>
+            <span>Acconsento a essere ricontattato da SB Consulting per l'accesso alla demo (<a href="privacy-policy.html" target="_blank" rel="noopener">privacy</a>).</span>
+          </label>
+          <p class="demo-err" id="demo-err"></p>
+          <button class="btn" type="submit"><span>Richiedi l'accesso alla demo</span> <span class="arw">&rarr;</span></button>
+        </form>
+      </div>
+      <div class="demo-ok" id="demo-ok">
+        <div class="ok-ic">&#10003;</div>
+        <h3>Richiesta ricevuta</h3>
+        <p>Ti scriviamo a breve con il link della demo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="ft">
+  &copy; 2025 SB Consulting · P.IVA 17372881007 ·
+  <a href="privacy-policy.html">Privacy</a> ·
+  <a href="https://www.sbfoodconsulting.com/">sbfoodconsulting.com</a>
+</footer>
+
+<script>
+(function(){
+  var PDF_URL='assets/pdf/cruscotto/cruscotto-5982dfb162f67bdb.pdf';
+  var FILENAME='Il-Cruscotto-dell-Imprenditore-SB-Consulting.pdf';
+  var BACKEND=window.SBFC_BACKEND||'https://web-production-f3794.up.railway.app';
+  var EMAIL_RE=/^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  var IS_INAPP=/(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|Twitter|Snapchat|Pinterest|TikTok|musical_ly)/i.test(navigator.userAgent);
+  function param(n){try{return new URLSearchParams(location.search).get(n)||'';}catch(e){return'';}}
+
+  // ---- download PDF (blob stesso-dominio: iOS-safe) ----
+  var buf=null,fetching=false;
+  function prefetch(){if(IS_INAPP||buf||fetching)return;fetching=true;
+    fetch(PDF_URL).then(function(r){return r.ok?r.arrayBuffer():null;})
+      .then(function(b){if(b)buf=b;fetching=false;}).catch(function(){fetching=false;});}
+  function blobDownload(){if(!buf)return false;try{
+      var url=URL.createObjectURL(new Blob([buf],{type:'application/octet-stream'}));
+      var a=document.createElement('a');a.href=url;a.download=FILENAME;a.rel='noopener';
+      document.body.appendChild(a);a.click();
+      setTimeout(function(){if(a.parentNode)a.parentNode.removeChild(a);URL.revokeObjectURL(url);},3000);
+      return true;}catch(e){return false;}}
+  var btn=document.getElementById('dl'),lbl=btn.querySelector('.btn-label');
+  function fail(){btn.disabled=false;lbl.textContent='Scarica il PDF';
+    document.getElementById('note').innerHTML='Se il download non parte, scrivici a <a style="color:#d3a24a" href="mailto:info@sbfoodconsulting.com">info@sbfoodconsulting.com</a> e te lo inviamo.';}
+  function download(){
+    if(IS_INAPP){window.open(PDF_URL,'_blank');return;}
+    if(blobDownload())return;
+    btn.disabled=true;lbl.textContent='Preparo il PDF…';
+    fetch(PDF_URL).then(function(r){return r.ok?r.arrayBuffer():null;}).then(function(b){
+      if(b){buf=b;btn.disabled=false;lbl.textContent='Scarica il PDF';if(blobDownload())return;}
+      else fail();
+    }).catch(fail);}
+  btn.addEventListener('click',download);
+  if(!IS_INAPP)prefetch();
+
+  // ---- richiesta accesso demo → lead sul backend ----
+  var form=document.getElementById('demo-form');
+  form.addEventListener('submit',function(e){e.preventDefault();
+    var nome=(document.getElementById('d-nome').value||'').trim();
+    var email=(document.getElementById('d-email').value||'').trim().toLowerCase();
+    var azienda=(document.getElementById('d-azienda').value||'').trim();
+    var consent=document.getElementById('d-consent').checked;
+    var err=document.getElementById('demo-err');
+    if(!nome){err.textContent='Inserisci il tuo nome.';err.style.display='block';return;}
+    if(!EMAIL_RE.test(email)){err.textContent='Inserisci un indirizzo email valido.';err.style.display='block';return;}
+    if(!consent){err.textContent='Serve il consenso per essere ricontattato.';err.style.display='block';return;}
+    err.style.display='none';
+    var payload=JSON.stringify({email:email,nome:nome,azienda:azienda,
+      strumento:'cruscotto-demo-access',consenso_marketing:true,referrer:document.referrer||'',
+      utm_source:param('utm_source'),utm_medium:param('utm_medium'),utm_campaign:param('utm_campaign')});
+    var url=BACKEND+'/api/lead-strumenti';
+    try{if(navigator.sendBeacon)navigator.sendBeacon(url,new Blob([payload],{type:'text/plain'}));}
+    catch(e2){try{fetch(url,{method:'POST',headers:{'Content-Type':'text/plain'},body:payload,keepalive:true}).catch(function(){});}catch(e3){}}
+    document.getElementById('demo-form-wrap').style.display='none';
+    document.getElementById('demo-ok').style.display='block';});
+})();
+</script>
+</body>
+</html>
