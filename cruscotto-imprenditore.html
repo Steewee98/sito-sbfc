@@ -461,31 +461,46 @@ section{padding:clamp(3.2rem,6.5vw,6rem) 0}
 
 <script>
 (function(){
-  // === Payment Link Stripe ===
-  // ↓↓↓ INCOLLA QUI il tuo Payment Link (es. 'https://buy.stripe.com/xxxxxxxx')
-  var STRIPE_URL='';
-  // ↑↑↑ Ricorda: nel Payment Link imposta la pagina di conferma (success URL) su
-  //     https://www.sbfoodconsulting.com/cruscotto-grazie
+  // === Checkout: STESSO backend/Stripe dei corsi SB Food (academy) ===
+  var CHECKOUT_URL='https://web-production-f3794.up.railway.app/api/checkout';
+  var PRODOTTO='cruscotto-imprenditore'; // il backend mappa questo id → prezzo €25 + success_url
 
   // ---- header solid on scroll ----
   var hd=document.getElementById('hd');
   function onScroll(){if(window.scrollY>40)hd.classList.add('solid');else hd.classList.remove('solid');}
   onScroll();window.addEventListener('scroll',onScroll,{passive:true});
 
-  // ---- acquisto → checkout Stripe ----
+  // ---- acquisto → checkout Stripe (via backend, come i corsi) ----
   function firePixel(){try{if(window.fbq)window.fbq('trackCustom','AcquistoCruscotto');}catch(e){}}
+  var buyEls=[].slice.call(document.querySelectorAll('[data-buy]'));
+  function buyLoading(on){
+    buyEls.forEach(function(b){
+      b.style.pointerEvents=on?'none':'';b.style.opacity=on?'.75':'';
+      var l=b.querySelector('.btn-label');
+      if(l){if(on){if(!l.dataset.o)l.dataset.o=l.textContent;l.textContent='Attendi…';}else if(l.dataset.o){l.textContent=l.dataset.o;}}
+    });
+  }
   function buy(){
     firePixel();
-    if(!STRIPE_URL||/INCOLLA|xxxx/i.test(STRIPE_URL)){
-      alert('Checkout non ancora attivo. (Da configurare: Payment Link Stripe in STRIPE_URL.)');
-      return;
+    var stored=null;try{stored=JSON.parse(localStorage.getItem('sb_user')||'null');}catch(e){}
+    var email=(stored&&stored.email)?stored.email:null;
+    if(!email){
+      email=prompt('Inserisci la tua email per ricevere la guida dopo il pagamento:');
+      if(!email||email.indexOf('@')<0){alert('Email non valida. Riprova.');return;}
     }
-    var u=STRIPE_URL, qs=location.search.replace(/^\?/,''); // porta con sé eventuali UTM
-    if(qs) u += (u.indexOf('?')>-1?'&':'?')+qs;
-    window.location.href=u;
+    buyLoading(true);
+    fetch(CHECKOUT_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prodotto:PRODOTTO,email:email})})
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if(data&&data.url){window.location.href=data.url;return;}
+        throw new Error((data&&data.error)||'no url');
+      })
+      .catch(function(e){console.error('checkout',e);
+        alert('Checkout non disponibile al momento. Riprova o scrivici a info@sbfoodconsulting.com');
+        buyLoading(false);});
   }
-  Array.prototype.forEach.call(document.querySelectorAll('[data-buy]'),function(el){
-    el.addEventListener('click',function(e){e.preventDefault();buy();});});
+  buyEls.forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();buy();});});
 
   // ---- reveal on scroll ----
   var io=new IntersectionObserver(function(es){es.forEach(function(en){

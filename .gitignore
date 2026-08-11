@@ -16,6 +16,3 @@ node_modules/
 package.json
 package-lock.json
 export-copertine.js
-
-# PDF a pagamento — NON committare nel repo pubblico
-assets/pdf/cruscotto/
