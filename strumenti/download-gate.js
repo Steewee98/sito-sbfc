@@ -22,7 +22,10 @@
   var TOOLS = window.SBFC_TOOLS || [
     { slug: 'checklist-apertura-chiusura', label: 'Checklist Apertura & Chiusura' },
     { slug: 'scheda-food-cost', label: 'Scheda Food Cost' },
-    { slug: 'scheda-ricetta', label: 'Scheda Ricetta' }
+    { slug: 'scheda-ricetta', label: 'Scheda Ricetta' },
+    { slug: 'checklist-pre-servizio', label: 'Checklist Pre-Servizio' },
+    { slug: 'quiz-numeri', label: 'Quiz — I Numeri del Locale' },
+    { slug: 'autovalutazione-team', label: 'Scheda Autovalutazione Team' }
   ];
 
   var IS_INAPP = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Line\/|Twitter|Snapchat|Pinterest|TikTok|musical_ly)/i.test(navigator.userAgent);
