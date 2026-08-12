@@ -400,6 +400,10 @@ tr:hover td{background:#fafaf8}
             <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             Pagamenti Stripe
         </div>
+        <div class="sidebar-item" data-section="cruscotto">
+            <svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 1 9-9"/><path d="M12 12l4.5-2.5"/><circle cx="12" cy="12" r="1.4"/></svg>
+            Cruscotto
+        </div>
         <div class="sidebar-item" data-section="traffico">
             <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             Traffico sito
@@ -573,6 +577,28 @@ tr:hover td{background:#fafaf8}
         <table>
             <thead><tr><th>Data</th><th>Nome</th><th>Email</th><th>Prodotto</th><th>Importo</th><th>Stato</th><th>ID Transazione</th></tr></thead>
             <tbody id="pagamentiBody"></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ========== CRUSCOTTO ========== -->
+<section class="admin-section" id="sec-cruscotto">
+    <div class="section-header">
+        <h2>Il Cruscotto dell'Imprenditore</h2>
+        <p>Vendite della guida &mdash; scontate e non scontate</p>
+    </div>
+    <div class="note-box">Prezzo pieno &euro; 25,00 &middot; con codice <strong>CRUSCOTTO15</strong> &euro; 21,25. Dati dai pagamenti Stripe.</div>
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px" id="cruscottoKpi"></div>
+    <div class="table-wrap">
+        <div class="table-filters">
+            <select id="cruscottoPeriodo"><option value="0">Sempre</option><option value="30">Ultimi 30 giorni</option><option value="7">Ultimi 7 giorni</option><option value="90">Ultimi 90 giorni</option></select>
+            <select id="cruscottoTipo"><option value="">Tutte</option><option value="scontata">Solo scontate</option><option value="piena">Solo non scontate</option></select>
+            <button class="btn-sm" onclick="renderCruscotto()">Aggiorna</button>
+            <a href="https://dashboard.stripe.com" target="_blank" class="btn-sm" style="display:inline-block;text-align:center;background:#635bff;text-decoration:none;color:#fff">Apri Stripe Dashboard</a>
+        </div>
+        <table>
+            <thead><tr><th>Data</th><th>Nome</th><th>Email</th><th>Prezzo</th><th>Tipo</th><th>Sconto</th><th>ID Transazione</th></tr></thead>
+            <tbody id="cruscottoBody"></tbody>
         </table>
     </div>
 </section>
@@ -986,6 +1012,7 @@ function refreshCurrentSection(){
     if(_currentSection==='dashboard') renderDashboard();
     else if(_currentSection==='contatti') renderContatti();
     else if(_currentSection==='pagamenti') renderPagamenti();
+    else if(_currentSection==='cruscotto') renderCruscotto();
     else if(_currentSection==='studenti') renderStudenti();
     else if(_currentSection==='traffico') renderTraffico();
     else if(_currentSection==='checklist') renderChecklist();
@@ -1741,6 +1768,64 @@ function filterPagamenti(){
         return true;
     });
     renderPagamenti(filtered);
+}
+
+// ============ CRUSCOTTO DELL'IMPRENDITORE ============
+var CRUSCOTTO_PIENO=25.00;
+async function renderCruscotto(){
+    var body=document.getElementById('cruscottoBody');
+    if(!body) return;
+    function scontata(p){return parseFloat(p.importo||0) < CRUSCOTTO_PIENO-0.01;}
+    function badge(sc){
+        var bg=sc?'#fdeee2':'#e6f4ec', col=sc?'#c4622d':'#2e7d4f', txt=sc?'Scontata':'Piena';
+        return '<span style="display:inline-block;padding:3px 11px;border-radius:100px;font-size:.72rem;font-weight:600;background:'+bg+';color:'+col+'">'+txt+'</span>';
+    }
+    try{
+        var data=await apiFetch('/api/pagamenti');
+        var vend=(data||[]).filter(function(p){return p.prodotto==='cruscotto-imprenditore' && p.stato==='completato';});
+
+        var periodo=parseInt((document.getElementById('cruscottoPeriodo')||{}).value||'0');
+        var tipo=(document.getElementById('cruscottoTipo')||{}).value||'';
+        if(periodo>0){var cutoff=new Date();cutoff.setDate(cutoff.getDate()-periodo);
+            vend=vend.filter(function(p){return p.created_at && new Date(p.created_at)>=cutoff;});}
+        if(tipo==='scontata') vend=vend.filter(scontata);
+        else if(tipo==='piena') vend=vend.filter(function(p){return !scontata(p);});
+
+        var scont=vend.filter(scontata);
+        var piene=vend.filter(function(p){return !scontata(p);});
+        var ric=vend.reduce(function(a,p){return a+parseFloat(p.importo||0)},0);
+        var ricS=scont.reduce(function(a,p){return a+parseFloat(p.importo||0)},0);
+        var ricP=piene.reduce(function(a,p){return a+parseFloat(p.importo||0)},0);
+
+        document.getElementById('cruscottoKpi').innerHTML=
+            kpiCard('Vendite totali',vend.length,'&euro; '+ric.toFixed(2)+' incassati','neutral')+
+            kpiCard('Non scontate',piene.length,'&euro; '+ricP.toFixed(2),'neutral')+
+            kpiCard('Scontate (-15%)',scont.length,'&euro; '+ricS.toFixed(2),'neutral')+
+            kpiCard('Ricavo totale','&euro; '+ric.toFixed(2),'&euro; 25,00 / &euro; 21,25','neutral');
+
+        if(!vend.length){
+            body.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:#5a5a5a;font-size:.9rem">Ancora nessuna vendita del Cruscotto.</td></tr>';
+            return;
+        }
+        vend.sort(function(a,b){return new Date(b.created_at||0)-new Date(a.created_at||0);});
+        body.innerHTML=vend.map(function(p){
+            var d=p.created_at?new Date(p.created_at).toLocaleDateString('it-IT'):'—';
+            var imp=parseFloat(p.importo||0), sc=scontata(p), sconto=sc?(CRUSCOTTO_PIENO-imp):0;
+            var sid=(p.stripe_id||'').substring(0,16);
+            return '<tr>'+
+                '<td>'+d+'</td>'+
+                '<td>'+(p.nome||'—')+'</td>'+
+                '<td>'+(p.email||'')+'</td>'+
+                '<td><strong>&euro; '+imp.toFixed(2)+'</strong></td>'+
+                '<td>'+badge(sc)+'</td>'+
+                '<td>'+(sc?('&minus;&euro; '+sconto.toFixed(2)):'&mdash;')+'</td>'+
+                '<td style="font-size:.75rem;font-family:monospace;color:#888">'+sid+'</td>'+
+            '</tr>';
+        }).join('');
+    }catch(e){
+        console.error('Errore cruscotto:',e);
+        body.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:#c4622d">Errore nel caricamento.</td></tr>';
+    }
 }
 
 // ============ TRAFFICO SITO ============
