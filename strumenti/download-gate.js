@@ -142,10 +142,38 @@
             '<div class="dlgate-cross-title">&#127873; Prendi gratis anche le altre schede</div>' +
             '<div class="dlgate-cross-list" id="dlgate-cross-list"></div>' +
           '</div>' +
+          '<a class="dlgate-crusc" id="dlgate-crusc" href="https://www.sbfoodconsulting.com/cruscotto-imprenditore" target="_blank" rel="noopener">' +
+            '<span class="dlgate-crusc-badge">-15%</span>' +
+            '<span class="dlgate-crusc-body">' +
+              '<strong>Il Cruscotto dell\'Imprenditore</strong>' +
+              '<em>La guida che ti dice, numeri alla mano, come sta andando la tua attivit&agrave;. Oggi <b>&euro;21,25</b> con il codice <b>CRUSCOTTO15</b>.</em>' +
+            '</span>' +
+            '<span class="dlgate-crusc-go">&rarr;</span>' +
+          '</a>' +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
     return wrap;
+  }
+
+  // CSS del banner Cruscotto iniettato via JS (self-contained, niente modifiche a style.css)
+  function injectCruscStyles() {
+    if (document.getElementById('dlgate-crusc-css')) return;
+    var s = document.createElement('style');
+    s.id = 'dlgate-crusc-css';
+    s.textContent =
+      '.dlgate-crusc{display:flex;align-items:center;gap:14px;margin-top:16px;padding:15px 18px;' +
+      'background:linear-gradient(135deg,#181410,#0b0908);border:1px solid rgba(224,134,63,.45);' +
+      'border-radius:14px;text-decoration:none;transition:border-color .2s,transform .2s}' +
+      '.dlgate-crusc:hover{border-color:rgba(224,134,63,.95);transform:translateY(-1px)}' +
+      '.dlgate-crusc-badge{flex:0 0 auto;background:#e0863f;color:#0a0705;font-weight:800;font-size:15px;' +
+      'padding:8px 11px;border-radius:8px;line-height:1}' +
+      '.dlgate-crusc-body{display:flex;flex-direction:column;gap:4px;min-width:0}' +
+      '.dlgate-crusc-body strong{color:#f5efe6;font-size:15px;line-height:1.25}' +
+      '.dlgate-crusc-body em{color:#c9b8a6;font-style:normal;font-size:12.5px;line-height:1.4}' +
+      '.dlgate-crusc-body b{color:#e0863f;font-weight:700}' +
+      '.dlgate-crusc-go{margin-left:auto;color:#e0863f;font-size:22px;flex:0 0 auto}';
+    document.head.appendChild(s);
   }
 
   function renderCross(modal) {
@@ -185,6 +213,7 @@
 
   function init() {
     if (!cfg.slug) return;
+    injectCruscStyles();
     var modal = buildModal();
     var formWrap = modal.querySelector('.dlgate-form');
     var doneWrap = modal.querySelector('#dlgate-done');
