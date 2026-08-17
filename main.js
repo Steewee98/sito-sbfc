@@ -280,10 +280,13 @@ var _sbScrollHits = {};
 /* Meta Pixel — caricato SOLO con consenso (consent-gated). Aggiuntivo al
    funnel interno: se manca il consenso resta tutto un no-op, il funnel gira. */
 function sbLoadPixel() {
-    if (sbConsent() !== 'accepted' || !META_PIXEL_ID || window.__sbPixelLoaded) return;
+    // Una pagina può impostare window.SB_PIXEL_ONLY per usare un Pixel dedicato
+    // (es. il funnel Cruscotto) al posto di quello di default del sito.
+    var pid = window.SB_PIXEL_ONLY || META_PIXEL_ID;
+    if (sbConsent() !== 'accepted' || !pid || window.__sbPixelLoaded) return;
     window.__sbPixelLoaded = true;
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', META_PIXEL_ID);
+    fbq('init', pid);
     fbq('track', 'PageView');
 }
 // Evento custom Meta. No-op se non c'è consenso/pixel. fbq accoda gli eventi

@@ -264,6 +264,8 @@ section{padding:clamp(3.2rem,6.5vw,6rem) 0}
 @media(prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;transition:none}
   .needle,.gauge-arc{transition:none}.gauge.live .needle{animation:none}}
 </style>
+<!-- Pixel dedicato al funnel Cruscotto (separato da quello del sito) -->
+<script>window.SB_PIXEL_ONLY='3810296189110262';</script>
 </head>
 <body>
 
@@ -471,7 +473,7 @@ section{padding:clamp(3.2rem,6.5vw,6rem) 0}
   onScroll();window.addEventListener('scroll',onScroll,{passive:true});
 
   // ---- acquisto → checkout Stripe (via backend, come i corsi) ----
-  function firePixel(){try{if(window.fbq)window.fbq('trackCustom','AcquistoCruscotto');}catch(e){}}
+  function firePixel(){try{if(window.fbq){window.fbq('track','InitiateCheckout',{value:25,currency:'EUR'});window.fbq('trackCustom','AcquistoCruscotto');}}catch(e){}}
   var buyEls=[].slice.call(document.querySelectorAll('[data-buy]'));
   function buyLoading(on){
     buyEls.forEach(function(b){
@@ -552,5 +554,6 @@ section{padding:clamp(3.2rem,6.5vw,6rem) 0}
   })();
 })();
 </script>
+<script src="main.js?v=20260817"></script>
 </body>
 </html>

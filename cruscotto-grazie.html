@@ -66,6 +66,8 @@ h1{font-size:clamp(2rem,5vw,3rem);color:#fff;margin:.6rem 0 0}
   font-size:.82rem;color:rgba(244,239,228,.5)}
 .ft a{color:rgba(244,239,228,.7);text-decoration:none}
 </style>
+<!-- Pixel dedicato al funnel Cruscotto (separato da quello del sito) -->
+<script>window.SB_PIXEL_ONLY='3810296189110262';</script>
 </head>
 <body>
 
@@ -116,6 +118,23 @@ h1{font-size:clamp(2rem,5vw,3rem);color:#fff;margin:.6rem 0 0}
   <a href="privacy-policy.html">Privacy</a> ·
   <a href="https://www.sbfoodconsulting.com/">sbfoodconsulting.com</a>
 </footer>
+
+<script src="main.js?v=20260817"></script>
+<script>
+/* Conversione Meta sul Pixel del Cruscotto. Consent-gated: fbq esiste solo
+   dopo che l'utente ha accettato i cookie (banner gestito da main.js). */
+(function(){
+  var done=false;
+  function firePurchase(){
+    if(done) return true;
+    try{ if(window.fbq){ window.fbq('track','Purchase',{value:25,currency:'EUR'}); done=true; return true; } }catch(e){}
+    return false;
+  }
+  if(!firePurchase()){
+    var n=0, t=setInterval(function(){ if(firePurchase()||++n>25) clearInterval(t); },300);
+  }
+})();
+</script>
 
 <script>
 (function(){
