@@ -416,6 +416,10 @@ tr:hover td{background:#fafaf8}
             <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             Lead strumenti
         </div>
+        <div class="sidebar-item" data-section="email">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/><circle cx="18" cy="6" r="3" fill="#c4622d" stroke="none"/></svg>
+            Email
+        </div>
         <div class="sidebar-item" data-section="prenotazioni">
             <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Prenotazioni
@@ -823,6 +827,46 @@ tr:hover td{background:#fafaf8}
     </div>
 </section>
 
+<!-- ========== EMAIL (statistiche Resend) ========== -->
+<section class="admin-section" id="sec-email">
+    <div class="section-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div>
+            <h2>Email</h2>
+            <p>Consegna, aperture e click delle email transazionali e delle campagne (dati Resend)</p>
+        </div>
+        <select id="emailFiltroGiorni" onchange="renderEmail()" style="white-space:nowrap;background:#fff;border:1px solid #e8e4df;padding:9px 14px;border-radius:6px;font-size:.82rem;cursor:pointer">
+            <option value="7">Ultimi 7 giorni</option>
+            <option value="30" selected>Ultimi 30 giorni</option>
+            <option value="90">Ultimi 90 giorni</option>
+            <option value="0">Sempre</option>
+        </select>
+    </div>
+
+    <div class="kpi-grid" id="emailKpi" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px"></div>
+
+    <div id="emailPerTipo" style="margin-bottom:24px"></div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Data/ora</th>
+                    <th>Destinatario</th>
+                    <th>Tipo</th>
+                    <th>Stato</th>
+                    <th>Aperta</th>
+                    <th>Click</th>
+                </tr>
+            </thead>
+            <tbody id="emailBody"></tbody>
+        </table>
+        <div class="mobile-card-list" id="emailCards"></div>
+    </div>
+    <p style="margin:14px 2px 0;color:#8a847b;font-size:.72rem;line-height:1.6">
+        Le aperture sono indicative: i filtri anti-tracciamento (es. Apple Mail Privacy) possono gonfiarle. Il tasso di click è il segnale più affidabile.
+    </p>
+</section>
+
 <!-- ========== PRENOTAZIONI ========== -->
 <section class="admin-section" id="sec-prenotazioni">
     <div class="section-header">
@@ -1017,6 +1061,7 @@ function refreshCurrentSection(){
     else if(_currentSection==='traffico') renderTraffico();
     else if(_currentSection==='checklist') renderChecklist();
     else if(_currentSection==='lead-strumenti') renderLeadStrumenti();
+    else if(_currentSection==='email') renderEmail();
     else if(_currentSection==='prenotazioni') renderPrenotazioni();
     else if(_currentSection==='callcenter') renderCallCenter();
     else if(_currentSection==='whatsapp') renderWhatsapp();
@@ -1109,6 +1154,71 @@ function exportLeadStrumentiCsv(){
             setTimeout(function(){URL.revokeObjectURL(u);},1000);
         })
         .catch(function(){alert('Export CSV non riuscito. Riprova.');});
+}
+
+// ============ EMAIL (statistiche Resend) ============
+var EMAIL_TIPI={
+    'grazie_download':'Grazie download',
+    'benvenuto':'Benvenuto/contatti',
+    'credenziali':'Credenziali Academy',
+    'campagna':'Campagna schede',
+    'campagna_schede':'Campagna schede',
+    'campagna_feedback':'Campagna feedback',
+    'altro':'Altro'
+};
+function nomeTipoEmail(t){return EMAIL_TIPI[t]||t||'Altro';}
+
+function renderEmail(){
+    var giorni=document.getElementById('emailFiltroGiorni').value;
+    apiFetch('/api/email/stats?giorni='+giorni).then(function(s){
+        var kpi=document.getElementById('emailKpi');
+        kpi.innerHTML=
+            '<div class="kpi-card"><div class="kpi-label">Inviate</div><div class="kpi-value">'+(s.inviati||0)+'</div><div class="kpi-trend">'+(s.consegnati||0)+' consegnate · '+(s.tasso_consegna||0)+'%</div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">Tasso apertura</div><div class="kpi-value">'+(s.tasso_apertura||0)+'%</div><div class="kpi-trend">'+(s.aperti||0)+' aperte</div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">Tasso click</div><div class="kpi-value">'+(s.tasso_click||0)+'%</div><div class="kpi-trend">'+(s.click||0)+' click</div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">Problemi</div><div class="kpi-value">'+((s.rimbalzi||0)+(s.reclami||0))+'</div><div class="kpi-trend'+(((s.rimbalzi||0)+(s.reclami||0))>0?' down':'')+'">'+(s.rimbalzi||0)+' rimbalzi · '+(s.reclami||0)+' spam</div></div>';
+
+        var pt=document.getElementById('emailPerTipo');
+        var tipi=s.per_tipo?Object.keys(s.per_tipo):[];
+        if(tipi.length){
+            var rows='';
+            tipi.sort(function(a,b){return (s.per_tipo[b].inviati||0)-(s.per_tipo[a].inviati||0);});
+            tipi.forEach(function(t){
+                var d=s.per_tipo[t];
+                rows+='<tr><td>'+escLead(nomeTipoEmail(t))+'</td><td style="text-align:right">'+d.inviati+'</td><td style="text-align:right">'+d.tasso_consegna+'%</td><td style="text-align:right">'+d.tasso_apertura+'%</td><td style="text-align:right">'+d.tasso_click+'%</td></tr>';
+            });
+            pt.innerHTML='<div class="table-wrap"><table><thead><tr><th>Tipo di email</th><th style="text-align:right">Inviate</th><th style="text-align:right">Consegna</th><th style="text-align:right">Apertura</th><th style="text-align:right">Click</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+        }else{pt.innerHTML='';}
+    }).catch(function(){document.getElementById('emailKpi').innerHTML='';document.getElementById('emailPerTipo').innerHTML='';});
+
+    apiFetch('/api/email/eventi?limit=150').then(function(list){
+        var body=document.getElementById('emailBody');
+        var cards=document.getElementById('emailCards');
+        if(!list.length){
+            body.innerHTML='<tr><td colspan="6" style="text-align:center;color:#999;padding:24px">Nessuna email registrata. Gli eventi appariranno qui appena Resend inizierà a inviare i webhook.</td></tr>';
+            if(cards)cards.innerHTML='';return;
+        }
+        function stato(e){
+            if(e.complained_at)return '<span class="badge badge-errore">Spam</span>';
+            if(e.bounced_at)return '<span class="badge badge-errore">Rimbalzo</span>';
+            if(e.delivered_at)return '<span class="badge badge-completato">Consegnata</span>';
+            if(e.sent_at)return '<span class="badge badge-inviato">Inviata</span>';
+            return '<span class="badge">'+escLead(e.last_event||'—')+'</span>';
+        }
+        var si='<span style="color:#1e8449;font-weight:600">Sì</span>',no='<span style="color:#bbb">—</span>';
+        var html='',ch='';
+        list.forEach(function(e){
+            var dt=e.created_at?e.created_at.replace('T',' ').substring(0,16):'—';
+            html+='<tr><td style="white-space:nowrap">'+dt+'</td><td>'+escLead(e.destinatario||'—')+'</td><td>'+escLead(nomeTipoEmail(e.tipo))+'</td><td>'+stato(e)+'</td><td>'+(e.opened_at?si:no)+'</td><td>'+(e.clicked_at?si:no)+'</td></tr>';
+            ch+='<div class="mobile-card"><div class="mobile-card-row"><strong>'+escLead(e.destinatario||'—')+'</strong><span>'+dt+'</span></div>'+
+                '<div class="mobile-card-row"><span>'+escLead(nomeTipoEmail(e.tipo))+'</span>'+stato(e)+'</div>'+
+                '<div class="mobile-card-row" style="color:#888;font-size:.8rem"><span>Aperta: '+(e.opened_at?'sì':'no')+'</span><span>Click: '+(e.clicked_at?'sì':'no')+'</span></div></div>';
+        });
+        body.innerHTML=html;
+        if(cards)cards.innerHTML=ch;
+    }).catch(function(){
+        document.getElementById('emailBody').innerHTML='<tr><td colspan="6" style="text-align:center;color:#c0392b;padding:24px">API non raggiungibile</td></tr>';
+    });
 }
 
 // ============ MODAL / SIDE PANEL ============
