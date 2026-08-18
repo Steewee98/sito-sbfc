@@ -482,122 +482,12 @@
             <h2 class="ed-heading" data-reveal data-reveal-delay="50" style="color:var(--ivory)">Accedi ai<br>tuoi corsi.</h2>
         </div>
 
-        <!-- LOGIN FORM -->
-        <div id="login-box" class="ac-login">
-            <h3>Accedi al tuo account</h3>
-            <p>Inserisci le credenziali ricevute via email dopo l'acquisto.</p>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="login-email" placeholder="la tua email">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="login-password" placeholder="password">
-            </div>
-            <div id="login-error" style="display:none;color:var(--accent);font-size:0.85rem;margin-bottom:16px"></div>
-            <button onclick="handleLogin()" class="btn btn-primary" style="width:100%">Accedi</button>
-            <p class="ac-login-note">Non hai ancora un account? <a href="#" onclick="avviaCheckout('corso-completo');return false">Acquista il corso</a></p>
-        </div>
-
-        <!-- AREA CORSI -->
-        <div id="corsi-box" style="display:none" class="ac-corsi">
-            <div class="ac-corsi-bar">
-                <p>Bentornato, <strong id="user-name"></strong></p>
-                <button onclick="handleLogout()" class="btn btn-ghost btn-sm">Esci</button>
-            </div>
-
-            <div class="moduli-lista" id="moduli-lista">
-                <!-- BENVENUTO -->
-                <div class="modulo-row unlocked" id="modulo-row-0">
-                    <div class="modulo-row-header">
-                        <div class="modulo-row-info">
-                            <span class="modulo-numero" style="color:var(--accent)">&#9733;</span>
-                            <div><h4>Benvenuto nel corso</h4><p>1 contenuto &middot; Video di presentazione</p></div>
-                        </div>
-                        <div class="modulo-row-status" id="status-0">
-                            <span class="badge-unlocked">&#10003; Disponibile</span>
-                            <button onclick="toggleContenuti(0)" class="btn btn-primary" style="font-size:0.8rem;padding:8px 16px">Guarda ora</button>
-                        </div>
-                    </div>
-                    <div class="modulo-row-contenuti" id="contenuti-0" style="display:none">
-                        <div class="lezione-item" onclick="apriLezione(0,0)">
-                            <span class="content-type video">Video</span>
-                            <span class="lezione-titolo">Presentazione del corso</span>
-                            <span class="lezione-durata"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modulo-row" id="modulo-row-1">
-                    <div class="modulo-row-header">
-                        <div class="modulo-row-info"><span class="modulo-numero">01</span><div><h4>Hai davvero il controllo del tuo ristorante?</h4><p>5 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast &middot; Challenge</p></div></div>
-                        <div class="modulo-row-status" id="status-1"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-1')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
-                    </div>
-                    <div class="modulo-row-contenuti" id="contenuti-1" style="display:none">
-                        <div class="lezione-item" onclick="apriLezione(1,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
-                        <div class="lezione-item" onclick="apriLezione(1,2)"><span class="content-type article">Articolo</span><span class="lezione-titolo">Slides esplicative</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(1,3)"><span class="content-type video">Video</span><span class="lezione-titolo">Video di approfondimento</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(1,4)"><span class="content-type article">Podcast</span><span class="lezione-titolo">Podcast — caso reale</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(1,5)"><span class="content-type" style="background:var(--accent);color:#fff">Challenge</span><span class="lezione-titolo">La Challenge del Controllo</span><span class="lezione-durata">14 giorni</span></div>
-                    </div>
-                </div>
-
-                <div class="modulo-row" id="modulo-row-2">
-                    <div class="modulo-row-header">
-                        <div class="modulo-row-info"><span class="modulo-numero">02</span><div><h4>Stai pagando per i risultati giusti?</h4><p>5 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast &middot; Challenge</p></div></div>
-                        <div class="modulo-row-status" id="status-2"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-2')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
-                    </div>
-                    <div class="modulo-row-contenuti" id="contenuti-2" style="display:none">
-                        <div class="lezione-item" onclick="apriLezione(2,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
-                        <div class="lezione-item" onclick="apriLezione(2,2)"><span class="content-type article">Articolo</span><span class="lezione-titolo">Slides esplicative</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(2,3)"><span class="content-type video">Video</span><span class="lezione-titolo">Video di approfondimento</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(2,4)"><span class="content-type article">Podcast</span><span class="lezione-titolo">Podcast — caso reale</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(2,5)"><span class="content-type" style="background:var(--accent);color:#fff">Challenge</span><span class="lezione-titolo">La Challenge dei Costi che Rendono</span><span class="lezione-durata">14 giorni</span></div>
-                    </div>
-                </div>
-
-                <div class="modulo-row" id="modulo-row-3">
-                    <div class="modulo-row-header">
-                        <div class="modulo-row-info"><span class="modulo-numero">03</span><div><h4>Cosa ti blocca dal crescere?</h4><p>5 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast &middot; Challenge</p></div></div>
-                        <div class="modulo-row-status" id="status-3"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-3')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
-                    </div>
-                    <div class="modulo-row-contenuti" id="contenuti-3" style="display:none">
-                        <div class="lezione-item" onclick="apriLezione(3,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
-                        <div class="lezione-item" onclick="apriLezione(3,2)"><span class="content-type article">Articolo</span><span class="lezione-titolo">Slides esplicative</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(3,3)"><span class="content-type video">Video</span><span class="lezione-titolo">Video di approfondimento</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(3,4)"><span class="content-type article">Podcast</span><span class="lezione-titolo">Podcast — caso reale</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(3,5)"><span class="content-type" style="background:var(--accent);color:#fff">Challenge</span><span class="lezione-titolo">La Challenge dei 3 Blocchi</span><span class="lezione-durata">30 giorni</span></div>
-                    </div>
-                </div>
-
-                <div class="modulo-row" id="modulo-row-4">
-                    <div class="modulo-row-header">
-                        <div class="modulo-row-info"><span class="modulo-numero">04</span><div><h4>L'Arte di Accogliere nel Food</h4><p>5 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast &middot; Challenge</p></div></div>
-                        <div class="modulo-row-status" id="status-4"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-4')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
-                    </div>
-                    <div class="modulo-row-contenuti" id="contenuti-4" style="display:none">
-                        <div class="lezione-item" onclick="apriLezione(4,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
-                        <div class="lezione-item" onclick="apriLezione(4,2)"><span class="content-type article">Articolo</span><span class="lezione-titolo">Slides esplicative</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(4,3)"><span class="content-type video">Video</span><span class="lezione-titolo">Video di approfondimento</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(4,4)"><span class="content-type article">Podcast</span><span class="lezione-titolo">Podcast — caso reale</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(4,5)"><span class="content-type" style="background:var(--accent);color:#fff">Challenge</span><span class="lezione-titolo">La Challenge dell'Accoglienza</span><span class="lezione-durata">30 giorni</span></div>
-                    </div>
-                </div>
-
-                <div class="modulo-row" id="modulo-row-5">
-                    <div class="modulo-row-header">
-                        <div class="modulo-row-info"><span class="modulo-numero">05</span><div><h4>Come prepararsi al lancio del tuo locale</h4><p>5 contenuti &middot; Simone &middot; Video &middot; Slides &middot; Podcast &middot; Challenge</p></div></div>
-                        <div class="modulo-row-status" id="status-5"><span class="badge-locked">Bloccato</span><button onclick="avviaCheckout('modulo-5')" class="btn btn-outline-dark" style="font-size:0.8rem;padding:8px 16px">Acquista 19,90&euro;</button></div>
-                    </div>
-                    <div class="modulo-row-contenuti" id="contenuti-5" style="display:none">
-                        <div class="lezione-item" onclick="apriLezione(5,0)"><span class="content-type video" style="background:var(--accent)">Simone</span><span class="lezione-titolo">Introduzione di Simone Braghetta</span><span class="lezione-durata"></span></div>
-                        <div class="lezione-item" onclick="apriLezione(5,2)"><span class="content-type article">Articolo</span><span class="lezione-titolo">Slides esplicative</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(5,3)"><span class="content-type video">Video</span><span class="lezione-titolo">Video di approfondimento</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(5,4)"><span class="content-type article">Podcast</span><span class="lezione-titolo">Podcast — caso reale</span><span class="lezione-durata">In arrivo</span></div>
-                        <div class="lezione-item" onclick="apriLezione(5,5)"><span class="content-type" style="background:var(--accent);color:#fff">Challenge</span><span class="lezione-titolo">La Challenge dei 30 Giorni al Lancio</span><span class="lezione-durata">30 giorni</span></div>
-                    </div>
-                </div>
-            </div>
+        <!-- ACCESSO PIATTAFORMA -->
+        <div class="ac-login">
+            <h3>Accedi alla piattaforma</h3>
+            <p>I tuoi corsi sono sulla piattaforma <strong>SB Food Academy</strong>. Accedi con le credenziali che hai ricevuto via email dopo l'acquisto.</p>
+            <a href="https://academy.sbfoodconsulting.com" class="btn btn-primary" style="width:100%;display:block;text-align:center;box-sizing:border-box;text-decoration:none">Accedi alla piattaforma &rarr;</a>
+            <p class="ac-login-note">Non hai ancora un corso? <a href="#" onclick="avviaCheckout('corso-completo');return false">Acquista il corso</a></p>
         </div>
     </div>
 </section>
@@ -731,7 +621,7 @@ if (urlParams.get('pagamento') === 'successo') {
         document.getElementById('area-studenti')
             ?.scrollIntoView({behavior: 'smooth'});
     }, 500);
-    alert('Pagamento completato! Controlla la tua email per le credenziali di accesso.');
+    alert('Pagamento completato! Controlla la tua email per le credenziali, poi accedi alla piattaforma SB Food Academy dal pulsante qui sotto.');
 }
 if (urlParams.get('pagamento') === 'annullato') {
     alert('Pagamento annullato. Puoi riprovare quando vuoi.');
