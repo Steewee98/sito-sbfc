@@ -1158,12 +1158,16 @@ function exportLeadStrumentiCsv(){
 
 // ============ EMAIL (statistiche Resend) ============
 var EMAIL_TIPI={
-    'grazie_download':'Grazie download',
-    'benvenuto':'Benvenuto/contatti',
-    'credenziali':'Credenziali Academy',
+    'grazie_download':'Grazie download (schede)',
+    'credenziali':'Credenziali/Benvenuto Academy',
+    'benvenuto':'Benvenuto contatto',
+    'lead_checklist':'Lead checklist (PDF)',
+    'checklist_esito':'Esito checklist/quiz',
+    'cruscotto':'Acquisto Cruscotto',
     'campagna':'Campagna schede',
     'campagna_schede':'Campagna schede',
     'campagna_feedback':'Campagna feedback',
+    'notifica_interna':'Notifica interna (staff)',
     'altro':'Altro'
 };
 function nomeTipoEmail(t){return EMAIL_TIPI[t]||t||'Altro';}
@@ -1209,8 +1213,10 @@ function renderEmail(){
         var html='',ch='';
         list.forEach(function(e){
             var dt=e.created_at?e.created_at.replace('T',' ').substring(0,16):'—';
-            html+='<tr><td style="white-space:nowrap">'+dt+'</td><td>'+escLead(e.destinatario||'—')+'</td><td>'+escLead(nomeTipoEmail(e.tipo))+'</td><td>'+stato(e)+'</td><td>'+(e.opened_at?si:no)+'</td><td>'+(e.clicked_at?si:no)+'</td></tr>';
+            var subj=e.subject?'<div style="font-size:.72rem;color:#999;margin-top:3px;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+escLead(e.subject)+'">'+escLead(e.subject)+'</div>':'';
+            html+='<tr><td style="white-space:nowrap;vertical-align:top">'+dt+'</td><td>'+escLead(e.destinatario||'—')+subj+'</td><td style="vertical-align:top">'+escLead(nomeTipoEmail(e.tipo))+'</td><td style="vertical-align:top">'+stato(e)+'</td><td style="vertical-align:top">'+(e.opened_at?si:no)+'</td><td style="vertical-align:top">'+(e.clicked_at?si:no)+'</td></tr>';
             ch+='<div class="mobile-card"><div class="mobile-card-row"><strong>'+escLead(e.destinatario||'—')+'</strong><span>'+dt+'</span></div>'+
+                (e.subject?'<div style="font-size:.78rem;color:#777;margin:2px 0 6px">'+escLead(e.subject)+'</div>':'')+
                 '<div class="mobile-card-row"><span>'+escLead(nomeTipoEmail(e.tipo))+'</span>'+stato(e)+'</div>'+
                 '<div class="mobile-card-row" style="color:#888;font-size:.8rem"><span>Aperta: '+(e.opened_at?'sì':'no')+'</span><span>Click: '+(e.clicked_at?'sì':'no')+'</span></div></div>';
         });
