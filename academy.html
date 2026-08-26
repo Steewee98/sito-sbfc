@@ -301,7 +301,7 @@
     </div>
 
     <div class="ac-moduli-stack">
-        <a href="#area-studenti" class="ac-mcard ac-mcard--odd" data-reveal>
+        <a href="#area-studenti" id="modulo-01" class="ac-mcard ac-mcard--odd" data-reveal>
             <div class="ac-mcard-ghost" aria-hidden="true">01</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">01</span>
@@ -322,7 +322,7 @@
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
 
-        <a href="#area-studenti" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="80">
+        <a href="#area-studenti" id="modulo-02" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="80">
             <div class="ac-mcard-ghost" aria-hidden="true">02</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">02</span>
@@ -343,7 +343,7 @@
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
 
-        <a href="#area-studenti" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="160">
+        <a href="#area-studenti" id="modulo-03" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="160">
             <div class="ac-mcard-ghost" aria-hidden="true">03</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">03</span>
@@ -364,7 +364,7 @@
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
 
-        <a href="#area-studenti" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="240">
+        <a href="#area-studenti" id="modulo-04" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="240">
             <div class="ac-mcard-ghost" aria-hidden="true">04</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">04</span>
@@ -385,7 +385,7 @@
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
 
-        <a href="#area-studenti" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="320">
+        <a href="#area-studenti" id="modulo-05" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="320">
             <div class="ac-mcard-ghost" aria-hidden="true">05</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">05</span>
@@ -562,10 +562,9 @@ async function avviaCheckout(prodottoId) {
         }
     }
 
-    const btn = event.target;
-    const testoOriginale = btn.textContent;
-    btn.textContent = 'Caricamento...';
-    btn.disabled = true;
+    const btn = btnEl || (typeof event !== 'undefined' && event ? event.target : null);
+    const testoOriginale = btn ? btn.textContent : '';
+    if (btn) { btn.textContent = 'Caricamento...'; btn.disabled = true; }
 
     try {
         const res = await fetch(
@@ -591,10 +590,16 @@ async function avviaCheckout(prodottoId) {
         console.error('Errore checkout:', e);
         alert('Errore. Riprova o contattaci a ' +
               'info@sbfoodconsulting.com');
-        btn.textContent = testoOriginale;
-        btn.disabled = false;
+        if (btn) { btn.textContent = testoOriginale; btn.disabled = false; }
     }
 }
+
+// Deep-link acquisto da email: academy.html?acquista=modulo-1 | corso-completo
+// apre direttamente il checkout Stripe del prodotto indicato.
+document.addEventListener('DOMContentLoaded', function () {
+    var prodotto = new URLSearchParams(location.search).get('acquista');
+    if (prodotto) { avviaCheckout(prodotto); }
+});
 
 function apriSceltaModulo() {
     var modal = document.getElementById('modulo-select-modal');
