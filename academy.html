@@ -409,7 +409,7 @@
 </section>
 
 <!-- ═══════ PRICING ═══════ -->
-<section class="ac-pricing">
+<section class="ac-pricing" id="prezzi">
     <div class="container">
         <div class="ac-pricing-header">
             <span class="label" data-reveal>Prezzi</span>
@@ -593,13 +593,6 @@ async function avviaCheckout(prodottoId) {
         if (btn) { btn.textContent = testoOriginale; btn.disabled = false; }
     }
 }
-
-// Deep-link acquisto da email: academy.html?acquista=modulo-1 | corso-completo
-// apre direttamente il checkout Stripe del prodotto indicato.
-document.addEventListener('DOMContentLoaded', function () {
-    var prodotto = new URLSearchParams(location.search).get('acquista');
-    if (prodotto) { avviaCheckout(prodotto); }
-});
 
 function apriSceltaModulo() {
     var modal = document.getElementById('modulo-select-modal');
