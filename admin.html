@@ -844,6 +844,8 @@ tr:hover td{background:#fafaf8}
 
     <div class="kpi-grid" id="emailKpi" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px"></div>
 
+    <div id="emailSequenze" style="margin-bottom:24px"></div>
+
     <div id="emailPerTipo" style="margin-bottom:24px"></div>
 
     <div class="table-wrap">
@@ -1167,13 +1169,48 @@ var EMAIL_TIPI={
     'campagna':'Campagna schede',
     'campagna_schede':'Campagna schede',
     'campagna_feedback':'Campagna feedback',
+    'nurture_1':'Nurture 1 · Uso scheda',
+    'nurture_2':'Nurture 2 · Il gap → Modulo 01',
+    'nurture_3':'Nurture 3 · Cruscotto',
+    'nurture_4':'Nurture 4 · Modulo 01',
+    'nurture_5':'Nurture 5 · Corso completo',
+    'nurture_6':'Nurture 6 · Nota di Simone',
     'notifica_interna':'Notifica interna (staff)',
     'altro':'Altro'
 };
 function nomeTipoEmail(t){return EMAIL_TIPI[t]||t||'Altro';}
 
+function renderSequenze(){
+    var box=document.getElementById('emailSequenze');
+    if(!box) return;
+    apiFetch('/api/sequenze/stats').then(function(q){
+        if(!q||q.totale===undefined){box.innerHTML='';return;}
+        var st=q.per_stato||{}, sp=q.per_step_attive||{};
+        var steps='';
+        for(var i=1;i<=6;i++){ steps+='<span style="display:inline-block;background:#f0ece6;border-radius:6px;padding:5px 10px;margin:3px 6px 3px 0;font-size:.8rem">Sett. '+i+': <strong>'+(sp[i]||0)+'</strong></span>'; }
+        // step 0 = iscritti in attesa della prima email
+        var inAttesa=(sp['0']||sp[0]||0);
+        box.innerHTML=
+          '<div style="background:#fff;border:1px solid #e8e4df;border-radius:10px;padding:18px 20px">'+
+            '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">'+
+              '<strong style="font-size:.95rem">Sequenza nurture (una email a settimana)</strong>'+
+              '<span style="font-size:.8rem;color:#8a847b">'+(q.totale||0)+' iscritti totali</span>'+
+            '</div>'+
+            '<div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">'+
+              '<div class="kpi-card"><div class="kpi-label">Attive</div><div class="kpi-value">'+(st.attiva||0)+'</div><div class="kpi-trend">'+inAttesa+' in attesa 1ª mail</div></div>'+
+              '<div class="kpi-card"><div class="kpi-label">Dovute ora</div><div class="kpi-value">'+(q.dovute_ora||0)+'</div><div class="kpi-trend">al prossimo invio</div></div>'+
+              '<div class="kpi-card"><div class="kpi-label">Completate</div><div class="kpi-value">'+(st.completata||0)+'</div><div class="kpi-trend">tutte 6 inviate</div></div>'+
+              '<div class="kpi-card"><div class="kpi-label">Disiscritte</div><div class="kpi-value">'+(st.disiscritta||0)+'</div><div class="kpi-trend">opt-out</div></div>'+
+            '</div>'+
+            '<div style="font-size:.8rem;color:#8a847b;margin-bottom:6px">Iscritti attivi per settimana della sequenza:</div>'+
+            '<div>'+steps+'</div>'+
+          '</div>';
+    }).catch(function(){ box.innerHTML=''; });
+}
+
 function renderEmail(){
     var giorni=document.getElementById('emailFiltroGiorni').value;
+    renderSequenze();
     apiFetch('/api/email/stats?giorni='+giorni).then(function(s){
         var kpi=document.getElementById('emailKpi');
         kpi.innerHTML=
