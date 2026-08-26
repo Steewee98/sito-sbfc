@@ -543,24 +543,12 @@
 <script>
 /* ═══════ STRIPE CHECKOUT ═══════ */
 
-async function avviaCheckout(prodottoId) {
-    // Se l'utente è già loggato usa la sua email
+async function avviaCheckout(prodottoId, btnEl) {
+    // Email: se l'utente è loggato la usiamo per prefill; altrimenti la
+    // raccoglie direttamente Stripe sulla sua pagina di pagamento (niente prompt).
     const userData = JSON.parse(
         localStorage.getItem('sb_user') || 'null');
-
-    let emailCliente = userData?.email || null;
-
-    // Se non loggato chiedi l'email prima del checkout
-    if (!emailCliente) {
-        emailCliente = prompt(
-            'Inserisci la tua email per ricevere ' +
-            'le credenziali di accesso al corso:'
-        );
-        if (!emailCliente || !emailCliente.includes('@')) {
-            alert('Email non valida. Inserisci una email corretta.');
-            return;
-        }
-    }
+    const emailCliente = userData?.email || null;
 
     const btn = btnEl || (typeof event !== 'undefined' && event ? event.target : null);
     const testoOriginale = btn ? btn.textContent : '';

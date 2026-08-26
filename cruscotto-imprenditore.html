@@ -484,12 +484,9 @@ section{padding:clamp(3.2rem,6.5vw,6rem) 0}
   }
   function buy(){
     firePixel();
+    // Email: prefill se loggato, altrimenti la raccoglie Stripe sulla pagina di pagamento.
     var stored=null;try{stored=JSON.parse(localStorage.getItem('sb_user')||'null');}catch(e){}
     var email=(stored&&stored.email)?stored.email:null;
-    if(!email){
-      email=prompt('Inserisci la tua email per ricevere la guida dopo il pagamento:');
-      if(!email||email.indexOf('@')<0){alert('Email non valida. Riprova.');return;}
-    }
     buyLoading(true);
     fetch(CHECKOUT_URL,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({prodotto:PRODOTTO,email:email})})
