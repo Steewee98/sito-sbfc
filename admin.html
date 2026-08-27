@@ -1675,13 +1675,21 @@ async function renderStudenti(filtered){
                 '<td>'+dataIscr+'</td>'+
                 '<td>—</td>'+
                 '<td><span class="badge badge-'+statoClass+'">'+statoLabel+'</span></td>'+
-                '<td><button class="btn-action" onclick="viewStudentAPI('+s.id+')">Dettagli</button></td>'+
+                '<td><button class="btn-action" onclick="viewStudentAPI('+s.id+')">Dettagli</button> '+
+                '<button class="btn-action" style="color:#c4622d;border-color:#e6c3b0" onclick="deleteStudent('+s.id+',\''+(s.email||'')+'\')">Elimina</button></td>'+
             '</tr>';
         }).join('');
     } catch(e){
         console.error('Errore studenti:',e);
         container.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:#c4622d">Errore nel caricamento.</td></tr>';
     }
+}
+function deleteStudent(id, email){
+    if(!confirm('Eliminare definitivamente lo studente '+(email||'#'+id)+'?\nL\'operazione non è reversibile.')) return;
+    apiFetch('/api/studenti/'+id, {method:'DELETE'}).then(function(){
+        renderStudenti();
+        if(typeof renderDashboard==='function') renderDashboard();
+    }).catch(function(e){ alert('Errore durante l\'eliminazione: '+e.message); });
 }
 function viewStudentAPI(id){
     apiFetch('/api/studenti').then(function(data){
