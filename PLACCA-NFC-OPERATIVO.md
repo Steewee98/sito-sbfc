@@ -1,0 +1,86 @@
+# Placca NFC — guida operativa (evasione ordini)
+
+> Cosa fare, ordine per ordine, dal pagamento alla spedizione.
+> Il negozio è su `placca-nfc.html`, gli ordini si gestiscono in `admin.html` → **Placche NFC**.
+
+---
+
+## 1. Il link da scrivere sul tag
+
+Per ogni ordine il sistema genera uno **slug** (identificativo del locale). Il link è sempre questo, con lo slug al posto della parte finale:
+
+```
+https://www.sbfoodconsulting.com/tap.html?p=SLUG-DEL-LOCALE
+```
+
+Lo slug si legge nel gestionale, sotto il nome del locale, e nella scheda che si apre con **Dettagli** (dove c'è anche il pulsante **Apri pagina tap** per provarla).
+
+**Esempio reale, già attivo** (ordine di prova, cancellabile):
+
+```
+https://www.sbfoodconsulting.com/tap.html?p=trattoria-del-tap-demo-0a63
+```
+
+### Perché il link è fatto così
+
+- **Sul tag non finiscono mai i dati del cliente, solo questo indirizzo.** I link recensioni, il menù, i colori stanno nel database e vengono letti al momento del tap.
+- **Il tag non si riscrive mai più.** Se il cliente cambia link Google, apre un profilo TheFork o cambia menù, si modifica dal gestionale e la placca già consegnata punta subito alla cosa nuova.
+- **Un tag per locale.** Lo slug è unico, quindi due clienti non possono avere lo stesso tag. Se un locale ordina più placche (es. una per tavolo), tutte portano lo **stesso** link: sono copie della stessa placca, non placche diverse.
+- **Ogni tap viene contato** e il numero compare nel gestionale, colonna Tap. È il dato da mostrare al cliente per fargli vedere che lo strumento gira.
+
+### Cosa vede il cliente dopo il tap
+
+- **Un solo link recensioni e niente menù** → si apre direttamente la pagina delle recensioni, senza passaggi intermedi.
+- **Più link, oppure il menù** → si apre una pagina con il nome del locale e i pulsanti (Google, TripAdvisor, TheFork, Menù), nei colori scelti dal cliente e con il suo logo se lo ha caricato.
+
+---
+
+## 2. Come si scrive il tag
+
+App **NFC Tools** di wakdev (su Android è più comoda per scrivere; su iPhone serve comunque l'app, la lettura invece è nativa).
+
+1. Apri NFC Tools → scheda **Scrivi** → **Aggiungi un record** → **URL/URI**.
+2. Incolla il link dell'ordine, per intero, `https://` compreso.
+3. **Scrivi**, poi avvicina il tag: su Android l'antenna sta nella parte alta del retro, su iPhone sul bordo superiore.
+4. **Prova con un altro telefono**: deve aprire la pagina senza che nessuno installi niente.
+5. Metti in **sola lettura** solo alla fine, quando il tag è testato e sta per essere spedito: è irreversibile e serve a evitare che qualcuno lo riscriva. Durante le prove lascialo riscrivibile.
+
+Per un semplice indirizzo basta un **NTAG213** (144 byte). NTAG215 o 216 servono solo se un domani vorrai scriverci contenuti più pesanti, tipo una vCard.
+
+---
+
+## 3. Il giro completo di un ordine
+
+| # | Passo | Dove |
+|---|---|---|
+| 1 | Il cliente ordina e paga | `placca-nfc.html` → Stripe |
+| 2 | Arriva l'avviso per email e l'ordine compare con stato **pagato** | email + gestionale |
+| 3 | Solo per le personalizzate: prepari l'anteprima e la mandi al cliente, aspetti l'ok | fuori dal sistema |
+| 4 | Stampi, scrivi il tag col link dell'ordine, provi con un telefono | NFC Tools |
+| 5 | Sposti lo stato su **in lavorazione**, poi **spedito** e infine **consegnato** | gestionale, menu a tendina |
+| 6 | Se in seguito il cliente cambia un link, lo correggi e salvi | gestionale, Dettagli → Salva link |
+
+Gli allegati che il cliente ha caricato (logo, foto, menù) si scaricano dalla scheda **Dettagli**.
+
+---
+
+## 4. Cose da sapere
+
+- **Gli ordini non pagati** restano nascosti: si vedono scegliendo "Abbandonati" dal filtro. Sono carrelli lasciati a metà, non ordini.
+- **L'indirizzo di spedizione** lo raccoglie Stripe al pagamento e compare in tabella. Se manca, il cliente non ha completato il pagamento.
+- **Le richieste fuori catalogo** (tante placche, formati diversi, grafica propria) arrivano nella scheda **Richieste**, con il contatore di quelle da leggere.
+- **La pagina del tap non va indicizzata** ed è già marcata `noindex`: è uno strumento, non una pagina del sito.
+- **Se cancelli un ordine dal gestionale, il tag di quel cliente smette di funzionare.** Cancella solo le prove.
+
+---
+
+## 5. Ordine di prova attivo
+
+| Voce | Valore |
+|---|---|
+| Locale | Trattoria del Tap (DEMO) |
+| Link del tag | `https://www.sbfoodconsulting.com/tap.html?p=trattoria-del-tap-demo-0a63` |
+| Versione | Personalizzata + Menù, 2 pezzi, 104 € |
+| Stato | in lavorazione |
+
+Serve per provare la scrittura di un tag vero senza toccare un ordine di un cliente. Quando non serve più, si elimina da **Dettagli → Elimina**.
