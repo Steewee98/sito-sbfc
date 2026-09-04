@@ -46,7 +46,6 @@
 .nf-stack .nf-img-b { right: 0; bottom: 0; transform: rotate(5deg); }
 .nf-stack:hover .nf-img-a { transform: rotate(-2deg) translateY(-10px); }
 .nf-stack:hover .nf-img-b { transform: rotate(3deg) translateY(10px); }
-.nf-stack-tag { position: absolute; left: 52%; top: 46%; z-index: 3; background: var(--dark); color: var(--ivory); padding: 12px 18px; font-size: .7rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; transform: rotate(-4deg); }
 @media (max-width: 1024px) { .nf-intro { grid-template-columns: 1fr; gap: 48px; } .nf-stack { height: 460px; max-width: 480px; margin: 0 auto; } }
 @media (max-width: 720px) { .nf-stack { height: 380px; } }
 </style>
@@ -65,6 +64,7 @@
             <li><a href="servizi.html">Servizi</a></li>
             <li><a href="percorso-sb.html">Percorso SB</a></li>
             <li><a href="academy.html" class="active">Academy</a></li>
+            <li><a href="placca-nfc.html" class="nav-placca">Placca NFC</a></li>
             <li><a href="clienti.html">Clienti</a></li>
             <li><a href="contatti.html">Contatti</a></li>
             <li><a href="https://academy-sbfc-production.up.railway.app" class="nav-accedi" title="Area studenti — accedi alla piattaforma">Accedi</a></li>
@@ -319,6 +319,34 @@
     </div>
 </section>
 
+<!-- ═══════ PLACCA NFC — promo (shop completo in placca-nfc.html) ═══════ -->
+<section class="nf-promo" id="placca-nfc">
+    <div class="container">
+        <div class="nf-intro">
+            <div>
+                <span class="label" data-reveal>Strumento &middot; Placca NFC recensioni</span>
+                <h2 data-reveal data-reveal-delay="50">Un tap.<br><em>Una recensione.</em></h2>
+                <p class="lead" data-reveal data-reveal-delay="100">Il cliente appoggia il telefono sulla placca e si apre la pagina recensioni del tuo locale. Niente QR da inquadrare, niente &laquo;poi lo faccio a casa&raquo;. Arriva gi&agrave; programmata con i tuoi link: la appoggi sul tavolo e funziona.</p>
+                <div class="nf-steps">
+                    <div class="nf-step" data-reveal data-reveal-delay="150"><span class="nf-step-n">01</span><div><h3>Ci dici i tuoi link</h3><p>Google, TripAdvisor, TheFork: quelli che vuoi. Programmiamo noi il tag prima di spedire.</p></div></div>
+                    <div class="nf-step" data-reveal data-reveal-delay="200"><span class="nf-step-n">02</span><div><h3>La metti dove serve</h3><p>Sul tavolo con il conto, alla cassa, all'uscita: dove il cliente &egrave; contento e ha il telefono in mano.</p></div></div>
+                    <div class="nf-step" data-reveal data-reveal-delay="250"><span class="nf-step-n">03</span><div><h3>Un tap e scrive</h3><p>iPhone e Android, senza app. Dieci secondi, recensione fatta.</p></div></div>
+                </div>
+                <ul class="nf-meta" data-reveal data-reveal-delay="300"><li>Formato A6</li><li>iPhone e Android</li><li>Link modificabili gratis</li><li>Spedizione inclusa</li></ul>
+                <div class="nf-promo-actions" data-reveal data-reveal-delay="350">
+                    <a href="placca-nfc.html" class="btn btn-primary">Ordina la tua placca &rarr;</a>
+                    <span class="nf-promo-price">da <strong>35&euro;</strong> &middot; neutra o personalizzata con logo, colori e men&ugrave;</span>
+                </div>
+            </div>
+            <div class="nf-stack" data-reveal data-reveal-delay="120">
+                <img class="nf-img-a" src="assets/nfc/shop/placca-scura.jpg" alt="Placca NFC recensioni, versione scura" loading="lazy">
+                <img class="nf-img-b" src="assets/nfc/shop/placca-chiara.jpg" alt="Placca NFC recensioni, versione chiara" loading="lazy">
+            </div>
+        </div>
+
+    </div>
+</section>
+
 <!-- ═══════ 5 MODULI ═══════ -->
 <section class="ac-moduli">
     <div class="container">
@@ -500,35 +528,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<!-- ═══════ PLACCA NFC — promo (shop completo in placca-nfc.html) ═══════ -->
-<section class="nf-promo" id="placca-nfc">
-    <div class="container">
-        <div class="nf-intro">
-            <div>
-                <span class="label" data-reveal>Strumento &middot; Placca NFC recensioni</span>
-                <h2 data-reveal data-reveal-delay="50">Un tap.<br><em>Una recensione.</em></h2>
-                <p class="lead" data-reveal data-reveal-delay="100">Il cliente appoggia il telefono sulla placca e si apre la pagina recensioni del tuo locale. Niente QR da inquadrare, niente &laquo;poi lo faccio a casa&raquo;. Arriva gi&agrave; programmata con i tuoi link: la appoggi sul tavolo e funziona.</p>
-                <div class="nf-steps">
-                    <div class="nf-step" data-reveal data-reveal-delay="150"><span class="nf-step-n">01</span><div><h3>Ci dici i tuoi link</h3><p>Google, TripAdvisor, TheFork: quelli che vuoi. Programmiamo noi il tag prima di spedire.</p></div></div>
-                    <div class="nf-step" data-reveal data-reveal-delay="200"><span class="nf-step-n">02</span><div><h3>La metti dove serve</h3><p>Sul tavolo con il conto, alla cassa, all'uscita: dove il cliente &egrave; contento e ha il telefono in mano.</p></div></div>
-                    <div class="nf-step" data-reveal data-reveal-delay="250"><span class="nf-step-n">03</span><div><h3>Un tap e scrive</h3><p>iPhone e Android, senza app. Dieci secondi, recensione fatta.</p></div></div>
-                </div>
-                <ul class="nf-meta" data-reveal data-reveal-delay="300"><li>Formato A6</li><li>iPhone e Android</li><li>Link modificabili gratis</li><li>Spedizione inclusa</li></ul>
-                <div class="nf-promo-actions" data-reveal data-reveal-delay="350">
-                    <a href="placca-nfc.html" class="btn btn-primary">Ordina la tua placca &rarr;</a>
-                    <span class="nf-promo-price">da <strong>35&euro;</strong> &middot; neutra o personalizzata con logo, colori e men&ugrave;</span>
-                </div>
-            </div>
-            <div class="nf-stack" data-reveal data-reveal-delay="120">
-                <img class="nf-img-a" src="assets/nfc/shop/placca-scura.jpg" alt="Placca NFC recensioni, versione scura" loading="lazy">
-                <img class="nf-img-b" src="assets/nfc/shop/placca-chiara.jpg" alt="Placca NFC recensioni, versione chiara" loading="lazy">
-                <span class="nf-stack-tag">10,5 &times; 14,8 cm</span>
-            </div>
-        </div>
-
     </div>
 </section>
 
