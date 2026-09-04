@@ -56,9 +56,10 @@ Per un semplice indirizzo basta un **NTAG213** (144 byte). NTAG215 o 216 servono
 | 1 | Il cliente ordina e paga | `placca-nfc.html` → Stripe |
 | 2 | Arriva l'avviso per email e l'ordine compare con stato **pagato** | email + gestionale |
 | 3 | Solo per le personalizzate: prepari l'anteprima e la mandi al cliente, aspetti l'ok | fuori dal sistema |
-| 4 | Stampi, scrivi il tag col link dell'ordine, provi con un telefono | NFC Tools |
-| 5 | Sposti lo stato su **in lavorazione**, poi **spedito** e infine **consegnato** | gestionale, menu a tendina |
-| 6 | Se in seguito il cliente cambia un link, lo correggi e salvi | gestionale, Dettagli → Salva link |
+| 4 | Scarichi il PDF dalla scheda e lo mandi al tipografo | gestionale, Dettagli → Scarica PDF |
+| 5 | Scrivi il tag col link dell'ordine e provi con un telefono | NFC Tools |
+| 6 | Sposti lo stato su **in lavorazione**, poi **spedito** e infine **consegnato** | gestionale, menu a tendina |
+| 7 | Se in seguito il cliente cambia un link, lo correggi e salvi | gestionale, Dettagli → Salva link |
 
 ### Cosa trovi in Dettagli
 
@@ -66,6 +67,15 @@ A sinistra c'è sempre **la grafica dell'ordine**, così non devi ricostruirla d
 
 - **Versione Base** → l'immagine della placca chiara o scura effettivamente scelta, con il badge della variante e il percorso del file di stampa da usare (`assets/nfc/placca-nfc-a6.html` per la scura, `placca-nfc-a6-light.html` per la chiara).
 - **Versioni personalizzate** → la placca ricostruita come l'ha configurata il cliente: colori scelti, testo, logo e foto caricati, e i portali che ha attivato. È la stessa bozza che vedeva lui mentre ordinava, quindi sai subito cosa si aspetta. Logo e foto vanno comunque impaginati a mano sul file di stampa vero.
+
+Sotto l'anteprima c'è il pulsante **Scarica PDF per la stampa**: genera il file da mandare al tipografo, formato **111 × 154 mm**, cioè A6 finito più 3 mm di abbondanza per lato. È vettoriale con i font incorporati, quindi si può ingrandire senza perdere qualità e non serve che il tipografo abbia Playfair o Inter installati. Il nome del file contiene già il locale, per esempio `placca-trattoria-del-tap-A6.pdf`.
+
+Cosa contiene il PDF, a seconda della versione:
+
+- **Base** → la grafica SB Food con la texture di fondo, chiara o scura secondo la scelta.
+- **Personalizzate** → i colori del cliente, il suo testo, il suo logo e la sua foto di sfondo, e solo le icone dei portali che ha indicato. Se ha preso la versione col menù, compare anche il riquadro "Menù digitale".
+
+Controlla sempre il PDF prima di mandarlo in stampa: se il cliente ha caricato una foto a bassa risoluzione, è qui che si vede.
 
 A destra, in ordine: il link da scrivere sul tag con il pulsante Copia, cosa apre il tap e quanti tap ha già registrato, il cliente, l'indirizzo di spedizione, il pagamento, i file caricati da scaricare, le note e i campi per correggere i link.
 
