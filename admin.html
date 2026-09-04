@@ -97,30 +97,33 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .nfc-art{background:#faf8f5;border:1px solid #e8e4df;border-radius:6px;padding:16px}
 .nfc-art-h{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:#c4622d;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
 .nfc-art-h em{font-style:normal;color:#888;letter-spacing:0;text-transform:none;font-weight:500;font-size:.74rem}
-.pl{position:relative;aspect-ratio:105/148;width:100%;background:#2b2d31;color:#f5f2ee;overflow:hidden;box-shadow:0 10px 26px rgba(26,26,26,.18);container-type:inline-size}
+/* La bozza è il file di stampa in scala: misure in mm/pt come assets/nfc/placca-nfc-a6.html */
+.pl-box{position:relative;width:100%;aspect-ratio:105/148;overflow:hidden;box-shadow:0 10px 26px rgba(26,26,26,.18);background:#2b2d31}
+.pl{position:absolute;top:0;left:0;width:105mm;height:148mm;transform-origin:top left;background:#2b2d31;color:#f5f2ee;overflow:hidden;font-family:'Inter',sans-serif}
 .pl img.pl-full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pl .pl-foto{position:absolute;inset:0;background-size:cover;background-position:center}
-.pl .pl-foto::after{content:"";position:absolute;inset:0;background:var(--plbg,#2b2d31);opacity:.72}
-.pl .pl-frame{position:absolute;top:3.8cqw;left:3.3cqw;right:3.3cqw;bottom:3.3cqw;border:1px solid var(--plac,#c4622d)}
-.pl .pl-body{position:absolute;inset:0}
-.pl .pl-welcome{position:absolute;top:8.6cqw;left:11.4cqw;right:11.4cqw;text-align:center;font-family:'Playfair Display',serif;font-style:italic;font-size:3.5cqw;opacity:.8;line-height:1.3}
-.pl .pl-ico{position:absolute;top:24.8cqw;left:50%;transform:translateX(-50%);width:22.9cqw;color:var(--plac,#c4622d)}
-.pl .pl-ico svg{width:100%;height:auto;display:block}
-.pl .pl-tap{position:absolute;top:48.6cqw;left:0;right:0;text-align:center;font-size:1.7cqw;letter-spacing:.67cqw;text-transform:uppercase;font-weight:600;color:var(--plac,#c4622d)}
-.pl .pl-mid{position:absolute;top:57.5cqw;left:11.4cqw;right:11.4cqw;text-align:center}
-.pl .pl-head{font-family:'Playfair Display',serif;font-weight:600;font-size:7.7cqw;line-height:1.2;overflow-wrap:anywhere}
-.pl .pl-thanks{margin-top:11.4cqw;font-family:'Playfair Display',serif;font-style:italic;font-size:4.2cqw;color:var(--plac,#c4622d)}
-.pl .pl-brand{position:absolute;bottom:10.5cqw;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:5.2cqw}
-.pl .pl-logo{max-height:11cqw;max-width:42cqw;object-fit:contain}
-.pl .pl-ports{display:flex;gap:5.7cqw;color:var(--plac,#c4622d);align-items:center;justify-content:center}
+.pl .pl-foto::after{content:"";position:absolute;inset:0;background:var(--plbg,#2b2d31);opacity:.78}
+.pl .pl-frame{position:absolute;top:4mm;left:3.5mm;right:3.5mm;bottom:3.5mm;border:.5pt solid var(--plac,#c4622d)}
+.pl .pl-body{position:absolute;inset:0;padding:14mm 12mm 13mm;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
+.pl .pl-welcome{position:absolute;top:10.5mm;left:0;right:0;padding:0 16mm;font-family:'Playfair Display',serif;font-style:italic;font-size:10.5pt;letter-spacing:.2pt;opacity:.9}
+.pl .pl-middle{flex:1 1 auto;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pl .pl-tap{position:relative;display:flex;flex-direction:column;align-items:center}
+.pl .pl-ico{width:24mm;color:var(--plac,#c4622d)}
+.pl .pl-ico svg{display:block;width:100%;height:auto}
+.pl .pl-here{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:2.5mm;white-space:nowrap;font-weight:600;font-size:5pt;letter-spacing:2pt;text-transform:uppercase;color:var(--plac,#c4622d)}
+.pl .pl-head{font-family:'Playfair Display',serif;font-weight:600;font-size:23pt;line-height:1.2;letter-spacing:.2pt;margin-top:11.3mm;max-width:80mm;overflow-wrap:anywhere}
+.pl .pl-thanks{font-family:'Playfair Display',serif;font-style:italic;font-size:12.5pt;letter-spacing:.2pt;color:var(--plac,#c4622d);margin-top:12mm}
+.pl .pl-brand{display:flex;flex-direction:column;align-items:center;gap:4.5mm;padding-bottom:1mm}
+.pl .pl-logo{max-height:12mm;max-width:40mm;object-fit:contain}
+.pl .pl-ports{display:flex;align-items:center;justify-content:center;gap:6mm;color:var(--plac,#c4622d)}
 .pl .pl-ports svg{display:block}
-.pl .pl-ports .p-google{height:5.9cqw;width:auto}
-.pl .pl-ports .p-trip{height:4.8cqw;width:auto}
-.pl .pl-ports .p-fork{height:6.5cqw;width:auto}
-.pl .pl-menu{font-size:1.7cqw;letter-spacing:.54cqw;text-transform:uppercase;font-weight:600;border:1px solid currentColor;padding:.8cqw 1.6cqw}
-.pl .pl-loc{display:flex;align-items:center;justify-content:center;gap:2.9cqw;font-family:'Inter',sans-serif;font-weight:600;font-size:2.3cqw;letter-spacing:.81cqw;text-transform:uppercase;color:var(--plac,#c4622d);white-space:nowrap}
-.pl .pl-loc::before,.pl .pl-loc::after{content:"";width:6.7cqw;height:1px;background:currentColor;opacity:.7;flex:none}
-.pl .pl-loc span{overflow:hidden;text-overflow:ellipsis;max-width:55cqw}
+.pl .pl-ports .p-google{height:6.2mm;width:auto}
+.pl .pl-ports .p-trip{height:5mm;width:auto}
+.pl .pl-ports .p-fork{height:6.8mm;width:auto}
+.pl .pl-menu{font-weight:600;font-size:5pt;letter-spacing:1.6pt;text-transform:uppercase;border:.5pt solid currentColor;padding:1mm 2mm}
+.pl .pl-loc{display:flex;align-items:center;gap:3mm;font-weight:600;font-size:6.8pt;letter-spacing:2.4pt;text-transform:uppercase;color:var(--plac,#c4622d);white-space:nowrap}
+.pl .pl-loc::before,.pl .pl-loc::after{content:"";width:7mm;height:.5pt;background:currentColor;opacity:.7;flex:none}
+.pl .pl-loc span{overflow:hidden;text-overflow:ellipsis;max-width:55mm}
 .nfc-sw{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;margin-right:14px}
 .nfc-sw i{width:16px;height:16px;border-radius:50%;border:1px solid #ccc;display:inline-block}
 .nfc-blk{margin-bottom:18px}
@@ -1243,42 +1246,6 @@ var PL_PORT={
 function plLum(h){try{var r=parseInt(h.substr(1,2),16),g=parseInt(h.substr(3,2),16),b=parseInt(h.substr(5,2),16);return (0.299*r+0.587*g+0.114*b)/255;}catch(e){return 0;}}
 
 // Riproduce la placca come l'ha configurata il cliente (o mostra la grafica SB scelta).
-function nfcAnteprima(o){
-    if(o.tier==='base'){
-        var v=o.variante||'scura';
-        return '<div class="nfc-art"><div class="nfc-art-h"><span>Grafica da stampare</span><em>SB Food</em></div>'+
-               '<div class="pl"><img class="pl-full" src="assets/nfc/shop/placca-'+v+'.jpg" alt="Placca '+v+'"></div>'+
-               '<div style="margin-top:12px;text-align:center"><span class="nfc-var '+v+'">Versione '+v.toUpperCase()+'</span></div>'+
-               nfcBottonePdf(o)+
-               '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5;text-align:center">Sorgente: <code>assets/nfc/placca-nfc-a6'+(v==='chiara'?'-light':'')+'.html</code></div></div>';
-    }
-    var bg=o.colore_sfondo||'#2b2d31', ac=o.colore_primario||'#c4622d';
-    var fg=plLum(bg)>0.6?'#2b2d31':'#f5f2ee';
-    var ports='';
-    [['google',o.link_google],['tripadvisor',o.link_tripadvisor],['thefork',o.link_thefork]].forEach(function(p){ if(p[1]) ports+=PL_PORT[p[0]]; });
-    if(o.tier==='personalizzata-menu') ports+='<span class="pl-menu">Menù</span>';
-    var alle=o.allegati||{};
-    return '<div class="nfc-art"><div class="nfc-art-h"><span>Come l\'ha configurata</span><em>bozza del cliente</em></div>'+
-      '<div class="pl" id="plBox" style="background:'+nfcEsc(bg)+';color:'+fg+';--plbg:'+nfcEsc(bg)+';--plac:'+nfcEsc(ac)+'">'+
-        (alle.foto?'<div class="pl-foto" id="plFoto"></div>':'')+
-        '<div class="pl-frame"></div>'+
-        '<div class="pl-body">'+
-          '<div class="pl-welcome">È stato un piacere averti con noi</div>'+
-          '<div class="pl-ico">'+PL_ICO_TAP+'</div><div class="pl-tap">Appoggia qui</div>'+
-          '<div class="pl-mid">'+
-            '<div class="pl-head">'+nfcEsc(o.testo_placca||'Avvicina il telefono per lasciare una recensione')+'</div>'+
-            '<div class="pl-thanks">Grazie per il tuo feedback!</div></div>'+
-          '<div class="pl-brand">'+(alle.logo?'<img class="pl-logo" id="plLogo" alt="">':'')+
-            '<div class="pl-ports">'+ports+'</div>'+
-            '<div class="pl-loc"><span>'+nfcEsc(o.nome_locale)+'</span></div></div>'+
-        '</div></div>'+
-      '<div style="margin-top:12px">'+
-        '<span class="nfc-sw"><i style="background:'+nfcEsc(bg)+'"></i>Sfondo '+nfcEsc(bg)+'</span>'+
-        '<span class="nfc-sw"><i style="background:'+nfcEsc(ac)+'"></i>Accento '+nfcEsc(ac)+'</span></div>'+
-      nfcBottonePdf(o)+
-      '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5">Il PDF riporta colori, testo, logo e foto scelti dal cliente. Controllalo prima di mandarlo in stampa.</div></div>';
-}
-
 function nfcBottonePdf(o){
     return '<button class="btn-sm" id="pdfBtn'+o.id+'" style="width:100%;margin-top:12px;padding:11px" '+
            'onclick="nfcScaricaPdf('+o.id+')">Scarica PDF per la stampa (A6 + abbondanza)</button>';
@@ -1300,6 +1267,51 @@ function nfcScaricaPdf(id){
       .catch(function(e){ alert('PDF non generato: '+e.message); })
       .then(function(){ if(btn){ btn.disabled=false; btn.textContent=testo; } });
 }
+
+function nfcAnteprima(o){
+    if(o.tier==='base'){
+        var v=o.variante||'scura';
+        return '<div class="nfc-art"><div class="nfc-art-h"><span>Grafica da stampare</span><em>SB Food</em></div>'+
+               '<div class="pl-box"><div class="pl" id="plBox"><img class="pl-full" src="assets/nfc/shop/placca-'+v+'.jpg" alt="Placca '+v+'"></div></div>'+
+               '<div style="margin-top:12px;text-align:center"><span class="nfc-var '+v+'">Versione '+v.toUpperCase()+'</span></div>'+
+               nfcBottonePdf(o)+
+               '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5;text-align:center">Sorgente: <code>assets/nfc/placca-nfc-a6'+(v==='chiara'?'-light':'')+'.html</code></div></div>';
+    }
+    var bg=o.colore_sfondo||'#2b2d31', ac=o.colore_primario||'#c4622d';
+    var fg=plLum(bg)>0.6?'#2b2d31':'#f5f2ee';
+    var ports='';
+    [['google',o.link_google],['tripadvisor',o.link_tripadvisor],['thefork',o.link_thefork]].forEach(function(p){ if(p[1]) ports+=PL_PORT[p[0]]; });
+    if(o.tier==='personalizzata-menu') ports+='<span class="pl-menu">Menù</span>';
+    var alle=o.allegati||{};
+    return '<div class="nfc-art"><div class="nfc-art-h"><span>Come l\'ha configurata</span><em>bozza del cliente</em></div>'+
+      '<div class="pl-box"><div class="pl" id="plBox" style="background:'+nfcEsc(bg)+';color:'+fg+';--plbg:'+nfcEsc(bg)+';--plac:'+nfcEsc(ac)+'">'+
+        (alle.foto?'<div class="pl-foto" id="plFoto"></div>':'')+
+        '<div class="pl-frame"></div>'+
+        '<div class="pl-body">'+
+          '<div class="pl-welcome">È stato un piacere averti con noi</div>'+
+          '<div class="pl-middle">'+
+            '<div class="pl-tap"><div class="pl-ico">'+PL_ICO_TAP+'</div><span class="pl-here">Appoggia qui</span></div>'+
+            '<div class="pl-head">'+nfcEsc(o.testo_placca||'Avvicina il telefono per lasciare una recensione')+'</div>'+
+            '<div class="pl-thanks">Grazie per il tuo feedback!</div>'+
+          '</div>'+
+          '<div class="pl-brand">'+(alle.logo?'<img class="pl-logo" id="plLogo" alt="">':'')+
+            '<div class="pl-ports">'+ports+'</div>'+
+            '<div class="pl-loc"><span>'+nfcEsc(o.nome_locale)+'</span></div></div>'+
+        '</div></div></div>'+
+      '<div style="margin-top:12px">'+
+        '<span class="nfc-sw"><i style="background:'+nfcEsc(bg)+'"></i>Sfondo '+nfcEsc(bg)+'</span>'+
+        '<span class="nfc-sw"><i style="background:'+nfcEsc(ac)+'"></i>Accento '+nfcEsc(ac)+'</span></div>'+
+      nfcBottonePdf(o)+
+      '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5">Il PDF riporta colori, testo, logo e foto scelti dal cliente. Controllalo prima di mandarlo in stampa.</div></div>';
+}
+
+// la placca è disegnata in mm: la riduco alla larghezza del riquadro
+function nfcScalaPlacca(){
+    var box=document.querySelector('.pl-box'), pl=document.getElementById('plBox');
+    if(!box||!pl) return;
+    pl.style.transform='scale('+(box.clientWidth/(105*96/25.4))+')';
+}
+
 // Logo e foto stanno dietro al token admin: li carico e li inserisco come blob.
 function nfcCaricaMedia(o){
     ['logo','foto'].forEach(function(k){
@@ -1360,6 +1372,7 @@ function nfcApri(id){
             '<button class="btn-sm" onclick="nfcSalvaLink('+o.id+')">Salva link</button></div></div>'+
         '</div>'+
       '</div>';
+    nfcScalaPlacca();
     nfcCaricaMedia(o);
     box.scrollIntoView({behavior:'smooth',block:'start'});
 }
