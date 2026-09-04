@@ -60,7 +60,14 @@ Per un semplice indirizzo basta un **NTAG213** (144 byte). NTAG215 o 216 servono
 | 5 | Sposti lo stato su **in lavorazione**, poi **spedito** e infine **consegnato** | gestionale, menu a tendina |
 | 6 | Se in seguito il cliente cambia un link, lo correggi e salvi | gestionale, Dettagli → Salva link |
 
-Gli allegati che il cliente ha caricato (logo, foto, menù) si scaricano dalla scheda **Dettagli**.
+### Cosa trovi in Dettagli
+
+A sinistra c'è sempre **la grafica dell'ordine**, così non devi ricostruirla dai campi:
+
+- **Versione Base** → l'immagine della placca chiara o scura effettivamente scelta, con il badge della variante e il percorso del file di stampa da usare (`assets/nfc/placca-nfc-a6.html` per la scura, `placca-nfc-a6-light.html` per la chiara).
+- **Versioni personalizzate** → la placca ricostruita come l'ha configurata il cliente: colori scelti, testo, logo e foto caricati, e i portali che ha attivato. È la stessa bozza che vedeva lui mentre ordinava, quindi sai subito cosa si aspetta. Logo e foto vanno comunque impaginati a mano sul file di stampa vero.
+
+A destra, in ordine: il link da scrivere sul tag con il pulsante Copia, cosa apre il tap e quanti tap ha già registrato, il cliente, l'indirizzo di spedizione, il pagamento, i file caricati da scaricare, le note e i campi per correggere i link.
 
 ---
 
