@@ -110,9 +110,11 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .pl .pl-tap{font-size:.38rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--plac,#c4622d);margin-top:-5%}
 .pl .pl-head{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(.8rem,4.2cqw,1.1rem);line-height:1.2;max-width:92%;overflow-wrap:anywhere}
 .pl .pl-thanks{font-family:'Playfair Display',serif;font-style:italic;font-size:.7rem;color:var(--plac,#c4622d)}
-.pl .pl-brand{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
-.pl .pl-logo{max-height:34px;max-width:55%;object-fit:contain}
-.pl .pl-loc{font-family:'Playfair Display',serif;font-size:.8rem}
+.pl .pl-brand{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+.pl .pl-logo{max-height:28px;max-width:45%;object-fit:contain}
+.pl .pl-loc{display:flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-weight:600;font-size:.46rem;letter-spacing:2.2px;text-transform:uppercase;color:var(--plac,#c4622d);white-space:nowrap;max-width:100%}
+.pl .pl-loc::before,.pl .pl-loc::after{content:"";width:15px;height:1px;background:currentColor;opacity:.7;flex:none}
+.pl .pl-loc span{overflow:hidden;text-overflow:ellipsis}
 .pl .pl-ports{display:flex;gap:9px;color:var(--plac,#c4622d);align-items:center}
 .pl .pl-ports svg{height:12px;width:auto}
 .pl .pl-menu{font-size:.42rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;border:1px solid currentColor;padding:1px 5px}
@@ -1263,7 +1265,8 @@ function nfcAnteprima(o){
             '<div class="pl-head">'+nfcEsc(o.testo_placca||'Avvicina il telefono per lasciare una recensione')+'</div>'+
             '<div class="pl-thanks">Grazie per il tuo feedback!</div></div>'+
           '<div class="pl-brand">'+(alle.logo?'<img class="pl-logo" id="plLogo" alt="">':'')+
-            '<div class="pl-loc">'+nfcEsc(o.nome_locale)+'</div><div class="pl-ports">'+ports+'</div></div>'+
+            '<div class="pl-ports">'+ports+'</div>'+
+            '<div class="pl-loc"><span>'+nfcEsc(o.nome_locale)+'</span></div></div>'+
         '</div></div>'+
       '<div style="margin-top:12px">'+
         '<span class="nfc-sw"><i style="background:'+nfcEsc(bg)+'"></i>Sfondo '+nfcEsc(bg)+'</span>'+

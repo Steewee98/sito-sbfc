@@ -161,11 +161,13 @@
 .nf-placca .headline { font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(.95rem, 4.2cqw, 1.35rem); line-height: 1.2; max-width: 92%; overflow-wrap: anywhere; }
 .nf-preview-wrap { container-type: inline-size; }
 .nf-placca .thanks { font-family: 'Playfair Display', serif; font-style: italic; font-size: .8rem; color: var(--pl-accent, #c4622d); }
-.nf-placca .brand { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
-.nf-placca .logo { max-height: 42px; max-width: 55%; object-fit: contain; }
-.nf-placca .locale { font-family: 'Playfair Display', serif; font-size: .95rem; letter-spacing: .3px; }
+.nf-placca .brand { display: flex; flex-direction: column; align-items: center; gap: 9px; width: 100%; }
+.nf-placca .logo { max-height: 34px; max-width: 45%; object-fit: contain; }
 .nf-placca .portals { display: flex; gap: 12px; color: var(--pl-accent, #c4622d); align-items: center; }
 .nf-placca .portals svg { height: 15px; width: auto; }
+.nf-placca .locale { display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: .5rem; letter-spacing: 2.4px; text-transform: uppercase; color: var(--pl-accent, #c4622d); white-space: nowrap; max-width: 100%; }
+.nf-placca .locale::before, .nf-placca .locale::after { content: ""; width: 18px; height: 1px; background: currentColor; opacity: .7; flex: none; }
+.nf-placca .locale span { overflow: hidden; text-overflow: ellipsis; }
 .nf-placca .portals .menu-badge { font-size: .5rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; border: 1px solid currentColor; padding: 2px 6px; }
 
 .nf-summary { margin-top: 18px; border-top: 1.5px solid var(--ink); padding-top: 18px; }
@@ -531,8 +533,8 @@
                                 </div>
                                 <div class="brand">
                                     <img class="logo" id="pvLogo" alt="" hidden>
-                                    <div class="locale" id="pvLocale">Il tuo locale</div>
                                     <div class="portals" id="pvPortals"></div>
+                                    <div class="locale"><span id="pvLocale">Il tuo locale</span></div>
                                 </div>
                             </div>
                         </div>
