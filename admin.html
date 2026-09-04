@@ -93,6 +93,38 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .panel-list-item .info p{font-size:.78rem;color:#5a5a5a}
 
 /* BADGES */
+.nfc-card{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:start}
+.nfc-art{background:#faf8f5;border:1px solid #e8e4df;border-radius:6px;padding:16px}
+.nfc-art-h{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:#c4622d;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.nfc-art-h em{font-style:normal;color:#888;letter-spacing:0;text-transform:none;font-weight:500;font-size:.74rem}
+.pl{position:relative;aspect-ratio:105/148;width:100%;background:#2b2d31;color:#f5f2ee;overflow:hidden;box-shadow:0 10px 26px rgba(26,26,26,.18);container-type:inline-size}
+.pl img.pl-full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pl .pl-foto{position:absolute;inset:0;background-size:cover;background-position:center}
+.pl .pl-foto::after{content:"";position:absolute;inset:0;background:var(--plbg,#2b2d31);opacity:.72}
+.pl .pl-frame{position:absolute;inset:6.5% 6%;border:1px solid var(--plac,#c4622d)}
+.pl .pl-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:13% 12% 11%}
+.pl .pl-welcome{font-family:'Playfair Display',serif;font-style:italic;font-size:.62rem;opacity:.75}
+.pl .pl-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7%}
+.pl .pl-ico{width:22%;color:var(--plac,#c4622d)}
+.pl .pl-ico svg{width:100%;height:auto;display:block}
+.pl .pl-tap{font-size:.38rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--plac,#c4622d);margin-top:-5%}
+.pl .pl-head{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(.8rem,4.2cqw,1.1rem);line-height:1.2;max-width:92%;overflow-wrap:anywhere}
+.pl .pl-thanks{font-family:'Playfair Display',serif;font-style:italic;font-size:.7rem;color:var(--plac,#c4622d)}
+.pl .pl-brand{display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
+.pl .pl-logo{max-height:34px;max-width:55%;object-fit:contain}
+.pl .pl-loc{font-family:'Playfair Display',serif;font-size:.8rem}
+.pl .pl-ports{display:flex;gap:9px;color:var(--plac,#c4622d);align-items:center}
+.pl .pl-ports svg{height:12px;width:auto}
+.pl .pl-menu{font-size:.42rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;border:1px solid currentColor;padding:1px 5px}
+.nfc-sw{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;margin-right:14px}
+.nfc-sw i{width:16px;height:16px;border-radius:50%;border:1px solid #ccc;display:inline-block}
+.nfc-blk{margin-bottom:18px}
+.nfc-blk h4{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:#888;font-weight:600;margin-bottom:8px}
+.nfc-blk div{font-size:.9rem;line-height:1.65}
+.nfc-grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 28px}
+.nfc-var{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:600;background:#37393f;color:#fff}
+.nfc-var.chiara{background:#f0ece7;color:#37393f;border:1px solid #d9d4cc}
+@media(max-width:900px){.nfc-card{grid-template-columns:1fr}.nfc-art{max-width:300px}}
 .nfc-tab{background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px;font-size:.92rem;font-weight:600;color:#888;cursor:pointer;transition:color .2s,border-color .2s}
 .nfc-tab:hover{color:#37393f}
 .nfc-tab.active{color:#c4622d;border-bottom-color:#c4622d}
@@ -1182,7 +1214,7 @@ function renderNfc(){
             return '<tr>'+
               '<td>'+new Date(o.created_at).toLocaleDateString('it-IT')+'</td>'+
               '<td><strong>'+nfcEsc(o.nome_locale)+'</strong><br><small style="color:#888">'+nfcEsc(o.slug)+'</small></td>'+
-              '<td>'+(NFC_TIER[o.tier]||o.tier)+(o.variante?' · '+o.variante:'')+'</td>'+
+              '<td>'+(NFC_TIER[o.tier]||o.tier)+(o.variante?'<br><span class="nfc-var '+o.variante+'" style="margin-top:4px">'+o.variante+'</span>':'')+'</td>'+
               '<td>'+o.quantita+'</td>'+
               '<td>'+nfcEsc(o.referente||'')+'<br><small><a href="mailto:'+nfcEsc(o.email)+'">'+nfcEsc(o.email)+'</a>'+(o.telefono?' · '+nfcEsc(o.telefono):'')+'</small></td>'+
               '<td style="font-size:.82rem">'+nfcEsc(sp)+'</td>'+
@@ -1197,38 +1229,112 @@ function renderNfc(){
 function nfcStato(id,stato){
     apiFetch('/api/nfc/ordini/'+id,{method:'PATCH',body:JSON.stringify({stato:stato})}).then(function(){renderNfc();});
 }
+var PL_ICO_TAP='<svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="24" width="42" height="60" rx="8"/><line x1="34" y1="32" x2="48" y2="32"/><circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/><path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/><path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/><path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/></svg>';
+var PL_PORT={
+ google:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20.5 12.2a8.5 8.5 0 1 1-2.5-6.1"/><path d="M12 12.2h8.5"/></svg>',
+ tripadvisor:'<svg viewBox="0 0 44 26" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="15" r="7"/><circle cx="32" cy="15" r="7"/><circle cx="12" cy="15" r="2.2" fill="currentColor" stroke="none"/><circle cx="32" cy="15" r="2.2" fill="currentColor" stroke="none"/><path d="M4 8h36" stroke-linecap="round"/><path d="M22 8l-3 4M22 8l3 4" stroke-linecap="round"/></svg>',
+ thefork:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v6a3 3 0 0 0 6 0V3"/><path d="M10 3v18"/><path d="M17 3c-2 2-2 6-2 8h3v10"/></svg>'};
+
+function plLum(h){try{var r=parseInt(h.substr(1,2),16),g=parseInt(h.substr(3,2),16),b=parseInt(h.substr(5,2),16);return (0.299*r+0.587*g+0.114*b)/255;}catch(e){return 0;}}
+
+// Riproduce la placca come l'ha configurata il cliente (o mostra la grafica SB scelta).
+function nfcAnteprima(o){
+    if(o.tier==='base'){
+        var v=o.variante||'scura';
+        return '<div class="nfc-art"><div class="nfc-art-h"><span>Grafica da stampare</span><em>SB Food</em></div>'+
+               '<div class="pl"><img class="pl-full" src="assets/nfc/shop/placca-'+v+'.jpg" alt="Placca '+v+'"></div>'+
+               '<div style="margin-top:12px;text-align:center"><span class="nfc-var '+v+'">Versione '+v.toUpperCase()+'</span></div>'+
+               '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5;text-align:center">File pronto in <code>assets/nfc/placca-nfc-a6'+(v==='chiara'?'-light':'')+'.html</code></div></div>';
+    }
+    var bg=o.colore_sfondo||'#2b2d31', ac=o.colore_primario||'#c4622d';
+    var fg=plLum(bg)>0.6?'#2b2d31':'#f5f2ee';
+    var ports='';
+    [['google',o.link_google],['tripadvisor',o.link_tripadvisor],['thefork',o.link_thefork]].forEach(function(p){ if(p[1]) ports+=PL_PORT[p[0]]; });
+    if(o.tier==='personalizzata-menu') ports+='<span class="pl-menu">Menù</span>';
+    var alle=o.allegati||{};
+    return '<div class="nfc-art"><div class="nfc-art-h"><span>Come l\'ha configurata</span><em>bozza del cliente</em></div>'+
+      '<div class="pl" id="plBox" style="background:'+nfcEsc(bg)+';color:'+fg+';--plbg:'+nfcEsc(bg)+';--plac:'+nfcEsc(ac)+'">'+
+        (alle.foto?'<div class="pl-foto" id="plFoto"></div>':'')+
+        '<div class="pl-frame"></div>'+
+        '<div class="pl-body">'+
+          '<div class="pl-welcome">È stato un piacere averti con noi</div>'+
+          '<div class="pl-mid"><div class="pl-ico">'+PL_ICO_TAP+'</div><div class="pl-tap">Appoggia qui</div>'+
+            '<div class="pl-head">'+nfcEsc(o.testo_placca||'Avvicina il telefono per lasciare una recensione')+'</div>'+
+            '<div class="pl-thanks">Grazie per il tuo feedback!</div></div>'+
+          '<div class="pl-brand">'+(alle.logo?'<img class="pl-logo" id="plLogo" alt="">':'')+
+            '<div class="pl-loc">'+nfcEsc(o.nome_locale)+'</div><div class="pl-ports">'+ports+'</div></div>'+
+        '</div></div>'+
+      '<div style="margin-top:12px">'+
+        '<span class="nfc-sw"><i style="background:'+nfcEsc(bg)+'"></i>Sfondo '+nfcEsc(bg)+'</span>'+
+        '<span class="nfc-sw"><i style="background:'+nfcEsc(ac)+'"></i>Accento '+nfcEsc(ac)+'</span></div>'+
+      '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5">Bozza indicativa: logo e foto vanno impaginati a mano sul file di stampa.</div></div>';
+}
+
+// Logo e foto stanno dietro al token admin: li carico e li inserisco come blob.
+function nfcCaricaMedia(o){
+    ['logo','foto'].forEach(function(k){
+        if(!(o.allegati||{})[k]) return;
+        fetch(BACKEND_URL+'/api/nfc/ordini/'+o.id+'/allegato/'+k,{headers:{'X-Admin-Token':ADMIN_TOKEN}})
+          .then(function(r){return r.blob()})
+          .then(function(b){
+              var u=URL.createObjectURL(b);
+              if(k==='logo'){ var el=document.getElementById('plLogo'); if(el) el.src=u; }
+              else { var f=document.getElementById('plFoto'); if(f) f.style.backgroundImage='url("'+u+'")'; }
+          }).catch(function(){});
+    });
+}
+
 function nfcApri(id){
     var o=_nfcOrdini.find(function(x){return x.id===id}); if(!o) return;
     var box=document.getElementById('nfcDettaglio');
-    var link=function(l,u){return u?'<div><strong>'+l+':</strong> <a href="'+nfcEsc(u)+'" target="_blank">'+nfcEsc(u)+'</a></div>':''};
-    var alle=Object.keys(o.allegati||{}).map(function(k){return '<button class="btn-sm" style="margin-right:8px" onclick="nfcScarica('+o.id+',\''+k+'\')">Scarica '+k+' ('+nfcEsc(o.allegati[k].nome)+')</button>'}).join('')||'<span style="color:#888">nessuno</span>';
+    var link=function(l,u){return u?'<div><strong>'+l+'</strong> · <a href="'+nfcEsc(u)+'" target="_blank">'+nfcEsc(u)+'</a></div>':''};
     var sp=o.spedizione||{};
+    var indirizzo=[sp.nome,sp.via,sp.via2,(sp.cap||'')+' '+(sp.citta||''),sp.provincia,sp.paese].filter(function(x){return x&&x.trim()}).join(', ');
+    var alle=Object.keys(o.allegati||{});
+    var alleHtml=alle.length
+        ? alle.map(function(k){return '<button class="btn-sm" style="margin:0 8px 8px 0" onclick="nfcScarica('+o.id+',\''+k+'\')">↓ '+k+' — '+nfcEsc(o.allegati[k].nome)+'</button>'}).join('')
+        : '<span style="color:#888">nessun file caricato dal cliente</span>';
+    var tapUrl='https://www.sbfoodconsulting.com/tap.html?p='+o.slug;
+
     box.style.display='block';
-    box.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">'+
-      '<h3 style="margin:0">'+nfcEsc(o.nome_locale)+' <small style="color:#888;font-weight:400">#'+o.id+' · '+nfcEsc(o.slug)+'</small></h3>'+
-      '<div><a class="btn-sm" style="text-decoration:none;display:inline-block;margin-right:8px" target="_blank" href="tap.html?p='+nfcEsc(o.slug)+'">Apri pagina tap</a>'+
-      '<button class="btn-sm" style="background:#c0392b" onclick="nfcElimina('+o.id+')">Elimina</button></div></div>'+
-      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:18px;font-size:.9rem;line-height:1.7">'+
-        '<div><div style="font-weight:600;margin-bottom:6px">Ordine</div>'+
-          '<div>'+(NFC_TIER[o.tier]||o.tier)+(o.variante?' · grafica '+o.variante:'')+' × '+o.quantita+'</div>'+
-          '<div>Importo: <strong>'+(o.importo!=null?o.importo.toFixed(2)+'€':'—')+'</strong> · Stripe: <code style="font-size:.78rem">'+nfcEsc(o.stripe_id||'—')+'</code></div>'+
-          '<div>Pagato: '+(o.pagato_at?new Date(o.pagato_at).toLocaleString('it-IT'):'—')+'</div>'+
-          '<div>Tap registrati: '+(o.tap_count||0)+'</div></div>'+
-        '<div><div style="font-weight:600;margin-bottom:6px">Cliente e spedizione</div>'+
-          '<div>'+nfcEsc(o.referente||'—')+' · '+nfcEsc(o.email)+(o.telefono?' · '+nfcEsc(o.telefono):'')+'</div>'+
-          '<div>'+nfcEsc([sp.nome,sp.via,sp.via2,sp.cap,sp.citta,sp.provincia,sp.paese].filter(Boolean).join(', ')||'Indirizzo non ancora ricevuto')+'</div></div>'+
-        '<div><div style="font-weight:600;margin-bottom:6px">Cosa apre il tap</div>'+link('Google',o.link_google)+link('TripAdvisor',o.link_tripadvisor)+link('TheFork',o.link_thefork)+link('Menù (link)',o.menu_link)+'</div>'+
-        '<div><div style="font-weight:600;margin-bottom:6px">Grafica</div>'+
-          (o.colore_primario?'<div>Colori: <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:'+nfcEsc(o.colore_sfondo)+';border:1px solid #ccc;vertical-align:middle"></span> '+nfcEsc(o.colore_sfondo)+' / <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:'+nfcEsc(o.colore_primario)+';border:1px solid #ccc;vertical-align:middle"></span> '+nfcEsc(o.colore_primario)+'</div>':'<div>Grafica SB Food standard</div>')+
-          (o.testo_placca?'<div>Testo: “'+nfcEsc(o.testo_placca)+'”</div>':'')+
-          '<div style="margin-top:8px">Allegati: '+alle+'</div></div>'+
+    box.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px">'+
+        '<div><h3 style="margin:0 0 4px">'+nfcEsc(o.nome_locale)+'</h3>'+
+        '<div style="color:#888;font-size:.85rem">Ordine #'+o.id+' · '+(NFC_TIER[o.tier]||o.tier)+' · '+o.quantita+' '+(o.quantita>1?'placche':'placca')+' · '+(o.importo!=null?o.importo.toFixed(2)+'€':'—')+'</div></div>'+
+        '<div><a class="btn-sm" style="text-decoration:none;display:inline-block;margin-right:8px" target="_blank" href="tap.html?p='+nfcEsc(o.slug)+'">Apri pagina tap</a>'+
+        '<button class="btn-sm" style="background:#c0392b" onclick="nfcElimina('+o.id+')">Elimina</button></div>'+
       '</div>'+
-      (o.note?'<div style="margin-top:16px;background:#faf8f5;padding:12px 14px;border-radius:4px;font-size:.88rem"><strong>Note cliente:</strong> '+nfcEsc(o.note)+'</div>':'')+
-      '<div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">'+
-        ['link_google','link_tripadvisor','link_thefork','menu_link'].map(function(k){return '<input id="nfcEdit_'+k+'" placeholder="'+k.replace('link_','').replace('_link',' link')+'" value="'+nfcEsc(o[k]||'')+'" style="padding:8px 10px;border:1px solid #ddd;border-radius:4px;font-size:.85rem">'}).join('')+
-        '<button class="btn-sm" onclick="nfcSalvaLink('+o.id+')">Salva link</button>'+
+      '<div class="nfc-card">'+
+        nfcAnteprima(o)+
+        '<div>'+
+          '<div class="nfc-blk"><h4>Link da scrivere sul tag</h4>'+
+            '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+            '<code style="background:#faf8f5;padding:8px 10px;border-radius:4px;font-size:.82rem;word-break:break-all">'+nfcEsc(tapUrl)+'</code>'+
+            '<button class="btn-sm" onclick="nfcCopia(\''+nfcEsc(tapUrl)+'\',this)">Copia</button></div></div>'+
+          '<div class="nfc-grid2">'+
+            '<div class="nfc-blk"><h4>Cosa apre il tap</h4>'+
+              (link('Google',o.link_google)+link('TripAdvisor',o.link_tripadvisor)+link('TheFork',o.link_thefork)+link('Menù',o.menu_link)||'<div style="color:#888">nessun link</div>')+
+              '<div style="margin-top:6px;color:#888;font-size:.84rem">Tap registrati: <strong>'+(o.tap_count||0)+'</strong></div></div>'+
+            '<div class="nfc-blk"><h4>Cliente</h4><div>'+nfcEsc(o.referente||'—')+'<br>'+
+              '<a href="mailto:'+nfcEsc(o.email)+'">'+nfcEsc(o.email)+'</a>'+(o.telefono?'<br><a href="tel:'+nfcEsc(o.telefono)+'">'+nfcEsc(o.telefono)+'</a>':'')+'</div></div>'+
+            '<div class="nfc-blk"><h4>Spedizione</h4><div>'+(indirizzo?nfcEsc(indirizzo):'<span style="color:#888">indirizzo non ancora ricevuto</span>')+'</div></div>'+
+            '<div class="nfc-blk"><h4>Pagamento</h4><div>'+(o.pagato_at?new Date(o.pagato_at).toLocaleString('it-IT'):'—')+
+              '<br><code style="font-size:.76rem;color:#888">'+nfcEsc(o.stripe_id||'—')+'</code></div></div>'+
+          '</div>'+
+          '<div class="nfc-blk"><h4>File del cliente</h4><div>'+alleHtml+'</div></div>'+
+          (o.note?'<div class="nfc-blk"><h4>Note del cliente</h4><div style="background:#faf8f5;padding:12px 14px;border-radius:4px">'+nfcEsc(o.note)+'</div></div>':'')+
+          '<div class="nfc-blk"><h4>Correggi i link (il tag non si riscrive)</h4>'+
+            '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:4px">'+
+            [['link_google','Google'],['link_tripadvisor','TripAdvisor'],['link_thefork','TheFork'],['menu_link','Menù']].map(function(k){
+                return '<input id="nfcEdit_'+k[0]+'" placeholder="'+k[1]+'" value="'+nfcEsc(o[k[0]]||'')+'" style="padding:8px 10px;border:1px solid #ddd;border-radius:4px;font-size:.85rem">'}).join('')+
+            '<button class="btn-sm" onclick="nfcSalvaLink('+o.id+')">Salva link</button></div></div>'+
+        '</div>'+
       '</div>';
+    nfcCaricaMedia(o);
     box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function nfcCopia(t,btn){
+    navigator.clipboard.writeText(t).then(function(){var v=btn.textContent;btn.textContent='Copiato ✓';setTimeout(function(){btn.textContent=v},1600);});
 }
 function nfcSalvaLink(id){
     var body={};['link_google','link_tripadvisor','link_thefork','menu_link'].forEach(function(k){body[k]=document.getElementById('nfcEdit_'+k).value.trim()});
