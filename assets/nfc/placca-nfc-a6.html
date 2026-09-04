@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>SBFC — Placca NFC recensioni (A6)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     SB FOOD CONSULTING — Placca NFC "Lascia una recensione"
+     A6 (105 x 148 mm) + bleed 3 mm. Minimale, tipografica.
+     Token brand: dark #37393f · ivory #f5f2ee · accent #c4622d
+     Font: Playfair Display (titolo) + Inter. Logo: solo monogramma SB.
+     ============================================================ */
+  :root{
+    --dark:#37393f; --ivory:#f5f2ee;
+    --accent:#c4622d; --accent-deep:#a8511f;
+    --line:#c4622d;
+    --w:105mm; --h:148mm; --bleed:3mm;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{
+    background:#e9e6e1; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Inter',sans-serif;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .placca{
+    position:relative;
+    width:calc(var(--w) + var(--bleed)*2);
+    height:calc(var(--h) + var(--bleed)*2);
+    background:
+      linear-gradient(180deg, rgba(28,29,33,.30) 0%, rgba(24,25,29,.26) 45%, rgba(20,21,25,.48) 100%),
+      url('bg-placca.png') center/cover no-repeat;
+    color:var(--ivory); overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+  }
+  .placca::after{ content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.014) 1px, transparent 1px);
+    background-size:3px 3px; mix-blend-mode:screen; opacity:.5; }
+
+  .frame{ position:absolute; top:7mm; left:6.5mm; right:6.5mm; bottom:6.5mm;
+    border:0.5pt solid var(--line); pointer-events:none; }
+
+  .safe{ position:absolute; top:var(--bleed); left:var(--bleed);
+    width:var(--w); height:var(--h);
+    padding:14mm 12mm 13mm;
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:space-between; text-align:center; }
+
+  .welcome{ position:absolute; z-index:3; top:13.5mm; left:0; right:0;
+    padding:0 16mm; text-align:center;
+    font-family:'Playfair Display',serif; font-style:italic; font-weight:400;
+    font-size:10.5pt; letter-spacing:.2pt; color:var(--ivory); opacity:.9; }
+
+  .middle{ position:relative; z-index:3; flex:1 1 auto; width:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
+  .tap{ position:relative; display:flex; flex-direction:column; align-items:center; }
+  .tapicon{ width:24mm; color:var(--accent); }
+  .tapicon svg{ display:block; width:100%; height:auto; }
+  .taphere{ position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    margin-top:2.5mm; white-space:nowrap;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:5pt;
+    letter-spacing:2pt; text-transform:uppercase; color:var(--accent); }
+
+  .headline{ font-family:'Playfair Display',serif; font-weight:600;
+    font-size:23pt; line-height:1.2; letter-spacing:.2pt;
+    color:var(--ivory); margin-top:11.3mm; max-width:80mm; }
+
+  .thanks{ font-family:'Playfair Display',serif; font-style:italic; font-weight:400;
+    font-size:12.5pt; color:var(--accent); letter-spacing:.2pt; margin-top:12mm; }
+
+  /* --- firma: monogramma + nome scritto a mano --- */
+  .brand{ position:relative; z-index:3; display:flex; flex-direction:column;
+    align-items:center; gap:4.5mm; padding-bottom:1mm; }
+  .portals{ display:flex; align-items:center; justify-content:center; gap:6mm; color:var(--accent); }
+  .portals svg{ display:block; }
+  .p-google{ height:6.2mm; width:auto; }
+  .p-trip{ height:5mm; width:auto; }
+  .p-fork{ height:6.8mm; width:auto; }
+  .brand .name{ display:flex; align-items:center; gap:3mm; }
+  .brand .name::before,.brand .name::after{
+    content:""; width:7mm; height:0.5pt; background:var(--line); opacity:.7; }
+  .brand .name span{
+    font-family:'Inter',sans-serif; font-weight:600;
+    font-size:6.8pt; letter-spacing:2.4pt; text-transform:uppercase;
+    color:var(--accent); white-space:nowrap; }
+
+  @page{ size:111mm 154mm; margin:0; }
+  @media print{ html,body{ background:#fff; } .placca{ box-shadow:none; } }
+</style>
+</head>
+<body>
+
+  <div class="placca">
+    <div class="frame"></div>
+
+    <div class="safe">
+      <p class="welcome">È stato un piacere averti con noi</p>
+      <div class="middle">
+        <div class="tap">
+          <div class="tapicon" aria-hidden="true">
+            <svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+              <!-- smartphone -->
+              <rect x="20" y="24" width="42" height="60" rx="8"/>
+              <line x1="34" y1="32" x2="48" y2="32"/>
+              <circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/>
+              <!-- onde NFC che escono dall'angolo alto-destra del telefono -->
+              <path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/>
+              <path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/>
+              <path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/>
+            </svg>
+          </div>
+          <span class="taphere">Appoggia qui</span>
+        </div>
+
+        <h1 class="headline">Avvicina il telefono<br>per lasciare una<br>recensione</h1>
+        <p class="thanks">Grazie per il tuo feedback!</p>
+      </div>
+
+      <div class="brand">
+        <div class="portals" aria-hidden="true">
+          <!-- Google -->
+          <svg class="p-google" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+            <path d="M21 12 A9 9 0 1 1 18.2 5.6"/>
+            <path d="M21 12 L12.4 12"/>
+          </svg>
+          <!-- TripAdvisor -->
+          <svg class="p-trip" viewBox="0 0 44 26" fill="none" stroke="currentColor" stroke-width="2.4">
+            <circle cx="13" cy="13" r="8.5"/>
+            <circle cx="31" cy="13" r="8.5"/>
+            <circle cx="13" cy="13" r="2.8" fill="currentColor" stroke="none"/>
+            <circle cx="31" cy="13" r="2.8" fill="currentColor" stroke="none"/>
+            <path d="M18.5 19 L22 22.5 L25.5 19" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 6 C9 3 12 3 14 5" stroke-linecap="round"/>
+            <path d="M38 6 C35 3 32 3 30 5" stroke-linecap="round"/>
+          </svg>
+          <!-- TheFork -->
+          <svg class="p-fork" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3 V9"/><path d="M12 3 V9"/><path d="M16 3 V9"/>
+            <path d="M8 9 C8 13 16 13 16 9"/>
+            <path d="M12 9 V21"/>
+          </svg>
+        </div>
+        <div class="name"><span>SB Food Consulting</span></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
