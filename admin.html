@@ -1244,7 +1244,8 @@ function nfcAnteprima(o){
         return '<div class="nfc-art"><div class="nfc-art-h"><span>Grafica da stampare</span><em>SB Food</em></div>'+
                '<div class="pl"><img class="pl-full" src="assets/nfc/shop/placca-'+v+'.jpg" alt="Placca '+v+'"></div>'+
                '<div style="margin-top:12px;text-align:center"><span class="nfc-var '+v+'">Versione '+v.toUpperCase()+'</span></div>'+
-               '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5;text-align:center">File pronto in <code>assets/nfc/placca-nfc-a6'+(v==='chiara'?'-light':'')+'.html</code></div></div>';
+               nfcBottonePdf(o)+
+               '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5;text-align:center">Sorgente: <code>assets/nfc/placca-nfc-a6'+(v==='chiara'?'-light':'')+'.html</code></div></div>';
     }
     var bg=o.colore_sfondo||'#2b2d31', ac=o.colore_primario||'#c4622d';
     var fg=plLum(bg)>0.6?'#2b2d31':'#f5f2ee';
@@ -1267,9 +1268,31 @@ function nfcAnteprima(o){
       '<div style="margin-top:12px">'+
         '<span class="nfc-sw"><i style="background:'+nfcEsc(bg)+'"></i>Sfondo '+nfcEsc(bg)+'</span>'+
         '<span class="nfc-sw"><i style="background:'+nfcEsc(ac)+'"></i>Accento '+nfcEsc(ac)+'</span></div>'+
-      '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5">Bozza indicativa: logo e foto vanno impaginati a mano sul file di stampa.</div></div>';
+      nfcBottonePdf(o)+
+      '<div style="margin-top:10px;font-size:.8rem;color:#888;line-height:1.5">Il PDF riporta colori, testo, logo e foto scelti dal cliente. Controllalo prima di mandarlo in stampa.</div></div>';
 }
 
+function nfcBottonePdf(o){
+    return '<button class="btn-sm" id="pdfBtn'+o.id+'" style="width:100%;margin-top:12px;padding:11px" '+
+           'onclick="nfcScaricaPdf('+o.id+')">Scarica PDF per la stampa (A6 + abbondanza)</button>';
+}
+// Il PDF lo genera il backend con i dati dell'ordine: A6 105×148 mm + 3 mm di bleed.
+function nfcScaricaPdf(id){
+    var btn=document.getElementById('pdfBtn'+id), testo=btn?btn.textContent:'';
+    if(btn){ btn.disabled=true; btn.textContent='Preparo il PDF...'; }
+    fetch(BACKEND_URL+'/api/nfc/ordini/'+id+'/grafica.pdf',{headers:{'X-Admin-Token':ADMIN_TOKEN}})
+      .then(function(r){
+          if(!r.ok) return r.json().then(function(d){throw new Error(d.error||'Errore '+r.status)});
+          var cd=r.headers.get('Content-Disposition')||''; var m=cd.match(/filename="([^"]+)"/);
+          return r.blob().then(function(b){
+              var a=document.createElement('a'); a.href=URL.createObjectURL(b);
+              a.download=m?m[1]:'placca-A6.pdf'; a.click();
+              setTimeout(function(){URL.revokeObjectURL(a.href)},4000);
+          });
+      })
+      .catch(function(e){ alert('PDF non generato: '+e.message); })
+      .then(function(){ if(btn){ btn.disabled=false; btn.textContent=testo; } });
+}
 // Logo e foto stanno dietro al token admin: li carico e li inserisco come blob.
 function nfcCaricaMedia(o){
     ['logo','foto'].forEach(function(k){
