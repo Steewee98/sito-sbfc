@@ -147,19 +147,30 @@
 .nf-preview-wrap { background: #fff; border: 1.5px solid var(--border); padding: 22px; }
 .nf-preview-kicker { font-size: .66rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; color: var(--accent); margin-bottom: 14px; display: flex; justify-content: space-between; }
 .nf-preview-kicker span:last-child { color: var(--ink-soft); font-weight: 500; letter-spacing: 1px; text-transform: none; }
-.nf-placca { position: relative; aspect-ratio: 105/148; width: 100%; background: #2b2d31; color: #f5f2ee; overflow: hidden; box-shadow: 0 24px 60px rgba(26,26,26,.22); transition: background .4s var(--ease-out); }
+.nf-placca { position: relative; aspect-ratio: 105/148; width: 100%; background: #2b2d31; color: #f5f2ee; overflow: hidden; box-shadow: 0 24px 60px rgba(26,26,26,.22); transition: background .4s var(--ease-out); container-type: inline-size; }
 .nf-placca img.nf-placca-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .nf-placca .pv-foto { position: absolute; inset: 0; background-size: cover; background-position: center; }
 .nf-placca .pv-foto::after { content: ""; position: absolute; inset: 0; background: var(--pl-bg, #2b2d31); opacity: .72; }
-.nf-placca .frame { position: absolute; inset: 6.5% 6%; border: 1px solid var(--pl-accent, #c4622d); pointer-events: none; }
-.nf-placca .body { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; padding: 13% 12% 11%; }
-.nf-placca .welcome { font-family: 'Playfair Display', serif; font-style: italic; font-size: .72rem; opacity: .75; }
-.nf-placca .mid { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8%; width: 100%; }
-.nf-placca .tapicon { width: 22%; color: var(--pl-accent, #c4622d); }
+.nf-placca .frame { position: absolute; top: 3.8cqw; left: 3.3cqw; right: 3.3cqw; bottom: 3.3cqw; border: 1px solid var(--pl-accent, #c4622d); pointer-events: none; }
+.nf-placca .body { position: absolute; inset: 0; }
+.nf-placca .welcome { position: absolute; top: 8.6cqw; left: 11.4cqw; right: 11.4cqw; text-align: center; font-family: 'Playfair Display', serif; font-style: italic; font-size: 3.5cqw; opacity: .8; line-height: 1.3; }
+.nf-placca .tapicon { position: absolute; top: 24.8cqw; left: 50%; transform: translateX(-50%); width: 22.9cqw; color: var(--pl-accent, #c4622d); }
 .nf-placca .tapicon svg { width: 100%; height: auto; display: block; }
-.nf-placca .taphere { font-size: .42rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; color: var(--pl-accent, #c4622d); margin-top: -6%; }
-.nf-placca .headline { font-family: 'Playfair Display', serif; font-weight: 600; font-size: clamp(.95rem, 4.2cqw, 1.35rem); line-height: 1.2; max-width: 92%; overflow-wrap: anywhere; }
-.nf-preview-wrap { container-type: inline-size; }
+.nf-placca .taphere { position: absolute; top: 48.6cqw; left: 0; right: 0; text-align: center; font-family: 'Inter', sans-serif; font-size: 1.7cqw; letter-spacing: .67cqw; text-transform: uppercase; font-weight: 600; color: var(--pl-accent, #c4622d); }
+.nf-placca .mid { position: absolute; top: 57.5cqw; left: 11.4cqw; right: 11.4cqw; text-align: center; }
+.nf-placca .headline { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 7.7cqw; line-height: 1.2; overflow-wrap: anywhere; }
+.nf-placca .thanks { margin-top: 11.4cqw; font-family: 'Playfair Display', serif; font-style: italic; font-size: 4.2cqw; color: var(--pl-accent, #c4622d); }
+.nf-placca .brand { position: absolute; bottom: 10.5cqw; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 5.2cqw; }
+.nf-placca .logo { max-height: 11cqw; max-width: 42cqw; object-fit: contain; }
+.nf-placca .portals { display: flex; gap: 5.7cqw; color: var(--pl-accent, #c4622d); align-items: center; justify-content: center; }
+.nf-placca .portals svg { display: block; }
+.nf-placca .portals .p-google { height: 5.9cqw; width: auto; }
+.nf-placca .portals .p-trip { height: 4.8cqw; width: auto; }
+.nf-placca .portals .p-fork { height: 6.5cqw; width: auto; }
+.nf-placca .portals .menu-badge { font-family: 'Inter', sans-serif; font-size: 1.7cqw; letter-spacing: .54cqw; text-transform: uppercase; font-weight: 600; border: 1px solid currentColor; padding: .8cqw 1.6cqw; }
+.nf-placca .locale { display: flex; align-items: center; justify-content: center; gap: 2.9cqw; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 2.3cqw; letter-spacing: .81cqw; text-transform: uppercase; color: var(--pl-accent, #c4622d); white-space: nowrap; }
+.nf-placca .locale::before, .nf-placca .locale::after { content: ""; width: 6.7cqw; height: 1px; background: currentColor; opacity: .7; flex: none; }
+.nf-placca .locale span { overflow: hidden; text-overflow: ellipsis; max-width: 55cqw; }
 .nf-placca .thanks { font-family: 'Playfair Display', serif; font-style: italic; font-size: .8rem; color: var(--pl-accent, #c4622d); }
 .nf-placca .brand { display: flex; flex-direction: column; align-items: center; gap: 9px; width: 100%; }
 .nf-placca .logo { max-height: 34px; max-width: 45%; object-fit: contain; }
@@ -525,9 +536,9 @@
                             <div class="frame"></div>
                             <div class="body">
                                 <div class="welcome">&Egrave; stato un piacere averti con noi</div>
-                                <div class="mid">
                                     <div class="tapicon"><svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="24" width="42" height="60" rx="8"/><line x1="34" y1="32" x2="48" y2="32"/><circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/><path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/><path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/><path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/></svg></div>
                                     <div class="taphere">Appoggia qui</div>
+                                <div class="mid">
                                     <div class="headline" id="pvHeadline">Avvicina il telefono per lasciare una recensione</div>
                                     <div class="thanks">Grazie per il tuo feedback!</div>
                                 </div>
@@ -776,9 +787,9 @@
         return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
     }
     var PORTALI = {
-        google: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20.5 12.2a8.5 8.5 0 1 1-2.5-6.1"/><path d="M12 12.2h8.5"/></svg>',
-        tripadvisor: '<svg viewBox="0 0 44 26" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="15" r="7"/><circle cx="32" cy="15" r="7"/><circle cx="12" cy="15" r="2.2" fill="currentColor" stroke="none"/><circle cx="32" cy="15" r="2.2" fill="currentColor" stroke="none"/><path d="M4 8h36" stroke-linecap="round"/><path d="M22 8l-3 4M22 8l3 4" stroke-linecap="round"/></svg>',
-        thefork: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v6a3 3 0 0 0 6 0V3"/><path d="M10 3v18"/><path d="M17 3c-2 2-2 6-2 8h3v10"/></svg>'
+        google: '<svg class="p-google" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M21 12 A9 9 0 1 1 18.2 5.6"/><path d="M21 12 L12.4 12"/></svg>',
+        tripadvisor: '<svg class="p-trip" viewBox="0 0 44 26" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="13" cy="13" r="8.5"/><circle cx="31" cy="13" r="8.5"/><circle cx="13" cy="13" r="2.8" fill="currentColor" stroke="none"/><circle cx="31" cy="13" r="2.8" fill="currentColor" stroke="none"/><path d="M18.5 19 L22 22.5 L25.5 19" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 6 C9 3 12 3 14 5" stroke-linecap="round"/><path d="M38 6 C35 3 32 3 30 5" stroke-linecap="round"/></svg>',
+        thefork: '<svg class="p-fork" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 V9"/><path d="M12 3 V9"/><path d="M16 3 V9"/><path d="M8 9 C8 13 16 13 16 9"/><path d="M12 9 V21"/></svg>'
     };
     function aggiornaPreview() {
         var p = $('placca');
