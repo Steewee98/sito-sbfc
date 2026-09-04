@@ -189,6 +189,25 @@
 .nf-faq details[open] summary::after { transform: rotate(45deg); }
 .nf-faq details p { padding: 0 0 24px; color: var(--ink-soft); line-height: 1.75; max-width: 600px; }
 
+/* ── Box richieste specifiche ── */
+.nf-ask { background: var(--dark); color: var(--ivory); padding: 110px 0; }
+.nf-ask-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+.nf-ask h2 { font-size: clamp(2rem, 4vw, 2.9rem); line-height: 1.06; margin: 16px 0 20px; }
+.nf-ask h2 em { font-style: italic; font-weight: 400; color: var(--accent); }
+.nf-ask p.lead { color: rgba(245,242,238,.7); line-height: 1.75; max-width: 460px; }
+.nf-ask ul { margin-top: 26px; }
+.nf-ask ul li { color: rgba(245,242,238,.7); font-size: .94rem; padding: 9px 0 9px 20px; position: relative; line-height: 1.55; }
+.nf-ask ul li::before { content: ""; position: absolute; left: 0; top: 18px; width: 10px; height: 1px; background: var(--accent); }
+.nf-ask-card { background: var(--ivory); color: var(--ink); padding: 34px 32px; }
+.nf-ask-card .nf-field > label { color: var(--ink); }
+.nf-ask-card .btn { width: 100%; margin-top: 6px; }
+.nf-ask-card .btn[disabled] { opacity: .6; cursor: wait; }
+.nf-ask-note { font-size: .78rem; color: var(--ink-soft); text-align: center; margin-top: 12px; line-height: 1.5; }
+.nf-ask-ok { background: var(--ivory); color: var(--ink); padding: 44px 32px; text-align: center; }
+.nf-ask-ok h3 { font-size: 1.7rem; margin-bottom: 10px; }
+.nf-ask-ok p { color: var(--ink-soft); line-height: 1.7; }
+.nf-ask-ok .tick { width: 46px; height: 46px; border: 1.5px solid var(--accent); border-radius: 50%; display: grid; place-items: center; margin: 0 auto 18px; color: var(--accent); }
+@media (max-width: 900px) { .nf-ask-grid { grid-template-columns: 1fr; gap: 40px; } }
 .nf-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); background: var(--dark); color: var(--ivory); padding: 14px 22px; font-size: .88rem; opacity: 0; transition: all .4s var(--ease-out); z-index: 999; pointer-events: none; }
 .nf-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -547,6 +566,42 @@
     </div>
 </section>
 
+
+<!-- ═══════ RICHIESTE SPECIFICHE ═══════ -->
+<section class="nf-ask" id="richiesta">
+    <div class="container nf-ask-grid">
+        <div>
+            <span class="label" data-reveal>Hai un'esigenza diversa?</span>
+            <h2 data-reveal data-reveal-delay="50">Scrivici cosa ti serve,<br><em>ci pensiamo noi.</em></h2>
+            <p class="lead" data-reveal data-reveal-delay="100">Le tre versioni coprono quasi tutti i casi, ma non tutti. Se quello che hai in mente non rientra nel configuratore, raccontacelo qui: ti rispondiamo entro un giorno lavorativo con una proposta e un prezzo.</p>
+            <ul data-reveal data-reveal-delay="150">
+                <li>Molte placche per pi&ugrave; locali o per una catena</li>
+                <li>Un formato diverso dall'A6: da tavolo, adesivo, biglietto da cassa</li>
+                <li>Una grafica tutta vostra, o il materiale gi&agrave; fatto dal vostro grafico</li>
+                <li>Un tap che deve aprire altro: prenotazioni, WiFi, social, lista vini</li>
+                <li>Un dubbio prima di ordinare, anche solo sui link del vostro locale</li>
+            </ul>
+        </div>
+        <div class="nf-ask-card" id="askCard">
+            <form id="askForm" novalidate>
+                <div class="nf-two">
+                    <div class="nf-field"><label>Nome</label><input class="nf-input" type="text" name="nome" placeholder="Come ti chiami"></div>
+                    <div class="nf-field"><label>Locale</label><input class="nf-input" type="text" name="nome_locale" placeholder="Nome del locale"></div>
+                </div>
+                <div class="nf-two">
+                    <div class="nf-field"><label>Email</label><input class="nf-input" type="email" name="email" id="askEmail" placeholder="Dove ti rispondiamo" required></div>
+                    <div class="nf-field"><label>Telefono <span class="opt">&middot; facoltativo</span></label><input class="nf-input" type="tel" name="telefono" placeholder="+39 ..."></div>
+                </div>
+                <div class="nf-field"><label>Quante placche <span class="opt">&middot; anche solo un'idea</span></label><input class="nf-input" type="text" name="quantita" placeholder="Es. 12, una per tavolo"></div>
+                <div class="nf-field"><label>Cosa ti serve</label><textarea class="nf-input" name="messaggio" id="askMsg" rows="5" placeholder="Raccontaci in due righe cosa hai in mente" required></textarea></div>
+                <button type="submit" class="btn btn-primary" id="askBtn">Invia la richiesta</button>
+                <p class="nf-ask-note">Nessun impegno e nessun pagamento. Ti scriviamo entro un giorno lavorativo.</p>
+                <div class="nf-err" id="askErr" hidden></div>
+            </form>
+        </div>
+    </div>
+</section>
+
 <footer class="footer">
     <div class="container">
         <div class="footer-divider"></div>
@@ -786,6 +841,38 @@
         toast('Pagamento annullato: la tua configurazione è ancora qui, puoi riprovare quando vuoi.');
         history.replaceState(null, '', location.pathname + '#acquista');
     }
+})();
+
+(function () {
+    /* ── Box richieste specifiche ── */
+    var BACKEND = 'https://web-production-f3794.up.railway.app';
+    var form = document.getElementById('askForm');
+    if (!form) return;
+    var btn = document.getElementById('askBtn'), err = document.getElementById('askErr');
+    function errore(msg, el) { err.textContent = msg; err.hidden = false; if (el) { el.classList.add('is-err'); el.focus(); el.addEventListener('input', function () { el.classList.remove('is-err'); }, { once: true }); } }
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        err.hidden = true;
+        var em = document.getElementById('askEmail'), msg = document.getElementById('askMsg');
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim())) return errore('Inserisci una email valida: è dove ti rispondiamo.', em);
+        if (msg.value.trim().length < 10) return errore('Scrivi due righe su cosa ti serve.', msg);
+        btn.disabled = true; btn.textContent = 'Invio...';
+        var dati = {};
+        new FormData(form).forEach(function (v, k) { dati[k] = v; });
+        fetch(BACKEND + '/api/nfc/richiesta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dati) })
+            .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+            .then(function (res) {
+                if (!res.ok) throw new Error(res.d.error || 'Errore imprevisto');
+                document.getElementById('askCard').className = 'nf-ask-ok';
+                document.getElementById('askCard').innerHTML =
+                    '<div class="tick"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+                    '<h3>Richiesta ricevuta.</h3><p>Ti abbiamo mandato una copia via email. Ti rispondiamo entro un giorno lavorativo con una proposta e un prezzo.</p>';
+            })
+            .catch(function (e) {
+                errore(e.message + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');
+                btn.disabled = false; btn.textContent = 'Invia la richiesta';
+            });
+    });
 })();
 </script>
 </body>
