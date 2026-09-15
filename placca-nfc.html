@@ -646,7 +646,7 @@
 
 <div class="nf-toast" id="toast"></div>
 
-<script src="main.js?v=20260715b"></script>
+<script src="main.js?v=20260915"></script>
 <script>
 (function () {
     var BACKEND = 'https://web-production-f3794.up.railway.app';
@@ -696,6 +696,8 @@
 
     function aggiornaRiepilogo() {
         var base = PREZZI[state.tier], extra = (qty - 1) * EXTRA;
+        // Il totale viva anche fuori: serve a InitiateCheckout e Purchase (pixel Meta).
+        state.totale = base + extra;
         $('sumTier').textContent = NOMI[state.tier];
         $('sumTierPrice').innerHTML = base + '&euro;';
         $('sumExtraRow').hidden = qty < 2;
@@ -852,6 +854,14 @@
             if (!hasMenu) return errore('Carica il menù (PDF o immagine) oppure inserisci il link al menù online.', $('menuLink'));
         }
         var btn = $('btnPay'); btn.disabled = true; btn.textContent = 'Un attimo...';
+        // Pixel Meta: sta partendo il checkout. Il totale lo mettiamo anche in
+        // sessionStorage perche' dopo Stripe serve alla pagina di ringraziamento
+        // per registrare l'acquisto con il valore giusto.
+        try { sessionStorage.setItem('sb_nfc_checkout', JSON.stringify({ valore: state.totale, quantita: qty, tier: state.tier })); } catch (e) {}
+        if (window.sbPixelStd) sbPixelStd('InitiateCheckout', {
+            content_ids: [state.tier], content_type: 'product', contents: [{ id: state.tier, quantity: qty }],
+            num_items: qty, value: state.totale, currency: 'EUR'
+        });
         var fd = new FormData(form);
         fd.set('tier', state.tier); fd.set('quantita', qty);
         Object.keys(compressi).forEach(function (k) { if (compressi[k]) fd.set(k, compressi[k], compressi[k].name); });
@@ -867,6 +877,12 @@
                 errore(err.message + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');
                 btn.disabled = false; btn.textContent = 'Procedi al pagamento';
             });
+    });
+
+    /* ── Pixel Meta: visualizzazione prodotto ── */
+    if (window.sbPixelStd) sbPixelStd('ViewContent', {
+        content_ids: ['placca-nfc'], content_type: 'product',
+        content_name: 'Placca NFC recensioni', value: PREZZI['base'], currency: 'EUR'
     });
 
     /* ── Ritorno da Stripe (annullato) ── */

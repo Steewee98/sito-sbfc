@@ -63,9 +63,30 @@
         </aside>
     </div>
 </section>
-<script src="main.js?v=20260715b"></script>
+<script src="main.js?v=20260915"></script>
 <script>
 (function(){
+  /* ── Pixel Meta: ACQUISTO ──
+     E' l'evento su cui la campagna vendite ottimizza. Lo mandiamo una sola volta
+     per ordine (guardia in localStorage: un refresh non deve contare due acquisti)
+     e con eventID = slug dell'ordine, cosi' Meta deduplica da solo.
+     Il valore arriva da sessionStorage, scritto dallo shop prima di Stripe. */
+  (function(){
+    var s = new URLSearchParams(location.search).get('ordine');
+    if (!s) return;
+    var chiave = 'sb_nfc_purchase_' + s;
+    try { if (localStorage.getItem(chiave)) return; } catch(e) {}
+    var dati = {};
+    try { dati = JSON.parse(sessionStorage.getItem('sb_nfc_checkout') || '{}') || {}; } catch(e) {}
+    if (window.sbPixelStd) sbPixelStd('Purchase', {
+      value: dati.valore || 0, currency: 'EUR',
+      content_ids: [dati.tier || 'placca-nfc'], content_type: 'product',
+      contents: [{ id: dati.tier || 'placca-nfc', quantity: dati.quantita || 1 }],
+      num_items: dati.quantita || 1
+    }, s);
+    try { localStorage.setItem(chiave, '1'); sessionStorage.removeItem('sb_nfc_checkout'); } catch(e) {}
+  })();
+
   var BACKEND='https://web-production-f3794.up.railway.app';
   var slug=new URLSearchParams(location.search).get('ordine');
   var $=function(id){return document.getElementById(id);};

@@ -295,6 +295,23 @@ window.sbPixel = function(evento, params) {
     try { if (window.fbq) window.fbq('trackCustom', evento, params || {}); } catch(e) {}
 };
 
+/* Evento STANDARD Meta (ViewContent, InitiateCheckout, Purchase...). Sono quelli
+   su cui si ottimizza una campagna vendite: senza Purchase, Meta non sa chi ha
+   comprato e non puo' cercare altri come lui.
+   Il pixel parte solo col consenso e in modo asincrono: se fbq non c'e' ancora
+   riproviamo per qualche secondo invece di perdere l'evento. eventID serve alla
+   deduplica (stesso id = stesso evento, anche se arrivasse due volte). */
+window.sbPixelStd = function(evento, params, eventID) {
+    var tentativi = 0;
+    (function prova() {
+        if (window.fbq) {
+            try { window.fbq('track', evento, params || {}, eventID ? { eventID: eventID } : undefined); } catch(e) {}
+            return;
+        }
+        if (++tentativi < 20) setTimeout(prova, 250);   // ~5 secondi, poi lascia perdere
+    })();
+};
+
 function sbInitTracking() {
     if (sbConsent() !== 'accepted') return;
     sbLoadPixel();
