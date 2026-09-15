@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>SBFC — Pacchetto 30 Storie · La Challenge delle 5 Stelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     SB FOOD CONSULTING — Pacchetto 30 storie (9:16, 1080×1920)
+     Challenge "Le 5 Stelle" · 1 copertina + 30 giorni.
+     Grafiche finite e autonome: nessuno sticker da aggiungere a mano.
+     ------------------------------------------------------------
+     EXPORT: porta --preview a 1 e cattura ogni .story (1080×1920).
+     Per cambiare i testi: modifica l'array DAYS in fondo alla pagina.
+     ============================================================ */
+  :root{
+    --ink:#2b2d31; --ink-soft:#6b6560;
+    --accent:#c4622d; --accent-deep:#a8511f; --line:#c4622d;
+    --cream:#efe9e0;
+    --preview:0.32;                 /* 1 = piena risoluzione per export */
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background:#c9c2b8; font-family:'Inter',sans-serif;
+    padding:40px; display:flex; flex-wrap:wrap; gap:56px;
+    align-items:flex-start; justify-content:center;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .stage{ width:calc(1080px * var(--preview)); }
+  .cap{ font-size:14px; color:#2a2a2a; margin:0 0 10px; font-weight:600;
+    max-width:calc(1080px*var(--preview)); line-height:1.4; }
+  .cap b{ color:var(--accent-deep); }
+  .framewrap{ width:calc(1080px * var(--preview)); height:calc(1920px * var(--preview)); }
+
+  .story{
+    width:1080px; height:1920px; position:relative; overflow:hidden;
+    transform:scale(var(--preview)); transform-origin:top left;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% 12%, rgba(255,253,249,.9) 0%, rgba(243,238,231,.7) 46%, rgba(233,226,215,.9) 100%),
+      var(--cream);
+    box-shadow:0 24px 64px rgba(0,0,0,.22);
+  }
+  .story::after{ content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:radial-gradient(rgba(0,0,0,.02) 1.4px, transparent 1.4px);
+    background-size:5px 5px; mix-blend-mode:multiply; opacity:.5; }
+  .edge{ position:absolute; top:120px; left:70px; right:70px; bottom:120px;
+    border:1.5px solid var(--line); opacity:.5; pointer-events:none; z-index:5; }
+  .pad{ position:absolute; inset:0; z-index:4; padding:250px 130px 250px;
+    display:flex; flex-direction:column; }
+
+  .kicker{ font-family:'Inter'; font-weight:700; font-size:26px; letter-spacing:6px;
+    text-transform:uppercase; color:var(--accent); }
+  .display{ font-family:'Playfair Display',serif; font-weight:600; color:var(--ink); line-height:1.09; }
+  i,.ital{ font-style:italic; }
+  .accent{ color:var(--accent); }
+  .soft{ color:var(--ink-soft); }
+  .rule{ width:120px; height:2px; background:var(--line); opacity:.8; }
+  .stars{ letter-spacing:10px; color:var(--accent); font-size:52px; line-height:1; }
+
+  /* day header */
+  .dayhead{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .daybig{ font-family:'Playfair Display',serif; font-weight:700; color:var(--accent);
+    font-size:200px; line-height:.72; letter-spacing:-4px; }
+  .hook{ font-family:'Playfair Display',serif; font-weight:600; color:var(--ink);
+    font-size:78px; line-height:1.1; }
+  .actionblock{ display:flex; flex-direction:column; gap:26px; }
+  .pill{ display:inline-flex; align-self:flex-start; border:2px solid var(--accent); color:var(--accent);
+    font-weight:700; font-size:26px; letter-spacing:2px; text-transform:uppercase;
+    padding:14px 28px; border-radius:100px; }
+  .action{ font-family:'Inter'; font-weight:500; font-size:40px; line-height:1.34; color:var(--ink-soft); max-width:800px; }
+
+  /* bilancio */
+  .points{ display:flex; flex-direction:column; gap:34px; }
+  .points .row{ display:flex; align-items:center; gap:30px; }
+  .points .idx{ font-family:'Playfair Display',serif; font-weight:700; color:var(--accent); font-size:56px; }
+  .points .txt{ font-size:40px; color:var(--ink); }
+  .bridge{ font-family:'Playfair Display',serif; font-style:italic; font-weight:500;
+    font-size:44px; line-height:1.28; color:var(--ink-soft); max-width:800px; }
+
+  /* offer */
+  .badge{ align-self:flex-start; background:var(--accent); color:#fff;
+    font-family:'Playfair Display',serif; font-weight:700; font-size:150px; line-height:1;
+    padding:22px 42px 32px; border-radius:20px; letter-spacing:-4px;
+    box-shadow:0 20px 50px rgba(168,81,31,.35); }
+  .cta{ display:flex; align-items:center; gap:16px; font-weight:700; font-size:36px; color:var(--ink); }
+  .cta .arrow{ color:var(--accent); font-size:46px; }
+
+  /* progress bar + footer */
+  .foot{ position:absolute; left:130px; right:130px; bottom:150px; z-index:4; }
+  .bar{ height:6px; background:rgba(196,98,45,.22); border-radius:100px; overflow:hidden; }
+  .bar > i{ display:block; height:100%; background:var(--accent); border-radius:100px; }
+  .footrow{ display:flex; justify-content:space-between; align-items:center; margin-top:22px;
+    font-weight:600; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:var(--ink-soft); }
+  .footrow .b{ color:var(--accent); }
+
+  /* tap motif (cover) */
+  .tap{ width:150px; color:var(--accent); } .tap svg{ width:100%; height:auto; display:block; }
+
+  /* modalità export: ?only=N → un solo frame 1080×1920 pieno */
+  body.export{ padding:0; gap:0; background:#fff; display:block; }
+  body.export .story{ transform:none; box-shadow:none; }
+
+  @media print{ body{ background:#fff; padding:0; gap:0; } .cap{ display:none; } .story{ box-shadow:none; } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const WEEKS = {
+  1:"Settimana 1 · Diagnosi",
+  2:"Settimana 2 · Merita la recensione",
+  3:"Settimana 3 · Chiedi senza chiedere",
+  4:"Settimana 4 · Il sistema",
+};
+
+const DAYS = [
+  {n:1,w:1,label:"Conta le stelle", hook:"Quante stelle hai <i>davvero?</i>", action:"Apri Google, TripAdvisor e TheFork e scrivi quante recensioni hai e la media. A memoria non vale."},
+  {n:2,w:1,label:"Le ultime 10", hook:"Le ultime <i>dieci</i> dicono la verità.", action:"Rileggi le ultime 10 recensioni di fila e segna cosa torna: cosa lodano, cosa criticano."},
+  {n:3,w:1,label:"Il ritmo", hook:"Non conta <i>quante</i> ne hai. Conta quante ne arrivano <span class='accent'>ogni mese</span>.", action:"Conta le recensioni degli ultimi 3 mesi e dividile per tre: quello è il tuo ritmo reale."},
+  {n:4,w:1,label:"Il vicino", hook:"Il cliente ti confronta <i>prima</i> di entrare.", action:"Guarda 2 concorrenti della tua zona: quante stelle e quante recensioni hanno."},
+  {n:5,w:1,label:"Senza risposta", hook:"Una recensione senza risposta è una <i>conversazione a metà.</i>", action:"Conta quante recensioni non hai mai risposto. Le vedono tutti i futuri clienti."},
+  {n:6,w:1,label:"La peggiore", hook:"La recensione che ti ha fatto <i>arrabbiare</i>… aveva ragione su una cosa.", action:"Rileggi la tua peggiore recensione senza difenderti: cosa c'è di vero? Quello è il primo cantiere."},
+  {n:7,w:1,type:"bilancio",label:"Bilancio · S1", title:"Tre numeri che una settimana fa <i>non sapevi.</i>", points:["Quante stelle hai davvero","La tua media reale","Il ritmo: quante al mese"], bridge:"Le stelle non arrivano per caso. Da domani: come <span class='accent'>meritarle</span>."},
+
+  {n:8,w:2,label:"Il momento wow", hook:"Se non c'è un momento <i>wow</i>, non c'è niente da raccontare.", action:"Qual è l'unico momento che un cliente racconterebbe agli amici? Se non lo trovi, è il problema."},
+  {n:9,w:2,label:"Il momento no", hook:"Un momento <i>no</i> cancella cinque momenti belli.", action:"Trova il punto dell'esperienza che fa storcere il naso — attesa, conto lento, bagno — e sistemane uno oggi."},
+  {n:10,w:2,label:"Il piatto firma", hook:"Senza un piatto <i>memorabile</i> non dai appigli al passaparola.", action:"Scegli o valorizza un piatto-firma che diventi LA ragione per nominarti."},
+  {n:11,w:2,label:"Primi 30 secondi", hook:"La recensione a 5 stelle si gioca nei <i>primi 30 secondi.</i>", action:"Fatti accogliere come un cliente: cronometra quanto passa da quando entri a quando qualcuno ti nota."},
+  {n:12,w:2,label:"L'ultima impressione", hook:"L'<i>ultima</i> impressione è quella che il cliente racconta.", action:"Decidi cosa si dice a un cliente quando esce. È ciò che ha fresco in mente quando poi scrive."},
+  {n:13,w:2,label:"Il dettaglio", hook:"I dettagli <i>inattesi</i> sono il carburante delle recensioni spontanee.", action:"Aggiungi un gesto gratuito e piccolo: un assaggio, una parola personale, un'attenzione."},
+  {n:14,w:2,type:"bilancio",label:"Bilancio · S2 · Modulo 04", title:"Un cliente colpito lascia la recensione <i>senza che gliela chiedi.</i>", points:["Il momento wow","Il momento no da togliere","Il dettaglio che sorprende"], bridge:"Costruire un'accoglienza così, uguale ogni giorno, è tutto il <span class='accent'>Modulo 04</span> dell'Academy. Link in bio."},
+
+  {n:15,w:3,label:"Il momento giusto", hook:"Si chiede al <i>picco di felicità</i>, non alla cassa di corsa.", action:"Individua il momento più felice del pasto — dopo il dolce, dopo un complimento. Si chiede lì."},
+  {n:16,w:3,label:"La frase giusta", hook:"Si chiede il <i>parere</i>, non si <span class='accent'>compra.</span>", action:"Scrivi la tua frase per chiedere la recensione, naturale. Mai in cambio di sconti: Google lo vieta."},
+  {n:17,w:3,label:"Chi chiede", hook:"Se lo chiedono <i>tutti</i>, non lo chiede nessuno.", action:"Decidi chi del team chiede la recensione e in che modo. Un compito di tutti è un compito di nessuno."},
+  {n:18,w:3,label:"Le positive", hook:"Rispondere a una positiva ti fa vendere <i>due volte.</i>", action:"Rispondi a 3 recensioni positive in modo personale: cita il piatto, il nome, il momento. Mai copia-incolla."},
+  {n:19,w:3,label:"Le negative", hook:"Alla negativa non rispondi per <i>vincere</i>: rispondi per <span class='accent'>chi legge.</span>", action:"Schema in 3 mosse: ringrazia, riconosci il punto vero, sposta la conversazione in privato."},
+  {n:20,w:3,label:"Rendi facile", hook:"Ogni click in più = <i>metà</i> recensioni in meno.", action:"Conta quanti passaggi deve fare oggi un cliente per lasciarti una recensione. Togline."},
+  {n:21,w:3,type:"bilancio",label:"Bilancio · S3 · Placca", title:"Togli ogni <i>attrito:</i> il cliente appoggia il telefono e scrive in 10 secondi.", points:["Il momento giusto per chiedere","La tua frase naturale","Meno passaggi possibili"], bridge:"Lo fa la <span class='accent'>Placca NFC</span>: niente QR, niente \"poi lo faccio a casa\". La trovi al link in bio."},
+
+  {n:22,w:4,label:"Sul tavolo", hook:"Uno strumento che nessuno <i>vede</i> è un soprammobile.", action:"Posiziona la placca — o il QR — dove il cliente la vede al momento giusto: tavolo, conto, cassa."},
+  {n:23,w:4,label:"Il team la indica", hook:"Uno strumento che nessuno <i>indica</i> resta fermo.", action:"Allena il team a dire con naturalezza \"trova tutto qui\", indicando la placca."},
+  {n:24,w:4,label:"Il ritmo", hook:"Senza un <i>numero</i> e un <span class='accent'>responsabile</span>, non succede.", action:"Datti un obiettivo settimanale di recensioni e stabilisci chi lo controlla."},
+  {n:25,w:4,label:"Il delta", hook:"Riguarda il numero del <i>Giorno 1.</i> Quanto è salito?", action:"Ricontrolla la media e il numero di recensioni e confrontali con l'inizio della challenge."},
+  {n:26,w:4,label:"In vetrina", hook:"La prova sociale porta <i>altri</i> clienti — e altre recensioni.", action:"Ripubblica una recensione bella nelle tue storie. Falla vedere."},
+  {n:27,w:4,label:"Il cliente che torna", hook:"Chi lascia una recensione è più <i>legato</i> al locale.", action:"Collega la recensione all'invito a tornare: chi ti ha recensito è il tuo cliente più fedele."},
+  {n:28,w:4,label:"Entro 24h", hook:"La <i>velocità</i> di risposta è ciò che i futuri clienti notano di più.", action:"Trasforma la risposta entro 24h in regola fissa, positiva o negativa che sia."},
+  {n:29,w:4,label:"Il tuo standard", hook:"Un sistema <i>in testa</i> non è un sistema. <span class='accent'>Scrivilo.</span>", action:"Una pagina: chi chiede, quando, come, chi risponde e in quanto tempo. È il tuo standard replicabile."},
+  {n:30,w:4,type:"offer",label:"Offerta −20%"},
+];
+
+function foot(n){
+  const pct = Math.round((n/30)*100);
+  return `<div class="foot"><div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="footrow"><span>Challenge 5 Stelle</span><span><span class="b">${String(n).padStart(2,'0')}</span> / 30</span></div></div>`;
+}
+
+function renderDay(d){
+  const num = String(d.n).padStart(2,'0');
+  if(d.type === "bilancio"){
+    return `<div class="story"><div class="edge"></div><div class="pad">
+      <div class="kicker">${d.label.replace('Bilancio · ','Bilancio · ')}</div>
+      <h1 class="display" style="font-size:74px;max-width:820px;margin-top:34px;">${d.title}</h1>
+      <div class="points" style="margin-top:64px;">
+        ${d.points.map((p,i)=>`<div class="row"><span class="idx">${String(i+1).padStart(2,'0')}</span><span class="txt">${p}</span></div>`).join('')}
+      </div>
+      <div style="flex:1"></div>
+      <p class="bridge">${d.bridge}</p>
+    </div>${foot(d.n)}</div>`;
+  }
+  if(d.type === "offer"){
+    return `<div class="story"><div class="edge"></div><div class="pad">
+      <div class="kicker">Solo per la challenge</div>
+      <div class="badge" style="margin-top:30px;">−20%</div>
+      <h1 class="display" style="font-size:82px;max-width:820px;margin-top:48px;">sulla <span class="accent">Placca NFC</span> recensioni</h1>
+      <p class="bridge" style="margin-top:30px;">Il cliente appoggia il telefono. La recensione parte in 10 secondi.</p>
+      <div style="flex:1"></div>
+      <span class="pill" style="margin-bottom:40px;">Offerta valida solo questa settimana</span>
+      <div class="cta"><span class="arrow">→</span> La prendi dal <span class="accent">&nbsp;link in bio</span></div>
+    </div>${foot(d.n)}</div>`;
+  }
+  // day standard
+  return `<div class="story"><div class="edge"></div><div class="pad">
+    <div class="dayhead">
+      <div class="kicker" style="max-width:360px;line-height:1.5;">${WEEKS[d.w]}</div>
+      <div class="daybig">${num}</div>
+    </div>
+    <div class="rule" style="margin:44px 0 54px;"></div>
+    <h1 class="hook" style="max-width:820px;">${d.hook}</h1>
+    <div style="flex:1"></div>
+    <div class="actionblock"><span class="pill">Cosa fai oggi</span><p class="action">${d.action}</p></div>
+  </div>${foot(d.n)}</div>`;
+}
+
+function coverStory(){
+  return `<div class="story"><div class="edge"></div>
+      <div class="pad" style="justify-content:center;align-items:center;text-align:center;gap:52px;">
+        <div class="kicker">SB Food Consulting presenta</div>
+        <div class="stars">★★★★★</div>
+        <h1 class="display" style="font-size:130px;">La Challenge<br>delle <span class="accent ital">5 Stelle</span></h1>
+        <div class="rule"></div>
+        <p class="display ital soft" style="font-size:46px;max-width:720px;font-weight:500;">30 giorni per riempire il tuo locale di recensioni vere — e meritarle.</p>
+        <div class="tap" aria-hidden="true"><svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="24" width="42" height="60" rx="8"/><line x1="34" y1="32" x2="48" y2="32"/><circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/>
+          <path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/><path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/><path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/></svg></div>
+      </div>
+    </div>`;
+}
+
+const params = new URLSearchParams(location.search);
+if(params.has('only')){
+  document.documentElement.style.setProperty('--preview','1');
+  document.body.classList.add('export');
+  const i = parseInt(params.get('only'),10);
+  document.getElementById('app').innerHTML = (i===0) ? coverStory() : renderDay(DAYS[i-1]);
+} else {
+  let html = `<div class="stage"><p class="cap"><b>Copertina</b> — lancio + Evidenza</p><div class="framewrap">${coverStory()}</div></div>`;
+  for(const d of DAYS){
+    html += `<div class="stage"><p class="cap"><b>Giorno ${d.n}</b> · ${d.label}</p><div class="framewrap">${renderDay(d)}</div></div>`;
+  }
+  document.getElementById('app').innerHTML = html;
+}
+</script>
+</body>
+</html>

@@ -16,3 +16,12 @@ node_modules/
 package.json
 package-lock.json
 export-copertine.js
+
+# Materiale di lavorazione Higgsfield per la placca NFC (decine di MB di bozze,
+# non servono al sito: le immagini pubblicate stanno in assets/nfc/shop/)
+assets/nfc/bg-prove/
+assets/nfc/bg-chiari/
+
+# Immagini scaricate di appoggio, rimaste in radice
+/jazz-*.jpg
+/rome-*.jpg
