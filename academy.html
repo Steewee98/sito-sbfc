@@ -673,18 +673,13 @@ if (urlParams.get('pagamento') === 'annullato') {
 
 /* Download schede: ora passano dalle pagine gated /strumenti/<slug> (gate email). */
 
-/* ═══════ CONTATORE CHECKLIST COMPLETATE ═══════ */
-(function() {
-    fetch('https://web-production-f3794.up.railway.app/api/checklist')
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            var count = Array.isArray(data) ? data.length : 0;
-            if (count > 0) {
-                document.getElementById('checklist-counter').textContent = count + ' checklist completate';
-            }
-        })
-        .catch(function() {});
-})();
+/* Qui c'era un contatore delle checklist completate: chiamava GET /api/checklist,
+   che e' un endpoint di sola amministrazione (risponde 401 senza X-Admin-Token) e
+   restituisce nomi ed email di chi ha fatto il quiz. Scaricare l'elenco intero per
+   contarne le righe, da una pagina pubblica, era sbagliato in partenza; in piu'
+   l'elemento #checklist-counter non esiste in questa pagina, quindi il contatore
+   non si e' mai visto e lasciava solo un errore 401 nella console a ogni visita.
+   Se il contatore serve davvero: endpoint pubblico che restituisce il solo numero. */
 </script>
 <script type="application/ld+json">
 {
