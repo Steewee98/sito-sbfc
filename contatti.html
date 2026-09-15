@@ -148,7 +148,9 @@
 
 <script src="main.js"></script>
 <script>
-const BACKEND_URL = 'https://web-production-f3794.up.railway.app';
+// BACKEND_URL e' gia' definito in main.js (var globale): ridichiararlo con const
+// qui provocava "Identifier 'BACKEND_URL' has already been declared" e mandava in
+// errore TUTTO questo script (il form contatti non inviava piu' nulla).
 
 async function inviaContatto() {
     const btn = document.querySelector('[onclick="inviaContatto()"]');
