@@ -1420,6 +1420,48 @@ function mostraRisultato() {
           .then(function(d) { console.log('Checklist salvata:', d); })
           .catch(function(e) { console.log('Backend non raggiunto:', e); });
     } catch(e) { console.log('Errore invio:', e); }
+
+    // Se il visitatore arriva da una nostra email, il resoconto parte da solo:
+    // niente modulo da compilare una seconda volta.
+    registraEmailNota();
+}
+
+/* ═══════ EMAIL GIÀ NOTA ═══════
+   Chi arriva dal link nella nostra email l'indirizzo ce l'ha già dato: non
+   glielo richiediamo. Il parametro «e» porta l'email in base64url, «n» il nome
+   se lo conosciamo. */
+var emailNota = '', nomeNoto = '';
+(function leggiIdentita() {
+    try {
+        var q = new URLSearchParams(location.search);
+        var e = q.get('e');
+        if (e) {
+            var b = e.replace(/-/g, '+').replace(/_/g, '/');
+            emailNota = decodeURIComponent(escape(atob(b)));
+        }
+        nomeNoto = q.get('n') || '';
+    } catch (err) { emailNota = ''; }
+})();
+
+function registraEmailNota() {
+    if (!emailNota || !emailNota.includes('@')) return;
+    userEmail = emailNota;
+    userName = nomeNoto;
+    var box = document.getElementById('email-capture');
+    if (box) {
+        box.innerHTML = '<div class="email-capture-success">'
+            + 'Il resoconto completo arriva a ' + emailNota + '.</div>';
+    }
+    fetch(BACKEND + '/api/checklist/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId, nome: nomeNoto, email: emailNota })
+    }).then(function (r) { return r.json(); })
+      .then(function () {
+        trackEvento('email_gia_nota');
+        if (window.sbIdentify) window.sbIdentify(emailNota, nomeNoto);
+      })
+      .catch(function (e) { console.log('Invio resoconto non riuscito:', e); });
 }
 
 /* ═══════ EMAIL CAPTURE ═══════ */
