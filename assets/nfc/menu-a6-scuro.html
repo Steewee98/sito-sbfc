@@ -2,13 +2,13 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>SBFC — Tag menù al tavolo (A6)</title>
+<title>SBFC — Tag menù al tavolo (A6) — scura</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
-     SB FOOD CONSULTING — Tag menù al tavolo
+     SB FOOD CONSULTING — Tag menù al tavolo — VERSIONE SCURA
      A6 (105 x 148 mm) + bleed 3 mm.
 
      Non è la placca recensioni con un'altra frase: è un altro
@@ -20,13 +20,13 @@
      Famiglia: stessi due caratteri, stessi tre colori, stesso gesto.
      ============================================================ */
   :root{
-    --ink:#2b2d31; --ink-soft:#6b6560; --cream:#f5f2ee;
-    --accent:#c4622d; --line:rgba(43,45,49,.22);
+    --ink:#f5f2ee; --ink-soft:#b9b2aa; --cream:#2b2d31;
+    --accent:#c4622d; --line:rgba(245,242,238,.26);
     --w:105mm; --h:148mm; --bleed:3mm;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{
-    background:#e2ddd5; min-height:100vh;
+    background:#e9e6e1; min-height:100vh;
     display:flex; align-items:center; justify-content:center;
     font-family:'Inter',sans-serif;
     -webkit-print-color-adjust:exact; print-color-adjust:exact;
@@ -36,8 +36,8 @@
     width:calc(var(--w) + var(--bleed)*2);
     height:calc(var(--h) + var(--bleed)*2);
     background:
-      linear-gradient(180deg, rgba(249,246,241,.30) 0%, rgba(245,241,235,.22) 60%, rgba(241,236,229,.42) 100%),
-      url('bg-chiari/bg-2.png') center/cover no-repeat;
+      linear-gradient(180deg, rgba(28,29,33,.32) 0%, rgba(24,25,29,.26) 60%, rgba(20,21,25,.48) 100%),
+      url('bg-placca.png') center/cover no-repeat;
     color:var(--ink); overflow:hidden;
     box-shadow:0 30px 80px rgba(0,0,0,.18);
   }
@@ -46,13 +46,13 @@
   .testata{
     position:absolute; top:var(--bleed); left:var(--bleed);
     width:var(--w); height:31mm;
-    background:var(--ink);
+    background:#f5f2ee;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
   }
   .testata .parola{
     font-family:'Inter',sans-serif; font-weight:600;
     font-size:8pt; letter-spacing:5.5pt; text-transform:uppercase;
-    color:var(--cream); text-indent:5.5pt;
+    color:#2b2d31; text-indent:5.5pt;
   }
   .testata .filo{ width:14mm; height:0.5pt; background:var(--accent); margin-top:3.2mm; }
 
