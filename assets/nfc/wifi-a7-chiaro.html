@@ -50,9 +50,18 @@
     display:flex; align-items:center; gap:7mm;
   }
 
-  /* il simbolo grande: è lui a dire cos'è, prima di qualsiasi parola */
-  .segnale{ width:22mm; flex:none; color:var(--accent); position:relative; z-index:2; }
-  .segnale svg{ display:block; width:100%; height:auto; }
+  /* il simbolo grande: è lui a dire cos'è, prima di qualsiasi parola.
+     Sotto, la dicitura che dice dove sta il tag: stessa di menù e placca,
+     così chi ne ha già usata una riconosce il gesto. */
+  .segnale{ flex:none; position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:3.4mm; }
+  .segnale .onde{ width:22mm; color:var(--accent); }
+  .segnale .onde svg{ display:block; width:100%; height:auto; }
+  .segnale .qui{
+    font-family:'Inter',sans-serif; font-weight:600;
+    font-size:5pt; letter-spacing:1.9pt; text-transform:uppercase;
+    color:var(--accent); text-indent:1.9pt; white-space:nowrap;
+  }
 
   .divisorio{ width:0.5pt; align-self:stretch; background:var(--accent); opacity:.55;
     position:relative; z-index:2; }
@@ -97,13 +106,16 @@
 
   <div class="placca">
     <div class="safe">
-      <div class="segnale" aria-hidden="true">
+      <div class="segnale">
+        <div class="onde" aria-hidden="true">
         <svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round">
           <path d="M4 15 A 39 39 0 0 1 60 15"/>
           <path d="M13 24.5 A 26 26 0 0 1 51 24.5"/>
           <path d="M21.5 33.8 A 14 14 0 0 1 42.5 33.8"/>
           <circle cx="32" cy="42" r="3.4" fill="currentColor" stroke="none"/>
         </svg>
+        </div>
+        <span class="qui">Appoggia qui</span>
       </div>
 
       <div class="divisorio"></div>
