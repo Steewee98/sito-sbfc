@@ -14,9 +14,9 @@
      Non è la placca recensioni con un'altra frase: è un altro
      oggetto. Quella è un cartello che parla al cliente che se ne
      va — testo centrato, tono cerimonioso. Questo deve sembrare
-     LA CARTA: fondo chiaro, testata scura come la copertina di un
-     menù, le portate incolonnate a sinistra con i filetti, e il
-     tap relegato in fondo come si fa con le istruzioni.
+     LA CARTA: fondo chiaro, il titolo in corsivo come si intesta un
+     menù scritto a mano, le portate incolonnate a sinistra con i
+     filetti, e il tap in fondo come si fa con le istruzioni.
      Famiglia: stessi due caratteri, stessi tre colori, stesso gesto.
      ============================================================ */
   :root{
@@ -42,24 +42,19 @@
     box-shadow:0 30px 80px rgba(0,0,0,.18);
   }
 
-  /* la testata scura: è quello che a colpo d'occhio dice «menù» */
-  .testata{
-    position:absolute; top:var(--bleed); left:var(--bleed);
-    width:var(--w); height:31mm;
-    background:var(--ink);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-  }
+  /* l'intestazione: corsivo, come si scrive in testa a una carta */
+  .testata{ text-align:center; padding-top:2mm; }
   .testata .parola{
-    font-family:'Inter',sans-serif; font-weight:600;
-    font-size:8pt; letter-spacing:5.5pt; text-transform:uppercase;
-    color:var(--cream); text-indent:5.5pt;
+    font-family:'Playfair Display',serif; font-style:italic; font-weight:500;
+    font-size:22pt; letter-spacing:.2pt; color:var(--ink); line-height:1.1;
   }
-  .testata .filo{ width:14mm; height:0.5pt; background:var(--accent); margin-top:3.2mm; }
+  .testata .filo{ width:16mm; height:0.5pt; background:var(--accent);
+    margin:5mm auto 0; opacity:.9; }
 
   .safe{
-    position:absolute; top:calc(var(--bleed) + 31mm); left:var(--bleed);
-    width:var(--w); height:calc(var(--h) - 31mm);
-    padding:11mm 13mm 9mm;
+    position:absolute; top:var(--bleed); left:var(--bleed);
+    width:var(--w); height:var(--h);
+    padding:14mm 13mm 9mm;
     display:flex; flex-direction:column;
   }
 
@@ -109,12 +104,12 @@
 <body>
 
   <div class="placca">
-    <div class="testata">
-      <div class="parola">Il nostro menù</div>
-      <div class="filo"></div>
-    </div>
-
     <div class="safe">
+      <div class="testata">
+        <div class="parola">Il nostro menù</div>
+        <div class="filo"></div>
+      </div>
+
       <div class="portate">
         <div class="voce"><span class="nome">Antipasti</span><span class="filetto"></span><span class="num">01</span></div>
         <div class="voce"><span class="nome">Primi</span><span class="filetto"></span><span class="num">02</span></div>
