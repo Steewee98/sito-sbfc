@@ -43,7 +43,7 @@
   }
 
   /* l'intestazione: corsivo, come si scrive in testa a una carta */
-  .testata{ text-align:center; padding-top:2mm; }
+  .testata{ text-align:center; }
   .testata .parola{
     font-family:'Playfair Display',serif; font-style:italic; font-weight:500;
     font-size:22pt; letter-spacing:.2pt; color:var(--ink); line-height:1.1;
@@ -54,13 +54,13 @@
   .safe{
     position:absolute; top:var(--bleed); left:var(--bleed);
     width:var(--w); height:var(--h);
-    padding:14mm 13mm 9mm;
+    padding:10mm 13mm 9mm;
     display:flex; flex-direction:column;
   }
 
   /* le portate: incolonnate, con il filetto che porta al numero —
      la forma di una carta, non di un cartello */
-  .portate{ flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; gap:5.4mm; }
+  .portate{ flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; gap:4.8mm; }
   .voce{ display:flex; align-items:baseline; gap:2.5mm; }
   .voce .nome{
     font-family:'Playfair Display',serif; font-weight:500;
@@ -75,10 +75,28 @@
   /* il tap in fondo, come si mettono le istruzioni */
   .istruzione{
     display:flex; align-items:center; gap:4.5mm;
-    border-top:0.5pt solid var(--line); padding-top:6mm; margin-top:6mm;
+    border-top:0.5pt solid var(--line); padding-top:5.5mm; margin-top:5.5mm;
   }
-  .istruzione .icona{ width:12mm; flex:none; color:var(--accent); }
+  /* il bersaglio: il tag NFC sta dietro questo cerchio, e si vede */
+  .istruzione .bersaglio{ flex:none; display:flex; flex-direction:column;
+    align-items:center; gap:2.2mm; }
+  .istruzione .cerchio{
+    width:21mm; height:21mm; border-radius:50%;
+    border:0.75pt solid var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .istruzione .cerchio::before{
+    content:""; position:absolute; inset:1.6mm; border-radius:50%;
+    border:0.4pt dashed var(--accent); opacity:.45;
+  }
+  .istruzione .icona{ width:9.5mm; color:var(--accent); }
   .istruzione .icona svg{ display:block; width:100%; height:auto; }
+  .istruzione .qui{
+    font-family:'Inter',sans-serif; font-weight:600;
+    font-size:5pt; letter-spacing:1.9pt; text-transform:uppercase;
+    color:var(--accent); text-indent:1.9pt;
+  }
   .istruzione .dice{ flex:1 1 auto; }
   .istruzione .dice b{
     display:block; font-family:'Playfair Display',serif; font-weight:600;
@@ -120,7 +138,9 @@
       </div>
 
       <div class="istruzione">
-        <div class="icona" aria-hidden="true">
+        <div class="bersaglio">
+          <div class="cerchio">
+            <div class="icona" aria-hidden="true">
           <svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round">
             <rect x="20" y="24" width="42" height="60" rx="8"/>
             <line x1="34" y1="32" x2="48" y2="32"/>
@@ -128,7 +148,10 @@
             <path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/>
             <path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/>
             <path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/>
-          </svg>
+              </svg>
+            </div>
+          </div>
+          <span class="qui">Appoggia qui</span>
         </div>
         <div class="dice">
           <b>Avvicina il telefono<br>per aprire la carta</b>
