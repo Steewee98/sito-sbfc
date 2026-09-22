@@ -3256,3 +3256,64 @@ ul { list-style: none; }
 .dlgate-cross-btn.is-done .dlgate-cross-ic { background: #58b384; }
 .dlgate-cross-btn.is-done .dlgate-cross-txt em { color: #2e7d52; }
 .dlgate-cross-btn.is-done .dlgate-cross-go { color: #58b384; }
+
+/* ═══════════════════ NOVITÀ ═══════════════════
+   Vetrina di quello che è stato aggiunto di recente e delle promozioni
+   in corso. Una voce sola in evidenza (la più importante del momento) e
+   le altre in griglia: per cambiarla basta spostare la classe --spicco.
+   ============================================================ */
+.ed-novita { padding: 130px 0; background: var(--surface); border-top: 1px solid var(--border); }
+.ed-novita-header { margin-bottom: 56px; }
+.ed-novita-header .ed-heading { margin-top: 14px; }
+.ed-novita-line { width: 64px; height: 2px; background: var(--accent); margin-top: 26px; }
+
+.ed-nov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.ed-nov {
+    position: relative; display: flex; flex-direction: column;
+    background: #fff; border: 1px solid var(--border); padding: 34px 30px 30px;
+    text-decoration: none; color: inherit;
+    transition: border-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out),
+                box-shadow var(--dur) var(--ease-out);
+}
+.ed-nov:hover { border-color: var(--accent); transform: translateY(-4px);
+    box-shadow: 0 18px 48px rgba(55,57,63,.10); }
+
+/* la voce in evidenza occupa due colonne e cambia fondo */
+.ed-nov--spicco { grid-column: span 2; background: var(--dark); border-color: var(--dark); color: var(--ivory); }
+.ed-nov--spicco:hover { border-color: var(--accent); }
+.ed-nov--spicco .ed-nov-desc { color: rgba(245,242,238,.72); }
+.ed-nov--spicco .ed-nov-prezzo { color: var(--ivory); }
+.ed-nov--spicco .ed-nov-vai { color: var(--accent); }
+
+.ed-nov-tag {
+    display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+    font-size: .62rem; font-weight: 600; letter-spacing: 2.2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+}
+.ed-nov-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.ed-nov-tag--gratis { color: var(--ink-soft); }
+.ed-nov-tag--gratis::before { background: var(--ink-soft); }
+
+.ed-nov-titolo {
+    font-family: 'Playfair Display', serif; font-weight: 500;
+    font-size: 1.45rem; line-height: 1.22; margin-bottom: 12px;
+}
+.ed-nov--spicco .ed-nov-titolo { font-size: 2rem; }
+.ed-nov-desc { font-size: .93rem; line-height: 1.65; color: var(--ink-soft); margin-bottom: 26px; max-width: 46ch; }
+.ed-nov-foot { margin-top: auto; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.ed-nov-prezzo { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--ink); }
+.ed-nov-prezzo small { font-family: 'Inter', sans-serif; font-size: .7rem; color: var(--ink-soft); margin-left: 6px; }
+.ed-nov-vai { font-size: .78rem; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+.ed-nov:hover .ed-nov-vai { text-decoration: underline; text-underline-offset: 4px; }
+
+@media (max-width: 900px) {
+    .ed-novita { padding: 90px 0; }
+    .ed-nov-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ed-nov--spicco { grid-column: span 2; }
+    .ed-nov--spicco .ed-nov-titolo { font-size: 1.7rem; }
+}
+@media (max-width: 620px) {
+    .ed-nov-grid { grid-template-columns: 1fr; }
+    .ed-nov--spicco { grid-column: span 1; }
+    .ed-nov { padding: 28px 24px 26px; }
+}
