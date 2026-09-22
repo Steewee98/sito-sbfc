@@ -3266,10 +3266,10 @@ ul { list-style: none; }
    ============================================================ */
 .nov { position: relative; padding: 104px 0 96px; background: var(--surface); overflow: hidden; }
 .nov-ghost {
-    position: absolute; top: 30%; right: -4%; z-index: 0; pointer-events: none;
+    position: absolute; top: 12%; right: -3%; z-index: 0; pointer-events: none;
     font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700;
     font-size: clamp(10rem, 20vw, 23rem); line-height: 1;
-    color: rgba(196,98,45,.032); white-space: nowrap;
+    color: rgba(196,98,45,.085); white-space: nowrap;
 }
 .nov .container { position: relative; z-index: 1; }
 
@@ -3322,7 +3322,7 @@ ul { list-style: none; }
 
 @media (max-width: 900px) {
     .nov { padding: 72px 0 66px; }
-    .nov-ghost { font-size: 9rem; top: 26%; right: -16%; }
+    .nov-ghost { font-size: 9rem; top: 10%; right: -14%; }
     .nov-head { margin-bottom: 38px; }
     .nov-grid { grid-template-columns: 1fr; gap: 44px; }
     .nov-media { aspect-ratio: 3 / 2; }
