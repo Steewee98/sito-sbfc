@@ -3269,7 +3269,7 @@ ul { list-style: none; }
     position: absolute; top: 12%; right: -3%; z-index: 0; pointer-events: none;
     font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700;
     font-size: clamp(10rem, 20vw, 23rem); line-height: 1;
-    color: rgba(196,98,45,.085); white-space: nowrap;
+    color: rgba(196,98,45,.05); white-space: nowrap;
 }
 .nov .container { position: relative; z-index: 1; }
 
