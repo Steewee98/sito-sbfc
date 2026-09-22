@@ -186,6 +186,9 @@ async function inviaContatto() {
         const data = await res.json();
         if (data.success || data.id) {
             if (window.sbIdentify) window.sbIdentify(email, nome);
+            // conversione Google: la richiesta di contatto e' l'obiettivo
+            // su cui la campagna impara chi vale la pena inseguire
+            if (window.sbGoogleConv) window.sbGoogleConv(CONV_CONTATTO);
             document.getElementById('contactForm').style.display = 'none';
             document.getElementById('form-success').style.display = 'block';
         } else {

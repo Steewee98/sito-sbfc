@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Google Ads per le consulenze — guida passo passo</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 15mm; }
+  :root{ --ink:#16181c; --testo:#3c4048; --tenue:#7b8089; --accento:#c4622d;
+         --riga:#e2ded7; --velo:#f7f4ef; --rosso:#a63423; --verde:#1f8455; }
+  *{ box-sizing:border-box }
+  body{ margin:0; font:10.5pt/1.55 "Helvetica Neue",Helvetica,Arial,sans-serif; color:var(--testo) }
+  h1,h2,h3{ color:var(--ink); margin:0 }
+
+  .cop{ height:250mm; display:flex; flex-direction:column; justify-content:center; page-break-after:always }
+  .cop .marchio{ font-size:9pt; letter-spacing:3px; text-transform:uppercase; color:var(--accento); font-weight:600 }
+  .cop h1{ font-size:32pt; line-height:1.05; letter-spacing:-1px; margin:14px 0 0 }
+  .cop .sotto{ font-size:12.5pt; color:var(--tenue); margin-top:14px; max-width:115mm }
+  .cop .barra{ width:54px; height:3px; background:var(--accento); margin:24px 0 }
+  .cop dl{ display:grid; grid-template-columns:32mm 1fr; gap:6px 0; margin:0; font-size:10pt }
+  .cop dt{ color:var(--tenue) } .cop dd{ margin:0; color:var(--ink) }
+
+  .capitolo{ font-size:8.5pt; letter-spacing:2.2px; text-transform:uppercase; color:var(--tenue);
+    font-weight:600; margin:0 0 4mm; padding-bottom:2mm; border-bottom:1px solid var(--riga) }
+  .passo{ margin-bottom:8mm; page-break-inside:avoid }
+  .passo .testa{ display:flex; align-items:baseline; gap:8px; margin-bottom:3mm }
+  .passo .n{ font-size:9.5pt; font-weight:700; color:var(--accento); white-space:nowrap }
+  .passo h3{ font-size:13pt; letter-spacing:-.2px }
+  .passo p{ margin:0 0 2.5mm }
+  ul,ol{ margin:0 0 3mm; padding-left:5mm } li{ margin-bottom:1.6mm }
+
+  .nota{ background:var(--velo); border-left:3px solid var(--accento); padding:4mm 5mm; margin:3mm 0; font-size:9.8pt }
+  .nota b{ color:var(--ink) }
+  .attenzione{ border-left-color:var(--rosso) }
+  .link{ font-family:"SF Mono",Menlo,monospace; font-size:8.6pt; color:var(--accento); word-break:break-all }
+  code{ font-family:"SF Mono",Menlo,monospace; font-size:9pt; background:var(--velo); padding:1px 4px }
+
+  table{ width:100%; border-collapse:collapse; font-size:9.6pt; margin-bottom:5mm }
+  th{ text-align:left; font-size:8pt; letter-spacing:1.2px; text-transform:uppercase; color:var(--tenue);
+    font-weight:600; padding:0 0 2mm; border-bottom:1px solid var(--riga) }
+  td{ padding:2.2mm 0; border-bottom:1px solid var(--riga); vertical-align:top }
+  td:first-child{ padding-right:5mm }
+  .dx{ text-align:right; white-space:nowrap }
+
+  .chiavi{ columns:2; column-gap:8mm; font-size:9.6pt; margin-bottom:4mm }
+  .chiavi div{ break-inside:avoid; margin-bottom:1.4mm }
+  .neg{ font-size:9.4pt; color:var(--testo); line-height:1.8 }
+  .pagina{ page-break-before:always }
+</style>
+</head>
+<body>
+
+<section class="cop">
+  <div class="marchio">SB Food Consulting</div>
+  <h1>Google Ads<br>per le consulenze</h1>
+  <div class="barra"></div>
+  <p class="sotto">Cosa fare, nell'ordine, per far comparire SB Food quando un
+     ristoratore del Lazio cerca aiuto. Con i testi già scritti e le parole da
+     escludere, che sono la parte che fa la differenza con questo budget.</p>
+  <dl>
+    <dt>Budget</dt><dd>200 € al mese &middot; 6,60 € al giorno</dd>
+    <dt>Area</dt><dd>Lazio</dd>
+    <dt>Obiettivo</dt><dd>Richieste di contatto e chiamate</dd>
+    <dt>Tracciamento</dt><dd>Già installato sul sito, mancano gli identificativi</dd>
+    <dt>Aggiornato al</dt><dd>22 settembre 2026</dd>
+  </dl>
+</section>
+
+<h2 class="capitolo">Prima di cominciare: cosa aspettarsi davvero</h2>
+<p>Con 6,60 € al giorno e un costo per clic che in questo settore sta fra 1,50 e 3 €,
+   la campagna porta circa <b>65-90 clic al mese</b>. Di quelli, fra il tre e il cinque
+   per cento lascia un contatto: <b>due o quattro richieste al mese</b>.</p>
+<div class="nota"><b>Va detto chiaro:</b> con questo budget non si costruisce un flusso
+   di clienti, si compra un'informazione — quali parole portano ristoratori veri e quanto
+   costa un contatto. Se dopo sei settimane il costo per contatto sta sotto i 60 €,
+   allora ha senso alzare il budget. Se sta sopra i 100 €, il problema non è il budget:
+   è la pagina d'atterraggio o le parole scelte.</div>
+
+<h2 class="capitolo">Passo 1 — Aprire l'account, in modalità esperto</h2>
+<div class="passo">
+  <div class="testa"><span class="n">1.1</span><h3>Crea l'account</h3></div>
+  <p>Vai su <span class="link">ads.google.com</span> e accedi con l'account Google di
+     SB Food. Alla domanda sull'obiettivo pubblicitario, <b>non</b> compilare la procedura
+     guidata.</p>
+  <div class="nota attenzione"><b>Il passaggio che quasi tutti sbagliano.</b> Google apre
+     di default la «modalità intelligente», dove non puoi scegliere le parole chiave, non
+     puoi escludere nulla e non puoi togliere la rete display. In fondo alla pagina di
+     creazione c'è la riga <b>«Passa alla modalità Esperto»</b>: cliccala. Se ti trovi già
+     dentro la modalità intelligente, si cambia da Impostazioni &rarr; Passa alla modalità
+     esperto.</div>
+</div>
+
+<h2 class="capitolo">Passo 2 — Creare le tre conversioni</h2>
+<p>Una conversione è l'azione che per noi vale: senza, Google ottimizza sui clic e basta.
+   Da <b>Obiettivi &rarr; Conversioni &rarr; Nuova azione di conversione &rarr; Sito web</b>,
+   inserisci <code>sbfoodconsulting.com</code> e scegli <b>«Aggiungi manualmente»</b>.</p>
+<table>
+  <thead><tr><th>Nome da dare</th><th>Categoria</th><th>Conteggio</th><th class="dx">Serve a</th></tr></thead>
+  <tbody>
+    <tr><td><b>Richiesta contatto</b></td><td>Invio modulo per lead</td><td>Una</td><td class="dx">è l'obiettivo vero</td></tr>
+    <tr><td><b>Clic sul telefono</b></td><td>Chiamate</td><td>Una</td><td class="dx">da mobile è il modo più frequente</td></tr>
+    <tr><td><b>Checklist completata</b></td><td>Iscrizione</td><td>Una</td><td class="dx">dà volume per imparare</td></tr>
+  </tbody>
+</table>
+<div class="nota"><b>Solo le prime due vanno messe come conversione principale.</b> La
+   checklist va impostata come <b>secondaria</b> (nella scheda della conversione:
+   «Azione di conversione secondaria»). Se la lasci principale, la campagna insegue il
+   contatto facile e smette di cercare chi vuole davvero una consulenza.</div>
+<div class="passo">
+  <div class="testa"><span class="n">2.1</span><h3>Quello che mi devi mandare</h3></div>
+  <p>Dopo aver creato le tre conversioni, apri <b>Configura il tag &rarr; Usa il tag di
+     Google</b>. Lì dentro trovi:</p>
+  <ul>
+    <li>l'<b>identificativo</b> che comincia con <code>AW-</code> (uno solo, uguale per tutte);</li>
+    <li>una <b>etichetta</b> diversa per ciascuna delle tre conversioni, una stringa tipo
+        <code>AbCdEfGhIj-KlMnOpQ</code>.</li>
+  </ul>
+  <p>Mandami questi quattro valori e li metto io nel sito: il codice è già installato e
+     aspetta solo quelli. Non devi incollare nessuno script da nessuna parte.</p>
+</div>
+
+<div class="pagina"></div>
+<h2 class="capitolo">Passo 3 — La campagna</h2>
+<p><b>Nuova campagna &rarr; Lead &rarr; Rete di ricerca.</b> Poi, nelle impostazioni:</p>
+<table>
+  <thead><tr><th>Voce</th><th>Cosa mettere</th><th class="dx">Perché</th></tr></thead>
+  <tbody>
+    <tr><td>Reti</td><td>Togli <b>Rete Display</b> e <b>Partner di ricerca</b></td><td class="dx">la display brucia il budget in banner</td></tr>
+    <tr><td>Località</td><td>Lazio</td><td class="dx">l'area che puoi raggiungere</td></tr>
+    <tr><td>Opzioni località</td><td><b>Presenza: persone che si trovano nella zona</b></td><td class="dx">il default include chi è solo «interessato» al Lazio</td></tr>
+    <tr><td>Lingua</td><td>Italiano</td><td class="dx">—</td></tr>
+    <tr><td>Budget</td><td>6,60 € al giorno</td><td class="dx">fa 200 € al mese</td></tr>
+    <tr><td>Offerta</td><td><b>Massimizza i clic</b>, limite 1,50 €</td><td class="dx">vedi la nota qui sotto</td></tr>
+    <tr><td>Programmazione</td><td>Lun-ven 8-20, sab 9-14</td><td class="dx">la domenica un ristoratore non cerca consulenti</td></tr>
+  </tbody>
+</table>
+<div class="nota"><b>Sull'offerta.</b> Il consiglio automatico sarà «Massimizza le
+   conversioni». Non seguirlo adesso: quella strategia ha bisogno di almeno quindici
+   conversioni al mese per funzionare, e noi ne faremo tre o quattro. Si parte a
+   <b>Massimizza i clic con limite a 1,50 €</b>, e si passa alle conversioni quando i
+   numeri ci sono. È la differenza fra spendere 200 € e buttarli.</div>
+
+<h2 class="capitolo">Passo 4 — Un solo gruppo di annunci</h2>
+<p>Con questo budget, tre gruppi significano tre gruppi che non imparano. Uno solo,
+   chiamalo <b>Consulente ristorazione</b>. Tutte le parole vanno inserite <b>a
+   corrispondenza a frase</b>, cioè fra virgolette: senza virgolette Google le allarga a
+   suo piacimento e ti fa pagare clic per «corso di cucina».</p>
+<div class="chiavi">
+  <div>"consulente ristorazione"</div>
+  <div>"consulente ristoranti"</div>
+  <div>"consulenza ristorazione"</div>
+  <div>"consulenza per ristoranti"</div>
+  <div>"consulente per ristoranti roma"</div>
+  <div>"consulenza gestione ristorante"</div>
+  <div>"consulente food cost"</div>
+  <div>"come aumentare i margini ristorante"</div>
+  <div>"ristorante non guadagna"</div>
+  <div>"come gestire un ristorante"</div>
+  <div>"aprire un ristorante consulenza"</div>
+  <div>"business plan ristorante"</div>
+  <div>"controllo di gestione ristorante"</div>
+  <div>"analisi food cost ristorante"</div>
+</div>
+<div class="nota attenzione"><b>Le parole da escludere valgono più di quelle da includere.</b>
+   Mettile subito, in <b>Parole chiave &rarr; Parole chiave escluse</b>, a corrispondenza
+   generica. Ogni voce qui sotto è un clic pagato che non diventerà mai un cliente:</div>
+<p class="neg">lavoro &middot; offerte lavoro &middot; assunzioni &middot; stipendio &middot;
+   cerco lavoro &middot; curriculum &middot; corso &middot; corsi &middot; gratis &middot;
+   gratuito &middot; pdf &middot; template &middot; esempio &middot; fac simile &middot;
+   università &middot; master &middot; tesi &middot; franchising &middot; attrezzature &middot;
+   arredamento &middot; forniture &middot; software &middot; gestionale &middot; app &middot;
+   cassa &middot; registratore &middot; wikipedia &middot; significato &middot; cosa fa &middot;
+   quanto guadagna &middot; aprire un bar &middot; food truck &middot; ricette</p>
+
+<div class="pagina"></div>
+<h2 class="capitolo">Passo 5 — L'annuncio</h2>
+<p>Google chiede fino a 15 titoli (30 caratteri) e 4 descrizioni (90 caratteri), poi li
+   combina da solo. Questi sono già dentro i limiti: copiali così.</p>
+<table>
+  <thead><tr><th>Titoli</th><th>Titoli</th></tr></thead>
+  <tbody>
+    <tr><td>Consulenza per ristoranti</td><td>35 anni nei ristoranti</td></tr>
+    <tr><td>Il tuo locale lavora, non rende</td><td>Analisi del food cost</td></tr>
+    <tr><td>Consulente ristorazione Roma</td><td>Margini, sprechi, turni</td></tr>
+    <tr><td>Prima chiamata gratuita</td><td>Metodo, non consigli generici</td></tr>
+    <tr><td>Veniamo noi nel locale</td><td>Oltre 200 locali seguiti</td></tr>
+    <tr><td>Sappiamo dove perdi margine</td><td>Consulenza operativa</td></tr>
+    <tr><td>Da 35 anni nella ristorazione</td><td>Apertura e rilancio locali</td></tr>
+    <tr><td>Checklist gratuita del locale</td><td>&nbsp;</td></tr>
+  </tbody>
+</table>
+<table>
+  <thead><tr><th>Descrizioni</th></tr></thead>
+  <tbody>
+    <tr><td>Analizziamo food cost, personale e sprechi. Ti diciamo dove stai perdendo margine, con i numeri.</td></tr>
+    <tr><td>Non un corso: veniamo nel locale, guardiamo i tuoi conti e lavoriamo con la tua squadra.</td></tr>
+    <tr><td>Prima chiamata gratuita di mezz'ora. Se non possiamo esserti utili te lo diciamo subito.</td></tr>
+    <tr><td>35 anni di consulenza operativa nei ristoranti italiani. Roma e Lazio.</td></tr>
+  </tbody>
+</table>
+<div class="nota"><b>Pagina d'atterraggio:</b>
+   <span class="link">sbfoodconsulting.com/consulenza-ristoranti-roma</span> — è l'unica
+   scritta per rispondere a chi cerca esattamente questo, e ha le domande frequenti in
+   fondo. Non mandare il traffico alla home: chi arriva da un annuncio deve trovare la
+   risposta alla frase che ha appena scritto, non un menu.</div>
+
+<h2 class="capitolo">Passo 6 — Le estensioni (si chiamano «asset»)</h2>
+<p>Sono gratis, allargano l'annuncio e alzano la percentuale di clic. Vanno messe tutte.</p>
+<table>
+  <thead><tr><th>Tipo</th><th>Cosa metterci</th></tr></thead>
+  <tbody>
+    <tr><td><b>Sitelink</b></td><td>Il Percorso SB &rarr; /percorso-sb &middot; Checklist gratuita &rarr; /checklist &middot; I servizi &rarr; /servizi &middot; Contatti &rarr; /contatti</td></tr>
+    <tr><td><b>Callout</b></td><td>Prima chiamata gratuita &middot; 35 anni di esperienza &middot; Roma e Lazio &middot; Interveniamo in locale</td></tr>
+    <tr><td><b>Snippet strutturati</b></td><td>Intestazione «Servizi»: Avviamento, Ristrutturazione, Food cost, Formazione, Controllo di gestione</td></tr>
+    <tr><td><b>Chiamata</b></td><td>+39 391 398 3820 — attiva solo negli orari in cui qualcuno risponde</td></tr>
+  </tbody>
+</table>
+
+<div class="pagina"></div>
+<h2 class="capitolo">Passo 7 — Cosa guardare, e quando</h2>
+<table>
+  <thead><tr><th>Quando</th><th>Cosa fare</th></tr></thead>
+  <tbody>
+    <tr><td><b>Giorno 3</b></td><td>Apri <b>Parole chiave &rarr; Termini di ricerca</b>: è l'elenco di cosa la gente ha scritto davvero. Ogni frase che non c'entra va aggiunta alle escluse. Si fa ogni tre giorni la prima settimana.</td></tr>
+    <tr><td><b>Settimana 2</b></td><td>Se una parola ha speso più di 20 € senza un contatto, mettila in pausa. Se una ne ha portati due, alzale l'offerta.</td></tr>
+    <tr><td><b>Settimana 4</b></td><td>Conta: quanto è costato un contatto? Sotto i 60 € si continua, sopra i 100 € si cambia pagina o parole prima di rimettere soldi.</td></tr>
+    <tr><td><b>Settimana 6</b></td><td>Se le conversioni del mese sono almeno quindici, passa a «Massimizza le conversioni». Se sono meno, resta sui clic.</td></tr>
+  </tbody>
+</table>
+<div class="nota attenzione"><b>Le due cose che fanno sprecare più soldi,</b> in ordine:
+   la rete Display lasciata accesa (spende il doppio e non porta nulla) e i termini di
+   ricerca mai guardati. Se fai solo queste due cose, hai già fatto l'ottanta per cento
+   del lavoro di ottimizzazione.</div>
+
+<h2 class="capitolo">Cosa è già fatto sul sito</h2>
+<p>Il codice di tracciamento è installato e collegato al banner dei cookie: <b>parte solo
+   se il visitatore accetta</b>, e finché gli identificativi restano vuoti non viene
+   inviata alcuna richiesta a Google. Sono già cablate tre conversioni:</p>
+<ul>
+  <li>l'<b>invio del modulo</b> nella pagina contatti, quando il server risponde che è andato a buon fine;</li>
+  <li>il <b>clic sul numero di telefono</b>, ovunque compaia nel sito;</li>
+  <li>il <b>completamento della checklist</b>.</li>
+</ul>
+<p>Quando mi mandi i quattro valori del passo 2.1 li inserisco in un punto solo
+   (<code>main.js</code>) e da quel momento la campagna comincia a vedere cosa succede
+   dopo il clic.</p>
+
+</body>
+</html>

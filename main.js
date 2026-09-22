@@ -277,6 +277,62 @@ window.sbIdentify = function(email, nome) {
 var _sbStart = Date.now();
 var _sbScrollHits = {};
 
+/* ═══════════════ GOOGLE — Ads e Analytics ═══════════════
+   Stesso trattamento del Pixel: si carica SOLO col consenso, e senza
+   consenso ogni chiamata resta un no-op — il funnel interno gira lo
+   stesso. Gli identificativi stanno qui sotto e da nessun'altra parte:
+   quando la campagna cambia, si tocca solo questo blocco.
+
+   Come si riempiono (dalla scheda Obiettivi → Conversioni di Google Ads,
+   voce «Configura il tag», sezione «Usa il tag di Google»):
+     GOOGLE_ADS_ID     l'identificativo che comincia con AW-
+     CONV_CONTATTO     l'etichetta della conversione «Richiesta contatto»
+     CONV_TELEFONO     l'etichetta della conversione «Clic sul telefono»
+     CONV_CHECKLIST    l'etichetta della conversione «Checklist completata»
+   Finché restano vuoti non viene caricato niente e non parte nessuna
+   richiesta verso Google. */
+var GOOGLE_ADS_ID  = '';          // es. 'AW-123456789'
+var GA4_ID         = '';          // es. 'G-ABCD12345' — facoltativo
+var CONV_CONTATTO  = '';          // es. 'AbCdEfGhIj-KlMnOpQ'
+var CONV_TELEFONO  = '';
+var CONV_CHECKLIST = '';
+
+function sbLoadGoogle() {
+    if (sbConsent() !== 'accepted' || window.__sbGoogleLoaded) return;
+    if (!GOOGLE_ADS_ID && !GA4_ID) return;
+    window.__sbGoogleLoaded = true;
+    var primo = GOOGLE_ADS_ID || GA4_ID;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + primo;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    gtag('js', new Date());
+    if (GOOGLE_ADS_ID) gtag('config', GOOGLE_ADS_ID);
+    if (GA4_ID)        gtag('config', GA4_ID);
+}
+
+/* Registra una conversione. `etichetta` è una delle CONV_* qui sopra.
+   Se manca il consenso, l'identificativo o l'etichetta, non fa nulla:
+   nessun errore in console, nessuna chiamata a vuoto. */
+window.sbGoogleConv = function(etichetta, valore) {
+    try {
+        if (!window.gtag || !GOOGLE_ADS_ID || !etichetta) return;
+        var dati = { send_to: GOOGLE_ADS_ID + '/' + etichetta };
+        if (valore) { dati.value = valore; dati.currency = 'EUR'; }
+        gtag('event', 'conversion', dati);
+    } catch(e) {}
+};
+
+/* Il clic sul numero di telefono è una conversione: su mobile è il modo
+   più frequente con cui un ristoratore risponde a un annuncio. Si aggancia
+   a tutti i link tel: della pagina, presenti e futuri. */
+document.addEventListener('click', function(e) {
+    var a = e.target && e.target.closest && e.target.closest('a[href^="tel:"]');
+    if (a) window.sbGoogleConv(CONV_TELEFONO);
+}, true);
+
 /* Meta Pixel — caricato SOLO con consenso (consent-gated). Aggiuntivo al
    funnel interno: se manca il consenso resta tutto un no-op, il funnel gira. */
 function sbLoadPixel() {
@@ -314,7 +370,7 @@ window.sbPixelStd = function(evento, params, eventID) {
 
 function sbInitTracking() {
     if (sbConsent() !== 'accepted') return;
-    sbLoadPixel();
+    sbLoadPixel(); sbLoadGoogle();
     sbSend('pageview');
     document.addEventListener('click', function(e){
         var el = e.target.closest && e.target.closest('a, button, [data-track]');

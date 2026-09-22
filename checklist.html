@@ -1347,6 +1347,10 @@ function mostraRisultato() {
     trackEvento('completata');
     // Pixel Meta (aggiuntivo, solo con consenso) — una volta per completamento
     if (window.sbPixel) window.sbPixel('ChecklistCompletata');
+    // conversione Google secondaria: costa poco ottenerla e da' alla campagna
+    // abbastanza segnale per imparare, che con questo budget le sole richieste
+    // di contatto non basterebbero a fornire
+    if (window.sbGoogleConv) window.sbGoogleConv(CONV_CHECKLIST);
 
     var scoreEl = document.getElementById('result-score');
     animateCount(scoreEl, 0, punteggioFinale, 1200);
