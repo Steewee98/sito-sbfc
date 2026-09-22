@@ -293,9 +293,9 @@ var _sbScrollHits = {};
    richiesta verso Google. */
 var GOOGLE_ADS_ID  = 'AW-18108911800';          // es. 'AW-123456789'
 var GA4_ID         = '';          // es. 'G-ABCD12345' — facoltativo
-var CONV_CONTATTO  = '';          // es. 'AbCdEfGhIj-KlMnOpQ'
-var CONV_TELEFONO  = '';
-var CONV_CHECKLIST = '';
+var CONV_CONTATTO  = 'JmtuCJGTo4EdELihgLtD';          // es. 'AbCdEfGhIj-KlMnOpQ'
+var CONV_TELEFONO  = 'TtOHCJSTo4EdELihgLtD';
+var CONV_CHECKLIST = 'dT1lCJeTo4EdELihgLtD';
 
 /* Il tag Google si carica SEMPRE, ma parte negato: è la «modalità di
    consenso» (consent mode v2) che Google richiede nel SEE. Prima di
