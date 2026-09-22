@@ -291,26 +291,60 @@ var _sbScrollHits = {};
      CONV_CHECKLIST    l'etichetta della conversione «Checklist completata»
    Finché restano vuoti non viene caricato niente e non parte nessuna
    richiesta verso Google. */
-var GOOGLE_ADS_ID  = '';          // es. 'AW-123456789'
+var GOOGLE_ADS_ID  = 'AW-18108911800';          // es. 'AW-123456789'
 var GA4_ID         = '';          // es. 'G-ABCD12345' — facoltativo
 var CONV_CONTATTO  = '';          // es. 'AbCdEfGhIj-KlMnOpQ'
 var CONV_TELEFONO  = '';
 var CONV_CHECKLIST = '';
 
+/* Il tag Google si carica SEMPRE, ma parte negato: è la «modalità di
+   consenso» (consent mode v2) che Google richiede nel SEE. Prima di
+   qualunque altra cosa dichiariamo che pubblicità e statistiche sono
+   vietate; finché il visitatore non accetta, gtag non scrive cookie e non
+   manda identificatori — solo un segnale anonimo, senza memoria.
+   All'accettazione il divieto si solleva con un `update`.
+
+   Perché non aspettare il consenso come fa il Pixel: un tag che esiste
+   solo dopo il clic è invisibile a chi lo verifica (il controllo di Google
+   non accetta i cookie), e resta per sempre «non rilevato». Questa forma è
+   insieme conforme e verificabile. */
 function sbLoadGoogle() {
-    if (sbConsent() !== 'accepted' || window.__sbGoogleLoaded) return;
+    if (window.__sbGoogleLoaded) return;
     if (!GOOGLE_ADS_ID && !GA4_ID) return;
     window.__sbGoogleLoaded = true;
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+
+    var acconsentito = sbConsent() === 'accepted';
+    gtag('consent', 'default', {
+        ad_storage:          acconsentito ? 'granted' : 'denied',
+        ad_user_data:        acconsentito ? 'granted' : 'denied',
+        ad_personalization:  acconsentito ? 'granted' : 'denied',
+        analytics_storage:   acconsentito ? 'granted' : 'denied',
+        wait_for_update: 500
+    });
+
     var primo = GOOGLE_ADS_ID || GA4_ID;
     var s = document.createElement('script');
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + primo;
     document.head.appendChild(s);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){ window.dataLayer.push(arguments); };
+
     gtag('js', new Date());
     if (GOOGLE_ADS_ID) gtag('config', GOOGLE_ADS_ID);
     if (GA4_ID)        gtag('config', GA4_ID);
+}
+
+/* Si chiama quando il visitatore accetta: da qui in poi Google può usare
+   i cookie pubblicitari. Se il tag non c'era ancora, lo accende. */
+function sbGoogleConsentOk() {
+    sbLoadGoogle();
+    if (!window.gtag) return;
+    gtag('consent', 'update', {
+        ad_storage: 'granted', ad_user_data: 'granted',
+        ad_personalization: 'granted', analytics_storage: 'granted'
+    });
 }
 
 /* Registra una conversione. `etichetta` è una delle CONV_* qui sopra.
@@ -370,7 +404,7 @@ window.sbPixelStd = function(evento, params, eventID) {
 
 function sbInitTracking() {
     if (sbConsent() !== 'accepted') return;
-    sbLoadPixel(); sbLoadGoogle();
+    sbLoadPixel(); sbGoogleConsentOk();
     sbSend('pageview');
     document.addEventListener('click', function(e){
         var el = e.target.closest && e.target.closest('a, button, [data-track]');
@@ -428,6 +462,7 @@ function sbShowBanner() {
 document.addEventListener('DOMContentLoaded', function() {
     trackPagina();
     sbInitSchede();
+    sbLoadGoogle();                 // sempre, ma negato finché non si accetta
     if (sbConsent() === 'accepted') sbInitTracking();
     sbShowBanner();
 });
