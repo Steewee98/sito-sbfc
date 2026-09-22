@@ -3280,6 +3280,11 @@ ul { list-style: none; }
 
 /* la voce in evidenza occupa due colonne e cambia fondo */
 .ed-nov--spicco { grid-column: span 2; background: var(--dark); border-color: var(--dark); color: var(--ivory); }
+/* con due sole voci stanno una accanto all'altra, larghe uguali */
+.ed-nov-grid--due { grid-template-columns: 1fr 1fr; gap: 24px; }
+.ed-nov-grid--due .ed-nov { grid-column: span 1; padding: 44px 40px 38px; }
+.ed-nov-grid--due .ed-nov-titolo { font-size: 1.85rem; }
+.ed-nov-grid--due .ed-nov--spicco .ed-nov-titolo { font-size: 1.85rem; }
 .ed-nov--spicco:hover { border-color: var(--accent); }
 .ed-nov--spicco .ed-nov-desc { color: rgba(245,242,238,.72); }
 .ed-nov--spicco .ed-nov-prezzo { color: var(--ivory); }
@@ -3311,6 +3316,12 @@ ul { list-style: none; }
     .ed-nov-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
     .ed-nov--spicco { grid-column: span 2; }
     .ed-nov--spicco .ed-nov-titolo { font-size: 1.7rem; }
+}
+@media (max-width: 820px) {
+    .ed-nov-grid--due { grid-template-columns: 1fr; }
+    .ed-nov-grid--due .ed-nov { padding: 34px 28px 30px; }
+    .ed-nov-grid--due .ed-nov-titolo,
+    .ed-nov-grid--due .ed-nov--spicco .ed-nov-titolo { font-size: 1.55rem; }
 }
 @media (max-width: 620px) {
     .ed-nov-grid { grid-template-columns: 1fr; }
