@@ -939,9 +939,10 @@
     }
 
     /* ── Variante base ── */
-    document.querySelectorAll('.nf-variant input').forEach(function (inp) {
+    // solo le varianti della placca: menù e Wi-Fi hanno il loro gruppo (variante_pezzi)
+    document.querySelectorAll('[name=variante]').forEach(function (inp) {
         inp.addEventListener('change', function () {
-            document.querySelectorAll('.nf-variant').forEach(function (v) { v.classList.remove('is-on'); });
+            $('blockBase').querySelectorAll('.nf-variant').forEach(function (v) { v.classList.remove('is-on'); });
             inp.closest('.nf-variant').classList.add('is-on');
             state.variante = inp.value;
             $('pvImg').src = 'assets/nfc/shop/placca-' + state.variante + '.jpg';
@@ -977,10 +978,13 @@
             cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
             cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
             URL.revokeObjectURL(url);
+            // PNG e WebP possono avere il fondo trasparente (i loghi): restano nel loro formato
+            var tipo = file.type === 'image/jpeg' ? 'image/jpeg' : file.type;
+            var est = { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp' }[tipo];
             cv.toBlob(function (blob) {
                 if (!blob || blob.size >= file.size) return done(file, false);
-                done(new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' }), true);
-            }, 'image/jpeg', 0.88);
+                done(new File([blob], file.name.replace(/\.[^.]+$/, '') + est, { type: tipo }), true);
+            }, tipo, 0.88);
         };
         img.onerror = function () { URL.revokeObjectURL(url); done(file, false); };
         img.src = url;

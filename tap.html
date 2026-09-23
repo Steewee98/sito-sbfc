@@ -59,7 +59,9 @@ body { background:var(--bg); color:var(--fg); font-family:'Inter',sans-serif; di
   var chiave='tap_'+slug+(pezzo?'_'+pezzo:'');
   var conta='1';
   try{ if(sessionStorage.getItem(chiave)) conta='0'; }catch(e){}
-  fetch(BACKEND+'/api/nfc/p/'+encodeURIComponent(slug)+'?conta='+conta+(pezzo?'&t='+pezzo:''))
+  var ctrl=window.AbortController?new AbortController():null;
+  if(ctrl) setTimeout(function(){ ctrl.abort(); },15000);
+  fetch(BACKEND+'/api/nfc/p/'+encodeURIComponent(slug)+'?conta='+conta+(pezzo?'&t='+pezzo:''),{signal:ctrl?ctrl.signal:undefined})
     .then(function(r){ if(!r.ok) throw 0; return r.json(); })
     .then(function(d){
       try{ sessionStorage.setItem(chiave,'1'); }catch(e){}
@@ -76,7 +78,11 @@ body { background:var(--bg); color:var(--fg); font-family:'Inter',sans-serif; di
       h+='<div class="foot">Placca NFC &middot; SB Food Consulting</div></div>';
       card.innerHTML=h;
     })
-    .catch(function(){ card.innerHTML='<div class="state">Placca non trovata o non ancora attiva.</div>'; });
+    .catch(function(e){
+      card.innerHTML = e && e.name==='AbortError'
+        ? '<div class="state">La connessione è lenta.<br><a href="" style="color:inherit">Tocca per riprovare</a></div>'
+        : '<div class="state">Placca non trovata o non ancora attiva.</div>';
+    });
   function colori(d){
     var rs=document.documentElement.style;
     rs.setProperty('--bg', d.colore_sfondo); rs.setProperty('--ac', d.colore_primario);
