@@ -279,7 +279,7 @@ button { font: inherit; color: inherit; }
         s: { en: 'Guanciale, egg yolk, pecorino', de: 'Guanciale, Eigelb, Pecorino', fr: 'Guanciale, jaune d’œuf, pecorino', es: 'Guanciale, yema, pecorino' },
         d: { it: 'Guanciale di Amatrice croccante, solo tuorli, pecorino romano DOP stagionato 12 mesi, pepe pestato al mortaio. Niente panna, mai.', en: 'Crisp Amatrice guanciale, egg yolks only, 12-month Pecorino Romano PDO, pepper crushed in a mortar. No cream, ever.', de: 'Knuspriger Guanciale aus Amatrice, nur Eigelb, 12 Monate gereifter Pecorino Romano g.U., im Mörser zerstoßener Pfeffer. Niemals Sahne.', fr: 'Guanciale d’Amatrice croustillant, jaunes d’œuf seulement, pecorino romano AOP affiné 12 mois, poivre pilé au mortier. Jamais de crème.', es: 'Guanciale de Amatrice crujiente, solo yemas, pecorino romano DOP curado 12 meses, pimienta majada al mortero. Nunca nata.' },
         v: 'Cesanese del Piglio' },
-      { n: 'Tonnarelli cacio e pepe', img: 'cacio-pepe', p: 13, a: [1,7],
+      { n: 'Tonnarelli cacio e pepe', img: 'cacio-pepe', p: 13, a: [1,3,7],
         s: { en: 'Pecorino and black pepper', de: 'Pecorino und schwarzer Pfeffer', fr: 'Pecorino et poivre noir', es: 'Pecorino y pimienta negra' },
         d: { it: 'Tre ingredienti e nessun trucco: pasta all’uovo trafilata al bronzo, pecorino e pepe tostato, mantecati con l’acqua di cottura.', en: 'Three ingredients, no tricks: bronze-cut pasta, pecorino and toasted pepper, emulsified with the cooking water.', de: 'Drei Zutaten, kein Trick: bronzegezogene Pasta, Pecorino und gerösteter Pfeffer, mit Kochwasser gebunden.', fr: 'Trois ingrédients, aucun artifice : pâtes tréfilées au bronze, pecorino et poivre torréfié, liés à l’eau de cuisson.', es: 'Tres ingredientes y ningún truco: pasta trefilada en bronce, pecorino y pimienta tostada, ligados con el agua de cocción.' },
         v: 'Frascati Superiore' },
@@ -316,13 +316,19 @@ button { font: inherit; color: inherit; }
   ]};
 
   var $ = function (id) { return document.getElementById(id); };
-  var lingua = 'it';
+  // la lingua scelta vince; quella del telefono vale solo alla prima apertura
+  var lingua = null;
   try { var l = localStorage.getItem('v23_lingua'); if (LINGUE.indexOf(l) >= 0) lingua = l; } catch (e) {}
-  if (lingua === 'it') {
+  if (!lingua) {
     var nav = (navigator.language || 'it').slice(0, 2);
-    if (LINGUE.indexOf(nav) >= 0) lingua = nav;
+    lingua = LINGUE.indexOf(nav) >= 0 ? nav : 'it';
   }
-  var tavolo = (location.hash.match(/tavolo-?(\d+)/) || [0, '7'])[1];
+  // il tavolo arriva dal tag (?tavolo=7 o #tavolo-7) e si ricorda: le ancore interne cambiano l'hash
+  var tavolo = null;
+  var mTav = (location.search + location.hash).match(/tavolo[=-]?(\d+)/);
+  if (mTav) { tavolo = mTav[1]; try { sessionStorage.setItem('v23_tavolo', tavolo); } catch (e) {} }
+  else { try { tavolo = sessionStorage.getItem('v23_tavolo'); } catch (e) {} }
+  tavolo = tavolo || '7';
 
   function euro(n) { return n.toFixed(2).replace('.', lingua === 'en' ? '.' : ',') + ' €'; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -385,11 +391,20 @@ button { font: inherit; color: inherit; }
       '<div class="meta"><span class="prezzo">' + euro(pi.p) + '</span></div>' +
       '<div class="blocco"><b>' + u.allergeni + '</b>' + nomi + '</div>' +
       (pi.v ? '<div class="blocco"><b>' + u.abb + '</b>' + esc(pi.v) + '</div>' : '');
+    daDove = document.activeElement;
     $('velo').classList.add('on'); $('scheda').classList.add('on'); $('scheda').scrollTop = 0;
+    // la scheda è modale davvero: il resto della pagina non riceve il focus
+    document.querySelectorAll('body > header, body > main, #conto').forEach(function (el) { el.inert = true; });
     $('chiudi').addEventListener('click', chiudi);
     $('chiudi').focus({ preventScroll: true });
   }
-  function chiudi() { $('velo').classList.remove('on'); $('scheda').classList.remove('on'); }
+  var daDove = null;
+  function chiudi() {
+    if (!$('scheda').classList.contains('on')) return;
+    $('velo').classList.remove('on'); $('scheda').classList.remove('on');
+    document.querySelectorAll('body > header, body > main, #conto').forEach(function (el) { el.inert = false; });
+    if (daDove && daDove.focus) daDove.focus({ preventScroll: true });
+  }
   $('velo').addEventListener('click', chiudi);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') chiudi(); });
   $('carta').addEventListener('click', function (e) { var b = e.target.closest('[data-k]'); if (b) apri(b.dataset.k); });
