@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>SBFC — Placca da tavolo (A6), prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     PROTOTIPO — la placca da tavolo, un solo pezzo per tavolo.
+     A6 (105 x 148 mm) + 3 mm di abbondanza, due materiali:
+       .bianca  plexiglas bianco 2 mm  → si stampa l'inchiostro scuro
+       .nera    plexiglas nero 5 mm    → si stampano bianco e ottone;
+                il QR sta su un riquadro chiaro perché non tutti i
+                telefoni leggono i QR invertiti.
+     L'arco è lo stesso delle foto del menù digitale: chi tocca la
+     placca ritrova la stessa forma sul telefono. Il tag NFC va
+     incollato dietro, al centro dell'arco.
+     Una pagina per placca in stampa (111 x 154 mm).
+     ============================================================ */
+  :root{ --w:105mm; --h:148mm; --bleed:3mm; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ background:#d9d4ca; font-family:'Hanken Grotesk',sans-serif;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{ display:flex; flex-wrap:wrap; gap:14mm; justify-content:center; align-items:center; min-height:100vh; padding:12mm; }
+  .placca{ position:relative; width:calc(var(--w) + var(--bleed)*2); height:calc(var(--h) + var(--bleed)*2);
+    overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.22); }
+  .bianca{ background:#fbfbf9; color:#15241d; --acc:#c2412a; --ott:#8d6d31; --soft:#5b675f; }
+  .nera{ background:#0d0d0d; color:#eee7d8; --acc:#e0603f; --ott:#cdac68; --soft:#a39c8e; }
+  .safe{ position:absolute; top:var(--bleed); left:var(--bleed); width:var(--w); height:var(--h);
+    padding:11mm 11mm 9mm; display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .testa .osteria{ font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:6pt; letter-spacing:3.2pt; text-transform:uppercase; color:var(--ott); text-indent:3.2pt; }
+  .testa .nome{ font-family:'Gloock',serif; font-size:25pt; line-height:1; margin-top:1.6mm; color:var(--acc); }
+  /* l'arco: una finestra romana tracciata a filo, il tag sta dietro */
+  .arco{ position:relative; width:54mm; height:62mm; margin-top:9mm; border:.6pt solid var(--ott);
+    border-radius:27mm 27mm 1mm 1mm; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3.5mm; }
+  .arco::before{ content:""; position:absolute; inset:1.6mm; border:.3pt solid var(--ott); opacity:.45;
+    border-radius:25.4mm 25.4mm .6mm .6mm; }
+  .icona{ width:20mm; color:var(--acc); margin-top:4mm; }
+  .icona svg{ display:block; width:100%; height:auto; }
+  .qui{ font-family:'Gloock',serif; font-size:12pt; line-height:1.2; }
+  .cosa{ margin-top:8mm; font-weight:600; font-size:8.6pt; letter-spacing:.3pt; }
+  .cosa span{ color:var(--ott); padding:0 1mm; }
+  .lingue{ margin-top:1.8mm; font-family:'IBM Plex Mono',monospace; font-size:5.4pt; letter-spacing:1.6pt; color:var(--soft); }
+  .piede{ margin-top:auto; width:100%; display:flex; align-items:flex-end; justify-content:space-between;
+    border-top:.4pt solid color-mix(in srgb, currentColor 22%, transparent); padding-top:4.5mm; }
+  .qr{ display:flex; align-items:flex-end; gap:2.6mm; text-align:left; }
+  .qr-fondo{ width:19mm; height:19mm; padding:1.3mm; background:#fbfbf9; color:#15241d; border-radius:.6mm; }
+  .qr-fondo svg{ display:block; width:100%; height:100%; }
+  .qr small{ font-size:5.6pt; color:var(--soft); max-width:13mm; line-height:1.3; padding-bottom:.6mm; }
+  .tavolo{ text-align:right; line-height:1; }
+  .tavolo small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:5.4pt; letter-spacing:2pt; text-transform:uppercase; color:var(--ott); margin-bottom:1mm; }
+  .tavolo b{ font-family:'Gloock',serif; font-weight:400; font-size:30pt; }
+  .firma{ position:absolute; left:0; right:0; bottom:calc(var(--bleed) + 3.2mm); text-align:center;
+    font-weight:600; font-size:4.4pt; letter-spacing:1.8pt; text-transform:uppercase; color:var(--soft); opacity:.7; }
+  @page{ size:111mm 154mm; margin:0; }
+  @media print{ html,body{ background:#fff; } body{ display:block; padding:0; min-height:0; }
+    .placca{ box-shadow:none; page-break-after:always; break-after:page; } }
+</style>
+</head>
+<body>
+<div class="placca bianca">
+  <div class="safe">
+    <div class="testa">
+      <div class="osteria">Osteria</div>
+      <div class="nome">Ventitré</div>
+    </div>
+    <div class="arco">
+      <div class="icona"><svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="24" width="42" height="60" rx="8"/><line x1="34" y1="32" x2="48" y2="32"/><circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/><path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/><path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/><path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/></svg></div>
+      <div class="qui">Appoggia qui<br>il telefono</div>
+    </div>
+    <div class="cosa">Menù <span>·</span> Wi-Fi <span>·</span> Recensioni</div>
+    <div class="lingue">IT · EN · DE · FR · ES</div>
+    <div class="piede">
+      <div class="qr"><div class="qr-fondo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" class="segno"><path class="qrline" stroke="currentColor" d="M0 0.5h7m4 0h1m4 0h1m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h3m5 0h2m2 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h4m1 0h1m3 0h2m1 0h1m5 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h2m-25 1h1m1 0h5m4 0h1m1 0h2m2 0h1m4 0h1m3 0h5m-31 1h1m1 0h1m2 0h1m2 0h6m3 0h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h4m2 0h2m3 0h1m1 0h5m2 0h2m2 0h2m2 0h1m1 0h2m-31 1h5m7 0h1m2 0h8m4 0h5m-30 1h2m1 0h6m2 0h3m2 0h2m1 0h4m1 0h3m1 0h2m-33 1h2m1 0h2m6 0h1m3 0h1m2 0h2m1 0h4m1 0h1m2 0h1m1 0h2m-33 1h1m1 0h1m2 0h5m2 0h1m1 0h3m3 0h1m1 0h1m2 0h2m2 0h3m-32 1h1m1 0h1m4 0h4m2 0h1m1 0h1m4 0h2m1 0h1m1 0h2m1 0h3m-30 1h1m1 0h1m2 0h3m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-32 1h1m1 0h1m1 0h1m1 0h3m3 0h2m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1m-33 1h2m1 0h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m-30 1h1m1 0h2m4 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-31 1h2m2 0h3m3 0h1m2 0h1m3 0h1m3 0h1m1 0h2m1 0h3m1 0h2m-33 1h2m7 0h2m2 0h1m1 0h3m1 0h1m3 0h2m1 0h2m1 0h2m1 0h1m-33 1h1m2 0h1m2 0h1m3 0h2m2 0h1m5 0h1m1 0h1m2 0h1m3 0h3m-32 1h1m2 0h1m1 0h1m3 0h1m2 0h1m3 0h1m1 0h6m1 0h2m2 0h2m-31 1h1m1 0h1m1 0h3m1 0h1m1 0h5m2 0h1m1 0h1m2 0h7m2 0h1m-24 1h1m2 0h1m1 0h2m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h3m1 0h1m1 0h3m4 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h8m1 0h2m1 0h5m3 0h5m-33 1h1m1 0h3m1 0h1m1 0h3m3 0h1m1 0h1m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h2m2 0h3m2 0h1m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h2m5 0h6m-28 1h1m5 0h1m3 0h1m2 0h3m2 0h1m1 0h3m2 0h2m1 0h3m-31 1h7m1 0h2m1 0h1m1 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"/></svg></div><small>oppure inquadra</small></div>
+      <div class="tavolo"><small>Tavolo</small><b>7</b></div>
+    </div>
+  </div>
+  <div class="firma">SB Food Consulting</div>
+</div>
+<div class="placca nera">
+  <div class="safe">
+    <div class="testa">
+      <div class="osteria">Osteria</div>
+      <div class="nome">Ventitré</div>
+    </div>
+    <div class="arco">
+      <div class="icona"><svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="24" width="42" height="60" rx="8"/><line x1="34" y1="32" x2="48" y2="32"/><circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/><path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/><path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/><path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/></svg></div>
+      <div class="qui">Appoggia qui<br>il telefono</div>
+    </div>
+    <div class="cosa">Menù <span>·</span> Wi-Fi <span>·</span> Recensioni</div>
+    <div class="lingue">IT · EN · DE · FR · ES</div>
+    <div class="piede">
+      <div class="qr"><div class="qr-fondo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" class="segno"><path class="qrline" stroke="currentColor" d="M0 0.5h7m4 0h1m4 0h1m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h3m5 0h2m2 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h4m1 0h1m3 0h2m1 0h1m5 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h2m-25 1h1m1 0h5m4 0h1m1 0h2m2 0h1m4 0h1m3 0h5m-31 1h1m1 0h1m2 0h1m2 0h6m3 0h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h4m2 0h2m3 0h1m1 0h5m2 0h2m2 0h2m2 0h1m1 0h2m-31 1h5m7 0h1m2 0h8m4 0h5m-30 1h2m1 0h6m2 0h3m2 0h2m1 0h4m1 0h3m1 0h2m-33 1h2m1 0h2m6 0h1m3 0h1m2 0h2m1 0h4m1 0h1m2 0h1m1 0h2m-33 1h1m1 0h1m2 0h5m2 0h1m1 0h3m3 0h1m1 0h1m2 0h2m2 0h3m-32 1h1m1 0h1m4 0h4m2 0h1m1 0h1m4 0h2m1 0h1m1 0h2m1 0h3m-30 1h1m1 0h1m2 0h3m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-32 1h1m1 0h1m1 0h1m1 0h3m3 0h2m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1m-33 1h2m1 0h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m-30 1h1m1 0h2m4 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-31 1h2m2 0h3m3 0h1m2 0h1m3 0h1m3 0h1m1 0h2m1 0h3m1 0h2m-33 1h2m7 0h2m2 0h1m1 0h3m1 0h1m3 0h2m1 0h2m1 0h2m1 0h1m-33 1h1m2 0h1m2 0h1m3 0h2m2 0h1m5 0h1m1 0h1m2 0h1m3 0h3m-32 1h1m2 0h1m1 0h1m3 0h1m2 0h1m3 0h1m1 0h6m1 0h2m2 0h2m-31 1h1m1 0h1m1 0h3m1 0h1m1 0h5m2 0h1m1 0h1m2 0h7m2 0h1m-24 1h1m2 0h1m1 0h2m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h3m1 0h1m1 0h3m4 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h8m1 0h2m1 0h5m3 0h5m-33 1h1m1 0h3m1 0h1m1 0h3m3 0h1m1 0h1m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h2m2 0h3m2 0h1m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h2m5 0h6m-28 1h1m5 0h1m3 0h1m2 0h3m2 0h1m1 0h3m2 0h2m1 0h3m-31 1h7m1 0h2m1 0h1m1 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"/></svg></div><small>oppure inquadra</small></div>
+      <div class="tavolo"><small>Tavolo</small><b>7</b></div>
+    </div>
+  </div>
+  <div class="firma">SB Food Consulting</div>
+</div>
+</body>
+</html>
