@@ -1162,7 +1162,9 @@
         btn.disabled = true; btn.textContent = 'Invio...';
         var dati = {};
         new FormData(form).forEach(function (v, k) { dati[k] = v; });
-        fetch(BACKEND + '/api/nfc/richiesta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dati) })
+        var ctrl = window.AbortController ? new AbortController() : null;
+        if (ctrl) setTimeout(function () { ctrl.abort(); }, 30000);
+        fetch(BACKEND + '/api/nfc/richiesta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dati), signal: ctrl ? ctrl.signal : undefined })
             .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
             .then(function (res) {
                 if (!res.ok) throw new Error(res.d.error || 'Errore imprevisto');
@@ -1172,7 +1174,7 @@
                     '<h3>Richiesta ricevuta.</h3><p>Ti abbiamo mandato una copia via email. Ti rispondiamo entro un giorno lavorativo con una proposta e un prezzo.</p>';
             })
             .catch(function (e) {
-                errore(e.message + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');
+                errore((e.name === 'AbortError' ? 'La connessione non risponde: riprova.' : e.message) + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');
                 btn.disabled = false; btn.textContent = 'Invia la richiesta';
             });
     });

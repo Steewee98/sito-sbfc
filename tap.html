@@ -71,7 +71,7 @@ body { background:var(--bg); color:var(--fg); font-family:'Inter',sans-serif; di
       document.title='Recensioni — '+d.nome_locale;
       colori(d);
       var h='<div class="frame">';
-      if(d.logo_url) h+='<img class="logo" src="'+d.logo_url+'" alt="">';
+      if(d.logo_url) h+='<img class="logo" src="'+esc(d.logo_url)+'" alt="">';
       h+='<div class="nome">'+esc(d.nome_locale)+'</div><div class="sub">'+esc(d.testo||'Grazie per essere stato con noi. Lasciaci una recensione:')+'</div>';
       d.links.forEach(function(l){ h+='<a class="btn" href="'+esc(l.url)+'" rel="noopener">'+ICO[l.tipo]+'<span>'+NOMI[l.tipo]+'</span><span class="arr">&rarr;</span></a>'; });
       if(d.menu_url) h+='<a class="btn btn-menu" href="'+esc(d.menu_url)+'" rel="noopener">'+ICO.menu+'<span>Guarda il men&ugrave;</span><span class="arr">&rarr;</span></a>';
