@@ -1399,11 +1399,13 @@ function nfcCopia(t,btn){
 }
 function nfcSalvaLink(id){
     var body={};['link_google','link_tripadvisor','link_thefork','menu_link'].forEach(function(k){body[k]=document.getElementById('nfcEdit_'+k).value.trim()});
-    apiFetch('/api/nfc/ordini/'+id,{method:'PATCH',body:JSON.stringify(body)}).then(function(){renderNfc();alert('Link aggiornati: il tap ora apre i nuovi indirizzi.');});
+    apiFetch('/api/nfc/ordini/'+id,{method:'PATCH',body:JSON.stringify(body)}).then(function(){renderNfc();alert('Link aggiornati: il tap ora apre i nuovi indirizzi.');})
+        .catch(function(e){alert('Link NON salvati: '+(e&&e.message||'errore di rete')+'. Riprova.');});
 }
 function nfcSalvaWifi(id){
     var body={wifi_rete:document.getElementById('nfcEdit_wifi_rete').value.trim(),wifi_password:document.getElementById('nfcEdit_wifi_password').value.trim()};
-    apiFetch('/api/nfc/ordini/'+id,{method:'PATCH',body:JSON.stringify(body)}).then(function(){renderNfc();alert('Wi-Fi aggiornato: la placchetta mostra già i nuovi dati.');});
+    apiFetch('/api/nfc/ordini/'+id,{method:'PATCH',body:JSON.stringify(body)}).then(function(){renderNfc();alert('Wi-Fi aggiornato: la placchetta mostra già i nuovi dati.');})
+        .catch(function(e){alert('Wi-Fi NON salvato: '+(e&&e.message||'errore di rete')+'. Riprova.');});
 }
 function nfcScarica(id,k){
     fetch(BACKEND_URL+'/api/nfc/ordini/'+id+'/allegato/'+k,{headers:{'X-Admin-Token':ADMIN_TOKEN}}).then(function(r){

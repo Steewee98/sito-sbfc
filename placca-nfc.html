@@ -966,7 +966,7 @@
     bindSwatches('swAc', 'cAc', 'ac');
 
     /* ── File ── */
-    var LIMITE = 4 * 1024 * 1024, compressi = {};
+    var LIMITE = 4 * 1024 * 1024, compressi = {}, inCorso = {}, giro = {};
     function comprimi(file, done) {
         // Solo immagini raster: PDF e SVG passano intatti.
         if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size <= 1.6 * 1024 * 1024) return done(file, false);
@@ -989,11 +989,17 @@
         var lab = $(id), inp = lab.querySelector('input'), name = lab.querySelector('.nf-file-name');
         inp.addEventListener('change', function () {
             var f = inp.files[0];
+            // ogni selezione ha il suo numero: una compressione superata non sovrascrive quella nuova
+            var mio = giro[inp.name] = (giro[inp.name] || 0) + 1;
+            compressi[inp.name] = null; inCorso[inp.name] = false;
             if (!f) { lab.classList.remove('has-file'); name.textContent = name.dataset.empty; if (onChange) onChange(null); return; }
             lab.classList.add('has-file');
             name.textContent = f.name;
             // Le foto da smartphone superano spesso i 4 MB: invece di rifiutarle le rimpiccioliamo qui.
+            inCorso[inp.name] = true;
             comprimi(f, function (finale, ridotto) {
+                if (mio !== giro[inp.name]) return;
+                inCorso[inp.name] = false;
                 if (finale.size > LIMITE) {
                     inp.value = ''; lab.classList.remove('has-file');
                     name.textContent = name.dataset.empty;
@@ -1086,6 +1092,7 @@
             var hasMenu = $('fileMenu').querySelector('input').files.length > 0 || $('menuLink').value.trim();
             if (!hasMenu) return errore('Carica il menù (PDF o immagine) oppure inserisci il link al menù online.', $('menuLink'));
         }
+        if (Object.keys(inCorso).some(function (k) { return inCorso[k]; })) return errore('Stiamo ancora preparando le foto per la stampa: riprova tra un secondo.');
         var btn = $('btnPay'); btn.disabled = true; btn.textContent = 'Un attimo...';
         // Pixel Meta: sta partendo il checkout. Il totale lo mettiamo anche in
         // sessionStorage perche' dopo Stripe serve alla pagina di ringraziamento
@@ -1105,14 +1112,19 @@
         Object.keys(compressi).forEach(function (k) { if (compressi[k]) fd.set(k, compressi[k], compressi[k].name); });
         if (state.tier === 'base') { ['logo', 'foto', 'colore_sfondo', 'colore_primario', 'testo_placca'].forEach(function (k) { fd.delete(k); }); }
         if (!serveMenu()) { fd.delete('menu'); fd.delete('menu_link'); }
-        fetch(BACKEND + '/api/nfc/ordine', { method: 'POST', body: fd })
+        // senza scadenza una connessione appesa lascerebbe il pulsante bloccato
+        var ctrl = window.AbortController ? new AbortController() : null;
+        var scade = ctrl && setTimeout(function () { ctrl.abort(); }, 45000);
+        fetch(BACKEND + '/api/nfc/ordine', { method: 'POST', body: fd, signal: ctrl ? ctrl.signal : undefined })
             .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
             .then(function (res) {
                 if (res.ok && res.d.url) { window.location.href = res.d.url; return; }
                 throw new Error(res.d.error || 'Errore imprevisto');
             })
             .catch(function (err) {
-                errore(err.message + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');
+                clearTimeout(scade);
+                var msg = err.name === 'AbortError' ? 'La connessione non risponde: riprova.' : err.message;
+                errore(msg + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');
                 btn.disabled = false; btn.textContent = 'Procedi al pagamento';
             });
     });

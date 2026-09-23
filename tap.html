@@ -57,7 +57,8 @@ body { background:var(--bg); color:var(--fg); font-family:'Inter',sans-serif; di
   var NOMI={google:'Recensione su Google',tripadvisor:'Recensione su TripAdvisor',thefork:'Recensione su TheFork'};
   function lum(h){var r=parseInt(h.substr(1,2),16),g=parseInt(h.substr(3,2),16),b=parseInt(h.substr(5,2),16);return (0.299*r+0.587*g+0.114*b)/255;}
   var chiave='tap_'+slug+(pezzo?'_'+pezzo:'');
-  var conta = sessionStorage.getItem(chiave) ? '0' : '1';
+  var conta='1';
+  try{ if(sessionStorage.getItem(chiave)) conta='0'; }catch(e){}
   fetch(BACKEND+'/api/nfc/p/'+encodeURIComponent(slug)+'?conta='+conta+(pezzo?'&t='+pezzo:''))
     .then(function(r){ if(!r.ok) throw 0; return r.json(); })
     .then(function(d){
