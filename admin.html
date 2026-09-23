@@ -1196,6 +1196,13 @@ document.querySelectorAll('.sidebar-item').forEach(function(el){
 
 // ============ PLACCHE NFC ============
 var NFC_TIER={'base':'Base','personalizzata':'Personalizzata','personalizzata-menu':'Personalizzata + Menù'};
+// Famiglia del tap: '+ 3 menù · 1 Wi-Fi · kit'
+function nfcPezzi(o){
+    var a=o.articoli||{},p=[];
+    if(a.menu) p.push(a.menu.quantita+' menù');
+    if(a.wifi) p.push(a.wifi.quantita+' Wi-Fi');
+    return p.length?'+ '+p.join(' · ')+(o.sconto?' · kit':''):'';
+}
 var NFC_STATI=['pagato','in_lavorazione','spedito','consegnato','annullato'];
 var NFC_BADGE={'pagato':'badge-nuovo','in_lavorazione':'badge-trattativa','spedito':'badge-contattato','consegnato':'badge-completato','annullato':'badge-perso','in_attesa':'badge-scaduto'};
 var _nfcOrdini=[];
@@ -1223,7 +1230,7 @@ function renderNfc(){
               '<td>'+new Date(o.created_at).toLocaleDateString('it-IT')+'</td>'+
               '<td><strong>'+nfcEsc(o.nome_locale)+'</strong><br><small style="color:#888">'+nfcEsc(o.slug)+'</small></td>'+
               '<td>'+(NFC_TIER[o.tier]||o.tier)+(o.variante?'<br><span class="nfc-var '+o.variante+'" style="margin-top:4px">'+o.variante+'</span>':'')+'</td>'+
-              '<td>'+o.quantita+'</td>'+
+              '<td>'+o.quantita+(nfcPezzi(o)?'<br><small style="color:#c4622d">'+nfcPezzi(o)+'</small>':'')+'</td>'+
               '<td>'+nfcEsc(o.referente||'')+'<br><small><a href="mailto:'+nfcEsc(o.email)+'">'+nfcEsc(o.email)+'</a>'+(o.telefono?' · '+nfcEsc(o.telefono):'')+'</small></td>'+
               '<td style="font-size:.82rem">'+nfcEsc(sp)+'</td>'+
               '<td>'+(o.tap_count||0)+'</td>'+
@@ -1337,26 +1344,37 @@ function nfcApri(id){
         ? alle.map(function(k){return '<button class="btn-sm" style="margin:0 8px 8px 0" onclick="nfcScarica('+o.id+',\''+k+'\')">↓ '+k+' — '+nfcEsc(o.allegati[k].nome)+'</button>'}).join('')
         : '<span style="color:#888">nessun file caricato dal cliente</span>';
     var tapUrl='https://www.sbfoodconsulting.com/tap.html?p='+o.slug;
+    var art=o.articoli||{}, tp=o.tap_pezzi||{};
+    // un URL per ogni tipo di pezzo: stesso slug, &t= dice al tap cosa aprire
+    var tagRighe=[['Placca recensioni',tapUrl,o.quantita+' pz']];
+    if(art.menu) tagRighe.push(['Tag menù ('+art.menu.variante+')',tapUrl+'&t=menu',art.menu.quantita+' pz']);
+    if(art.wifi) tagRighe.push(['Placchetta Wi-Fi ('+art.wifi.variante+')',tapUrl+'&t=wifi',art.wifi.quantita+' pz']);
 
     box.style.display='block';
     box.innerHTML=
       '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px">'+
         '<div><h3 style="margin:0 0 4px">'+nfcEsc(o.nome_locale)+'</h3>'+
-        '<div style="color:#888;font-size:.85rem">Ordine #'+o.id+' · '+(NFC_TIER[o.tier]||o.tier)+' · '+o.quantita+' '+(o.quantita>1?'placche':'placca')+' · '+(o.importo!=null?o.importo.toFixed(2)+'€':'—')+'</div></div>'+
+        '<div style="color:#888;font-size:.85rem">Ordine #'+o.id+' · '+(NFC_TIER[o.tier]||o.tier)+' · '+o.quantita+' '+(o.quantita>1?'placche':'placca')+(nfcPezzi(o)?' '+nfcPezzi(o):'')+(o.sconto?' (−'+o.sconto.toFixed(0)+'€)':'')+' · '+(o.importo!=null?o.importo.toFixed(2)+'€':'—')+'</div></div>'+
         '<div><a class="btn-sm" style="text-decoration:none;display:inline-block;margin-right:8px" target="_blank" href="tap.html?p='+nfcEsc(o.slug)+'">Apri pagina tap</a>'+
         '<button class="btn-sm" style="background:#c0392b" onclick="nfcElimina('+o.id+')">Elimina</button></div>'+
       '</div>'+
       '<div class="nfc-card">'+
         nfcAnteprima(o)+
         '<div>'+
-          '<div class="nfc-blk"><h4>Link da scrivere sul tag</h4>'+
+          '<div class="nfc-blk"><h4>'+(tagRighe.length>1?'Link da scrivere sui tag, uno per tipo':'Link da scrivere sul tag')+'</h4>'+
+            tagRighe.map(function(r){return '<div style="margin-bottom:10px">'+(tagRighe.length>1?'<div style="font-size:.8rem;color:#888;margin-bottom:4px">'+nfcEsc(r[0])+' · '+r[2]+'</div>':'')+
             '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
-            '<code style="background:#faf8f5;padding:8px 10px;border-radius:4px;font-size:.82rem;word-break:break-all">'+nfcEsc(tapUrl)+'</code>'+
-            '<button class="btn-sm" onclick="nfcCopia(\''+nfcEsc(tapUrl)+'\',this)">Copia</button></div></div>'+
+            '<code style="background:#faf8f5;padding:8px 10px;border-radius:4px;font-size:.82rem;word-break:break-all">'+nfcEsc(r[1])+'</code>'+
+            '<button class="btn-sm" onclick="nfcCopia(\''+nfcEsc(r[1])+'\',this)">Copia</button></div></div>'}).join('')+'</div>'+
+          (art.wifi?'<div class="nfc-blk"><h4>Wi-Fi ospiti</h4><div style="display:flex;gap:8px;flex-wrap:wrap">'+
+            '<input id="nfcEdit_wifi_rete" placeholder="Rete" value="'+nfcEsc(o.wifi_rete||'')+'" style="padding:8px 10px;border:1px solid #ddd;border-radius:4px;font-size:.85rem">'+
+            '<input id="nfcEdit_wifi_password" placeholder="Password (vuota = aperta)" value="'+nfcEsc(o.wifi_password||'')+'" style="padding:8px 10px;border:1px solid #ddd;border-radius:4px;font-size:.85rem">'+
+            '<button class="btn-sm" onclick="nfcSalvaWifi('+o.id+')">Salva Wi-Fi</button></div></div>':'')+
           '<div class="nfc-grid2">'+
             '<div class="nfc-blk"><h4>Cosa apre il tap</h4>'+
               (link('Google',o.link_google)+link('TripAdvisor',o.link_tripadvisor)+link('TheFork',o.link_thefork)+link('Menù',o.menu_link)||'<div style="color:#888">nessun link</div>')+
-              '<div style="margin-top:6px;color:#888;font-size:.84rem">Tap registrati: <strong>'+(o.tap_count||0)+'</strong></div></div>'+
+              '<div style="margin-top:6px;color:#888;font-size:.84rem">Tap registrati: <strong>'+(o.tap_count||0)+'</strong>'+
+              (art.menu?' · menù <strong>'+(tp.menu||0)+'</strong>':'')+(art.wifi?' · Wi-Fi <strong>'+(tp.wifi||0)+'</strong>':'')+'</div></div>'+
             '<div class="nfc-blk"><h4>Cliente</h4><div>'+nfcEsc(o.referente||'—')+'<br>'+
               '<a href="mailto:'+nfcEsc(o.email)+'">'+nfcEsc(o.email)+'</a>'+(o.telefono?'<br><a href="tel:'+nfcEsc(o.telefono)+'">'+nfcEsc(o.telefono)+'</a>':'')+'</div></div>'+
             '<div class="nfc-blk"><h4>Spedizione</h4><div>'+(indirizzo?nfcEsc(indirizzo):'<span style="color:#888">indirizzo non ancora ricevuto</span>')+'</div></div>'+
@@ -1382,6 +1400,10 @@ function nfcCopia(t,btn){
 function nfcSalvaLink(id){
     var body={};['link_google','link_tripadvisor','link_thefork','menu_link'].forEach(function(k){body[k]=document.getElementById('nfcEdit_'+k).value.trim()});
     apiFetch('/api/nfc/ordini/'+id,{method:'PATCH',body:JSON.stringify(body)}).then(function(){renderNfc();alert('Link aggiornati: il tap ora apre i nuovi indirizzi.');});
+}
+function nfcSalvaWifi(id){
+    var body={wifi_rete:document.getElementById('nfcEdit_wifi_rete').value.trim(),wifi_password:document.getElementById('nfcEdit_wifi_password').value.trim()};
+    apiFetch('/api/nfc/ordini/'+id,{method:'PATCH',body:JSON.stringify(body)}).then(function(){renderNfc();alert('Wi-Fi aggiornato: la placchetta mostra già i nuovi dati.');});
 }
 function nfcScarica(id,k){
     fetch(BACKEND_URL+'/api/nfc/ordini/'+id+'/allegato/'+k,{headers:{'X-Admin-Token':ADMIN_TOKEN}}).then(function(r){

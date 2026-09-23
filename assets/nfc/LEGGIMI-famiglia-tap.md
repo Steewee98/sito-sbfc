@@ -25,14 +25,28 @@ I PDF pronti per la tipografia sono in `print/`, già con 3 mm di abbondanza
 per lato (A6 → 111×154, A7 → 80×111). Si rigenerano aprendo l'HTML e
 stampando nel formato corrispondente.
 
-## Cosa manca prima di poterli vendere
+## In vendita nello shop (23 set 2026)
 
-1. **Il catalogo del backend** (`routes/nfc.py`) conosce solo le tre placche
-   recensioni: 35 base, 59 personalizzata, 79 con menù, 25 la copia extra.
-   Menù e Wi-Fi come articoli a sé non esistono ancora.
-2. **La micro-pagina** `tap.html` gestisce già più azioni, ma il Wi-Fi ha
-   bisogno di una riga sua: iOS e Android si connettono con un profilo WPA
-   scritto nel tag, non con un link — va deciso se il tag porta alla pagina o
-   contiene direttamente la rete.
-3. **Le foto per il negozio**: nello shop ci sono `shop/placca-chiara.jpg` e
-   `placca-scura.jpg`. Per menù e Wi-Fi servono le due equivalenti.
+Menù e Wi-Fi si aggiungono alla placca recensioni dal configuratore di
+`placca-nfc.html` (blocco «Il resto del tavolo»), con il Kit sala a −10 €.
+Prezzi in `backend_sbfc/routes/nfc.py` (`PEZZI`, `KIT`); promozioni in
+`PROMOZIONI-FAMIGLIA-TAP.md`.
+
+**Un solo slug per ordine, un URL per tipo di pezzo** — il gestionale li mostra già:
+
+    placca recensioni   tap.html?p=<slug>
+    tag menù            tap.html?p=<slug>&t=menu   → apre dritto il menù
+    placchetta Wi-Fi    tap.html?p=<slug>&t=wifi   → rete + password da copiare
+
+Il Wi-Fi porta a una pagina e non a un record WPA nel tag: iPhone non legge
+le reti Wi-Fi via NFC, e così la password si cambia senza riscrivere il tag.
+
+Foto dello shop in `shop/` (`menu-*.jpg`, `wifi-*.jpg`), generate dagli HTML
+di stampa con Puppeteer.
+
+## Ancora aperto
+
+- Menù e Wi-Fi **da soli** (senza placca) non si comprano dal configuratore:
+  passano dal box richieste.
+- Menù e Wi-Fi **personalizzati** con il logo: solo su preventivo; il PDF
+  automatico del gestionale copre soltanto la placca recensioni.
