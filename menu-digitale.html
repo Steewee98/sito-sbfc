@@ -606,7 +606,23 @@
     var $ = function (id) { return document.getElementById(id); };
     if (window.sbPixelStd) sbPixelStd('ViewContent', { content_ids: ['menu-digitale'], content_type: 'product', content_name: 'Menù digitale con placca da tavolo' });
 
+    /* Pixel: InitiateCheckout = «si è messo a provare» (menù di prova o configuratore).
+       Una volta per visita: con 12-15 €/giorno i Lead sono troppo pochi perché Meta
+       impari, questo evento arriva molto più spesso ed è comunque un segnale d'intento. */
+    var avviato = false;
+    function avvia(dove) {
+        if (avviato) return; avviato = true;
+        if (window.sbPixelStd) sbPixelStd('InitiateCheckout', { content_ids: ['menu-digitale'], content_type: 'product', content_name: 'Menù digitale', content_category: dove });
+    }
+    document.querySelectorAll('a[href^="menu-demo/"]').forEach(function (a) { a.addEventListener('click', function () { avvia('demo'); }); });
+    var ifr = document.querySelector('.md-phone iframe');
+    if (ifr) ifr.addEventListener('load', function () {
+        try { ifr.contentDocument.addEventListener('pointerdown', function () { avvia('demo'); }, { once: true }); } catch (e) {}
+    });
+
     var form = $('mdForm'), pv = $('pv');
+    form.addEventListener('input', function () { avvia('configuratore'); }, { once: true });
+    form.addEventListener('click', function (e) { if (e.target.closest('.md-scelta, .md-col, .md-stepper, .md-file')) avvia('configuratore'); });
     var st = { versione: 'personalizzata', materiale: 'bianco', colore: '#c2412a', tavoli: 12, foto: null };
     var MAT = { bianco: 'Plexiglas bianco 2 mm', nero: 'Plexiglas nero 5 mm' };
 
