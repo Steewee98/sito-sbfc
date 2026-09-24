@@ -3,6 +3,17 @@
    Custom scroll reveal, parallax, hero animation
    ════════════════════════════════════════════════════════ */
 
+/* Un indirizzo solo per ogni pagina. Railway serve gli statici da sé (il nostro
+   nginx.conf è ignorato), quindi i rimandi lato server non si possono fare:
+   senza «www» e /index.html restavano pagine doppie agli occhi di Google, che
+   segue anche i rimandi fatti così. Il canonical nelle pagine dice lo stesso. */
+(function () {
+    var h = location.hostname, p = location.pathname, dove = null;
+    if (h === 'sbfoodconsulting.com') dove = 'https://www.sbfoodconsulting.com' + (p === '/index.html' ? '/' : p);
+    else if (h === 'www.sbfoodconsulting.com' && p === '/index.html') dove = '/';
+    if (dove) location.replace(dove + location.search + location.hash);
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ═══════ NAVBAR ═══════ */
