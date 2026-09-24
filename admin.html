@@ -1438,6 +1438,8 @@ function renderRichieste(){
         tb.innerHTML=list.map(function(r){
             var opts=RICH_STATI.map(function(st){return '<option value="'+st+'"'+(r.stato===st?' selected':'')+'>'+RICH_LABEL[st]+'</option>'}).join('');
             var msg=nfcEsc(r.messaggio);
+            var alle=Object.keys(r.allegati||{});
+            if(alle.length) msg+='<div style="margin-top:8px">'+alle.map(function(k){return '<button class="btn-sm" style="margin:0 6px 6px 0" onclick="richScarica('+r.id+',\''+k+'\')">↓ '+k+' — '+nfcEsc(r.allegati[k].nome)+'</button>'}).join('')+'</div>';
             return '<tr>'+
               '<td>'+new Date(r.created_at).toLocaleDateString('it-IT')+'</td>'+
               '<td><strong>'+nfcEsc(r.nome_locale||r.nome||'—')+'</strong>'+(r.nome&&r.nome_locale?'<br><small style="color:#888">'+nfcEsc(r.nome)+'</small>':'')+'</td>'+
@@ -1453,6 +1455,13 @@ function renderRichieste(){
         var b=document.getElementById('nfcBadgeRich');
         if(b){ b.textContent=nuove; b.style.display=nuove?'inline-block':'none'; }
     }).catch(function(e){document.getElementById('richBody').innerHTML='<tr><td colspan="7" style="color:#c0392b">Errore: '+e.message+'</td></tr>';});
+}
+function richScarica(id,k){
+    fetch(BACKEND_URL+'/api/nfc/richieste/'+id+'/allegato/'+k,{headers:{'X-Admin-Token':ADMIN_TOKEN}}).then(function(r){
+        if(!r.ok) throw new Error('errore '+r.status);
+        var cd=r.headers.get('Content-Disposition')||''; var m=cd.match(/filename="([^"]+)"/);
+        return r.blob().then(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=m?m[1]:k;a.click();});
+    }).catch(function(e){alert('Download non riuscito: '+e.message);});
 }
 function richStato(id,stato){ apiFetch('/api/nfc/richieste/'+id,{method:'PATCH',body:JSON.stringify({stato:stato})}).then(renderRichieste); }
 function richElimina(id){ if(!confirm('Eliminare questa richiesta?')) return; apiFetch('/api/nfc/richieste/'+id,{method:'DELETE'}).then(renderRichieste); }

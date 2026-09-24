@@ -15,7 +15,7 @@
     <meta property="og:locale" content="it_IT">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gloock&family=IBM+Plex+Mono:wght@500&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=20260826b">
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/sb-32.png">
@@ -134,6 +134,115 @@
 .md-faq details[open] summary::after { transform: rotate(45deg); }
 .md-faq details p { padding: 0 0 22px; color: var(--ink-soft); line-height: 1.75; max-width: 600px; }
 
+
+/* ── Configuratore ── */
+.md-conf { padding: 120px 0 130px; background: var(--surface); }
+.md-conf-head { max-width: 680px; margin-bottom: 56px; }
+.md-conf-head h2 { font-size: clamp(2.2rem, 4.5vw, 3.2rem); line-height: 1.05; margin: 14px 0 16px; }
+.md-conf-head h2 em { font-style: italic; font-weight: 400; color: var(--accent); }
+.md-conf-head p { color: var(--ink-soft); line-height: 1.75; }
+.md-conf-grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 64px; align-items: start; }
+.md-conf-main { min-width: 0; }
+.md-aside { position: sticky; top: 110px; }
+.md-blk { margin-bottom: 48px; }
+.md-blk-h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+.md-blk-h .n { font-family: 'Playfair Display', serif; color: var(--accent); }
+.md-blk-h h3 { font-size: 1.45rem; }
+.md-scelte { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.md-scelta { position: relative; background: #fff; border: 1.5px solid var(--border); padding: 20px 20px 18px; cursor: pointer; transition: border-color .25s, box-shadow .25s; }
+.md-scelta input { position: absolute; opacity: 0; pointer-events: none; }
+.md-scelta.is-on { border-color: var(--ink); box-shadow: 0 0 0 1.5px var(--ink); }
+.md-scelta:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.md-scelta b { display: block; font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.2rem; margin-bottom: 4px; }
+.md-scelta span { font-size: .86rem; color: var(--ink-soft); line-height: 1.5; }
+.md-sw { display: inline-block; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); margin-bottom: 10px; }
+.md-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.md-col { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--border); cursor: pointer; }
+.md-col.is-on { box-shadow: 0 0 0 2px var(--ink); }
+/* .md-field label è display:block e più specifico: qui serve il flex */
+.md-field label.md-file, .md-file { display: flex; width: 100%; min-width: 0; align-items: center; gap: 14px; letter-spacing: 0; text-transform: none; font-weight: 400; margin-bottom: 0; border: 1.5px dashed var(--border); background: #fff; padding: 13px 15px; cursor: pointer; }
+.md-file input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.md-file:focus-within { border-color: var(--ink); }
+.md-file-btn { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; padding: 9px 14px; border: 1.5px solid var(--ink); white-space: nowrap; }
+.md-file-name { display: block; flex: 1; min-width: 0; font-size: .88rem; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.md-file.has-file { border-style: solid; border-color: var(--ink); }
+.md-help { font-size: .8rem; color: var(--ink-soft); margin-top: 8px; line-height: 1.55; }
+.md-or { display: flex; align-items: center; gap: 14px; margin: 12px 0; color: var(--ink-soft); font-size: .76rem; letter-spacing: 2px; text-transform: uppercase; }
+.md-or::before, .md-or::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.md-qty { display: flex; align-items: center; gap: 20px; padding: 18px 20px; background: #fff; border: 1.5px solid var(--border); }
+.md-qty > div:first-child { flex: 1; }
+.md-qty strong { display: block; font-size: .95rem; }
+.md-qty span { font-size: .84rem; color: var(--ink-soft); }
+.md-stepper { display: inline-flex; border: 1.5px solid var(--ink); }
+.md-stepper button { width: 42px; height: 42px; background: transparent; border: 0; font-size: 1.2rem; cursor: pointer; color: var(--ink); }
+.md-stepper output { width: 52px; display: grid; place-items: center; font-weight: 600; border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); }
+.md-prev { background: #fff; border: 1.5px solid var(--border); padding: 20px; }
+.md-prev-k { display: flex; justify-content: space-between; font-size: .66rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; color: var(--accent); margin-bottom: 14px; }
+.md-prev-k span:last-child { color: var(--ink-soft); letter-spacing: 1px; text-transform: none; font-weight: 500; }
+.md-riep { margin-top: 18px; border-top: 1.5px solid var(--ink); padding-top: 14px; }
+.md-riep-r { display: flex; justify-content: space-between; font-size: .9rem; padding: 5px 0; color: var(--ink-soft); }
+.md-riep-r span:last-child { color: var(--ink); font-weight: 500; }
+.md-riep .btn { width: 100%; margin-top: 16px; }
+.md-riep .btn[disabled] { opacity: .6; cursor: wait; }
+.md-ok { text-align: center; padding: 24px 8px; }
+.md-ok h3 { font-size: 1.6rem; margin-bottom: 10px; }
+.md-ok p { color: var(--ink-soft); line-height: 1.7; }
+.md-conf-main .md-field label:not(.md-file) { color: var(--ink); }
+.solo-pers[hidden] { display: none !important; }
+
+/* anteprima: la placca a 105x148 mm veri, ridotta con transform (vedi scalaPv) */
+.pv-box { position: relative; width: 100%; aspect-ratio: 105 / 148; overflow: hidden; box-shadow: 0 24px 60px rgba(26,26,26,.22); }
+.pv { position: absolute; top: 0; left: 0; width: 105mm; height: 148mm; transform-origin: top left; }
+.pv > div { position: absolute; inset: 0; }
+.pv .pv-neutra { display: none; }
+.pv.neutra .pv-pers { display: none; }
+.pv.neutra .pv-neutra { display: block; }
+.pv { --acc: #c2412a; --ott: #8d6d31; --soft: #5b675f; --fondo: #fbfbf9; --ink: #15241d; background: var(--fondo); color: var(--ink); }
+.pv.nero { --ott: #cdac68; --soft: #a39c8e; --fondo: #0d0d0d; --ink: #eee7d8; }
+.pv.neutra { --acc: #c4622d; --fondo: #f5f2ee; --ink: #2b2d31; --soft: #6b6560; }
+.pv.neutra.nero { --acc: #d9773f; --fondo: #161719; --ink: #f5f2ee; --soft: #a8a29a; }
+.pv-safe { position: absolute; inset: 0; padding: 11mm 11mm 9mm; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.pv-tipo { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 6pt; letter-spacing: 3.2pt; text-transform: uppercase; color: var(--ott); text-indent: 3.2pt; min-height: 7pt; }
+.pv-nome { font-family: 'Gloock', Georgia, serif; font-size: 25pt; line-height: 1; margin-top: 1.6mm; color: var(--acc); max-width: 83mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pv-arco { position: relative; width: 58mm; height: 64mm; margin-top: 6mm; border: .6pt solid var(--ott); border-radius: 29mm 29mm 1mm 1mm; }
+.pv-foto { position: absolute; inset: 1.6mm; border-radius: 27.4mm 27.4mm .6mm .6mm; overflow: hidden; }
+.pv-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pv-qui { font-family: 'Gloock', Georgia, serif; font-size: 13pt; line-height: 1.2; margin-top: 5mm; }
+.pv-cosa { margin-top: 3mm; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 8.6pt; }
+.pv-cosa span { color: var(--ott); padding: 0 1mm; }
+.pv-lingue { margin-top: 1.8mm; font-family: 'IBM Plex Mono', monospace; font-size: 5.4pt; letter-spacing: 1.6pt; color: var(--soft); }
+.pv-piede { margin-top: auto; width: 100%; display: flex; align-items: flex-end; justify-content: space-between; border-top: .4pt solid color-mix(in srgb, currentColor 22%, transparent); padding-top: 4.5mm; }
+.pv-coppia { display: flex; align-items: flex-end; gap: 5mm; }
+.pv-punto { display: flex; flex-direction: column; align-items: center; gap: 1.6mm; }
+.pv-punto small { font-family: 'IBM Plex Mono', monospace; font-size: 5pt; letter-spacing: 1.4pt; text-transform: uppercase; color: var(--soft); }
+.pv-qr { width: 19mm; height: 19mm; padding: 1.3mm; background: #fbfbf9; color: #15241d; border-radius: .6mm; }
+.pv-qr svg { display: block; width: 100%; height: 100%; }
+.pv-bers { width: 19mm; height: 19mm; border-radius: 50%; border: .7pt solid var(--acc); display: flex; align-items: center; justify-content: center; position: relative; }
+.pv-bers::before, .pv-anello::before { content: ""; position: absolute; inset: 1.4mm; border-radius: 50%; border: .35pt dashed var(--acc); opacity: .5; }
+.pv-ico { width: 10mm; color: var(--acc); margin-left: .8mm; }
+.pv-ico svg { display: block; width: 100%; height: auto; }
+.pv-tav { text-align: right; line-height: 1; }
+.pv-tav small { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 5.4pt; letter-spacing: 2pt; text-transform: uppercase; color: var(--ott); margin-bottom: 1mm; }
+.pv-tav b { font-family: 'Gloock', Georgia, serif; font-weight: 400; font-size: 30pt; }
+.pv-firma { position: absolute; left: 0; right: 0; bottom: 3.2mm; text-align: center; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 4.4pt; letter-spacing: 1.8pt; text-transform: uppercase; color: var(--soft); opacity: .7; }
+.pv-neutra .pv-safe { padding: 13mm 12mm 11mm; }
+.pv-frame { position: absolute; inset: 4mm; border: .5pt solid var(--acc); }
+.pv-benv { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 5.6pt; letter-spacing: 2.6pt; text-transform: uppercase; color: var(--acc); }
+.pv-titolo { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; font-size: 30pt; line-height: 1; margin-top: 3mm; }
+.pv-anello { margin-top: 9mm; width: 30mm; height: 30mm; border-radius: 50%; border: .8pt solid var(--acc); display: flex; align-items: center; justify-content: center; position: relative; }
+.pv-anello::before { inset: 2.2mm; }
+.pv-anello .pv-ico { width: 14mm; margin-left: 1mm; }
+.pv-appoggia { margin-top: 3mm; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 5.4pt; letter-spacing: 2pt; text-transform: uppercase; color: var(--acc); }
+.pv-dice { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 14pt; line-height: 1.22; margin-top: 7mm; }
+.pv-neutra .pv-cosa span { color: var(--acc); }
+.pv-neutra .pv-piede { border-top: 0; padding-top: 5mm; }
+.pv-neutra .pv-qr { width: 17mm; height: 17mm; padding: 1.2mm; }
+.pv-cod { text-align: left; }
+.pv-cod small { display: block; font-family: 'Inter', sans-serif; font-size: 5.4pt; color: var(--soft); }
+.pv-cod b { display: block; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 7pt; letter-spacing: 1.4pt; margin-top: .8mm; }
+.pv-logo { height: 9mm; width: auto; display: block; }
+.pv.neutra:not(.nero) .pv-logo { filter: brightness(0); opacity: .82; }
+
 [hidden] { display: none !important; }
 @media (max-width: 1024px) {
     .md-prova-grid { grid-template-columns: 1fr; gap: 50px; }
@@ -143,6 +252,8 @@
     .md-feat > div:nth-child(2n) { padding-left: 24px; border-left: 1px solid var(--border); }
     .md-placca-head, .md-versioni, .md-come-grid, .md-demo-grid, .md-faq-grid { grid-template-columns: 1fr; gap: 40px; }
     .md-come h2 { position: static; }
+    .md-conf-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .md-aside { position: static; max-width: 420px; }
     .md-specs { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
@@ -158,6 +269,9 @@
     .md-two { grid-template-columns: 1fr; }
     .md-input { font-size: 16px; }
     .md-specs { grid-template-columns: 1fr; }
+    .md-scelte { grid-template-columns: 1fr; }
+    .md-conf { padding: 80px 0; }
+    .md-stepper button { width: 46px; height: 46px; }
 }
 </style>
 </head>
@@ -190,13 +304,13 @@
         <div class="breadcrumb" data-reveal><a href="index.html">Home</a><span>/</span>Menù digitale</div>
         <div class="cs-hero-content">
             <h1 class="cs-hero-name" data-reveal data-reveal-delay="100">
-                <span class="cs-hero-line"><span class="line-inner">Tocca il tavolo.</span></span>
-                <span class="cs-hero-line cs-hero-line--accent"><span class="line-inner">Si apre la carta.</span></span>
+                <span class="cs-hero-line"><span class="line-inner">Il tuo menù,</span></span>
+                <span class="cs-hero-line cs-hero-line--accent"><span class="line-inner">sul telefono.</span></span>
             </h1>
-            <p class="cs-hero-sub" data-reveal data-reveal-delay="200">Una placca su ogni tavolo. Il cliente appoggia il telefono e sfoglia il tuo menù con le foto dei piatti, nella sua lingua, con gli allergeni e il Wi-Fi. A fine cena gli chiede com'è andata. Lo prepariamo e lo aggiorniamo noi.</p>
+            <p class="cs-hero-sub" data-reveal data-reveal-delay="200">Il menù digitale per il tuo ristorante. Una placca su ogni tavolo: il cliente ci appoggia il telefono, o inquadra il QR, e sfoglia il tuo menù con le foto dei piatti, nella sua lingua, con gli allergeni e il Wi-Fi. A fine cena gli chiede com'è andata. Lo prepariamo e lo aggiorniamo noi.</p>
             <div class="md-hero-actions" data-reveal data-reveal-delay="300">
                 <a href="#prova" class="btn btn-primary">Prova il menù</a>
-                <a href="#demo" class="btn btn-ghost">Chiedi il tuo</a>
+                <a href="#configura" class="btn btn-ghost">Crea la tua placca</a>
             </div>
         </div>
     </div>
@@ -308,38 +422,143 @@
     </div>
 </section>
 
-<!-- ═══════ DEMO / CONTATTO ═══════ -->
-<section class="md-demo" id="demo">
-    <div class="container md-demo-grid">
-        <div>
-            <span class="label" data-reveal>Il tuo menù</span>
-            <h2 data-reveal data-reveal-delay="50">Vuoi vederlo<br><em>con i tuoi piatti?</em></h2>
-            <p class="lead" data-reveal data-reveal-delay="100">Lasciaci due dati: ti richiamiamo entro un giorno lavorativo, ti facciamo vedere come verrebbe il tuo menù e ti diamo un prezzo sui tuoi tavoli.</p>
-            <ul data-reveal data-reveal-delay="150">
-                <li>Preventivo sui tavoli che hai davvero</li>
-                <li>Placca personalizzata o neutra: scegli dopo aver visto le due</li>
-                <li>Nessun impegno, nessun pagamento per parlarne</li>
-            </ul>
+<!-- ═══════ CONFIGURATORE ═══════
+     Nessun pagamento qui: il prezzo dipende dai tavoli e il listino non è
+     ancora fisso. Si configura, si carica il menù, parte una richiesta di
+     preventivo con i file (POST /api/nfc/richiesta, multipart). -->
+<section class="md-conf" id="configura">
+    <div class="container">
+        <div class="md-conf-head">
+            <span class="label" data-reveal>Crea la tua placca</span>
+            <h2 data-reveal data-reveal-delay="50">Scegli come la vuoi,<br><em>mandaci il tuo menù.</em></h2>
+            <p data-reveal data-reveal-delay="100">L'anteprima a destra cambia mentre scegli. Carica il menù com'è, anche la foto della carta: lo trasformiamo noi. Ti rispondiamo in giornata con la bozza e il prezzo sui tuoi tavoli.</p>
         </div>
-        <div class="md-card" id="mdCard">
-            <form id="mdForm" novalidate>
-                <div class="md-two">
-                    <div class="md-field"><label for="mdNome">Nome</label><input class="md-input" id="mdNome" name="nome" type="text" placeholder="Come ti chiami" autocomplete="name"></div>
-                    <div class="md-field"><label for="mdLocale">Locale</label><input class="md-input" id="mdLocale" name="nome_locale" type="text" placeholder="Nome del locale" required></div>
+        <form id="mdForm" class="md-conf-grid" novalidate>
+            <div class="md-conf-main">
+                <div class="md-blk">
+                    <div class="md-blk-h"><span class="n">01</span><h3>La placca</h3></div>
+                    <div class="md-scelte">
+                        <label class="md-scelta is-on"><input type="radio" name="versione" value="personalizzata" checked><b>Personalizzata</b><span>Il nome del locale, una tua foto nell'arco, il numero del tavolo</span></label>
+                        <label class="md-scelta"><input type="radio" name="versione" value="neutra"><b>Neutra SB</b><span>Grafica SB Food, uguale su tutti i tavoli. Pronta subito, costa meno</span></label>
+                    </div>
                 </div>
-                <div class="md-two">
-                    <div class="md-field"><label for="mdCitta">Città</label><input class="md-input" id="mdCitta" name="citta" type="text" placeholder="Es. Roma"></div>
-                    <div class="md-field"><label for="mdTavoli">Tavoli <span class="opt">· circa</span></label><input class="md-input" id="mdTavoli" name="quantita" type="text" inputmode="numeric" placeholder="Es. 14"></div>
+                <div class="md-blk">
+                    <div class="md-blk-h"><span class="n">02</span><h3>Il materiale</h3></div>
+                    <div class="md-scelte">
+                        <label class="md-scelta is-on"><input type="radio" name="materiale" value="bianco" checked><i class="md-sw" style="background:#fbfbf9"></i><b>Plexiglas bianco</b><span>2 mm, luminoso, per sale chiare</span></label>
+                        <label class="md-scelta"><input type="radio" name="materiale" value="nero"><i class="md-sw" style="background:#0d0d0d"></i><b>Plexiglas nero</b><span>5 mm, più spesso, per sale calde e serali</span></label>
+                    </div>
                 </div>
-                <div class="md-two">
-                    <div class="md-field"><label for="mdTel">Telefono</label><input class="md-input" id="mdTel" name="telefono" type="tel" placeholder="+39 ..." autocomplete="tel"></div>
-                    <div class="md-field"><label for="mdEmail">Email</label><input class="md-input" id="mdEmail" name="email" type="email" placeholder="Per il preventivo" autocomplete="email" required></div>
+                <div class="md-blk">
+                    <div class="md-blk-h"><span class="n">03</span><h3>Il tuo locale</h3></div>
+                    <div class="md-two">
+                        <div class="md-field solo-pers"><label for="mdTipo">Sopra il nome <span class="opt">· facoltativo</span></label><input class="md-input" id="mdTipo" name="tipo" type="text" maxlength="24" placeholder="Osteria, Trattoria, Bistrot…" value="Osteria"></div>
+                        <div class="md-field"><label for="mdLocale">Nome del locale</label><input class="md-input" id="mdLocale" name="nome_locale" type="text" maxlength="40" placeholder="Es. Ventitré" value="" required></div>
+                    </div>
+                    <div class="md-field solo-pers">
+                        <label>Colore del nome</label>
+                        <div class="md-swatches" id="mdColori">
+                            <button type="button" class="md-col is-on" data-c="#c2412a" style="background:#c2412a" title="Rosso pomodoro"></button>
+                            <button type="button" class="md-col" data-c="#c4622d" style="background:#c4622d" title="Terracotta"></button>
+                            <button type="button" class="md-col" data-c="#b08a3e" style="background:#b08a3e" title="Oro"></button>
+                            <button type="button" class="md-col" data-c="#2f5d4a" style="background:#2f5d4a" title="Verde bottiglia"></button>
+                            <button type="button" class="md-col" data-c="#23395b" style="background:#23395b" title="Blu notte"></button>
+                            <button type="button" class="md-col" data-c="#7a2436" style="background:#7a2436" title="Bordeaux"></button>
+                        </div>
+                    </div>
+                    <div class="md-field solo-pers">
+                        <label for="mdFoto">Foto nell'arco <span class="opt">· un tuo piatto o la tua sala</span></label>
+                        <label class="md-file" for="mdFoto"><input type="file" id="mdFoto" name="foto" accept="image/png,image/jpeg,image/webp"><span class="md-file-btn">Carica</span><span class="md-file-name" data-vuoto="Nessuna foto: nell'anteprima vedi un esempio">Nessuna foto: nell'anteprima vedi un esempio</span></label>
+                        <p class="md-help">Meglio lo scatto originale del telefono, non uno screenshot. Se non ne hai una bella, a Roma veniamo noi a farla.</p>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" id="mdBtn">Richiamatemi</button>
-                <p class="md-note">Ti scriviamo solo per questo. Niente newsletter.</p>
-                <div class="md-err" id="mdErr" hidden></div>
-            </form>
-        </div>
+                <div class="md-blk">
+                    <div class="md-blk-h"><span class="n">04</span><h3>I tavoli</h3></div>
+                    <div class="md-qty">
+                        <div><strong>Quanti tavoli hai?</strong><span>Una placca per tavolo. <span class="solo-pers">Ognuna col suo numero stampato.</span></span></div>
+                        <div class="md-stepper"><button type="button" id="mdMeno" aria-label="Un tavolo in meno">&minus;</button><output id="mdTav">12</output><button type="button" id="mdPiu" aria-label="Un tavolo in più">+</button></div>
+                    </div>
+                </div>
+                <div class="md-blk">
+                    <div class="md-blk-h"><span class="n">05</span><h3>Il tuo menù</h3></div>
+                    <div class="md-field">
+                        <label for="mdMenu">File del menù <span class="opt">· PDF o foto, max 4 MB</span></label>
+                        <label class="md-file" for="mdMenu"><input type="file" id="mdMenu" name="menu" accept="application/pdf,image/png,image/jpeg,image/webp"><span class="md-file-btn">Carica</span><span class="md-file-name" data-vuoto="Nessun file">Nessun file</span></label>
+                    </div>
+                    <div class="md-or">oppure</div>
+                    <div class="md-field">
+                        <label for="mdMenuLink">Link al menù online <span class="opt">· sito, TheFork, Google</span></label>
+                        <input class="md-input" id="mdMenuLink" name="menu_link" type="url" placeholder="https://...">
+                        <p class="md-help">Non ce l'hai pronto? Nessun problema: invia lo stesso, te lo chiediamo noi.</p>
+                    </div>
+                </div>
+                <div class="md-blk">
+                    <div class="md-blk-h"><span class="n">06</span><h3>Dove ti rispondiamo</h3></div>
+                    <div class="md-two">
+                        <div class="md-field"><label for="mdNome">Nome</label><input class="md-input" id="mdNome" name="nome" type="text" placeholder="Come ti chiami" autocomplete="name"></div>
+                        <div class="md-field"><label for="mdCitta">Città</label><input class="md-input" id="mdCitta" name="citta" type="text" placeholder="Es. Roma"></div>
+                    </div>
+                    <div class="md-two">
+                        <div class="md-field"><label for="mdTel">Telefono</label><input class="md-input" id="mdTel" name="telefono" type="tel" placeholder="+39 ..." autocomplete="tel"></div>
+                        <div class="md-field"><label for="mdEmail">Email</label><input class="md-input" id="mdEmail" name="email" type="email" placeholder="Per la bozza e il preventivo" autocomplete="email" required></div>
+                    </div>
+                    <div class="md-field"><label for="mdNote">Note <span class="opt">· facoltativo</span></label><textarea class="md-input" id="mdNote" name="note" rows="3" placeholder="Il piatto da mettere in evidenza, le lingue che ti servono, altro"></textarea></div>
+                </div>
+            </div>
+
+            <aside class="md-aside">
+                <div class="md-prev">
+                    <div class="md-prev-k"><span>Anteprima</span><span id="pvNota">Bozza: la rifiniamo noi</span></div>
+                    <div class="pv-box" id="pvBox">
+                        <div class="pv" id="pv">
+                            <div class="pv-pers">
+                                <div class="pv-safe">
+                                    <div class="pv-tipo" id="pvTipo">Osteria</div>
+                                    <div class="pv-nome" id="pvNome">Il tuo locale</div>
+                                    <div class="pv-arco"><div class="pv-foto"><img id="pvFoto" src="menu-demo/img/carbonara.jpg" alt=""></div></div>
+                                    <div class="pv-qui">Il menù sul tuo telefono</div>
+                                    <div class="pv-cosa">Menù <span>·</span> Wi-Fi <span>·</span> Recensioni</div>
+                                    <div class="pv-lingue">IT · EN · DE · FR · ES</div>
+                                    <div class="pv-piede">
+                                        <div class="pv-coppia">
+                                            <div class="pv-punto"><div class="pv-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" class="segno"><path class="qrline" stroke="currentColor" d="M0 0.5h7m2 0h1m1 0h1m4 0h1m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m6 0h2m2 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h3m2 0h1m3 0h2m1 0h1m5 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m-24 1h1m1 0h5m4 0h1m1 0h2m2 0h1m4 0h2m2 0h5m-31 1h1m1 0h1m2 0h1m2 0h6m3 0h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h4m2 0h2m1 0h3m1 0h5m2 0h2m2 0h2m2 0h1m1 0h2m-32 1h4m6 0h1m2 0h1m2 0h8m4 0h5m-33 1h2m1 0h6m2 0h2m1 0h3m2 0h2m1 0h2m1 0h1m1 0h3m1 0h2m-33 1h2m1 0h3m1 0h1m2 0h2m3 0h1m2 0h2m1 0h4m1 0h1m2 0h1m1 0h2m-33 1h1m4 0h2m1 0h2m1 0h2m1 0h3m3 0h1m1 0h1m2 0h2m2 0h3m-32 1h1m7 0h4m1 0h1m1 0h1m4 0h2m1 0h1m1 0h2m1 0h3m-30 1h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-33 1h2m1 0h3m1 0h3m4 0h1m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1m-33 1h1m2 0h1m1 0h3m2 0h2m1 0h3m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m-31 1h2m1 0h3m4 0h2m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-31 1h2m1 0h1m1 0h2m2 0h2m1 0h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h2m-33 1h2m7 0h2m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m5 0h1m1 0h1m2 0h1m3 0h3m-32 1h1m1 0h2m1 0h1m3 0h1m2 0h1m3 0h1m1 0h6m1 0h2m2 0h2m-31 1h1m3 0h5m1 0h5m2 0h1m1 0h1m2 0h7m2 0h1m-24 1h2m1 0h1m2 0h1m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h3m1 0h5m4 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h6m1 0h1m1 0h2m1 0h5m3 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h5m1 0h2m2 0h3m2 0h1m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h2m5 0h6m-28 1h1m5 0h1m3 0h6m2 0h1m1 0h3m2 0h2m1 0h3m-31 1h7m1 0h2m3 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"/></svg></div><small>Inquadra</small></div>
+                                            <div class="pv-punto"><div class="pv-bers"><div class="pv-ico"><svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="24" width="42" height="60" rx="8"/><line x1="34" y1="32" x2="48" y2="32"/><circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/><path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/><path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/><path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/></svg></div></div><small>Appoggia qui</small></div>
+                                        </div>
+                                        <div class="pv-tav"><small>Tavolo</small><b>7</b></div>
+                                    </div>
+                                </div>
+                                <div class="pv-firma">SB Food Consulting</div>
+                            </div>
+                            <div class="pv-neutra">
+                                <div class="pv-frame"></div>
+                                <div class="pv-safe">
+                                    <div class="pv-benv">Benvenuti a tavola</div>
+                                    <div class="pv-titolo">Il menù</div>
+                                    <div class="pv-anello"><div class="pv-ico"><svg viewBox="0 0 100 92" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="24" width="42" height="60" rx="8"/><line x1="34" y1="32" x2="48" y2="32"/><circle cx="41" cy="78" r="2.6" fill="currentColor" stroke="none"/><path d="M64.8 22.4 A 9 9 0 0 1 68.3 33.4"/><path d="M69.0 15.6 A 17 17 0 0 1 75.8 36.4"/><path d="M73.3 8.8 A 25 25 0 0 1 83.2 39.4"/></svg></div></div>
+                                    <div class="pv-appoggia">Appoggia qui</div>
+                                    <div class="pv-dice">Avvicina il telefono<br>per aprire la carta</div>
+                                    <div class="pv-cosa">Menù <span>·</span> Wi-Fi <span>·</span> Recensioni</div>
+                                    <div class="pv-lingue">IT · EN · DE · FR · ES</div>
+                                    <div class="pv-piede">
+                                        <div class="pv-coppia"><div class="pv-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" class="segno"><path class="qrline" stroke="currentColor" d="M0 0.5h7m2 0h1m1 0h1m4 0h1m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m6 0h2m2 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h3m2 0h1m3 0h2m1 0h1m5 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m-24 1h1m1 0h5m4 0h1m1 0h2m2 0h1m4 0h2m2 0h5m-31 1h1m1 0h1m2 0h1m2 0h6m3 0h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h4m2 0h2m1 0h3m1 0h5m2 0h2m2 0h2m2 0h1m1 0h2m-32 1h4m6 0h1m2 0h1m2 0h8m4 0h5m-33 1h2m1 0h6m2 0h2m1 0h3m2 0h2m1 0h2m1 0h1m1 0h3m1 0h2m-33 1h2m1 0h3m1 0h1m2 0h2m3 0h1m2 0h2m1 0h4m1 0h1m2 0h1m1 0h2m-33 1h1m4 0h2m1 0h2m1 0h2m1 0h3m3 0h1m1 0h1m2 0h2m2 0h3m-32 1h1m7 0h4m1 0h1m1 0h1m4 0h2m1 0h1m1 0h2m1 0h3m-30 1h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-33 1h2m1 0h3m1 0h3m4 0h1m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1m-33 1h1m2 0h1m1 0h3m2 0h2m1 0h3m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m-31 1h2m1 0h3m4 0h2m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-31 1h2m1 0h1m1 0h2m2 0h2m1 0h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h2m-33 1h2m7 0h2m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m5 0h1m1 0h1m2 0h1m3 0h3m-32 1h1m1 0h2m1 0h1m3 0h1m2 0h1m3 0h1m1 0h6m1 0h2m2 0h2m-31 1h1m3 0h5m1 0h5m2 0h1m1 0h1m2 0h7m2 0h1m-24 1h2m1 0h1m2 0h1m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h3m1 0h5m4 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h6m1 0h1m1 0h2m1 0h5m3 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h5m1 0h2m2 0h3m2 0h1m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h2m5 0h6m-28 1h1m5 0h1m3 0h6m2 0h1m1 0h3m2 0h2m1 0h3m-31 1h7m1 0h2m3 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"/></svg></div><div class="pv-cod"><small>oppure inquadra</small><b>A7F3</b></div></div>
+                                        <img class="pv-logo" src="assets/logo/logo-bianco.png" alt="SB Food Consulting">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md-riep">
+                        <div class="md-riep-r"><span>Placca</span><span id="rVers">Personalizzata</span></div>
+                        <div class="md-riep-r"><span>Materiale</span><span id="rMat">Plexiglas bianco 2 mm</span></div>
+                        <div class="md-riep-r"><span>Tavoli</span><span id="rTav">12 placche</span></div>
+                        <div class="md-riep-r"><span>Menù digitale</span><span>incluso</span></div>
+                        <button type="submit" class="btn btn-primary" id="mdBtn">Richiedi bozza e preventivo</button>
+                        <p class="md-note">Nessun pagamento adesso. Ti rispondiamo in giornata con la bozza della placca e il prezzo.</p>
+                        <div class="md-err" id="mdErr" hidden></div>
+                    </div>
+                </div>
+            </aside>
+        </form>
     </div>
 </section>
 
@@ -380,39 +599,130 @@
 <script>
 (function () {
     var BACKEND = 'https://web-production-f3794.up.railway.app';
+    var $ = function (id) { return document.getElementById(id); };
     if (window.sbPixelStd) sbPixelStd('ViewContent', { content_ids: ['menu-digitale'], content_type: 'product', content_name: 'Menù digitale con placca da tavolo' });
 
-    var form = document.getElementById('mdForm'), btn = document.getElementById('mdBtn'), err = document.getElementById('mdErr');
+    var form = $('mdForm'), pv = $('pv');
+    var st = { versione: 'personalizzata', materiale: 'bianco', colore: '#c2412a', tavoli: 12, foto: null };
+    var MAT = { bianco: 'Plexiglas bianco 2 mm', nero: 'Plexiglas nero 5 mm' };
+
+    /* ── scelte a schede (versione, materiale) ── */
+    form.querySelectorAll('.md-scelta input').forEach(function (inp) {
+        inp.addEventListener('change', function () {
+            form.querySelectorAll('input[name="' + inp.name + '"]').forEach(function (x) { x.closest('.md-scelta').classList.toggle('is-on', x.checked); });
+            st[inp.name] = inp.value; aggiorna();
+        });
+    });
+    $('mdColori').querySelectorAll('.md-col').forEach(function (b) {
+        b.addEventListener('click', function () {
+            $('mdColori').querySelectorAll('.md-col').forEach(function (x) { x.classList.remove('is-on'); });
+            b.classList.add('is-on'); st.colore = b.dataset.c; aggiorna();
+        });
+    });
+    function setTav(n) { st.tavoli = Math.max(1, Math.min(80, n)); $('mdTav').textContent = st.tavoli; aggiorna(); }
+    $('mdMeno').addEventListener('click', function () { setTav(st.tavoli - 1); });
+    $('mdPiu').addEventListener('click', function () { setTav(st.tavoli + 1); });
+    ['mdTipo', 'mdLocale'].forEach(function (id) { $(id).addEventListener('input', aggiorna); });
+
+    /* ── file: le foto grandi del telefono si riducono qui, PDF passa intatto ── */
+    var LIMITE = 4 * 1024 * 1024, pronti = {}, inCorso = {}, giro = {};
+    function comprimi(file, done) {
+        if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size <= 1.6 * 1024 * 1024) return done(file);
+        var img = new Image(), url = URL.createObjectURL(file);
+        img.onload = function () {
+            var sc = Math.min(1, 2200 / Math.max(img.width, img.height)), cv = document.createElement('canvas');
+            cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
+            cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); URL.revokeObjectURL(url);
+            var tipo = file.type === 'image/jpeg' ? 'image/jpeg' : file.type;   // i PNG restano PNG (trasparenze)
+            cv.toBlob(function (b) { done(b && b.size < file.size ? new File([b], file.name, { type: tipo }) : file); }, tipo, 0.88);
+        };
+        img.onerror = function () { URL.revokeObjectURL(url); done(file); };
+        img.src = url;
+    }
+    function bindFile(id, onFile) {
+        var inp = $(id), lab = inp.closest('.md-file'), nome = lab.querySelector('.md-file-name');
+        inp.addEventListener('change', function () {
+            var f = inp.files[0], mio = giro[id] = (giro[id] || 0) + 1;
+            pronti[inp.name] = null; inCorso[inp.name] = false;
+            if (!f) { lab.classList.remove('has-file'); nome.textContent = nome.dataset.vuoto; onFile && onFile(null); return; }
+            lab.classList.add('has-file'); nome.textContent = f.name; inCorso[inp.name] = true;
+            comprimi(f, function (fin) {
+                if (mio !== giro[id]) return;                       // scelta superata da una più recente
+                inCorso[inp.name] = false;
+                if (fin.size > LIMITE) { inp.value = ''; lab.classList.remove('has-file'); nome.textContent = 'File oltre i 4 MB: mandacelo per email dopo la richiesta'; onFile && onFile(null); return; }
+                pronti[inp.name] = fin; onFile && onFile(fin);
+            });
+        });
+    }
+    bindFile('mdFoto', function (f) {
+        if (!f) { $('pvFoto').src = 'menu-demo/img/carbonara.jpg'; return; }
+        var rd = new FileReader(); rd.onload = function () { $('pvFoto').src = rd.result; }; rd.readAsDataURL(f);
+    });
+    bindFile('mdMenu');
+
+    /* ── anteprima e riepilogo ── */
+    function aggiorna() {
+        var pers = st.versione === 'personalizzata';
+        pv.classList.toggle('neutra', !pers);
+        pv.classList.toggle('nero', st.materiale === 'nero');
+        pv.style.setProperty('--acc', pers ? (st.materiale === 'nero' ? schiarisci(st.colore) : st.colore) : '');
+        if (!pers) pv.style.removeProperty('--acc');
+        document.querySelectorAll('.solo-pers').forEach(function (el) { el.hidden = !pers; });
+        $('pvTipo').textContent = $('mdTipo').value.trim();
+        $('pvNome').textContent = $('mdLocale').value.trim() || 'Il tuo locale';
+        $('pvNota').textContent = pers ? 'Bozza: la rifiniamo noi' : 'Grafica SB, uguale su ogni tavolo';
+        $('rVers').textContent = pers ? 'Personalizzata' : 'Neutra SB';
+        $('rMat').textContent = MAT[st.materiale];
+        $('rTav').textContent = st.tavoli + (st.tavoli === 1 ? ' placca' : ' placche');
+    }
+    // sul plexiglas nero lo stesso colore va un filo più chiaro, o sparisce
+    function schiarisci(hex) {
+        var n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(function (v) { return Math.round(v + (255 - v) * 0.22); });
+        return '#' + c.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join('');
+    }
+    function scalaPv() { pv.style.transform = 'scale(' + ($('pvBox').clientWidth / (105 * 96 / 25.4)) + ')'; }
+    scalaPv(); window.addEventListener('resize', scalaPv);
+    if (window.ResizeObserver) new ResizeObserver(scalaPv).observe($('pvBox'));
+    aggiorna();
+
+    /* ── invio: richiesta di bozza e preventivo, con i file ── */
+    var btn = $('mdBtn'), err = $('mdErr');
     function errore(msg, el) {
         err.textContent = msg; err.hidden = false;
         if (el) { el.classList.add('is-err'); el.focus(); el.addEventListener('input', function () { el.classList.remove('is-err'); }, { once: true }); }
     }
     form.addEventListener('submit', function (e) {
         e.preventDefault(); err.hidden = true;
-        var v = function (id) { return document.getElementById(id).value.trim(); };
-        if (!v('mdLocale')) return errore('Scrivi il nome del locale.', document.getElementById('mdLocale'));
-        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('mdEmail'))) return errore('Serve un\'email valida: è dove ti mandiamo il preventivo.', document.getElementById('mdEmail'));
+        var v = function (id) { return $(id).value.trim(); };
+        if (!v('mdLocale')) return errore('Scrivi il nome del locale: va sulla placca.', $('mdLocale'));
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('mdEmail'))) return errore('Serve un\'email valida: è dove ti mandiamo bozza e preventivo.', $('mdEmail'));
+        if (inCorso.foto || inCorso.menu) return errore('Stiamo ancora preparando i file: riprova tra un secondo.');
+        var pers = st.versione === 'personalizzata';
+        var righe = ['[Menù digitale] Richiesta di bozza e preventivo dal configuratore.',
+            'Placca: ' + (pers ? 'personalizzata' : 'neutra SB') + ' · ' + MAT[st.materiale] + ' · ' + st.tavoli + ' tavoli.'];
+        if (pers) righe.push('Sulla placca: ' + (v('mdTipo') ? v('mdTipo') + ' ' : '') + v('mdLocale') + ' · colore ' + st.colore + (pronti.foto ? ' · foto caricata' : ' · foto da fare'));
+        righe.push('Menù: ' + (pronti.menu ? 'file caricato' : v('mdMenuLink') ? v('mdMenuLink') : 'da chiedere') + '.');
+        righe.push('Città: ' + (v('mdCitta') || 'non indicata') + '.');
+        if (v('mdNote')) righe.push('Note: ' + v('mdNote'));
+        var fd = new FormData();
+        fd.set('nome', v('mdNome')); fd.set('nome_locale', v('mdLocale')); fd.set('email', v('mdEmail'));
+        fd.set('telefono', v('mdTel')); fd.set('quantita', st.tavoli + ' tavoli'); fd.set('messaggio', righe.join('\n'));
+        if (pronti.menu) fd.set('menu', pronti.menu, pronti.menu.name);
+        if (pers && pronti.foto) fd.set('foto', pronti.foto, pronti.foto.name);
         btn.disabled = true; btn.textContent = 'Invio...';
-        // passa dal box richieste dello shop NFC: arriva a Simone e nel gestionale
-        var dati = {
-            nome: v('mdNome'), nome_locale: v('mdLocale'), email: v('mdEmail'), telefono: v('mdTel'),
-            quantita: v('mdTavoli') ? v('mdTavoli') + ' tavoli' : '',
-            messaggio: '[Menù digitale] Richiesta di demo dalla pagina menu-digitale. Città: ' + (v('mdCitta') || 'non indicata') + '. Tavoli: ' + (v('mdTavoli') || 'non indicati') + '.'
-        };
         var ctrl = window.AbortController ? new AbortController() : null;
-        if (ctrl) setTimeout(function () { ctrl.abort(); }, 30000);
-        fetch(BACKEND + '/api/nfc/richiesta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dati), signal: ctrl ? ctrl.signal : undefined })
+        if (ctrl) setTimeout(function () { ctrl.abort(); }, 45000);
+        fetch(BACKEND + '/api/nfc/richiesta', { method: 'POST', body: fd, signal: ctrl ? ctrl.signal : undefined })
             .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
             .then(function (res) {
                 if (!res.ok) throw new Error(res.d.error || 'Errore imprevisto');
-                if (window.sbPixelStd) sbPixelStd('Lead', { content_name: 'Menù digitale', content_category: 'demo' });
+                if (window.sbPixelStd) sbPixelStd('Lead', { content_name: 'Menù digitale', content_category: st.versione, num_items: st.tavoli });
                 if (window.sbGoogleConv && window.CONV_CONTATTO) sbGoogleConv(window.CONV_CONTATTO);
-                var card = document.getElementById('mdCard');
-                card.innerHTML = '<div class="md-ok"><h3>Ci sentiamo presto.</h3><p>Ti abbiamo mandato una conferma via email. Ti richiamiamo entro un giorno lavorativo per mostrarti come verrebbe il tuo menù.</p></div>';
+                document.querySelector('.md-riep').innerHTML = '<div class="md-ok"><h3>Richiesta inviata.</h3><p>Ti abbiamo mandato una conferma via email. In giornata ricevi la bozza della tua placca e il prezzo per ' + st.tavoli + ' tavoli.</p></div>';
             })
             .catch(function (e) {
                 errore((e.name === 'AbortError' ? 'La connessione non risponde: riprova.' : e.message) + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');
-                btn.disabled = false; btn.textContent = 'Richiamatemi';
+                btn.disabled = false; btn.textContent = 'Richiedi bozza e preventivo';
             });
     });
 })();
