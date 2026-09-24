@@ -64,4 +64,5 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == '__main__':
     print('Sito su http://127.0.0.1:%d  (Ctrl+C per fermare)' % PORTA)
-    ThreadingHTTPServer(('127.0.0.1', PORTA), Handler).serve_forever()
+    # SBFC_HOST=0.0.0.0 per provarlo dal telefono sulla stessa rete Wi-Fi
+    ThreadingHTTPServer((os.environ.get('SBFC_HOST', '127.0.0.1'), PORTA), Handler).serve_forever()

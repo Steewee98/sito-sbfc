@@ -50,6 +50,10 @@
 .md-qr svg { width: 104px; height: 104px; flex: none; display: block; }
 .md-qr strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 500; margin-bottom: 4px; }
 .md-qr span { font-size: .86rem; color: var(--ink-soft); line-height: 1.5; }
+.md-qr .btn { margin-top: 12px; padding: 11px 18px; font-size: .78rem; }
+/* su telefoni e tablet il QR non serve: chi guarda è già sul telefono giusto */
+@media (hover: none) and (pointer: coarse) { .md-qr svg, .md-qr .solo-desk { display: none; } }
+@media (hover: hover) { .md-qr .solo-touch { display: none; } }
 
 /* ── Cosa c'è dentro ── */
 .md-dentro { padding: 110px 0; background: #fff; border-top: 1px solid var(--border); }
@@ -147,7 +151,7 @@
     .md-phone-mob { display: block; text-align: center; }
     .md-phone-mob img { width: 72%; max-width: 280px; border-radius: 28px; box-shadow: 0 30px 60px -24px rgba(26,26,26,.45); }
     .md-phone-mob .btn { margin-top: 22px; }
-    .md-qr { display: none; }
+    .md-qr { display: none; } /* da telefono c'è già il pulsante grande sotto l'immagine */
     .md-prova, .md-dentro, .md-placca, .md-come, .md-demo, .md-faq { padding: 80px 0; }
     .md-feat { grid-template-columns: 1fr; }
     .md-feat > div, .md-feat > div + div, .md-feat > div:nth-child(2n) { padding: 24px 0; border-left: 0; }
@@ -220,7 +224,7 @@
             </ol>
             <div class="md-qr" data-reveal data-reveal-delay="200">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" class="segno"><path class="qrline" stroke="#2b2d31" d="M0 0.5h7m2 0h1m1 0h1m4 0h1m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m6 0h2m2 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h3m2 0h1m3 0h2m1 0h1m5 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m-24 1h1m1 0h5m4 0h1m1 0h2m2 0h1m4 0h2m2 0h5m-31 1h1m1 0h1m2 0h1m2 0h6m3 0h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h4m2 0h2m1 0h3m1 0h5m2 0h2m2 0h2m2 0h1m1 0h2m-32 1h4m6 0h1m2 0h1m2 0h8m4 0h5m-33 1h2m1 0h6m2 0h2m1 0h3m2 0h2m1 0h2m1 0h1m1 0h3m1 0h2m-33 1h2m1 0h3m1 0h1m2 0h2m3 0h1m2 0h2m1 0h4m1 0h1m2 0h1m1 0h2m-33 1h1m4 0h2m1 0h2m1 0h2m1 0h3m3 0h1m1 0h1m2 0h2m2 0h3m-32 1h1m7 0h4m1 0h1m1 0h1m4 0h2m1 0h1m1 0h2m1 0h3m-30 1h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-33 1h2m1 0h3m1 0h3m4 0h1m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1m-33 1h1m2 0h1m1 0h3m2 0h2m1 0h3m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m-31 1h2m1 0h3m4 0h2m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-31 1h2m1 0h1m1 0h2m2 0h2m1 0h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h2m-33 1h2m7 0h2m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m5 0h1m1 0h1m2 0h1m3 0h3m-32 1h1m1 0h2m1 0h1m3 0h1m2 0h1m3 0h1m1 0h6m1 0h2m2 0h2m-31 1h1m3 0h5m1 0h5m2 0h1m1 0h1m2 0h7m2 0h1m-24 1h2m1 0h1m2 0h1m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h3m1 0h5m4 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h6m1 0h1m1 0h2m1 0h5m3 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h5m1 0h2m2 0h3m2 0h1m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h2m5 0h6m-28 1h1m5 0h1m3 0h6m2 0h1m1 0h3m2 0h2m1 0h3m-31 1h7m1 0h2m3 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"/></svg>
-                <div><strong>Meglio sul telefono</strong><span>Inquadra il codice e aprilo dove lo aprirebbe il tuo cliente.</span></div>
+                <div><strong>Meglio sul telefono</strong><span class="solo-desk">Inquadra il codice e aprilo dove lo aprirebbe il tuo cliente. Oppure:</span><span class="solo-touch">Aprilo a tutto schermo, come lo vedrebbe il tuo cliente.</span><div><a href="menu-demo/?tavolo=7" class="btn btn-primary">Apri il menù di prova</a></div></div>
             </div>
         </div>
     </div>
@@ -235,7 +239,7 @@
         </div>
         <div class="md-feat" data-reveal data-reveal-delay="100">
             <div><small>Foto e racconto</small><h3>I piatti si vedono</h3><p>Foto vere dei tuoi piatti e due righe che li raccontano. Il piatto su cui vuoi puntare lo mettiamo in evidenza, grande, in cima alla sua portata.</p></div>
-            <div><small>Cinque lingue</small><h3>Il turista ordina da solo</h3><p>Italiano, inglese, tedesco, francese e spagnolo. Il menù si apre già nella lingua del telefono. I nomi dei piatti restano italiani: una carbonara è una carbonara.</p></div>
+            <div><small>Cinque lingue</small><h3>Il turista capisce cosa sceglie</h3><p>Italiano, inglese, tedesco, francese e spagnolo. Il menù si apre già nella lingua del telefono. I nomi dei piatti restano italiani: una carbonara è una carbonara.</p></div>
             <div><small>Allergeni</small><h3>I 14 della legge, su ogni piatto</h3><p>Numerati sul piatto e scritti per esteso nella scheda. Li compiliamo con te, piatto per piatto: sugli allergeni non si tira a indovinare.</p></div>
             <div><small>Wi-Fi</small><h3>La password che nessuno chiede più</h3><p>Rete e password dentro il menù, da copiare con un tocco. Cambi password? La aggiorniamo noi.</p></div>
             <div><small>Recensioni</small><h3>La domanda al momento giusto</h3><p>Dopo un'ora e mezza il menù chiede «Com'è andata?» con i pulsanti Google e TripAdvisor. Nessun filtro: chiediamo a tutti, come vogliono le piattaforme.</p></div>
