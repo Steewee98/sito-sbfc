@@ -133,7 +133,41 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .nfc-var{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:600;background:#37393f;color:#fff}
 .nfc-var.chiara{background:#f0ece7;color:#37393f;border:1px solid #d9d4cc}
 @media(max-width:900px){.nfc-card{grid-template-columns:1fr}.nfc-art{max-width:300px}}
-.nfc-tab{background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px;font-size:.92rem;font-weight:600;color:#888;cursor:pointer;transition:color .2s,border-color .2s}
+/* richieste del menù digitale: schede, uguali su computer e telefono */
+.rich-filtri{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.rich-filtri select{padding:9px 12px;border:1px solid #ddd;border-radius:6px;font-size:.88rem;background:#fff}
+#richLista{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px}
+.rich{background:#fff;border:1px solid #e8e4df;border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.rich.nuova{border-left:4px solid #c4622d}
+.rich-h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.rich-h h3{font-size:1.08rem;line-height:1.25;margin:0}
+.rich-h small{display:block;color:#888;font-size:.78rem;margin-top:3px}
+.rich-conf{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.88rem;margin:0}
+.rich-conf dt{color:#888;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;padding-top:3px}
+.rich-conf dd{margin:0;line-height:1.45;word-break:break-word}
+.rich-col{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:4px;border:1px solid rgba(0,0,0,.15)}
+.rich-az{display:flex;gap:8px;flex-wrap:wrap}
+.rich-az a,.rich-az button{flex:1 1 auto;text-align:center;text-decoration:none;padding:10px 12px;border-radius:6px;font-size:.84rem;font-weight:600;border:1px solid #d9d4cc;background:#faf8f5;color:#37393f;cursor:pointer;white-space:nowrap}
+.rich-az .wa{background:#1e8449;border-color:#1e8449;color:#fff}
+.rich-az .tel{background:#37393f;border-color:#37393f;color:#fff}
+.rich-file{display:flex;gap:8px;flex-wrap:wrap}
+.rich-file button{padding:8px 12px;border-radius:6px;border:1px dashed #c4622d;background:#fff;color:#c4622d;font-size:.82rem;font-weight:600;cursor:pointer}
+.rich-piede{display:flex;gap:8px;align-items:center;justify-content:space-between;border-top:1px solid #f0ece7;padding-top:12px}
+.rich-del{background:none;border:0;color:#c0392b;font-size:.84rem;font-weight:600;cursor:pointer;padding:8px 4px}
+.rich-piede select{padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.85rem}
+.rich-vuoto{grid-column:1/-1;text-align:center;color:#888;padding:40px 16px;background:#fff;border:1px dashed #e0dcd7;border-radius:8px}
+@media(max-width:768px){
+    #richLista{grid-template-columns:1fr;gap:12px}
+    .rich{padding:16px}
+    .rich-filtri select{flex:1 1 100%;padding:11px 12px;font-size:.9rem}
+    .rich-filtri .btn-sm{flex:1 1 100%;padding:11px}
+    .rich-az a,.rich-az button{padding:12px 10px;font-size:.86rem}
+    .rich-conf{grid-template-columns:1fr;gap:2px}
+    .rich-conf dd{margin-bottom:8px}
+    .nfc-tab{padding:10px 12px;font-size:.88rem}
+}
+.nfc-tabs{display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid #e8e4df;overflow-x:auto}
+.nfc-tab{white-space:nowrap;background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px;font-size:.92rem;font-weight:600;color:#888;cursor:pointer;transition:color .2s,border-color .2s}
 .nfc-tab:hover{color:#37393f}
 .nfc-tab.active{color:#c4622d;border-bottom-color:#c4622d}
 .badge-nuova{background:#fdf0e8;color:#c4622d}
@@ -452,7 +486,7 @@ tr:hover td{background:#fafaf8}
         </div>
         <div class="sidebar-item" data-section="nfc">
             <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/><path d="M15 8a4 4 0 0 1 0 5"/><path d="M17.5 5.5a8 8 0 0 1 0 10"/></svg>
-            Placche NFC
+            Menù digitale <span id="nfcBadgeSide" class="badge badge-nuovo" style="display:none;margin-left:6px"></span>
         </div>
         <div class="sidebar-item" data-section="traffico">
             <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -638,14 +672,14 @@ tr:hover td{background:#fafaf8}
 <!-- ========== PLACCHE NFC ========== -->
 <section class="admin-section" id="sec-nfc">
     <div class="section-header">
-        <h2>Placche NFC</h2>
-        <p>Ordini dallo shop <a href="placca-nfc.html" target="_blank">placca-nfc.html</a> — pagati via Stripe, da lavorare e spedire</p>
+        <h2>Menù digitale</h2>
+        <p>Richieste dal configuratore di <a href="menu-digitale.html" target="_blank">menu-digitale.html</a>: ognuna aspetta bozza e preventivo in giornata</p>
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid #e8e4df">
-        <button class="nfc-tab active" data-tab="ordini" onclick="nfcTab('ordini')">Ordini</button>
-        <button class="nfc-tab" data-tab="richieste" onclick="nfcTab('richieste')">Richieste <span id="nfcBadgeRich" class="badge badge-nuovo" style="display:none;margin-left:6px"></span></button>
+    <div class="nfc-tabs">
+        <button class="nfc-tab active" data-tab="richieste" onclick="nfcTab('richieste')">Richieste <span id="nfcBadgeRich" class="badge badge-nuovo" style="display:none;margin-left:6px"></span></button>
+        <button class="nfc-tab" data-tab="ordini" onclick="nfcTab('ordini')">Ordini placca recensioni</button>
     </div>
-    <div id="nfcPaneOrdini">
+    <div id="nfcPaneOrdini" style="display:none">
     <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px" id="nfcKpi"></div>
     <div class="table-wrap">
         <div class="table-filters">
@@ -664,27 +698,28 @@ tr:hover td{background:#fafaf8}
             <thead><tr><th>Data</th><th>Locale</th><th>Versione</th><th>Q.tà</th><th>Cliente</th><th>Spedizione</th><th>Tap</th><th>Importo</th><th>Stato</th><th></th></tr></thead>
             <tbody id="nfcBody"></tbody>
         </table>
+        <div class="mobile-card-list" id="nfcCards"></div>
     </div>
     <div id="nfcDettaglio" style="display:none;margin-top:24px;background:#fff;border:1px solid #e8e4df;border-radius:6px;padding:24px"></div>
     </div>
 
-    <div id="nfcPaneRichieste" style="display:none">
-        <div class="note-box">Richieste dal box in fondo allo shop: esigenze fuori dai tre pacchetti (grandi quantità, formati diversi, grafica propria). Non sono ordini pagati: vanno lavorate a mano.</div>
-        <div class="table-wrap" style="margin-top:16px">
-            <div class="table-filters">
-                <select id="richFiltroStato" onchange="renderRichieste()">
-                    <option value="">Tutte</option>
-                    <option value="nuova">Da leggere</option>
-                    <option value="in_corso">In corso</option>
-                    <option value="chiusa">Chiuse</option>
-                </select>
-                <button class="btn-sm" onclick="renderRichieste()">Aggiorna</button>
-            </div>
-            <table>
-                <thead><tr><th>Data</th><th>Chi</th><th>Contatti</th><th>Q.tà</th><th>Cosa serve</th><th>Stato</th><th></th></tr></thead>
-                <tbody id="richBody"></tbody>
-            </table>
+    <div id="nfcPaneRichieste">
+        <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:18px" id="richKpi"></div>
+        <div class="rich-filtri">
+            <select id="richFiltroTipo" onchange="renderRichieste()">
+                <option value="menu">Menù digitale</option>
+                <option value="altre">Altre richieste (shop placca)</option>
+                <option value="">Tutte</option>
+            </select>
+            <select id="richFiltroStato" onchange="renderRichieste()">
+                <option value="">Tutti gli stati</option>
+                <option value="nuova">Da leggere</option>
+                <option value="in_corso">In corso</option>
+                <option value="chiusa">Chiuse</option>
+            </select>
+            <button class="btn-sm" onclick="renderRichieste()">Aggiorna</button>
         </div>
+        <div id="richLista"></div>
     </div>
 </section>
 
@@ -1162,7 +1197,7 @@ function refreshCurrentSection(){
     else if(_currentSection==='contatti') renderContatti();
     else if(_currentSection==='pagamenti') renderPagamenti();
     else if(_currentSection==='cruscotto') renderCruscotto();
-    else if(_currentSection==='nfc') { renderNfc(); renderRichieste(); }
+    else if(_currentSection==='nfc') { renderRichieste(); renderNfc(); }
     else if(_currentSection==='studenti') renderStudenti();
     else if(_currentSection==='traffico') renderTraffico();
     else if(_currentSection==='checklist') renderChecklist();
@@ -1221,8 +1256,16 @@ function renderNfc(){
             '<div class="kpi-card"><div class="kpi-label">Placche vendute</div><div class="kpi-value">'+pezzi+'</div></div>'+
             '<div class="kpi-card"><div class="kpi-label">Incasso</div><div class="kpi-value">'+inc.toFixed(0)+'€</div></div>'+
             '<div class="kpi-card"><div class="kpi-label">Tap totali</div><div class="kpi-value">'+tap+'</div></div>';
-        var tb=document.getElementById('nfcBody');
-        if(!list.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#888;padding:30px">Nessun ordine</td></tr>';return;}
+        var tb=document.getElementById('nfcBody'), cards=document.getElementById('nfcCards');
+        if(!list.length){tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:#888;padding:30px">Nessun ordine</td></tr>';cards.innerHTML='<div class="mobile-card" style="text-align:center;color:#888">Nessun ordine</div>';return;}
+        // su telefono la tabella è nascosta: stesse informazioni in schede
+        cards.innerHTML=list.map(function(o){
+            var opts=NFC_STATI.map(function(st){return '<option value="'+st+'"'+(o.stato===st?' selected':'')+'>'+st.replace('_',' ')+'</option>'}).join('');
+            return '<div class="mobile-card"><div style="display:flex;justify-content:space-between;gap:10px"><strong>'+nfcEsc(o.nome_locale)+'</strong><span>'+(o.importo!=null?o.importo.toFixed(0)+'€':'—')+'</span></div>'+
+              '<div style="font-size:.82rem;color:#888;margin:4px 0 10px">'+new Date(o.created_at).toLocaleDateString('it-IT')+' · '+(NFC_TIER[o.tier]||o.tier)+' · '+o.quantita+' pz'+(nfcPezzi(o)?' '+nfcPezzi(o):'')+'</div>'+
+              '<div style="display:flex;gap:8px">'+(o.stato==='in_attesa'?'<span class="badge badge-scaduto">non pagato</span>':'<select onchange="nfcStato('+o.id+',this.value)" style="flex:1;padding:9px;border:1px solid #ddd;border-radius:6px">'+opts+'</select>')+
+              '<button class="btn-sm" onclick="nfcApri('+o.id+')">Dettagli</button></div></div>';
+        }).join('');
         tb.innerHTML=list.map(function(o){
             var sp=o.spedizione?[o.spedizione.via,o.spedizione.cap,o.spedizione.citta].filter(Boolean).join(', '):'—';
             var opts=NFC_STATI.map(function(st){return '<option value="'+st+'"'+(o.stato===st?' selected':'')+'>'+st.replace('_',' ')+'</option>'}).join('');
@@ -1430,31 +1473,64 @@ function nfcTab(t){
     document.getElementById('nfcPaneRichieste').style.display = t==='richieste'?'block':'none';
     if(t==='richieste') renderRichieste();
 }
+// La richiesta del configuratore arriva come testo a righe «Chiave: valore» (vedi menu-digitale.html).
+function richLeggi(msg){
+    var d={};
+    String(msg||'').split('\n').forEach(function(r){ var m=r.match(/^([A-Za-zÀ-ÿ ]{3,20}):\s*(.+)$/); if(m) d[m[1].trim().toLowerCase()]=m[2].replace(/\.$/,''); });
+    return d;
+}
+function richTel(t){ var n=String(t||'').replace(/[^\d+]/g,''); if(!n) return ''; if(n.indexOf('+')!==0) n=(n.indexOf('39')===0&&n.length>10?'+':'+39')+n; return n; }
 function renderRichieste(){
+    var tipo=(document.getElementById('richFiltroTipo')||{}).value;
     var f=(document.getElementById('richFiltroStato')||{}).value||'';
-    apiFetch('/api/nfc/richieste'+(f?'?stato='+f:'')).then(function(list){
-        var tb=document.getElementById('richBody');
-        if(!list.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#888;padding:30px">Nessuna richiesta</td></tr>';return;}
-        tb.innerHTML=list.map(function(r){
+    apiFetch('/api/nfc/richieste'+(f?'?stato='+f:'')).then(function(tutte){
+        var isMenu=function(r){return String(r.messaggio||'').indexOf('[Menù digitale]')===0};
+        var list=tutte.filter(function(r){return tipo==='menu'?isMenu(r):tipo==='altre'?!isMenu(r):true});
+        var menu=tutte.filter(isMenu);
+        var nuove=menu.filter(function(r){return r.stato==='nuova'}).length;
+        var tavoli=menu.reduce(function(a,r){return a+(parseInt(r.quantita,10)||0)},0);
+        document.getElementById('richKpi').innerHTML=
+            '<div class="kpi-card"><div class="kpi-label">Da leggere</div><div class="kpi-value" style="color:#c4622d">'+nuove+'</div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">In corso</div><div class="kpi-value">'+menu.filter(function(r){return r.stato==='in_corso'}).length+'</div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">Richieste menù</div><div class="kpi-value">'+menu.length+'</div></div>'+
+            '<div class="kpi-card"><div class="kpi-label">Tavoli richiesti</div><div class="kpi-value">'+tavoli+'</div></div>';
+        ['nfcBadgeRich','nfcBadgeSide','nfcBadgeTab'].forEach(function(id){ var b=document.getElementById(id); if(b){ b.textContent=nuove; b.style.display=nuove?'inline-block':'none'; } });
+        var box=document.getElementById('richLista');
+        if(!list.length){ box.innerHTML='<div class="rich-vuoto">Nessuna richiesta'+(tipo==='menu'?' dal configuratore del menù digitale':'')+'.<br><small>Arrivano qui, e per email a Simone, appena qualcuno invia il configuratore.</small></div>'; return; }
+        box.innerHTML=list.map(function(r){
+            var c=richLeggi(r.messaggio), menuDig=isMenu(r);
             var opts=RICH_STATI.map(function(st){return '<option value="'+st+'"'+(r.stato===st?' selected':'')+'>'+RICH_LABEL[st]+'</option>'}).join('');
-            var msg=nfcEsc(r.messaggio);
+            var righe='';
+            function riga(k,v){ if(v) righe+='<dt>'+k+'</dt><dd>'+v+'</dd>'; }
+            if(menuDig){
+                riga('Placca',nfcEsc(c['placca']||''));
+                var sulla=nfcEsc(c['sulla placca']||''); sulla=sulla.replace(/colore (#[0-9a-fA-F]{6})/,'<span class="rich-col" style="background:$1"></span>$1');
+                riga('Sulla placca',sulla);
+                var menuV=c['menù']||c['menu']||'';
+                riga('Menù',/^https?:\/\//.test(menuV)?'<a href="'+nfcEsc(menuV)+'" target="_blank" rel="noopener" style="color:#c4622d;word-break:break-all">'+nfcEsc(menuV)+'</a>':nfcEsc(menuV));
+                riga('Città',nfcEsc(c['città']||''));
+                riga('Note',nfcEsc(c['note']||''));
+            } else {
+                riga('Messaggio',nfcEsc(r.messaggio));
+                riga('Quantità',nfcEsc(r.quantita||''));
+            }
+            var tel=richTel(r.telefono), wa=tel.replace('+','');
+            var saluto=encodeURIComponent('Ciao'+(r.nome?' '+r.nome.split(' ')[0]:'')+', sono Simone di SB Food Consulting: ho visto la tua richiesta per il menù digitale di '+(r.nome_locale||'')+'.');
+            var az='';
+            if(tel) az+='<a class="tel" href="tel:'+tel+'">Chiama</a><a class="wa" href="https://wa.me/'+wa+'?text='+saluto+'" target="_blank" rel="noopener">WhatsApp</a>';
+            az+='<a href="mailto:'+nfcEsc(r.email)+'?subject='+encodeURIComponent(menuDig?'La bozza del tuo menù digitale':'La tua richiesta sulla Placca NFC')+'">Email</a>';
             var alle=Object.keys(r.allegati||{});
-            if(alle.length) msg+='<div style="margin-top:8px">'+alle.map(function(k){return '<button class="btn-sm" style="margin:0 6px 6px 0" onclick="richScarica('+r.id+',\''+k+'\')">↓ '+k+' — '+nfcEsc(r.allegati[k].nome)+'</button>'}).join('')+'</div>';
-            return '<tr>'+
-              '<td>'+new Date(r.created_at).toLocaleDateString('it-IT')+'</td>'+
-              '<td><strong>'+nfcEsc(r.nome_locale||r.nome||'—')+'</strong>'+(r.nome&&r.nome_locale?'<br><small style="color:#888">'+nfcEsc(r.nome)+'</small>':'')+'</td>'+
-              '<td><a href="mailto:'+nfcEsc(r.email)+'">'+nfcEsc(r.email)+'</a>'+(r.telefono?'<br><small><a href="tel:'+nfcEsc(r.telefono)+'">'+nfcEsc(r.telefono)+'</a></small>':'')+'</td>'+
-              '<td>'+nfcEsc(r.quantita||'—')+'</td>'+
-              '<td style="max-width:380px;font-size:.88rem;line-height:1.5">'+msg+'</td>'+
-              '<td><select onchange="richStato('+r.id+',this.value)" style="padding:4px 6px;border:1px solid #ddd;border-radius:4px">'+opts+'</select></td>'+
-              '<td style="white-space:nowrap"><a class="btn-sm" style="text-decoration:none;display:inline-block;margin-right:6px" href="mailto:'+nfcEsc(r.email)+'?subject=La%20tua%20richiesta%20sulla%20Placca%20NFC">Rispondi</a>'+
-              '<button class="btn-sm" style="background:#c0392b" onclick="richElimina('+r.id+')">Elimina</button></td>'+
-            '</tr>';
+            var file=alle.length?'<div class="rich-file">'+alle.map(function(k){return '<button onclick="richScarica('+r.id+',\''+k+'\')">↓ '+(k==='menu'?'Menù':k==='foto'?'Foto per l\'arco':k)+' — '+nfcEsc(r.allegati[k].nome)+'</button>'}).join('')+'</div>':'';
+            return '<article class="rich '+nfcEsc(r.stato)+'">'+
+                '<div class="rich-h"><div><h3>'+nfcEsc(r.nome_locale||r.nome||'Senza nome')+'</h3><small>'+new Date(r.created_at).toLocaleString('it-IT',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+(r.nome?' · '+nfcEsc(r.nome):'')+'</small></div>'+
+                (r.quantita?'<span class="badge badge-nuovo" style="white-space:nowrap">'+nfcEsc(r.quantita)+'</span>':'')+'</div>'+
+                (righe?'<dl class="rich-conf">'+righe+'</dl>':'')+file+
+                '<div class="rich-az">'+az+'</div>'+
+                '<div style="font-size:.82rem;color:#888;word-break:break-all">'+nfcEsc(r.email)+(r.telefono?' · '+nfcEsc(r.telefono):'')+'</div>'+
+                '<div class="rich-piede"><select onchange="richStato('+r.id+',this.value)">'+opts+'</select><button class="rich-del" onclick="richElimina('+r.id+')">Elimina</button></div>'+
+            '</article>';
         }).join('');
-        var nuove=list.filter(function(r){return r.stato==='nuova'}).length;
-        var b=document.getElementById('nfcBadgeRich');
-        if(b){ b.textContent=nuove; b.style.display=nuove?'inline-block':'none'; }
-    }).catch(function(e){document.getElementById('richBody').innerHTML='<tr><td colspan="7" style="color:#c0392b">Errore: '+e.message+'</td></tr>';});
+    }).catch(function(e){document.getElementById('richLista').innerHTML='<div class="rich-vuoto" style="color:#c0392b">Errore: '+nfcEsc(e.message)+'</div>';});
 }
 function richScarica(id,k){
     fetch(BACKEND_URL+'/api/nfc/richieste/'+id+'/allegato/'+k,{headers:{'X-Admin-Token':ADMIN_TOKEN}}).then(function(r){
@@ -1463,7 +1539,7 @@ function richScarica(id,k){
         return r.blob().then(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=m?m[1]:k;a.click();});
     }).catch(function(e){alert('Download non riuscito: '+e.message);});
 }
-function richStato(id,stato){ apiFetch('/api/nfc/richieste/'+id,{method:'PATCH',body:JSON.stringify({stato:stato})}).then(renderRichieste); }
+function richStato(id,stato){ apiFetch('/api/nfc/richieste/'+id,{method:'PATCH',body:JSON.stringify({stato:stato})}).then(renderRichieste).catch(function(e){alert('Stato NON salvato: '+e.message+'. Riprova.');renderRichieste();}); }
 function richElimina(id){ if(!confirm('Eliminare questa richiesta?')) return; apiFetch('/api/nfc/richieste/'+id,{method:'DELETE'}).then(renderRichieste); }
 
 // ============ LEAD STRUMENTI ============
@@ -3257,6 +3333,10 @@ async function renderWhatsapp(){
         <button class="bottom-tab active" data-section="dashboard" onclick="mobileNav(this)">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
             Home
+        </button>
+        <button class="bottom-tab" data-section="nfc" onclick="mobileNav(this)" style="position:relative">
+            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/><path d="M15 8a4 4 0 0 1 0 5"/></svg>
+            Menù<span id="nfcBadgeTab" class="badge badge-nuovo" style="display:none;position:absolute;top:4px;right:8px;padding:1px 6px;font-size:.62rem"></span>
         </button>
         <button class="bottom-tab" data-section="contatti" onclick="mobileNav(this)">
             <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
