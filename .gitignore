@@ -25,3 +25,7 @@ assets/nfc/bg-chiari/
 # Immagini scaricate di appoggio, rimaste in radice
 /jazz-*.jpg
 /rome-*.jpg
+
+# documenti interni: la cartella del sito è pubblicata così com'è
+STUDIO-PREZZI-FAMIGLIA-TAP.md
+PROMOZIONI-FAMIGLIA-TAP.md
