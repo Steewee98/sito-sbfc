@@ -30,6 +30,9 @@
    un telefono su desktop, a tutto schermo da mobile.
    ═══════════════════════════════════════════════════════ */
 .md-hero .cs-hero-sub { max-width: 580px; }
+/* il titolo sta su due righe esatte: «Appoggia il telefono,» / «si apre il menù.» */
+.md-hero .cs-hero-line { white-space: nowrap; font-size: clamp(2.1rem, 6.4vw, 5.8rem); }
+.md-hero .cs-hero-line--accent { font-size: clamp(2.7rem, 7.8vw, 7rem); }
 .md-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 36px; }
 
 /* ── Prova ── */
@@ -258,7 +261,6 @@
 }
 @media (max-width: 720px) {
     /* «si apre il menù.» non va a capo (stile del sito): da telefono un filo più piccolo */
-    .md-hero .cs-hero-line--accent { font-size: clamp(2.3rem, 12.5vw, 3.4rem); }
     /* da telefono il menù si apre a tutta pagina: un telefono dentro un telefono non si usa */
     .md-phone { display: none; }
     .md-phone-mob { display: block; text-align: center; }
