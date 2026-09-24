@@ -1146,6 +1146,8 @@ function apiFetch(endpoint, options) {
     if (options.headers) { for (var k in options.headers) headers[k] = options.headers[k]; }
     options.headers = headers;
     return fetch(BACKEND_URL + endpoint, options).then(function(res) {
+        // chiave non più valida (cambiata sul server o assente): si torna al login
+        if (res.status === 401) { esciPerChiave(); throw new Error('Accesso scaduto: rientra con utente e password'); }
         if (!res.ok) throw new Error('API error: ' + res.status);
         return res.json();
     });
@@ -1162,20 +1164,39 @@ function toggleMobileSidebar(){
 }
 
 // ============ AUTH ============
+// Utente e password li controlla il server (/api/admin/login): in questa pagina,
+// che è pubblica, non c'è più nessuna credenziale. La chiave arriva solo se sono giusti.
+var _loginInCorso=false;
 function doLogin(){
+    if(_loginInCorso) return;
     var u=document.getElementById('adminUser').value.trim();
     var p=document.getElementById('adminPass').value;
-    if(u==='admin'&&p==='sbfood2025admin'){
-        localStorage.setItem('sb_admin_logged','true');
-        localStorage.setItem('sb_admin_token','5wD6Zf9e7Ezt9v_JEQYNjoc--4IAiA94tMaWfh2m4V0');
-        ADMIN_TOKEN='5wD6Zf9e7Ezt9v_JEQYNjoc--4IAiA94tMaWfh2m4V0';
-        showDashboard();
-    } else {
-        var e=document.getElementById('loginError');e.style.display='block';
-    }
+    var e=document.getElementById('loginError'), btn=document.querySelector('.btn-login');
+    e.style.display='none';
+    if(!u||!p){ e.textContent='Inserisci utente e password.'; e.style.display='block'; return; }
+    _loginInCorso=true; if(btn){ btn.disabled=true; btn.textContent='Accesso...'; }
+    fetch(BACKEND_URL+'/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})})
+        .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
+        .then(function(res){
+            if(!res.ok||!res.d.token) throw new Error(res.d.error||'Credenziali non corrette.');
+            ADMIN_TOKEN=res.d.token;
+            localStorage.setItem('sb_admin_token',ADMIN_TOKEN);
+            localStorage.setItem('sb_admin_logged','true');
+            document.getElementById('adminPass').value='';
+            showDashboard();
+        })
+        .catch(function(err){ e.textContent=err.message==='Failed to fetch'?'Server non raggiungibile: riprova tra poco.':err.message; e.style.display='block'; })
+        .then(function(){ _loginInCorso=false; if(btn){ btn.disabled=false; btn.textContent='Accedi'; } });
 }
 function doLogout(){
     localStorage.removeItem('sb_admin_logged');
+    localStorage.removeItem('sb_admin_token');
+    location.reload();
+}
+function esciPerChiave(){
+    if(localStorage.getItem('sb_admin_logged')!=='true') return;
+    localStorage.removeItem('sb_admin_logged');
+    localStorage.removeItem('sb_admin_token');
     location.reload();
 }
 function showDashboard(){
@@ -1186,7 +1207,7 @@ function showDashboard(){
     startAutoRefresh();
 }
 document.getElementById('adminPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
-if(localStorage.getItem('sb_admin_logged')==='true') showDashboard();
+if(localStorage.getItem('sb_admin_logged')==='true' && ADMIN_TOKEN) showDashboard();
 
 // ============ NAVIGATION ============
 var _currentSection='dashboard';
