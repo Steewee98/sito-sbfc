@@ -257,6 +257,8 @@
     .md-specs { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
+    /* «si apre il menù.» non va a capo (stile del sito): da telefono un filo più piccolo */
+    .md-hero .cs-hero-line--accent { font-size: clamp(2.6rem, 14vw, 3.6rem); }
     /* da telefono il menù si apre a tutta pagina: un telefono dentro un telefono non si usa */
     .md-phone { display: none; }
     .md-phone-mob { display: block; text-align: center; }
@@ -304,8 +306,8 @@
         <div class="breadcrumb" data-reveal><a href="index.html">Home</a><span>/</span>Menù digitale</div>
         <div class="cs-hero-content">
             <h1 class="cs-hero-name" data-reveal data-reveal-delay="100">
-                <span class="cs-hero-line"><span class="line-inner">Il tuo menù,</span></span>
-                <span class="cs-hero-line cs-hero-line--accent"><span class="line-inner">sul telefono.</span></span>
+                <span class="cs-hero-line"><span class="line-inner">Appoggia il telefono,</span></span>
+                <span class="cs-hero-line cs-hero-line--accent"><span class="line-inner">si apre il menù.</span></span>
             </h1>
             <p class="cs-hero-sub" data-reveal data-reveal-delay="200">Il menù digitale per il tuo ristorante. Una placca su ogni tavolo: il cliente ci appoggia il telefono, o inquadra il QR, e sfoglia il tuo menù con le foto dei piatti, nella sua lingua, con gli allergeni e il Wi-Fi. A fine cena gli chiede com'è andata. Lo prepariamo e lo aggiorniamo noi.</p>
             <div class="md-hero-actions" data-reveal data-reveal-delay="300">
