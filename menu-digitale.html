@@ -38,9 +38,30 @@
 /* ── Prova ── */
 .md-prova { padding: 110px 0; background: var(--ivory); }
 .md-prova-grid { display: grid; grid-template-columns: auto 1fr; gap: 90px; align-items: center; }
-.md-phone { width: 340px; height: 700px; border-radius: 48px; background: #111; padding: 11px; box-shadow: 0 50px 100px -30px rgba(26,26,26,.45), inset 0 0 0 1.5px #333; position: relative; }
-.md-phone iframe { width: 100%; height: 100%; border: 0; border-radius: 38px; background: #0e1b16; display: block; }
-.md-phone-mob { display: none; }
+.md-prova { overflow: hidden; }
+.md-mazzo-wrap { padding: 0 64px; }
+.md-mazzo { position: relative; width: 340px; height: 700px; margin: 0 auto; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.md-tel { position: absolute; inset: 0; border-radius: 48px; background: #111; padding: 11px; box-shadow: 0 40px 80px -30px rgba(26,26,26,.5), inset 0 0 0 1.5px #333; transition: transform .6s cubic-bezier(.2,.8,.2,1), filter .5s; cursor: pointer; }
+.md-tel img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 38px; display: block; pointer-events: none; }
+.md-tel[data-pos="0"] { z-index: 3; transform: none; cursor: default; }
+.md-tel[data-pos="1"] { z-index: 2; transform: translateX(64px) rotate(6deg) scale(.9); filter: brightness(.9) saturate(.9); }
+.md-tel[data-pos="2"] { z-index: 1; transform: translateX(-64px) rotate(-6deg) scale(.9); filter: brightness(.9) saturate(.9); }
+.md-mazzo.trascina .md-tel { transition: none; }
+.md-tel-live { position: absolute; inset: 11px; z-index: 4; border-radius: 38px; overflow: hidden; transition: opacity .25s; }
+.md-tel-live.via { opacity: 0; }
+.md-tel-live iframe { width: 100%; height: 100%; border: 0; display: block; background: #0e1b16; }
+.md-mazzo-nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 30px; }
+.md-freccia { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; color: var(--ink); font-size: 1.1rem; cursor: pointer; transition: border-color .2s, background .2s; }
+.md-freccia:hover { border-color: var(--ink); }
+.md-freccia:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.md-mazzo-nome { min-width: 150px; text-align: center; }
+.md-mazzo-nome b { display: block; font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.25rem; }
+.md-mazzo-nome span { font-size: .8rem; color: var(--ink-soft); }
+.md-punti { display: flex; justify-content: center; gap: 6px; margin-top: 8px; }
+.md-punti i { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background .3s, width .3s; }
+.md-punti i.on { width: 18px; border-radius: 3px; background: var(--accent); }
+.md-mazzo-hint { text-align: center; font-size: .78rem; color: var(--ink-soft); margin-top: 10px; }
+.md-mazzo-cta { display: none; text-align: center; margin-top: 22px; }
 .md-prova h2 { font-size: clamp(2.2rem, 4.5vw, 3.2rem); line-height: 1.05; margin: 14px 0 18px; }
 .md-prova h2 em { font-style: italic; font-weight: 400; color: var(--accent); }
 .md-prova p.lead { color: var(--ink-soft); line-height: 1.75; max-width: 520px; }
@@ -125,6 +146,9 @@
 .md-ok h3 { font-size: 1.7rem; margin-bottom: 10px; }
 .md-ok p { color: var(--ink-soft); line-height: 1.7; }
 
+.md-riep-r.tot { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 10px; }
+.md-riep-r.tot span:last-child { font-weight: 700; }
+
 /* ── FAQ ── */
 .md-faq { padding: 110px 0; background: var(--ivory); }
 .md-faq-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; }
@@ -162,6 +186,9 @@
 .md-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
 .md-col { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--border); cursor: pointer; }
 .md-col.is-on { box-shadow: 0 0 0 2px var(--ink); }
+.md-col-libero { position: relative; overflow: hidden; background: conic-gradient(#e53935, #fb8c00, #fdd835, #43a047, #1e88e5, #8e24aa, #e53935); }
+.md-col-libero input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
+.md-col-nome { margin-top: 10px; font-size: .85rem; color: var(--ink-soft); }
 /* .md-field label è display:block e più specifico: qui serve il flex */
 .md-field label.md-file, .md-file { display: flex; width: 100%; min-width: 0; align-items: center; gap: 14px; letter-spacing: 0; text-transform: none; font-weight: 400; margin-bottom: 0; border: 1.5px dashed var(--border); background: #fff; padding: 13px 15px; cursor: pointer; }
 .md-file input { position: absolute; width: 1px; height: 1px; opacity: 0; }
@@ -249,7 +276,6 @@
 [hidden] { display: none !important; }
 @media (max-width: 1024px) {
     .md-prova-grid { grid-template-columns: 1fr; gap: 50px; }
-    .md-phone { margin: 0 auto; }
     .md-feat { grid-template-columns: 1fr 1fr; }
     .md-feat > div, .md-feat > div + div { padding: 26px 24px 28px 0; border-left: 0; }
     .md-feat > div:nth-child(2n) { padding-left: 24px; border-left: 1px solid var(--border); }
@@ -262,10 +288,15 @@
 @media (max-width: 720px) {
     /* «si apre il menù.» non va a capo (stile del sito): da telefono un filo più piccolo */
     /* da telefono il menù si apre a tutta pagina: un telefono dentro un telefono non si usa */
-    .md-phone { display: none; }
-    .md-phone-mob { display: block; text-align: center; }
-    .md-phone-mob img { width: 72%; max-width: 280px; border-radius: 28px; box-shadow: 0 30px 60px -24px rgba(26,26,26,.45); }
-    .md-phone-mob .btn { margin-top: 22px; }
+    .md-mazzo-wrap { padding: 0; }
+    .md-mazzo { width: 244px; height: 504px; }
+    .md-tel { border-radius: 36px; padding: 8px; }
+    .md-tel img { border-radius: 29px; }
+    .md-tel[data-pos="0"] { cursor: pointer; }
+    .md-tel[data-pos="1"] { transform: translateX(48px) rotate(6deg) scale(.9); }
+    .md-tel[data-pos="2"] { transform: translateX(-48px) rotate(-6deg) scale(.9); }
+    .md-tel-live { display: none; }
+    .md-mazzo-cta { display: block; }
     .md-qr { display: none; } /* da telefono c'è già il pulsante grande sotto l'immagine */
     .md-prova, .md-dentro, .md-placca, .md-come, .md-demo, .md-faq { padding: 80px 0; }
     .md-feat { grid-template-columns: 1fr; }
@@ -325,23 +356,33 @@
 <section class="md-prova" id="prova">
     <div class="container md-prova-grid">
         <div data-reveal>
-            <div class="md-phone"><iframe src="menu-demo/?tavolo=7" title="Menù di prova dell'Osteria Ventitré" loading="lazy"></iframe></div>
-            <div class="md-phone-mob">
-                <img src="assets/nfc/shop/menu-demo-telefono.jpg" alt="Il menù di prova aperto sul telefono" loading="lazy">
-                <div><a href="menu-demo/?tavolo=7" class="btn btn-primary" id="apriDemo">Apri il menù di prova</a></div>
+            <div class="md-mazzo-wrap">
+                <div class="md-mazzo" id="mdMazzo" role="region" aria-roledescription="carosello" aria-label="Tre stili di menù di prova">
+                    <div class="md-tel" data-i="0" data-pos="0"><img src="assets/nfc/shop/menu-demo-telefono.jpg" alt="Menù di prova in stile osteria, scuro ed elegante" loading="lazy" draggable="false"></div>
+                    <div class="md-tel" data-i="1" data-pos="1"><img src="assets/nfc/shop/menu-demo-telefono-bistrot.jpg" alt="Menù di prova in stile bistrot, chiaro e minimale" loading="lazy" draggable="false"></div>
+                    <div class="md-tel" data-i="2" data-pos="2"><img src="assets/nfc/shop/menu-demo-telefono-pop.jpg" alt="Menù di prova in stile pop, colorato" loading="lazy" draggable="false"></div>
+                    <div class="md-tel-live" id="mdLive"><iframe src="menu-demo/?tavolo=7" title="Menù di prova dell'Osteria Ventitré" loading="lazy"></iframe></div>
+                </div>
+                <div class="md-mazzo-nav">
+                    <button type="button" class="md-freccia" id="mdPrec" aria-label="Stile precedente">&larr;</button>
+                    <div class="md-mazzo-nome" aria-live="polite"><b id="mdStNome">Osteria</b><span id="mdStDesc">scuro ed elegante</span><span class="md-punti" id="mdPunti"><i class="on"></i><i></i><i></i></span></div>
+                    <button type="button" class="md-freccia" id="mdSucc" aria-label="Stile successivo">&rarr;</button>
+                </div>
+                <p class="md-mazzo-hint">Scorri i telefoni: tre stili, tre locali di prova</p>
+                <div class="md-mazzo-cta"><a href="menu-demo/?tavolo=7" class="btn btn-primary" id="apriDemo">Apri il menù di prova</a></div>
             </div>
         </div>
         <div>
             <span class="label" data-reveal>Provalo adesso</span>
             <h2 data-reveal data-reveal-delay="50">Questo è quello che vede<br><em>il tuo cliente.</em></h2>
-            <p class="lead" data-reveal data-reveal-delay="100">È il menù di un'osteria di prova, con piatti fotografati per l'esempio. Il tuo avrà i tuoi piatti, i tuoi prezzi e i tuoi colori. Usalo come lo userebbe un cliente seduto al tavolo 7:</p>
+            <p class="lead" data-reveal data-reveal-delay="100">Tre locali di prova, tre stili diversi: scorri i telefoni. Sono esempi, non modelli fissi: il tuo menù lo disegniamo sul carattere del tuo locale, con i tuoi piatti, i tuoi prezzi e i tuoi colori. Usalo come lo userebbe un cliente seduto al tavolo 7:</p>
             <ol data-reveal data-reveal-delay="150">
                 <li><div><b>Cambia lingua</b> in alto: tutto il menù passa in inglese, tedesco, francese o spagnolo.</div></li>
                 <li><div><b>Tocca un piatto:</b> si apre la scheda con la foto grande, gli allergeni e il vino consigliato.</div></li>
                 <li><div><b>In fondo, «Anteprima: fine pasto»:</b> è quello che vede chi riapre il menù dopo un'ora e mezza. La richiesta di recensione arriva quando il cliente ha finito, non quando si è appena seduto.</div></li>
             </ol>
             <div class="md-qr" data-reveal data-reveal-delay="200">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" class="segno"><path class="qrline" stroke="#2b2d31" d="M0 0.5h7m2 0h1m1 0h1m4 0h1m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m6 0h2m2 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h3m2 0h1m3 0h2m1 0h1m5 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m-24 1h1m1 0h5m4 0h1m1 0h2m2 0h1m4 0h2m2 0h5m-31 1h1m1 0h1m2 0h1m2 0h6m3 0h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h4m2 0h2m1 0h3m1 0h5m2 0h2m2 0h2m2 0h1m1 0h2m-32 1h4m6 0h1m2 0h1m2 0h8m4 0h5m-33 1h2m1 0h6m2 0h2m1 0h3m2 0h2m1 0h2m1 0h1m1 0h3m1 0h2m-33 1h2m1 0h3m1 0h1m2 0h2m3 0h1m2 0h2m1 0h4m1 0h1m2 0h1m1 0h2m-33 1h1m4 0h2m1 0h2m1 0h2m1 0h3m3 0h1m1 0h1m2 0h2m2 0h3m-32 1h1m7 0h4m1 0h1m1 0h1m4 0h2m1 0h1m1 0h2m1 0h3m-30 1h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-33 1h2m1 0h3m1 0h3m4 0h1m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1m-33 1h1m2 0h1m1 0h3m2 0h2m1 0h3m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m-31 1h2m1 0h3m4 0h2m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-31 1h2m1 0h1m1 0h2m2 0h2m1 0h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h2m-33 1h2m7 0h2m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m5 0h1m1 0h1m2 0h1m3 0h3m-32 1h1m1 0h2m1 0h1m3 0h1m2 0h1m3 0h1m1 0h6m1 0h2m2 0h2m-31 1h1m3 0h5m1 0h5m2 0h1m1 0h1m2 0h7m2 0h1m-24 1h2m1 0h1m2 0h1m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h3m1 0h5m4 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h6m1 0h1m1 0h2m1 0h5m3 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h5m1 0h2m2 0h3m2 0h1m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h2m5 0h6m-28 1h1m5 0h1m3 0h6m2 0h1m1 0h3m2 0h2m1 0h3m-31 1h7m1 0h2m3 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" shape-rendering="crispEdges" class="segno" id="mdQr"><path class="qrline" stroke="#2b2d31" d="M0 0.5h7m2 0h1m1 0h1m4 0h1m2 0h3m1 0h1m2 0h7m-33 1h1m5 0h1m5 0h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m6 0h2m2 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h3m2 0h1m3 0h2m1 0h1m5 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m-24 1h1m1 0h5m4 0h1m1 0h2m2 0h1m4 0h2m2 0h5m-31 1h1m1 0h1m2 0h1m2 0h6m3 0h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h4m2 0h2m1 0h3m1 0h5m2 0h2m2 0h2m2 0h1m1 0h2m-32 1h4m6 0h1m2 0h1m2 0h8m4 0h5m-33 1h2m1 0h6m2 0h2m1 0h3m2 0h2m1 0h2m1 0h1m1 0h3m1 0h2m-33 1h2m1 0h3m1 0h1m2 0h2m3 0h1m2 0h2m1 0h4m1 0h1m2 0h1m1 0h2m-33 1h1m4 0h2m1 0h2m1 0h2m1 0h3m3 0h1m1 0h1m2 0h2m2 0h3m-32 1h1m7 0h4m1 0h1m1 0h1m4 0h2m1 0h1m1 0h2m1 0h3m-30 1h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-33 1h2m1 0h3m1 0h3m4 0h1m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1m-33 1h1m2 0h1m1 0h3m2 0h2m1 0h3m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m-31 1h2m1 0h3m4 0h2m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-31 1h2m1 0h1m1 0h2m2 0h2m1 0h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h2m-33 1h2m7 0h2m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m5 0h1m1 0h1m2 0h1m3 0h3m-32 1h1m1 0h2m1 0h1m3 0h1m2 0h1m3 0h1m1 0h6m1 0h2m2 0h2m-31 1h1m3 0h5m1 0h5m2 0h1m1 0h1m2 0h7m2 0h1m-24 1h2m1 0h1m2 0h1m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h3m1 0h5m4 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h6m1 0h1m1 0h2m1 0h5m3 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h5m1 0h2m2 0h3m2 0h1m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h2m5 0h6m-28 1h1m5 0h1m3 0h6m2 0h1m1 0h3m2 0h2m1 0h3m-31 1h7m1 0h2m3 0h3m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"/></svg>
                 <div><strong>Meglio sul telefono</strong><span class="solo-desk">Inquadra il codice e aprilo dove lo aprirebbe il tuo cliente. Oppure:</span><span class="solo-touch">Aprilo a tutto schermo, come lo vedrebbe il tuo cliente.</span><div><a href="menu-demo/?tavolo=7" class="btn btn-primary">Apri il menù di prova</a></div></div>
             </div>
         </div>
@@ -427,8 +468,8 @@
 </section>
 
 <!-- ═══════ CONFIGURATORE ═══════
-     Nessun pagamento qui: il prezzo dipende dai tavoli e il listino non è
-     ancora fisso. Si configura, si carica il menù, parte una richiesta di
+     Nessun pagamento qui: il riepilogo mostra il conto col listino, ma
+     si paga dopo la bozza. Si configura, si carica il menù, parte una richiesta di
      preventivo con i file (POST /api/nfc/richiesta, multipart). -->
 <section class="md-conf" id="configura">
     <div class="container">
@@ -461,14 +502,30 @@
                     </div>
                     <div class="md-field solo-pers">
                         <label>Colore del nome</label>
-                        <div class="md-swatches" id="mdColori">
-                            <button type="button" class="md-col is-on" data-c="#c2412a" style="background:#c2412a" title="Rosso pomodoro"></button>
-                            <button type="button" class="md-col" data-c="#c4622d" style="background:#c4622d" title="Terracotta"></button>
-                            <button type="button" class="md-col" data-c="#b08a3e" style="background:#b08a3e" title="Oro"></button>
-                            <button type="button" class="md-col" data-c="#2f5d4a" style="background:#2f5d4a" title="Verde bottiglia"></button>
-                            <button type="button" class="md-col" data-c="#23395b" style="background:#23395b" title="Blu notte"></button>
-                            <button type="button" class="md-col" data-c="#7a2436" style="background:#7a2436" title="Bordeaux"></button>
+                        <div class="md-swatches" id="mdColori" role="group" aria-label="Colore">
+                            <button type="button" class="md-col is-on" data-c="#c2412a" style="background:#c2412a" title="Rosso pomodoro" aria-label="Rosso pomodoro"></button>
+                            <button type="button" class="md-col" data-c="#d9573f" style="background:#d9573f" title="Corallo" aria-label="Corallo"></button>
+                            <button type="button" class="md-col" data-c="#d9772b" style="background:#d9772b" title="Arancio" aria-label="Arancio"></button>
+                            <button type="button" class="md-col" data-c="#c4622d" style="background:#c4622d" title="Terracotta" aria-label="Terracotta"></button>
+                            <button type="button" class="md-col" data-c="#b8862b" style="background:#b8862b" title="Senape" aria-label="Senape"></button>
+                            <button type="button" class="md-col" data-c="#b08a3e" style="background:#b08a3e" title="Oro" aria-label="Oro"></button>
+                            <button type="button" class="md-col" data-c="#7d7a36" style="background:#7d7a36" title="Oliva" aria-label="Oliva"></button>
+                            <button type="button" class="md-col" data-c="#6f8f6a" style="background:#6f8f6a" title="Salvia" aria-label="Salvia"></button>
+                            <button type="button" class="md-col" data-c="#2f5d4a" style="background:#2f5d4a" title="Verde bottiglia" aria-label="Verde bottiglia"></button>
+                            <button type="button" class="md-col" data-c="#1f5f63" style="background:#1f5f63" title="Petrolio" aria-label="Petrolio"></button>
+                            <button type="button" class="md-col" data-c="#3f7fa6" style="background:#3f7fa6" title="Azzurro" aria-label="Azzurro"></button>
+                            <button type="button" class="md-col" data-c="#2c4fa3" style="background:#2c4fa3" title="Blu cobalto" aria-label="Blu cobalto"></button>
+                            <button type="button" class="md-col" data-c="#23395b" style="background:#23395b" title="Blu notte" aria-label="Blu notte"></button>
+                            <button type="button" class="md-col" data-c="#5b3a6e" style="background:#5b3a6e" title="Melanzana" aria-label="Melanzana"></button>
+                            <button type="button" class="md-col" data-c="#8a6fa8" style="background:#8a6fa8" title="Lilla" aria-label="Lilla"></button>
+                            <button type="button" class="md-col" data-c="#b5657a" style="background:#b5657a" title="Rosa antico" aria-label="Rosa antico"></button>
+                            <button type="button" class="md-col" data-c="#7a2436" style="background:#7a2436" title="Bordeaux" aria-label="Bordeaux"></button>
+                            <button type="button" class="md-col" data-c="#5a3b2a" style="background:#5a3b2a" title="Cioccolato" aria-label="Cioccolato"></button>
+                            <button type="button" class="md-col" data-c="#3a3d42" style="background:#3a3d42" title="Grafite" aria-label="Grafite"></button>
+                            <button type="button" class="md-col" data-c="#1c1c1c" style="background:#1c1c1c" title="Nero" aria-label="Nero"></button>
+                            <label class="md-col md-col-libero" title="Un altro colore" aria-label="Scegli un altro colore"><input type="color" id="mdColLibero" value="#c2412a"></label>
                         </div>
+                        <p class="md-col-nome" id="mdColNome">Rosso pomodoro</p>
                     </div>
                     <div class="md-field solo-pers">
                         <label for="mdFoto">Foto nell'arco <span class="opt">· un tuo piatto o la tua sala</span></label>
@@ -484,7 +541,7 @@
                     </div>
                 </div>
                 <div class="md-blk">
-                    <div class="md-blk-h"><span class="n">05</span><h3>Il tuo menù</h3></div>
+                    <div class="md-blk-h"><span class="n">05</span><h3>Il tuo menù e il suo stile</h3></div>
                     <div class="md-field">
                         <label for="mdMenu">File del menù <span class="opt">· PDF o foto, max 4 MB</span></label>
                         <label class="md-file" for="mdMenu"><input type="file" id="mdMenu" name="menu" accept="application/pdf,image/png,image/jpeg,image/webp"><span class="md-file-btn">Carica</span><span class="md-file-name" data-vuoto="Nessun file">Nessun file</span></label>
@@ -494,6 +551,15 @@
                         <label for="mdMenuLink">Link al menù online <span class="opt">· sito, TheFork, Google</span></label>
                         <input class="md-input" id="mdMenuLink" name="menu_link" type="url" placeholder="https://...">
                         <p class="md-help">Non ce l'hai pronto? Nessun problema: invia lo stesso, te lo chiediamo noi.</p>
+                    </div>
+                    <div class="md-field">
+                        <label for="mdStileRif">Il tuo stile <span class="opt">· Instagram o ispirazioni</span></label>
+                        <input class="md-input" id="mdStileRif" name="stile_rif" type="text" maxlength="300" placeholder="instagram.com/iltuolocale, o un menù che ti piace">
+                        <p class="md-help">Ci basta il profilo Instagram del locale per capire il tuo stile. Se hai in mente altro, mettici qualsiasi link che ti ispira.</p>
+                    </div>
+                    <div class="md-field">
+                        <label for="mdStileNote">Come lo immagini <span class="opt">· facoltativo</span></label>
+                        <textarea class="md-input" id="mdStileNote" name="stile_note" rows="3" maxlength="800" placeholder="Colori, atmosfera, caratteri, cosa non ti piace. Anche solo «come il nostro logo» o «caldo, da trattoria»"></textarea>
                     </div>
                 </div>
                 <div class="md-blk">
@@ -555,9 +621,10 @@
                         <div class="md-riep-r"><span>Placca</span><span id="rVers">Personalizzata</span></div>
                         <div class="md-riep-r"><span>Materiale</span><span id="rMat">Plexiglas bianco 2 mm</span></div>
                         <div class="md-riep-r"><span>Tavoli</span><span id="rTav">12 placche</span></div>
-                        <div class="md-riep-r"><span>Menù digitale</span><span>incluso</span></div>
+                        <div class="md-riep-r tot"><span>Placche, una volta</span><span id="rTot">216 €</span></div>
+                        <div class="md-riep-r"><span>Mantenimento</span><span>19 €/mese</span></div>
                         <button type="submit" class="btn btn-primary" id="mdBtn">Richiedi bozza e preventivo</button>
-                        <p class="md-note">Nessun pagamento adesso. Ti rispondiamo in giornata con la bozza della placca e il prezzo.</p>
+                        <p class="md-note">Nessun pagamento adesso. Ti rispondiamo in giornata con la bozza della placca: paghi solo quando ti convince.</p>
                         <div class="md-err" id="mdErr" hidden></div>
                     </div>
                 </div>
@@ -575,7 +642,7 @@
             <details><summary>E chi non sa usare il telefono?</summary><p>La carta di carta non la buttiamo: il menù digitale si affianca, non obbliga. Molti clienti però lo preferiscono già, soprattutto chi non parla italiano.</p></details>
             <details><summary>Chi aggiorna il menù?</summary><p>Noi. Ci scrivi cosa cambia e lo sistemiamo in giornata. Le placche non si toccano: il QR e il tag portano sempre allo stesso indirizzo.</p></details>
             <details><summary>Gli allergeni sono affidabili?</summary><p>Li compiliamo insieme a te, piatto per piatto, e li ricontrolli prima della pubblicazione. Resta comunque obbligatorio che il personale sappia rispondere: il menù lo ricorda in fondo alla pagina.</p></details>
-            <details><summary>Quanto costa?</summary><p>Dipende da quanti tavoli hai e se scegli la placca personalizzata o quella neutra. Lasciaci i dati qui sopra: il preventivo arriva in giornata.</p></details>
+            <details><summary>Quanto costa?</summary><p>Le placche si pagano una volta: 12 € a tavolo la neutra, 18 € la personalizzata, spedizione inclusa. Poi 19 € al mese (o 190 € l'anno) per il menù online e tutte le modifiche. Con 10 tavoli e placche neutre: 120 € più 19 € al mese.</p></details>
         </div>
     </div>
 </section>
@@ -620,11 +687,61 @@
         try { ifr.contentDocument.addEventListener('pointerdown', function () { avvia('demo'); }, { once: true }); } catch (e) {}
     });
 
+    /* ── tre stili del menù di prova: telefoni uno dietro l'altro, si scorrono ── */
+    var STILI_DEMO = [
+        { k: '', nome: 'Osteria', desc: 'scuro ed elegante', chi: "dell'Osteria Ventitré", fondo: '#0e1b16', qr: ["0 0 33 33", "M0 0.5h7m2 0h1m1 0h1m1 0h1m2 0h2m1 0h3m1 0h1m2 0h7M0 1.5h1m5 0h1m2 0h2m1 0h4m1 0h1m3 0h2m3 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m2 0h6m1 0h2m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h3m2 0h1m1 0h4m1 0h1m5 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h1m1 0h1m1 0h1m1 0h2m3 0h3m1 0h1M0 8.5h1m1 0h5m6 0h3m1 0h1m4 0h2m2 0h5M0 9.5h1m1 0h1m2 0h1m2 0h1m1 0h3m6 0h3m1 0h1m2 0h2m1 0h2m1 0h1M0 10.5h5m1 0h2m1 0h1m1 0h1m3 0h2m1 0h1m1 0h2m2 0h2m2 0h1m1 0h2M0 11.5h4m5 0h1m4 0h1m1 0h1m2 0h5m4 0h5M0 12.5h1m5 0h2m2 0h2m3 0h1m2 0h3m1 0h2m1 0h1m1 0h3m1 0h2M0 13.5h6m2 0h1m5 0h3m2 0h1m1 0h4m1 0h1m2 0h1m1 0h2M0 14.5h1m4 0h2m1 0h2m1 0h2m1 0h1m5 0h1m1 0h1m2 0h2m2 0h3M0 15.5h1m6 0h4m1 0h2m2 0h1m3 0h2m1 0h1m1 0h2m1 0h3M1 16.5h1m1 0h1m2 0h1m1 0h1m1 0h3m4 0h1m1 0h1m2 0h4m1 0h2m3 0h1M0 17.5h2m1 0h3m1 0h2m5 0h1m1 0h6m1 0h5m1 0h2m1 0h1M1 18.5h1m1 0h5m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h2m1 0h1M0 19.5h1m2 0h1m7 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1m1 0h5M2 20.5h2m2 0h3m2 0h4m1 0h1m3 0h1m1 0h1m1 0h2m1 0h3m1 0h2M0 21.5h1m2 0h1m3 0h1m1 0h1m1 0h3m1 0h1m1 0h3m3 0h2m1 0h2m1 0h2m1 0h1M0 22.5h1m5 0h3m1 0h1m3 0h3m3 0h1m1 0h1m2 0h1m3 0h3M0 23.5h1m2 0h1m1 0h1m2 0h2m5 0h1m2 0h6m1 0h2m2 0h2M0 24.5h1m1 0h1m1 0h5m1 0h1m1 0h4m1 0h1m1 0h1m2 0h7m2 0h1M8 25.5h1m2 0h1m1 0h2m1 0h1m2 0h2m2 0h2m3 0h1m1 0h1m1 0h1M0 26.5h7m2 0h1m1 0h1m1 0h4m1 0h1m3 0h3m1 0h1m1 0h1m1 0h2M0 27.5h1m5 0h1m1 0h1m1 0h4m1 0h1m4 0h5m3 0h5M0 28.5h1m1 0h3m1 0h1m1 0h1m4 0h2m3 0h1m3 0h1m1 0h6m1 0h2M0 29.5h1m1 0h3m1 0h1m1 0h2m4 0h3m2 0h2m2 0h1m1 0h1m2 0h2m1 0h2M0 30.5h1m1 0h3m1 0h1m1 0h1m4 0h1m8 0h6M0 31.5h1m5 0h1m3 0h5m1 0h1m1 0h1m1 0h3m2 0h2m1 0h3M0 32.5h7m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"] },
+        { k: 'bistrot', nome: 'Bistrot', desc: 'chiaro e minimale', chi: 'del Bistrot Quarantuno', fondo: '#fbfaf6', qr: ["0 0 37 37", "M0 0.5h7m2 0h1m1 0h3m1 0h3m3 0h1m3 0h2m3 0h7M0 1.5h1m5 0h1m5 0h1m1 0h1m1 0h1m3 0h9m1 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m7 0h1m1 0h1m2 0h3m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m7 0h2m4 0h2m1 0h3m2 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h5m1 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h1m2 0h2m4 0h1m2 0h2m2 0h1m1 0h2m2 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h2m4 0h2m1 0h6m3 0h1m1 0h1M0 8.5h1m1 0h5m4 0h1m3 0h2m2 0h1m1 0h1m1 0h5m2 0h5M1 9.5h1m1 0h1m1 0h1m1 0h1m3 0h5m2 0h1m1 0h1m1 0h1m1 0h2m2 0h2m5 0h1M0 10.5h2m4 0h1m1 0h2m3 0h1m1 0h2m2 0h1m1 0h1m2 0h4m1 0h3m1 0h1m1 0h2M0 11.5h1m3 0h2m2 0h1m1 0h1m3 0h2m3 0h4m3 0h4m1 0h2m3 0h1M1 12.5h1m2 0h4m1 0h7m1 0h1m1 0h1m2 0h1m1 0h3m2 0h8M0 13.5h2m3 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m3 0h1m4 0h2m1 0h1m3 0h1M0 14.5h4m1 0h9m1 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h5m1 0h2M0 15.5h2m2 0h2m3 0h1m1 0h1m1 0h4m3 0h1m8 0h1m1 0h2m2 0h1M0 16.5h2m1 0h4m4 0h4m3 0h5m2 0h3m2 0h3m1 0h2M1 17.5h2m2 0h1m2 0h3m1 0h1m1 0h4m5 0h1m4 0h1m4 0h1m1 0h1M0 18.5h1m1 0h5m1 0h1m2 0h2m4 0h1m2 0h1m1 0h1m3 0h7m2 0h2M1 19.5h2m6 0h1m6 0h1m1 0h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h2m3 0h1M4 20.5h1m1 0h2m1 0h1m2 0h1m1 0h1m2 0h1m4 0h2m1 0h2m2 0h2m1 0h1m1 0h1M3 21.5h2m3 0h2m1 0h2m1 0h1m1 0h2m1 0h3m1 0h1m1 0h1m2 0h2m3 0h1m1 0h1M0 22.5h2m1 0h2m1 0h6m1 0h1m1 0h3m2 0h2m5 0h7m2 0h1M1 23.5h1m3 0h1m1 0h2m1 0h1m2 0h12m1 0h1m4 0h2m2 0h1M1 24.5h1m1 0h4m2 0h1m2 0h2m1 0h2m2 0h1m1 0h1m2 0h4m1 0h2m1 0h1m1 0h2M0 25.5h3m1 0h2m1 0h2m2 0h2m2 0h1m2 0h1m1 0h4m2 0h1m1 0h2m1 0h1M0 26.5h1m2 0h1m1 0h3m3 0h2m2 0h2m2 0h1m2 0h1m1 0h2m1 0h1m1 0h2m2 0h4M0 27.5h1m3 0h1m2 0h3m1 0h1m2 0h2m3 0h6m1 0h4m1 0h2M0 28.5h1m1 0h1m1 0h4m2 0h4m1 0h1m1 0h3m5 0h10m1 0h1M8 29.5h1m2 0h1m2 0h1m1 0h1m1 0h3m2 0h1m4 0h1m3 0h2M0 30.5h7m2 0h1m5 0h1m2 0h1m1 0h1m1 0h1m1 0h2m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1M0 31.5h1m5 0h1m1 0h4m1 0h1m1 0h2m2 0h1m3 0h1m2 0h1m1 0h1m3 0h2m1 0h1M0 32.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h1m1 0h4m1 0h8m1 0h2M0 33.5h1m1 0h3m1 0h1m1 0h2m5 0h3m5 0h1m1 0h4m1 0h1m1 0h1m1 0h1m1 0h1M0 34.5h1m1 0h3m1 0h1m1 0h3m1 0h2m6 0h1m1 0h1m1 0h3m1 0h1m5 0h3M0 35.5h1m5 0h1m2 0h3m2 0h1m1 0h1m4 0h1m4 0h1m1 0h1m1 0h1m1 0h1m3 0h1M0 36.5h7m1 0h6m3 0h1m4 0h1m1 0h3m2 0h1m2 0h5"] },
+        { k: 'pop', nome: 'Pop', desc: 'colorato e allegro', chi: 'della Trattoria Tonda', fondo: '#ffd84a', qr: ["0 0 33 33", "M0 0.5h7m5 0h2m2 0h1m2 0h3m1 0h1m2 0h7M0 1.5h1m5 0h1m3 0h2m1 0h3m1 0h1m3 0h2m3 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m1 0h5m2 0h1m1 0h1m2 0h1m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m5 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h1m2 0h2m1 0h2m3 0h3m1 0h1M0 8.5h1m1 0h5m2 0h1m1 0h1m1 0h3m1 0h1m4 0h2m2 0h5M0 9.5h1m2 0h1m4 0h1m1 0h1m8 0h3m1 0h1m2 0h2m1 0h2m1 0h1M0 10.5h1m4 0h3m4 0h1m2 0h4m1 0h2m2 0h2m2 0h1m1 0h2M4 11.5h1m6 0h2m3 0h1m2 0h5m4 0h5M0 12.5h8m7 0h3m1 0h2m1 0h2m1 0h1m1 0h3m1 0h2M1 13.5h1m7 0h5m2 0h1m2 0h1m1 0h4m1 0h1m2 0h1m1 0h2M0 14.5h1m2 0h2m1 0h1m2 0h3m1 0h4m3 0h1m1 0h1m2 0h2m2 0h3M0 15.5h2m3 0h1m1 0h1m1 0h3m3 0h2m3 0h2m1 0h1m1 0h2m1 0h3M1 16.5h1m1 0h2m1 0h2m1 0h1m4 0h1m2 0h1m1 0h1m2 0h4m1 0h2m3 0h1M0 17.5h1m4 0h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h4m1 0h5m1 0h2m1 0h1M0 18.5h1m1 0h1m1 0h1m1 0h2m4 0h4m4 0h1m1 0h1m2 0h1m1 0h2m1 0h1M5 19.5h1m4 0h1m2 0h2m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h5M2 20.5h2m1 0h5m3 0h1m2 0h2m2 0h1m1 0h1m1 0h2m1 0h3m1 0h2M0 21.5h1m3 0h2m1 0h2m1 0h1m2 0h1m3 0h3m3 0h2m1 0h2m1 0h2m1 0h1M0 22.5h1m5 0h5m1 0h1m2 0h2m3 0h1m1 0h1m2 0h1m3 0h3M0 23.5h1m2 0h2m4 0h1m1 0h1m1 0h4m1 0h6m1 0h2m2 0h2m1 0h1M0 24.5h1m2 0h2m1 0h3m5 0h2m1 0h1m1 0h1m2 0h7m2 0h2M8 25.5h1m5 0h1m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1M0 26.5h7m2 0h2m1 0h1m2 0h2m1 0h1m3 0h3m1 0h1m1 0h1m1 0h2M0 27.5h1m5 0h1m1 0h1m3 0h2m1 0h1m4 0h5m3 0h5M0 28.5h1m1 0h3m1 0h1m1 0h5m1 0h1m2 0h1m4 0h1m1 0h6m1 0h2M0 29.5h1m1 0h3m1 0h1m1 0h2m4 0h1m1 0h1m1 0h3m2 0h1m1 0h1m2 0h2m1 0h2M0 30.5h1m1 0h3m1 0h1m1 0h4m1 0h3m6 0h6M0 31.5h1m5 0h1m5 0h1m1 0h3m1 0h1m1 0h3m2 0h2m1 0h3M0 32.5h7m1 0h5m4 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h1"] }
+    ];
+    var mazzo = $('mdMazzo'), tel = mazzo.querySelectorAll('.md-tel'), live = $('mdLive'), attuale = 0, giroLive = 0;
+    function urlStile(i) { return 'menu-demo/?tavolo=7' + (STILI_DEMO[i].k ? '&stile=' + STILI_DEMO[i].k : ''); }
+    function mostra(i) {
+        attuale = (i + 3) % 3; var c = STILI_DEMO[attuale], url = urlStile(attuale);
+        tel.forEach(function (t) { t.dataset.pos = (+t.dataset.i - attuale + 3) % 3; });
+        $('mdStNome').textContent = c.nome; $('mdStDesc').textContent = c.desc;
+        $('mdPunti').querySelectorAll('i').forEach(function (d, j) { d.classList.toggle('on', j === attuale); });
+        document.querySelectorAll('#prova a[href^="menu-demo/"]').forEach(function (a) { a.href = url; });
+        var q = $('mdQr'); if (q) { q.setAttribute('viewBox', c.qr[0]); q.querySelector('path').setAttribute('d', c.qr[1]); }
+        // il menù vero sta sopra il telefono davanti: sparisce, cambia, riappare quando è carico
+        var f = live.querySelector('iframe'), mio = ++giroLive;
+        live.classList.add('via');
+        setTimeout(function () {
+            if (mio !== giroLive) return;
+            f.style.background = c.fondo; f.title = 'Menù di prova ' + c.chi;
+            f.onload = function () { if (mio === giroLive) live.classList.remove('via'); };
+            f.src = url;
+        }, 320);
+        avvia('demo');
+    }
+    $('mdPrec').addEventListener('click', function () { mostra(attuale - 1); });
+    $('mdSucc').addEventListener('click', function () { mostra(attuale + 1); });
+    // trascinare o toccare: i telefoni dietro portano avanti il loro stile, quello davanti (da telefono) apre il menù
+    var x0 = null, dx = 0;
+    mazzo.addEventListener('pointerdown', function (e) { x0 = e.clientX; dx = 0; });
+    window.addEventListener('pointermove', function (e) {
+        if (x0 === null) return; dx = e.clientX - x0;
+        if (Math.abs(dx) > 8) { mazzo.classList.add('trascina'); tel.forEach(function (t) { if (t.dataset.pos === '0') t.style.transform = 'translateX(' + dx + 'px) rotate(' + dx / 30 + 'deg)'; }); }
+    });
+    window.addEventListener('pointerup', function (e) {
+        if (x0 === null) return;
+        var t = e.target.closest && e.target.closest('.md-tel');
+        mazzo.classList.remove('trascina'); tel.forEach(function (el) { el.style.transform = ''; });
+        x0 = null;
+        if (dx < -45) return mostra(attuale + 1);
+        if (dx > 45) return mostra(attuale - 1);
+        if (Math.abs(dx) > 8 || !t) return;
+        if (t.dataset.pos === '1') mostra(attuale + 1);
+        else if (t.dataset.pos === '2') mostra(attuale - 1);
+        else if (getComputedStyle(live).display === 'none') { avvia('demo'); location.href = urlStile(attuale); }
+    });
+    window.addEventListener('pointercancel', function () { x0 = null; mazzo.classList.remove('trascina'); tel.forEach(function (el) { el.style.transform = ''; }); });
+
     var form = $('mdForm'), pv = $('pv');
     form.addEventListener('input', function () { avvia('configuratore'); }, { once: true });
     form.addEventListener('click', function (e) { if (e.target.closest('.md-scelta, .md-col, .md-stepper, .md-file')) avvia('configuratore'); });
     var st = { versione: 'personalizzata', materiale: 'bianco', colore: '#c2412a', tavoli: 12, foto: null };
     var MAT = { bianco: 'Plexiglas bianco 2 mm', nero: 'Plexiglas nero 5 mm' };
+    var PREZZO = { personalizzata: 18, neutra: 12 };   // € a placca, una volta (listino: anche nella FAQ «Quanto costa?»)
 
     /* ── scelte a schede (versione, materiale) ── */
     form.querySelectorAll('.md-scelta input').forEach(function (inp) {
@@ -633,11 +750,16 @@
             st[inp.name] = inp.value; aggiorna();
         });
     });
-    $('mdColori').querySelectorAll('.md-col').forEach(function (b) {
-        b.addEventListener('click', function () {
-            $('mdColori').querySelectorAll('.md-col').forEach(function (x) { x.classList.remove('is-on'); });
-            b.classList.add('is-on'); st.colore = b.dataset.c; aggiorna();
-        });
+    var nomeColore = 'Rosso pomodoro';
+    function scegliColore(el, hex, nome) {
+        $('mdColori').querySelectorAll('.md-col').forEach(function (x) { x.classList.remove('is-on'); });
+        el.classList.add('is-on'); st.colore = hex; nomeColore = nome; $('mdColNome').textContent = nome; aggiorna();
+    }
+    $('mdColori').querySelectorAll('button.md-col').forEach(function (b) {
+        b.addEventListener('click', function () { scegliColore(b, b.dataset.c, b.title); });
+    });
+    $('mdColLibero').addEventListener('input', function (e) {
+        scegliColore(e.target.closest('.md-col'), e.target.value, 'Colore scelto da te (' + e.target.value + ')');
     });
     function setTav(n) { st.tavoli = Math.max(1, Math.min(80, n)); $('mdTav').textContent = st.tavoli; aggiorna(); }
     $('mdMeno').addEventListener('click', function () { setTav(st.tavoli - 1); });
@@ -693,7 +815,8 @@
         $('pvNota').textContent = pers ? 'Bozza: la rifiniamo noi' : 'Grafica SB, uguale su ogni tavolo';
         $('rVers').textContent = pers ? 'Personalizzata' : 'Neutra SB';
         $('rMat').textContent = MAT[st.materiale];
-        $('rTav').textContent = st.tavoli + (st.tavoli === 1 ? ' placca' : ' placche');
+        $('rTav').textContent = st.tavoli + (st.tavoli === 1 ? ' placca' : ' placche') + ' × ' + PREZZO[st.versione] + ' €';
+        $('rTot').textContent = (st.tavoli * PREZZO[st.versione]) + ' €';
     }
     // sul plexiglas nero lo stesso colore va un filo più chiaro, o sparisce
     function schiarisci(hex) {
@@ -719,9 +842,11 @@
         if (inCorso.foto || inCorso.menu) return errore('Stiamo ancora preparando i file: riprova tra un secondo.');
         var pers = st.versione === 'personalizzata';
         var righe = ['[Menù digitale] Richiesta di bozza e preventivo dal configuratore.',
-            'Placca: ' + (pers ? 'personalizzata' : 'neutra SB') + ' · ' + MAT[st.materiale] + ' · ' + st.tavoli + ' tavoli.'];
-        if (pers) righe.push('Sulla placca: ' + (v('mdTipo') ? v('mdTipo') + ' ' : '') + v('mdLocale') + ' · colore ' + st.colore + (pronti.foto ? ' · foto caricata' : ' · foto da fare'));
+            'Placca: ' + (pers ? 'personalizzata' : 'neutra SB') + ' · ' + MAT[st.materiale] + ' · ' + st.tavoli + ' tavoli · ' + (st.tavoli * PREZZO[st.versione]) + ' € + 19 €/mese.'];
+        if (pers) righe.push('Sulla placca: ' + (v('mdTipo') ? v('mdTipo') + ' ' : '') + v('mdLocale') + ' · colore ' + nomeColore + ' ' + st.colore + (pronti.foto ? ' · foto caricata' : ' · foto da fare'));
         righe.push('Menù: ' + (pronti.menu ? 'file caricato' : v('mdMenuLink') ? v('mdMenuLink') : 'da chiedere') + '.');
+        righe.push('Stile: ' + (v('mdStileRif') || 'nessun riferimento') + '.');
+        if (v('mdStileNote')) righe.push('Come lo immagina: ' + v('mdStileNote'));
         righe.push('Città: ' + (v('mdCitta') || 'non indicata') + '.');
         if (v('mdNote')) righe.push('Note: ' + v('mdNote'));
         var fd = new FormData();
@@ -738,7 +863,7 @@
                 if (!res.ok) throw new Error(res.d.error || 'Errore imprevisto');
                 if (window.sbPixelStd) sbPixelStd('Lead', { content_name: 'Menù digitale', content_category: st.versione, num_items: st.tavoli });
                 if (window.sbGoogleConv && window.CONV_CONTATTO) sbGoogleConv(window.CONV_CONTATTO);
-                document.querySelector('.md-riep').innerHTML = '<div class="md-ok"><h3>Richiesta inviata.</h3><p>Ti abbiamo mandato una conferma via email. In giornata ricevi la bozza della tua placca e il prezzo per ' + st.tavoli + ' tavoli.</p></div>';
+                document.querySelector('.md-riep').innerHTML = '<div class="md-ok"><h3>Richiesta inviata.</h3><p>Ti abbiamo mandato una conferma via email. In giornata ricevi la bozza della tua placca per ' + st.tavoli + ' tavoli.</p></div>';
             })
             .catch(function (e) {
                 errore((e.name === 'AbortError' ? 'La connessione non risponde: riprova.' : e.message) + ' Se il problema continua scrivici a info@sbfoodconsulting.com.');

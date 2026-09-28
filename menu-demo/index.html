@@ -4,7 +4,11 @@
 <title>Osteria Ventitré</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap">
+<script>
+/* Tre stili dello stesso menù: ?stile=bistrot o ?stile=pop. Si decide prima di disegnare, niente lampi. */
+(function () { var m = location.search.match(/stile=(bistrot|pop)/); if (m) { document.documentElement.dataset.stile = m[1]; document.documentElement.dataset.theme = 'light'; } })();
+</script>
 <style>
 /* ════════════════════════════════════════════════════════════
    PROTOTIPO — menù digitale aperto dal tap sul tavolo.
@@ -169,6 +173,130 @@ button { font: inherit; color: inherit; }
 .chiudi { position: sticky; top: 10px; float: right; margin: 10px 0 0; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); cursor: pointer; font-size: 1.1rem; line-height: 1; }
 .toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px); background: var(--ink); color: var(--ground); padding: 11px 18px; font-size: .88rem; border-radius: 2px; opacity: 0; transition: .35s; z-index: 50; pointer-events: none; }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* ════════════════════════════════════════════════════════════
+   STILE «BISTROT» — chiaro, editoriale, quasi niente ornamenti.
+   Carta bianca, un solo verde oliva, foto rotonde piccole a sinistra,
+   il nome del locale prima della foto. Si apre con ?stile=bistrot
+   ════════════════════════════════════════════════════════════ */
+[data-stile="bistrot"] {
+  --ground: #fbfaf6; --card: #ffffff; --ink: #1d1d1b; --muted: #6f6d66; --line: rgba(29, 29, 27, .12);
+  --accent: #5f7a3a; --brass: #5f7a3a; --arch-shadow: rgba(0, 0, 0, 0); --sheet: #fbfaf6; --veil: rgba(20, 20, 18, .45);
+  --display: 'Instrument Serif', Georgia, serif; --body: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif; --mono: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+}
+[data-stile="bistrot"] body { font-size: 15.5px; }
+[data-stile="bistrot"] .top { background: color-mix(in srgb, var(--ground) 92%, transparent); }
+[data-stile="bistrot"] .mono { font-style: italic; font-size: 1.25rem; }
+[data-stile="bistrot"] .mono b { color: var(--ink); }
+[data-stile="bistrot"] .lang { font-weight: 500; letter-spacing: .04em; }
+[data-stile="bistrot"] .lang button[aria-pressed="true"] { box-shadow: none; text-decoration: underline; text-underline-offset: 4px; }
+[data-stile="bistrot"] .hero { display: flex; flex-direction: column; padding-top: 34px; }
+[data-stile="bistrot"] .hero .nome { order: 1; margin: 0; font-size: clamp(3.2rem, 15vw, 4.6rem); line-height: .95; letter-spacing: -.02em; }
+[data-stile="bistrot"] .hero .nome em { font-style: italic; color: var(--accent); }
+[data-stile="bistrot"] .hero .dove { order: 2; font-size: .9rem; }
+[data-stile="bistrot"] .hero .arco { order: 3; margin-top: 26px; aspect-ratio: 16 / 11; border-radius: 0; box-shadow: none; }
+[data-stile="bistrot"] .hero .azioni { order: 4; gap: 18px; margin-top: 16px; }
+[data-stile="bistrot"] .azioni a { border: 0; background: none; padding: 4px 0; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--line); }
+[data-stile="bistrot"] .azioni svg { color: var(--accent); }
+[data-stile="bistrot"] .tavolo { left: 12px; bottom: 12px; transform: none; font-size: .78rem; letter-spacing: .06em; text-transform: none; border-radius: 0; }
+[data-stile="bistrot"] .indice a { text-transform: uppercase; font-size: .72rem; letter-spacing: .16em; }
+[data-stile="bistrot"] .indice a span { display: none; }
+[data-stile="bistrot"] .indice a.on { text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--accent); }
+[data-stile="bistrot"] .portata-h { align-items: center; margin-bottom: 8px; }
+[data-stile="bistrot"] .portata-h .num { display: none; }
+[data-stile="bistrot"] .portata-h h2 { font-family: var(--body); font-size: .74rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+[data-stile="bistrot"] .portata-h::after { content: ""; flex: 1; height: 1px; background: var(--line); order: 2; }
+[data-stile="bistrot"] .portata-h small { order: 3; margin-left: 0; font-size: .7rem; }
+[data-stile="bistrot"] .casa .arco { aspect-ratio: 1; border-radius: 0; box-shadow: none; margin-top: 10px; }
+[data-stile="bistrot"] .casa .ribbon { left: 12px; top: 12px; transform: none; background: var(--ground); color: var(--ink); border-radius: 0; letter-spacing: .12em; }
+[data-stile="bistrot"] .casa .testo { margin: 14px 0 0; padding: 0; background: none; box-shadow: none; }
+[data-stile="bistrot"] .casa h3 { font-size: 2rem; }
+[data-stile="bistrot"] .piatto { grid-template-columns: 64px 1fr; gap: 16px; align-items: center; }
+[data-stile="bistrot"] .piatto .foto { order: -1; width: 64px; aspect-ratio: 1; border-radius: 50%; }
+[data-stile="bistrot"] .piatto h3 { font-size: 1.4rem; }
+[data-stile="bistrot"] .desc { -webkit-line-clamp: 1; font-size: .88rem; }
+[data-stile="bistrot"] .meta { margin-top: 6px; }
+[data-stile="bistrot"] .prezzo { font-weight: 600; font-variant-numeric: tabular-nums; }
+[data-stile="bistrot"] .all i { border-radius: 3px; }
+[data-stile="bistrot"] .vino b { font-size: 1.3rem; }
+[data-stile="bistrot"] .wifi { background: var(--card); color: var(--ink); border: 1px solid var(--ink); border-radius: 0; }
+[data-stile="bistrot"] .wifi::before { display: none; }
+[data-stile="bistrot"] .wifi h2 svg { color: var(--accent); }
+[data-stile="bistrot"] .wifi button { background: var(--ink); color: var(--ground); border-radius: 0; }
+[data-stile="bistrot"] .fine h2 { font-size: 2.3rem; font-style: italic; }
+[data-stile="bistrot"] .fine a, [data-stile="bistrot"] .conto a { border-radius: 0; }
+[data-stile="bistrot"] .conto p { font-style: italic; font-size: 1.6rem; }
+[data-stile="bistrot"] .scheda { border-radius: 0; }
+[data-stile="bistrot"] .scheda .arco { border-radius: 0; box-shadow: none; aspect-ratio: 1; }
+[data-stile="bistrot"] .scheda h3 { font-size: 2.4rem; }
+
+/* ════════════════════════════════════════════════════════════
+   STILE «POP» — trattoria colorata e allegra. Giallo pieno, rosso,
+   bordi spessi e ombre nette come un adesivo, caratteri grassi,
+   ogni piatto una scheda. Si apre con ?stile=pop
+   ════════════════════════════════════════════════════════════ */
+[data-stile="pop"] {
+  --ground: #ffd84a; --card: #fff8e1; --ink: #1f1a14; --muted: #5a4a26; --line: rgba(31, 26, 20, .2);
+  --accent: #e2361c; --brass: #1f1a14; --arch-shadow: rgba(0, 0, 0, 0); --sheet: #fff8e1; --veil: rgba(31, 26, 20, .55);
+  --display: 'Bricolage Grotesque', 'Arial Black', sans-serif; --body: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif; --mono: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+}
+[data-stile="pop"] .top { background: var(--accent); color: #fff; border-bottom: 3px solid var(--ink); backdrop-filter: none; -webkit-backdrop-filter: none; }
+[data-stile="pop"] .mono { font-weight: 800; font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0; }
+[data-stile="pop"] .mono b { color: var(--ground); font-weight: 800; }
+[data-stile="pop"] .lang button { color: rgba(255,255,255,.8); font-weight: 600; border-radius: 999px; padding: 7px 8px; }
+[data-stile="pop"] .lang button[aria-pressed="true"] { background: var(--ground); color: var(--ink); box-shadow: none; }
+[data-stile="pop"] .hero { padding-top: 26px; }
+[data-stile="pop"] .hero .arco { aspect-ratio: 1 / .9; border-radius: 26px; border: 3px solid var(--ink); box-shadow: 7px 7px 0 var(--ink); transform: rotate(-1.5deg); }
+[data-stile="pop"] .tavolo { left: auto; right: 14px; top: 14px; bottom: auto; transform: rotate(8deg); width: 74px; height: 74px; border-radius: 50%; display: grid; place-items: center; text-align: center; background: var(--accent); color: #fff; border: 3px solid var(--ink); font-weight: 800; font-size: .66rem; letter-spacing: .06em; padding: 0; white-space: normal; line-height: 1.1; }
+[data-stile="pop"] .tavolo b { color: #fff; display: block; font-size: 1.5rem; }
+[data-stile="pop"] .nome { font-weight: 800; text-transform: uppercase; font-size: clamp(3rem, 15vw, 4.4rem); line-height: .86; letter-spacing: -.03em; margin-top: 30px; }
+[data-stile="pop"] .nome em { color: var(--accent); -webkit-text-stroke: 0; }
+[data-stile="pop"] .dove { color: var(--ink); font-weight: 600; }
+[data-stile="pop"] .azioni a { border: 2.5px solid var(--ink); border-radius: 999px; background: var(--card); font-weight: 600; box-shadow: 3px 3px 0 var(--ink); }
+[data-stile="pop"] .azioni svg { color: var(--accent); }
+[data-stile="pop"] .indice { border-bottom: 3px solid var(--ink); }
+[data-stile="pop"] .indice .wrap { gap: 8px; }
+[data-stile="pop"] .indice a { border: 2px solid var(--ink); border-radius: 999px; padding: 6px 12px; color: var(--ink); font-weight: 600; background: var(--card); }
+[data-stile="pop"] .indice a span { display: none; }
+[data-stile="pop"] .indice a.on { background: var(--ink); color: var(--ground); }
+[data-stile="pop"] .portata-h { align-items: center; }
+[data-stile="pop"] .portata-h .num { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; -webkit-text-stroke: 0; font-size: 1.3rem; font-weight: 800; line-height: 1; border: 3px solid var(--ink); flex: none; }
+[data-stile="pop"] .portata-h h2 { font-weight: 800; text-transform: uppercase; font-size: 2.1rem; letter-spacing: -.02em; }
+[data-stile="pop"] .portata-h small { font-weight: 600; color: var(--ink); }
+[data-stile="pop"] .casa { border: 3px solid var(--ink); border-radius: 24px; background: var(--card); box-shadow: 6px 6px 0 var(--ink); overflow: hidden; }
+[data-stile="pop"] .casa .arco { aspect-ratio: 4 / 3; border-radius: 0; box-shadow: none; border-bottom: 3px solid var(--ink); }
+[data-stile="pop"] .casa .ribbon { left: 14px; top: 14px; transform: rotate(-4deg); border-radius: 999px; border: 2.5px solid var(--ink); font-weight: 800; letter-spacing: .06em; padding: 8px 12px; }
+[data-stile="pop"] .casa .testo { margin: 0; background: var(--card); border-radius: 0; box-shadow: none; }
+[data-stile="pop"] .casa h3, [data-stile="pop"] .piatto h3 { font-weight: 800; letter-spacing: -.01em; }
+[data-stile="pop"] .piatto { background: var(--card); border: 2.5px solid var(--ink); border-radius: 20px; padding: 14px; margin-bottom: 14px; box-shadow: 4px 4px 0 var(--ink); grid-template-columns: 1fr 92px; }
+[data-stile="pop"] .piatto .foto { width: 92px; aspect-ratio: 1; border-radius: 14px; border: 2.5px solid var(--ink); }
+[data-stile="pop"] .sub { font-style: normal; font-weight: 600; }
+[data-stile="pop"] .prezzo { background: var(--ink); color: var(--ground); font-weight: 800; padding: 4px 10px; border-radius: 999px; font-size: .9rem; }
+[data-stile="pop"] .vino .prezzo { background: none; color: var(--ink); padding: 0; }
+[data-stile="pop"] .all i { background: var(--ground); border: 1.5px solid var(--ink); color: var(--ink); font-weight: 600; }
+[data-stile="pop"] .vino { border-top: 2px solid var(--ink); }
+[data-stile="pop"] .vino b { font-weight: 800; }
+[data-stile="pop"] .wifi { background: var(--accent); color: #fff; border: 3px solid var(--ink); border-radius: 24px; box-shadow: 6px 6px 0 var(--ink); }
+[data-stile="pop"] .wifi::before { display: none; }
+[data-stile="pop"] .wifi h2 { font-weight: 800; text-transform: uppercase; }
+[data-stile="pop"] .wifi h2 svg { color: var(--ground); }
+[data-stile="pop"] .wifi dt { opacity: .85; }
+[data-stile="pop"] .wifi button { background: var(--ground); color: var(--ink); border: 2.5px solid var(--ink); border-radius: 999px; font-weight: 800; }
+[data-stile="pop"] .fine { border: 0; }
+[data-stile="pop"] .fine h2 { font-weight: 800; text-transform: uppercase; font-size: 2.2rem; }
+[data-stile="pop"] .fine a, [data-stile="pop"] .conto a { border-radius: 999px; border: 2.5px solid var(--ink); }
+[data-stile="pop"] .conto { background: var(--ink); }
+[data-stile="pop"] .conto p { font-weight: 800; }
+[data-stile="pop"] .conto a { border-color: var(--ground); }
+[data-stile="pop"] .piede h2 { font-weight: 800; }
+[data-stile="pop"] .legenda i { background: var(--card); border-color: var(--ink); color: var(--ink); }
+[data-stile="pop"] .demo { border-color: var(--ink); color: var(--ink); border-radius: 999px; }
+[data-stile="pop"] .scheda { border-top: 3px solid var(--ink); border-radius: 26px 26px 0 0; }
+[data-stile="pop"] .scheda .arco { border-radius: 22px; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); aspect-ratio: 4 / 3.2; }
+[data-stile="pop"] .scheda h3 { font-weight: 800; text-transform: uppercase; font-size: 2rem; }
+[data-stile="pop"] .scheda .blocco b { color: var(--accent); font-weight: 800; }
+[data-stile="pop"] .chiudi { border: 2.5px solid var(--ink); }
+[data-stile="pop"] .toast { border-radius: 999px; }
 </style>
 
 <div class="conto" id="conto" role="region" aria-live="polite">
@@ -184,7 +312,7 @@ button { font: inherit; color: inherit; }
 
 <header class="top">
   <div class="wrap">
-    <div class="mono">Osteria <b>XXIII</b></div>
+    <div class="mono" id="mono">Osteria <b>XXIII</b></div>
     <nav class="lang" id="lang" aria-label="Lingua"></nav>
   </div>
 </header>
@@ -195,7 +323,7 @@ button { font: inherit; color: inherit; }
       <img src="img/sala.jpg" alt="" id="salaImg">
       <div class="tavolo" id="tavolo"></div>
     </div>
-    <h1 class="nome">Osteria<br><em>Ventitré</em></h1>
+    <h1 class="nome" id="nome">Osteria<br><em>Ventitré</em></h1>
     <p class="dove" id="dove"></p>
     <div class="azioni">
       <a href="#wifi" id="aWifi"><svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M4 15a39 39 0 0 1 56 0"/><path d="M13 24.5a26 26 0 0 1 38 0"/><path d="M21.5 33.8a14 14 0 0 1 21 0"/><circle cx="32" cy="42" r="3.4" fill="currentColor" stroke="none"/></svg><span></span></a>
@@ -212,7 +340,7 @@ button { font: inherit; color: inherit; }
     <section class="wifi" id="wifi">
       <h2><svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M4 15a39 39 0 0 1 56 0"/><path d="M13 24.5a26 26 0 0 1 38 0"/><path d="M21.5 33.8a14 14 0 0 1 21 0"/><circle cx="32" cy="42" r="3.4" fill="currentColor" stroke="none"/></svg><span id="wifiT"></span></h2>
       <dl>
-        <dt id="wifiR"></dt><dd>Ventitre-Ospiti</dd>
+        <dt id="wifiR"></dt><dd id="ssid">Ventitre-Ospiti</dd>
         <dt id="wifiP"></dt><dd id="pw">carbonara1987</dd>
       </dl>
       <button type="button" id="copia"></button>
@@ -316,6 +444,23 @@ button { font: inherit; color: inherit; }
   ]};
 
   var $ = function (id) { return document.getElementById(id); };
+
+  /* ── gli stili: stesso menù, locale e aspetto diversi ── */
+  var STILE = document.documentElement.dataset.stile || 'osteria';
+  var STILI = {
+    bistrot: { titolo: 'Bistrot Quarantuno', mono: 'Quarantuno', nome: 'Bistrot<br><em>Quarantuno</em>', foto: 'carciofo', ssid: 'Quarantuno-Guest', pw: 'cacioepepe41',
+      dove: { it: 'Bistrot di quartiere · Monti · vino naturale', en: 'Neighbourhood bistro · Monti · natural wine', de: 'Nachbarschaftsbistro · Monti · Naturwein', fr: 'Bistrot de quartier · Monti · vin nature', es: 'Bistró de barrio · Monti · vino natural' } },
+    pop: { titolo: 'Trattoria Tonda', mono: 'Trattoria <b>Tonda</b>', nome: 'Trattoria<br><em>Tonda!</em>', foto: 'suppli', ssid: 'Tonda-Free', pw: 'supplì2024',
+      dove: { it: 'Trattoria pop · Pigneto · aperti anche a pranzo', en: 'Pop trattoria · Pigneto · open for lunch too', de: 'Pop-Trattoria · Pigneto · auch mittags geöffnet', fr: 'Trattoria pop · Pigneto · ouvert aussi le midi', es: 'Trattoria pop · Pigneto · abierto también a mediodía' } }
+  };
+  var CFG = STILI[STILE];
+  if (CFG) {
+    document.title = CFG.titolo; $('mono').innerHTML = CFG.mono; $('nome').innerHTML = CFG.nome;
+    $('salaImg').src = 'img/' + CFG.foto + '.jpg'; $('ssid').textContent = CFG.ssid; $('pw').textContent = CFG.pw;
+    LINGUE.forEach(function (k) { UI[k].dove = CFG.dove[k]; });
+  }
+  // nel pop le portate si contano in cifre, non in numeri romani
+  function num(s, i) { return STILE === 'pop' ? String(i + 1) : s.num; }
   // la lingua scelta vince; quella del telefono vale solo alla prima apertura
   var lingua = null;
   try { var l = localStorage.getItem('v23_lingua'); if (LINGUE.indexOf(l) >= 0) lingua = l; } catch (e) {}
@@ -353,11 +498,11 @@ button { font: inherit; color: inherit; }
     $('demo').textContent = fine() ? u.demoOff : u.demo;
 
     var sezioni = CARTA.concat([VINI]);
-    $('indice').innerHTML = sezioni.map(function (s) { return '<a href="#' + s.id + '" data-s="' + s.id + '"><span>' + s.num + '</span>' + esc(s.t[lingua]) + '</a>'; }).join('');
+    $('indice').innerHTML = sezioni.map(function (s, i) { return '<a href="#' + s.id + '" data-s="' + s.id + '"><span>' + num(s, i) + '</span>' + esc(s.t[lingua]) + '</a>'; }).join('');
 
     var h = '';
-    CARTA.forEach(function (s) {
-      h += '<section class="portata" id="' + s.id + '"><div class="portata-h"><span class="num" aria-hidden="true">' + s.num + '</span><h2>' + esc(s.t[lingua]) + '</h2><small>' + s.piatti.length + ' ' + u.piatti + '</small></div>';
+    CARTA.forEach(function (s, si) {
+      h += '<section class="portata" id="' + s.id + '"><div class="portata-h"><span class="num" aria-hidden="true">' + num(s, si) + '</span><h2>' + esc(s.t[lingua]) + '</h2><small>' + s.piatti.length + ' ' + u.piatti + '</small></div>';
       s.piatti.forEach(function (pi, i) {
         var key = s.id + ':' + i;
         if (pi.casa) {
@@ -370,7 +515,7 @@ button { font: inherit; color: inherit; }
       });
       h += '</section>';
     });
-    h += '<section class="portata" id="vini"><div class="portata-h"><span class="num" aria-hidden="true">V</span><h2>' + esc(VINI.t[lingua]) + '</h2></div>';
+    h += '<section class="portata" id="vini"><div class="portata-h"><span class="num" aria-hidden="true">' + num(VINI, CARTA.length) + '</span><h2>' + esc(VINI.t[lingua]) + '</h2></div>';
     VINI.righe.forEach(function (w) {
       var pr = w.caraffa ? u.caraffa + ' ' + euro(w.caraffa) : u.calice + ' ' + euro(w.calice) + '<br>' + u.bott + ' ' + euro(w.bott);
       h += '<div class="vino"><b>' + esc(w.n) + '</b><span>' + esc(w.s[lingua]) + '</span><span class="prezzo">' + pr + '</span></div>';
