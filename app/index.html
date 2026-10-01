@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0e1013">
+<title>Turni e chiusura · Rete SB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="app.css?v=20260929e">
+<link rel="icon" href="../favicon.ico">
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════════════════════
+     App del locale · il tag NFC sulla cassa o in vista (Rete SB, fase 2)
+     /app/?l=<codice del locale>. Lo staff tocca il suo nome, mette il PIN
+     e il turno si apre o si chiude; chi chiude il locale lo segna qui.
+     Nessun dato nella pagina: tutto arriva dal backend col codice del tag.
+     ═══════════════════════════════════════════════════════════════════ -->
+<main class="pagina" id="app">
+  <p class="nota">Caricamento…</p>
+</main>
+
+<script>
+(function () {
+  var API = (function () { try { return localStorage.getItem('sb_app_api'); } catch (e) { return null; } })()
+    || 'https://web-production-f3794.up.railway.app';
+  var CODICE = new URLSearchParams(location.search).get('l') || '';
+  var VOCI = [['celle', 'Celle e frigoriferi chiusi'], ['gas', 'Gas e forni spenti'], ['luci', 'Luci spente'],
+              ['cassa', 'Cassa chiusa'], ['porte', 'Porte e serrande chiuse']];
+  var app = document.getElementById('app');
+  var dati = null, scelta = null, pin = '', modo = 'turno', tornaVia = null;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function ora(iso) { return iso ? iso.slice(11, 16) : new Date().toTimeString().slice(0, 5); }
+  // 15 secondi e poi si dice che la rete non risponde: meglio di una rotella senza fine
+  function chiama(percorso, corpo) {
+    var ctrl = window.AbortController ? new AbortController() : null, t = ctrl && setTimeout(function () { ctrl.abort(); }, 15000);
+    var opz = corpo ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) } : {};
+    if (ctrl) opz.signal = ctrl.signal;
+    return fetch(API + '/api/app/' + encodeURIComponent(CODICE) + percorso, opz)
+      .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || 'Errore'); return d; }); })
+      .catch(function (e) { throw new Error(e.name === 'AbortError' || e.message === 'Failed to fetch' ? 'La rete non risponde: riprova tra poco.' : e.message); })
+      .then(function (d) { clearTimeout(t); return d; }, function (e) { clearTimeout(t); throw e; });
+  }
+  // mentre parte una richiesta la pagina non accetta altri tocchi: niente doppie timbrature
+  function attendi(testo) {
+    app.innerHTML = testa(modo === 'chiusura' ? 'Chiusura' : 'Turni') + '<div class="esito"><h2>' + esc(testo) + '</h2><p class="nota">Un attimo…</p></div>';
+  }
+
+  function carica() {
+    clearTimeout(tornaVia);
+    if (!CODICE) { app.innerHTML = '<div class="errore">Manca il codice del locale: tocca col telefono il tag del locale, sulla cassa.</div>'; return; }
+    chiama('').then(function (d) { dati = d; scelta = null; pin = ''; modo = 'turno'; elenco(); })
+      .catch(function (e) { app.innerHTML = '<div class="errore">' + esc(e.message === 'Failed to fetch' ? 'Nessuna connessione: riprova tra poco.' : e.message) + '</div>'; });
+  }
+
+  function testa(sotto) {
+    return '<header class="testa"><div><small>' + esc(sotto) + '</small><h1>' + esc(dati.locale) + '</h1></div><div class="ora num" id="ora">' + ora() + '</div></header>';
+  }
+
+  function elenco() {
+    var dentro = dati.persone.filter(function (p) { return p.in_servizio; }).length;
+    app.innerHTML = testa('Turni') +
+      '<h2>Chi sei?</h2>' +
+      (dati.persone.length ? '<div class="nomi">' + dati.persone.map(function (p) {
+        return '<button type="button" class="nome ' + (p.in_servizio ? 'dentro' : '') + '" data-id="' + p.id + '">' + esc(p.nome) +
+          '<span>' + (p.in_servizio ? 'in servizio · tocca per uscire' : 'tocca per entrare') + '</span></button>';
+      }).join('') + '</div>' : '<p class="nota">Nessuno è ancora registrato: lo fa il consulente SB dalla console.</p>') +
+      '<p class="nota">' + (dentro ? dentro + (dentro === 1 ? ' persona' : ' persone') + ' in servizio adesso.' : 'Nessuno in servizio adesso.') + '</p>' +
+      (dati.chiuso_oggi ? '<p class="nota">La chiusura di stasera è già segnata.</p>'
+        : '<button type="button" class="bottone chiaro" id="chiudi">Chiudi il locale</button>') +
+      '<p class="piede">Rete SB · SB Food Consulting</p>';
+    app.querySelectorAll('.nome').forEach(function (b) {
+      b.addEventListener('click', function () {
+        scelta = dati.persone.filter(function (p) { return p.id === +b.dataset.id; })[0]; pin = ''; tastierino();
+      });
+    });
+    var c = document.getElementById('chiudi');
+    if (c) c.addEventListener('click', function () { modo = 'chiusura'; sceltaChiusura(); });
+  }
+
+  function sceltaChiusura() {
+    app.innerHTML = testa('Chiusura') + '<h2>Chi chiude stasera?</h2><div class="nomi">' + dati.persone.map(function (p) {
+      return '<button type="button" class="nome" data-id="' + p.id + '">' + esc(p.nome) + '<span>tocca</span></button>';
+    }).join('') + '</div><button type="button" class="bottone chiaro" id="annulla">Indietro</button>';
+    app.querySelectorAll('.nome').forEach(function (b) {
+      b.addEventListener('click', function () { scelta = dati.persone.filter(function (p) { return p.id === +b.dataset.id; })[0]; pin = ''; tastierino(); });
+    });
+    document.getElementById('annulla').addEventListener('click', carica);
+  }
+
+  function tastierino(errore) {
+    var cosa = modo === 'chiusura' ? 'Chiusura del locale' : scelta.in_servizio ? 'Fine turno' : 'Inizio turno';
+    app.innerHTML = testa(cosa) +
+      '<h2>' + esc(scelta.nome) + ', il tuo PIN</h2>' +
+      (errore ? '<div class="errore">' + esc(errore) + '</div>' : '') +
+      '<div class="pin-punti" aria-label="Cifre scritte: ' + pin.length + '">' + [0, 1, 2, 3, 4, 5].slice(0, Math.max(4, pin.length)).map(function (i) { return '<i class="' + (i < pin.length ? 'pieno' : '') + '"></i>'; }).join('') + '</div>' +
+      '<div class="tastiera">' + [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (n) { return '<button type="button" data-n="' + n + '">' + n + '</button>'; }).join('') +
+      '<button type="button" class="tenue" data-a="indietro">Indietro</button><button type="button" data-n="0">0</button><button type="button" class="tenue" data-a="cancella">Cancella</button></div>' +
+      '<button type="button" class="bottone" id="ok" ' + (pin.length < 4 ? 'disabled' : '') + '>' + (modo === 'chiusura' ? 'Avanti' : cosa) + '</button>';
+    app.querySelectorAll('[data-n]').forEach(function (b) { b.addEventListener('click', function () { if (pin.length < 6) { pin += b.dataset.n; tastierino(); } }); });
+    app.querySelector('[data-a=cancella]').addEventListener('click', function () { pin = pin.slice(0, -1); tastierino(); });
+    app.querySelector('[data-a=indietro]').addEventListener('click', carica);
+    document.getElementById('ok').addEventListener('click', function () { modo === 'chiusura' ? spunte() : timbra(); });
+  }
+
+  function timbra() {
+    attendi(scelta.in_servizio ? 'Fine turno' : 'Inizio turno');
+    chiama('/timbra', { persona_id: scelta.id, pin: pin }).then(function (r) {
+      var h = r.ore != null ? Math.floor(r.ore) + ' h ' + Math.round((r.ore % 1) * 60) + ' min' : '';
+      app.innerHTML = '<div class="esito ' + r.azione + '"><div class="segno">✓</div>' +
+        '<h2>' + (r.azione === 'inizio' ? 'Buon lavoro, ' + esc(r.nome) : 'A presto, ' + esc(r.nome)) + '</h2>' +
+        '<p class="nota">' + (r.azione === 'inizio' ? 'Inizio turno alle ' + ora(r.ora) : 'Fine turno alle ' + ora(r.ora) + ' · ' + h) + '</p></div>';
+      tornaVia = setTimeout(carica, 4000);
+    }).catch(function (e) {
+      // se la rete è caduta non sappiamo se la timbratura è arrivata: si rilegge lo stato prima di rifarla
+      if (/rete/.test(e.message)) { app.innerHTML = '<div class="errore">' + esc(e.message) + ' Controlla nell\'elenco se il turno risulta aperto prima di rifarlo.</div><button type="button" class="bottone chiaro" id="riprova">Torna all\'elenco</button>';
+        document.getElementById('riprova').addEventListener('click', carica); return; }
+      pin = ''; tastierino(e.message);
+    });
+  }
+
+  function spunte(errore) {
+    app.innerHTML = testa('Chiusura') + '<h2>Prima di andare</h2>' + (errore ? '<div class="errore">' + esc(errore) + '</div>' : '') +
+      '<div class="spunte">' + VOCI.map(function (v) { return '<label class="spunta"><input type="checkbox" name="' + v[0] + '"> ' + v[1] + '</label>'; }).join('') + '</div>' +
+      '<textarea id="nota" rows="3" placeholder="Qualcosa da segnalare? (facoltativo)"></textarea>' +
+      '<button type="button" class="bottone" id="conferma">Segna la chiusura</button>' +
+      '<button type="button" class="bottone chiaro" id="annulla">Annulla</button>';
+    document.getElementById('annulla').addEventListener('click', carica);
+    document.getElementById('conferma').addEventListener('click', function () {
+      var voci = { nota: document.getElementById('nota').value };
+      VOCI.forEach(function (v) { voci[v[0]] = app.querySelector('[name=' + v[0] + ']').checked; });
+      attendi('Chiusura del locale');
+      chiama('/chiusura', { persona_id: scelta.id, pin: pin, voci: voci }).then(function (r) {
+        var manca = VOCI.filter(function (v) { return r.mancano.indexOf(v[0]) >= 0; }).map(function (v) { return v[1].toLowerCase(); });
+        app.innerHTML = '<div class="esito fine"><div class="segno">✓</div><h2>Chiusura segnata</h2>' +
+          '<p class="nota">' + (manca.length ? 'Da ricontrollare: ' + esc(manca.join(', ')) + '.' : 'Tutto a posto. Buona serata.') + '</p></div>';
+        tornaVia = setTimeout(carica, 5000);
+      }).catch(function (e) { if (/PIN/.test(e.message)) { pin = ''; tastierino(e.message); } else spunte(e.message); });
+    });
+  }
+
+  setInterval(function () { var o = document.getElementById('ora'); if (o) o.textContent = ora(); }, 15000);
+  carica();
+})();
+</script>
+</body>
+</html>

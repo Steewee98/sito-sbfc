@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0e1013">
+<title>Owner · Rete SB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="app.css?v=20260929e">
+<link rel="icon" href="../favicon.ico">
+<script src="grafici.js?v=20260929e"></script>
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════════════════════
+     App del locale · «Il quadro» del titolare (Rete SB, fase 2)
+     Una pagina da leggere: pochi numeri e una frase su cosa è cambiato.
+     Il titolare entra con email e password date dal consulente SB.
+     ═══════════════════════════════════════════════════════════════════ -->
+<main class="pagina" id="app"><p class="nota">Caricamento…</p></main>
+
+<script>
+(function () {
+  var API = (function () { try { return localStorage.getItem('sb_app_api'); } catch (e) { return null; } })()
+    || 'https://web-production-f3794.up.railway.app';
+  var app = document.getElementById('app');
+  // il token sta in memoria; localStorage serve solo a ricordarlo alla prossima apertura
+  var memoria = {};
+  function leggi(k) { if (k in memoria) return memoria[k]; try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function scrivi(k, v) { memoria[k] = v; try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
+  function prendi(url, opz) {
+    var ctrl = window.AbortController ? new AbortController() : null, t = ctrl && setTimeout(function () { ctrl.abort(); }, 15000);
+    opz = opz || {}; if (ctrl) opz.signal = ctrl.signal;
+    return fetch(url, opz).then(function (r) { clearTimeout(t); return r; },
+      function (e) { clearTimeout(t); throw new Error(e.name === 'AbortError' ? 'La rete non risponde: riprova tra poco.' : e.message); });
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function euro(n) { return n == null ? '—' : n.toLocaleString('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }); }
+  function pct(n) { return n == null ? '—' : n.toLocaleString('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%'; }
+  function giorno(s) { return new Date(s + 'T12:00:00').toLocaleDateString('it-IT', { day: 'numeric', month: 'long' }); }
+  function variazione(v, meglioSu) {
+    if (v == null) return '';
+    var su = v > 0, bene = meglioSu ? su : !su;
+    return '<span class="' + (Math.abs(v) < 0.5 ? '' : bene ? 'su' : 'giu') + '">' + (su ? '▲ ' : v < 0 ? '▼ ' : '') + pct(Math.abs(v)).replace('%', '') + (meglioSu ? '%' : ' punti') + ' sulla settimana prima</span>';
+  }
+
+  function accesso(errore) {
+    app.innerHTML = '<header class="testa"><div><small>Rete SB</small><h1>Il quadro<br>del tuo locale</h1></div><span class="sigla">SB</span></header>' +
+      '<form class="accesso vetro" id="entra"><label for="email">Email</label><input class="campo" id="email" type="email" autocomplete="username" required>' +
+      '<label for="parola">Password</label><input class="campo" id="parola" type="password" autocomplete="current-password" required>' +
+      (errore ? '<div class="errore">' + esc(errore) + '</div>' : '') +
+      '<button class="bottone" type="submit">Entra</button></form>' +
+      '<p class="piede">Le credenziali te le dà il tuo consulente SB Food Consulting.</p>';
+    document.getElementById('entra').addEventListener('submit', function (e) {
+      e.preventDefault();
+      prendi(API + '/api/app/login', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: document.getElementById('email').value, password: document.getElementById('parola').value }) })
+        .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || 'Errore'); return d; }); })
+        .then(function (d) { scrivi('sb_app_tok', d.token); carica(); })
+        .catch(function (x) { accesso(x.message === 'Failed to fetch' ? 'Nessuna connessione: riprova.' : x.message); });
+    });
+  }
+
+  var aperto = false;
+  function carica(silenzioso) {
+    var tok = leggi('sb_app_tok');
+    if (!tok) { aperto = false; return silenzioso ? null : accesso(); }
+    prendi(API + '/api/app/quadro', { headers: { Authorization: 'Bearer ' + tok } })
+      .then(function (r) { return r.json().then(function (d) { if (r.status === 401) { scrivi('sb_app_tok', null); throw new Error(d.error); } if (!r.ok) throw new Error(d.error || 'Errore'); return d; }); })
+      .then(function (q) { var y = window.scrollY; disegna(q); aperto = true; if (silenzioso) window.scrollTo(0, y); })
+      .catch(function (x) { if (silenzioso && leggi('sb_app_tok')) return; aperto = false; leggi('sb_app_tok') ? app.innerHTML = '<div class="errore">' + esc(x.message) + '</div>' : accesso(x.message); });
+  }
+  // i numeri li cambia SB da un'altra parte: si rileggono quando si torna sull'app e ogni 30 secondi
+  var ultimo = 0;
+  function aggiorna() {
+    if (!aperto || document.hidden || Date.now() - ultimo < 5000) return;
+    ultimo = Date.now(); carica(true);
+  }
+  window.addEventListener('focus', aggiorna);
+  document.addEventListener('visibilitychange', aggiorna);
+  setInterval(aggiorna, 30000);
+
+  var PAROLA = { buono: 'In linea', attesa: 'Da tenere d’occhio', fuori: 'Fuori obiettivo' };
+  var GIORNI = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
+
+  // la cifra che conta, dentro la frase, in evidenza
+  function evidenzia(frase) { return esc(frase).replace(/(\d+(?:[,.]\d+)?\s?(?:punti|%))/g, '<em>$1</em>'); }
+
+  // anello del food cost: l'arco è il vero, la tacca è l'obiettivo
+  function anello(fc) {
+    var r = 44, C = 2 * Math.PI * r, max = Math.max(fc.obiettivo * 1.6, fc.vero * 1.15, 30);
+    var colore = fc.semaforo === 'fuori' ? 'var(--fuori)' : fc.semaforo === 'attesa' ? 'var(--attesa)' : 'var(--buono)';
+    var ang = fc.obiettivo / max * 2 * Math.PI, tx = 50 + Math.cos(ang) * r, ty = 50 + Math.sin(ang) * r;
+    return '<div class="anello" role="img" aria-label="Food cost ' + pct(fc.vero) + ', obiettivo ' + pct(fc.obiettivo) + '"><svg viewBox="0 0 100 100">' +
+      '<circle cx="50" cy="50" r="' + r + '" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="9"/>' +
+      '<circle cx="50" cy="50" r="' + r + '" fill="none" stroke="' + colore + '" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + (Math.min(fc.vero / max, 1) * C).toFixed(1) + ' ' + C.toFixed(1) + '"/>' +
+      '<circle cx="' + tx.toFixed(1) + '" cy="' + ty.toFixed(1) + '" r="3.2" fill="#f4f2ef"/></svg>' +
+      '<div class="val"><b class="num">' + pct(fc.vero) + '</b><i>obiettivo ' + pct(fc.obiettivo) + '</i></div></div>';
+  }
+
+  // mini andamento dentro la scheda: le ultime otto settimane, senza assi
+  var nSpark = 0;
+  function spark(valori) {
+    // solo le settimane con dati, distese su tutta la larghezza
+    var v = valori.filter(function (x) { return x != null; });
+    if (v.length < 2) return '';
+    valori = v;
+    var min = Math.min.apply(null, v), max = Math.max.apply(null, v), W = 100, H = 30, id = 'sf' + (++nSpark);
+    var pts = []; valori.forEach(function (x, i) { if (x != null) pts.push([i / (valori.length - 1) * W, H - 3 - (max === min ? .5 : (x - min) / (max - min)) * (H - 6)]); });
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('');
+    var ult = pts[pts.length - 1];
+    return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="' + id + '" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ef8b52" stop-opacity=".35"/><stop offset="1" stop-color="#ef8b52" stop-opacity="0"/></linearGradient></defs>' +
+      '<path class="a" style="fill:url(#' + id + ')" d="' + d + 'L' + ult[0].toFixed(1) + ' ' + H + 'L' + pts[0][0].toFixed(1) + ' ' + H + 'Z"/><path class="l" d="' + d + '"/><circle cx="' + ult[0].toFixed(1) + '" cy="' + ult[1].toFixed(1) + '" r="2.6"/></svg>';
+  }
+
+  function delta(v, unita, meglioSu) {
+    if (v == null) return '';
+    var su = v > 0.05, giu = v < -0.05, bene = meglioSu ? su : giu;
+    var n = Math.abs(v).toLocaleString('it-IT', { maximumFractionDigits: 1 });
+    if (unita === ' punti' && n === '1') unita = ' punto';
+    return '<span class="delta ' + (!su && !giu ? 'pari' : bene ? 'su' : 'giu') + '">' + (su ? '▲ ' : giu ? '▼ ' : '') +
+      n + unita + ' sulla settimana prima</span>';
+  }
+
+  function disegna(q) {
+    var fc = q.food_cost, pers = q.personale, inc = q.incasso, a = q.andamento || { settimane: [] };
+    var tono = fc ? (fc.semaforo === 'buono' ? 'bene' : 'male') : '';
+    var sere = (q.chiusure.sere || []).map(function (x) {
+      return '<span><i class="' + x.stato + '" title="' + esc(x.giorno) + (x.manca.length ? ': da ricontrollare ' + esc(x.manca.join(', ')) : '') + '"></i>' + GIORNI[new Date(x.giorno + 'T12:00:00').getDay()] + '</span>';
+    }).join('');
+    app.innerHTML =
+      '<header class="testa"><div><small>Ciao ' + esc(q.chi) + '</small><h1>' + esc(q.locale) + '</h1></div><span class="sigla">SB</span></header>' +
+      '<span class="quando">Settimana dal ' + giorno(q.dal) + ' al ' + giorno(q.al) + '</span>' +
+      '<section class="eroe vetro ' + tono + '"><span class="etichetta">Cosa è cambiato</span><p class="frase">' + evidenzia(q.frase) + '</p>' +
+        (fc ? '<div class="fc">' + anello(fc) + '<div class="fc-testo"><span>Food cost vero <b class="num">' + pct(fc.vero) + '</b></span>' +
+          '<span>Quello che le ricette giustificano <b class="num">' + pct(fc.ricette) + '</b></span>' +
+          '<span class="pillola ' + fc.semaforo + '">' + PAROLA[fc.semaforo] + '</span></div></div>'
+          : q.food_cost_ricette
+            // prima dei due inventari: quello che le ricette dicono sulle vendite, con la stima detta chiara
+            ? '<p class="nota">Secondo le ricette il food cost è <b class="num">' + pct(q.food_cost_ricette.valore) + '</b> (obiettivo ' +
+              pct(q.food_cost_ricette.obiettivo) + ', ' + esc(q.food_cost_ricette.quando) + ')' +
+              (q.food_cost_ricette.quota_stima ? ', con prezzi in parte stimati' : '') +
+              '. Il food cost vero arriva con i primi due inventari del consulente.</p>'
+            : '<p class="nota">Il food cost arriva dopo i primi due inventari del consulente.</p>') +
+      '</section>' +
+      '<div class="numeri">' +
+        (!inc.giorni && inc.periodo
+          // la cassa arriva a blocchi (report SumUp): la media a settimana dell'ultimo report, e di quale periodo
+          ? '<div class="numero vetro"><small>Incasso medio a settimana</small><b class="num">' + euro(inc.periodo.sett_incasso) + '</b>' +
+            '<span class="sotto">' + euro(inc.periodo.incasso) + ' ' + esc(inc.periodo.quando) + '</span></div>'
+          : '<div class="numero vetro"><small>Incasso</small><b class="num">' + euro(inc.euro) + '</b>' + delta(inc.variazione, '%', true) +
+            spark(a.settimane.map(function (x) { return x.giorni ? x.incasso : null; })) + '</div>') +
+        '<div class="numero vetro"><small>Personale</small><b class="num">' + pct(pers.percento) + '</b><span class="sotto">' + pers.ore.toLocaleString('it-IT') + ' ore timbrate</span>' +
+          (pers.percento != null && pers.prima != null ? delta(pers.percento - pers.prima, ' punti', false) : '') +
+          spark(a.settimane.map(function (x) { return x.personale; })) + '</div>' +
+      '</div>' +
+      '<div class="numero vetro"><small>Chiusure della sera</small><b class="num">' + q.chiusure.segnate + ' su ' + q.chiusure.giorni + '</b>' +
+        '<div class="sere">' + sere + '</div>' + stasera(q.chiusure.stasera) + '<span class="sotto" style="margin-top:6px">Verde: tutto a posto · giallo: qualcosa da ricontrollare · vuoto: non segnata</span></div>' +
+      acquisti(q.lavoro) +
+      previsto(q.personale) +
+      '<div class="servizio vetro">' + (q.in_servizio.length ? '<span>In servizio adesso</span>' + q.in_servizio.map(function (n) {
+        return '<span class="chi"><b>' + esc(n.charAt(0)) + '</b>' + esc(n) + '</span>'; }).join('') : '<span>Nessuno in servizio adesso.</span>') + '</div>' +
+      squadra(q.squadra) +
+      grafici(a) +
+      lavoroSB(q.lavoro) +
+      '<p class="piede">I numeri li aggiorna SB Food Consulting con la cassa, le fatture e gli inventari.</p>' +
+      '<button type="button" class="bottone chiaro" id="esci">Esci</button>';
+    document.getElementById('esci').addEventListener('click', function () { scrivi('sb_app_tok', null); aperto = false; accesso(); });
+  }
+
+  function data(s) { return new Date(s + 'T12:00:00').toLocaleDateString('it-IT', { day: 'numeric', month: 'short' }); }
+
+  function stasera(s) {
+    if (!s) return '';
+    var t = s.stato === 'no' ? 'Stasera: non ancora segnata' : 'Stasera: segnata' + (s.ora ? ' alle ' + s.ora : '') + (s.chi ? ' da ' + esc(s.chi) : '') +
+      (s.manca.length ? ' · da ricontrollare: ' + esc(s.manca.join(', ')) : ' · tutto a posto');
+    return '<span class="stasera ' + s.stato + '">' + t + '</span>';
+  }
+
+  function acquisti(w) {
+    if (!w) return '';
+    return '<div class="numeri">' +
+      '<div class="numero vetro"><small>Acquisti</small><b class="num">' + euro(w.acquisti) + '</b><span class="sotto">' + w.fatture_settimana + (w.fatture_settimana === 1 ? ' fattura' : ' fatture') + ' della settimana</span></div>' +
+      '<div class="numero vetro"><small>Scarti</small><b class="num">' + euro(w.scarti_euro) + '</b><span class="sotto">' + w.scarti + (w.scarti === 1 ? ' registrato' : ' registrati') + ' in settimana</span></div>' +
+      '</div>';
+  }
+
+  // il personale che si spende: dal turno previsto, prima che la settimana cominci
+  function previsto(p) {
+    var x = p && p.prossima;
+    if (!x) return '';
+    var mesi = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+    return '<div class="numeri">' +
+      '<div class="numero vetro"><small>Personale, prossimi 7 giorni</small><b class="num">' + euro(x.euro) + '</b><span class="sotto">' + x.ore.toLocaleString('it-IT') + ' ore dal turno previsto</span></div>' +
+      '<div class="numero vetro"><small>Personale a ' + mesi[x.mese - 1] + '</small><b class="num">' + euro(x.euro_mese) + '</b><span class="sotto">' + x.ore_mese.toLocaleString('it-IT') + ' ore previste nel mese</span></div>' +
+      '</div>';
+  }
+
+  var RUOLO = { titolare: 'Titolare', responsabile: 'Responsabile', staff: 'Staff' };
+  function squadra(sq) {
+    if (!sq) return '';
+    var ore = sq.reduce(function (t, p) { return t + p.ore; }, 0), max = Math.max.apply(null, sq.map(function (p) { return p.ore; }).concat([1]));
+    return '<p class="titolino">La squadra</p><section class="squadra vetro">' +
+      (sq.length ? sq.map(function (p) {
+        return '<div class="persona' + (p.in_servizio ? ' dentro' : '') + '"><span class="iniz">' + esc(p.nome.charAt(0).toUpperCase()) + '</span>' +
+          '<div class="pn"><b>' + esc(p.nome) + '</b><span>' + (p.mansione ? esc(p.mansione) : (RUOLO[p.ruolo] || esc(p.ruolo))) + (p.in_servizio ? ' · in servizio' : '') +
+            (p.ore_previste != null ? ' · ' + p.ore_previste.toLocaleString('it-IT') + ' h previste' : '') + '</span>' +
+          '<i class="barra-ore"><i style="width:' + Math.round(p.ore / max * 100) + '%"></i></i></div>' +
+          '<b class="num ore">' + p.ore.toLocaleString('it-IT') + '<small> h</small></b></div>';
+      }).join('') + '<p class="dida">' + ore.toLocaleString('it-IT', { maximumFractionDigits: 1 }) + ' ore timbrate negli ultimi 7 giorni.</p>'
+      : '<p class="nota">Chi lavora nel locale lo inserisce il consulente SB.</p>') + '</section>';
+  }
+
+  function lavoroSB(w) {
+    if (!w) return '';
+    var righe = [
+      ['Fatture caricate', w.fatture + (w.ultima_fattura ? ' · ultima del ' + data(w.ultima_fattura) : '')],
+      ['Ricette nel ricettario', w.ricette + ' · ' + w.articoli + ' ingredienti'],
+      ['Inventari', w.inventari ? w.inventari + ' · ultimo del ' + data(w.ultimo_inventario) + (w.inventari < 2 ? ' · al prossimo arriva il food cost' : '') : (w.inventario_aperto ? 'il primo è in corso' : 'ancora nessuno')],
+      ['Cassa', w.ultima_vendita ? 'aggiornata al ' + data(w.ultima_vendita) : 'non ancora collegata']
+    ];
+    return '<p class="titolino">Il lavoro di SB</p><section class="lavoro vetro">' + righe.map(function (r) {
+      return '<div><span>' + r[0] + '</span><b>' + esc(r[1]) + '</b></div>'; }).join('') + '</section>';
+  }
+
+  // i grafici: com'è andata nelle ultime otto settimane, e cosa si vende
+  function grafici(a) {
+    if (!a || !a.settimane || !window.SBGrafici) return '';
+    var G = window.SBGrafici, s = a.settimane, T = { largo: 360, alto: 210, ogni: 2 }, et = function (x) { return G.settimana(x.dal, x.al); };
+    var migliaia = function (v, asse) { return asse ? (Math.round(v / 100) / 10).toLocaleString('it-IT') + 'k' : euro(v); };
+    var maxPiatto = Math.max.apply(null, a.piatti.map(function (p) { return p.quantita; }).concat([1]));
+    function fig(titolo, nota, corpo, dida) { return '<figure class="vetro"><figcaption><b>' + titolo + '</b><span>' + nota + '</span></figcaption>' + corpo + (dida ? '<p class="dida">' + dida + '</p>' : '') + '</figure>'; }
+    return '<p class="titolino">Com’è andata</p><section class="grafici">' +
+      fig('Incasso', 'per settimana', G.barre(Object.assign({ punti: s.map(function (x) { return { etichetta: et(x), valore: x.giorni ? x.incasso : null }; }), formato: migliaia, titolo: 'Incasso per settimana' }, T))) +
+      fig('Costo del personale', 'sull’incasso', G.linea(Object.assign({ punti: s.map(function (x) { return { etichetta: et(x), valore: x.personale }; }), formato: function (v) { return pct(v); }, titolo: 'Costo del personale' }, T)),
+        'Ore timbrate per il costo orario, sull’incasso senza IVA.') +
+      fig('Food cost', 'tra un inventario e l’altro', a.food_cost.length ? G.linea({ punti: a.food_cost.map(function (x) { return { etichetta: new Date(x.al + 'T12:00:00').toLocaleDateString('it-IT', { day: 'numeric', month: 'short' }), valore: x.vero }; }),
+          seconda: a.food_cost.map(function (x) { return x.ricette; }), nomi: ['vero', 'quello delle ricette'], soglia: { valore: a.obiettivo, nome: 'obiettivo ' + pct(a.obiettivo) }, formato: function (v) { return pct(v); }, titolo: 'Food cost per periodo', largo: 360, alto: 210 }) : '<div class="g-vuoto">Arriva dopo i primi due inventari.</div>',
+        a.food_cost.length ? 'La distanza tra la linea arancio e quella tratteggiata è quello che esce oltre le ricette.' : '') +
+      fig('I giorni', 'incasso medio, ultime 4 settimane', G.barre({ punti: a.giorni_settimana.map(function (x) { return { etichetta: x.giorno, valore: x.incasso }; }), formato: function (v, asse) { return asse ? Math.round(v) : euro(v); }, titolo: 'Incasso medio per giorno', evidenzia: null, largo: 360, alto: 200 })) +
+      '</section>' +
+      (a.piatti.length ? '<p class="titolino">Cosa si vende</p><section class="grafici"><figure class="vetro"><figcaption><b>I più venduti</b><span>' + esc(a.piatti_quando || 'ultimi 7 giorni') + '</span></figcaption><div class="classifica">' +
+        a.piatti.map(function (p, i) { return '<div class="voce-cl"><span class="pos">' + (i + 1) + '</span><div class="barra"><i style="width:' + Math.round(p.quantita / maxPiatto * 100) + '%"></i><span>' + esc(p.nome) + '</span></div><b>' + p.quantita + '</b></div>'; }).join('') +
+        '</div></figure></section>' : '');
+  }
+
+  // ?esci: si entra di nuovo da capo (telefono condiviso, o cambio di locale)
+  if (new URLSearchParams(location.search).has('esci')) { scrivi('sb_app_tok', null); history.replaceState(null, '', location.pathname); }
+  carica();
+})();
+</script>
+</body>
+</html>

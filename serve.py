@@ -32,6 +32,11 @@ class Handler(SimpleHTTPRequestHandler):
 
     def send_head(self):
         percorso = self.path.split('?', 1)[0].split('#', 1)[0]
+        # .git, .env e gli altri file nascosti non si servono mai (in produzione non ci sono)
+        from urllib.parse import unquote
+        if any(p.startswith('.') for p in unquote(percorso).split('/') if p):
+            self.send_error(404)
+            return None
         destinazione = REDIRECT_301.get(percorso.rstrip('/') or '/')
         if destinazione:
             self.send_response(301)
