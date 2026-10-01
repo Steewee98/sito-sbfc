@@ -205,6 +205,7 @@
 .md-ok h3 { font-size: 1.6rem; margin-bottom: 10px; }
 .md-ok p { color: var(--ink-soft); line-height: 1.7; }
 .md-conf-main .md-field label:not(.md-file) { color: var(--ink); }
+.md-corto { display: none; }
 .solo-pers[hidden] { display: none !important; }
 
 /* anteprima: la placca a 105x148 mm veri, ridotta con transform (vedi scalaPv) */
@@ -284,11 +285,68 @@
     .md-qr { display: none; } /* da telefono c'è già il pulsante grande sotto l'immagine */
     .md-prova, .md-placca, .md-come, .md-demo, .md-faq { padding: 80px 0; }
     .md-two { grid-template-columns: 1fr; }
+    .md-conf .md-two { grid-template-columns: 1fr 1fr; }
     .md-input { font-size: 16px; }
     .md-specs { grid-template-columns: 1fr; }
     .md-scelte { grid-template-columns: 1fr; }
     .md-conf { padding: 80px 0; }
     .md-stepper button { width: 46px; height: 46px; }
+
+    /* Configuratore da telefono: meno testo, e l'anteprima resta in alto mentre si sceglie
+       la placca (blocchi 01-03); dai tavoli in giù sparisce (classe is-via, vedi script). */
+    .md-conf { padding: 64px 0; }
+    .md-conf-head { margin-bottom: 28px; }
+    .md-conf-head .md-lungo { display: none; }
+    .md-corto { display: block; }
+    .md-conf-grid { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+    .md-aside, .md-prev { display: contents; }
+    .md-prev-k { display: none; }
+    .pv-stage { order: -1; position: sticky; top: 80px; z-index: 5; margin: 0 -24px 24px; padding: 12px 24px 14px;
+        background: var(--surface); border-bottom: 1px solid var(--border);
+        display: flex; justify-content: center; transition: transform .35s ease, opacity .25s ease; }
+    .pv-stage.is-via { transform: translateY(-16px); opacity: 0; pointer-events: none; }
+    .pv-stage .pv-box { width: 132px; flex: none; box-shadow: 0 10px 26px rgba(26,26,26,.2); }
+    .md-riep { order: 2; margin-top: 0; }
+    .md-blk { margin-bottom: 32px; }
+    .md-blk-h { margin-bottom: 12px; }
+    .md-blk-h h3 { font-size: 1.2rem; }
+    .md-scelte { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .md-scelta { padding: 14px 14px 12px; }
+    .md-scelta b { font-size: 1rem; margin-bottom: 0; }
+    .md-scelta span, .md-help, .md-qty > div > span { display: none; }
+    .md-sw { width: 18px; height: 18px; margin-bottom: 6px; }
+    .md-swatches { flex-wrap: nowrap; overflow-x: auto; padding: 3px 3px 6px; margin: 0 -3px; scrollbar-width: none; }
+    .md-swatches::-webkit-scrollbar { display: none; }
+    .md-col { flex: none; width: 34px; height: 34px; }
+    .md-col-nome { margin-top: 4px; }
+    .md-qty { padding: 12px 14px; }
+
+    /* compatto: anteprima + scelte della placca (01-03) stanno in una schermata, così
+       ogni tocco (colore, nero, nome) si vede subito senza scendere */
+    .md-conf-head { margin-bottom: 18px; }
+    .md-conf-head .label { display: none; }
+    .md-conf-head h2 { font-size: 1.75rem; margin: 0 0 8px; }
+    .md-corto { font-size: .9rem; line-height: 1.5; }
+    .pv-stage { padding: 8px 24px 10px; margin-bottom: 16px; }
+    .pv-stage .pv-box { width: 122px; }
+    .md-blk { margin-bottom: 18px; }
+    .md-blk-h { margin-bottom: 8px; gap: 8px; }
+    .md-blk-h .n { font-size: .8rem; }
+    .md-blk-h h3 { font-size: 1rem; }
+    .md-scelta { padding: 10px 12px; display: flex; align-items: center; gap: 8px; }
+    .md-scelta b { font-size: .92rem; }
+    .md-sw { flex: none; width: 14px; height: 14px; margin: 0; }
+    .md-conf .md-two { gap: 10px; }
+    .md-field { margin-bottom: 12px; }
+    .md-field label { font-size: .64rem; letter-spacing: 1.6px; margin-bottom: 5px; }
+    .md-field label .opt, .md-col-nome { display: none; }
+    .md-input { padding: 10px 12px; }
+    .md-col { width: 30px; height: 30px; }
+    .md-swatches { gap: 8px; }
+    .md-field label.md-file, .md-file { padding: 8px 10px; gap: 10px; }
+    .md-file-btn { padding: 7px 10px; font-size: .66rem; }
+    .md-file-name { font-size: .8rem; }
+    .md-or { margin: 6px 0; }
 }
 </style>
 </head>
@@ -440,7 +498,8 @@
         <div class="md-conf-head">
             <span class="label" data-reveal>Crea la tua placca</span>
             <h2 data-reveal data-reveal-delay="50">Scegli come la vuoi,<br><em>mandaci il tuo menù.</em></h2>
-            <p data-reveal data-reveal-delay="100">L'anteprima a destra cambia mentre scegli. Carica il menù com'è, anche la foto della carta: lo trasformiamo noi. Ti rispondiamo in giornata con la bozza e il prezzo sui tuoi tavoli.</p>
+            <p class="md-lungo" data-reveal data-reveal-delay="100">L'anteprima a destra cambia mentre scegli. Carica il menù com'è, anche la foto della carta: lo trasformiamo noi. Ti rispondiamo in giornata con la bozza e il prezzo sui tuoi tavoli.</p>
+            <p class="md-corto">Bozza e prezzo in giornata.</p>
         </div>
         <form id="mdForm" class="md-conf-grid" novalidate>
             <div class="md-conf-main">
@@ -543,7 +602,7 @@
             <aside class="md-aside">
                 <div class="md-prev">
                     <div class="md-prev-k"><span>Anteprima</span><span id="pvNota">Bozza: la rifiniamo noi</span></div>
-                    <div class="pv-box" id="pvBox">
+                    <div class="pv-stage" id="pvStage"><div class="pv-box" id="pvBox">
                         <div class="pv" id="pv">
                             <div class="pv-pers">
                                 <div class="pv-safe">
@@ -580,6 +639,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                     <div class="md-riep">
                         <div class="md-riep-r"><span>Placca</span><span id="rVers">Personalizzata</span></div>
@@ -790,6 +850,12 @@
     function scalaPv() { pv.style.transform = 'scale(' + ($('pvBox').clientWidth / (105 * 96 / 25.4)) + ')'; }
     scalaPv(); window.addEventListener('resize', scalaPv);
     if (window.ResizeObserver) new ResizeObserver(scalaPv).observe($('pvBox'));
+    /* da telefono l'anteprima in alto serve solo mentre si sceglie la placca: dai tavoli in giù si toglie */
+    var blkTavoli = $('mdTav').closest('.md-blk');
+    if (window.IntersectionObserver && blkTavoli) new IntersectionObserver(function (es) {
+        var e = es[0];
+        $('pvStage').classList.toggle('is-via', e.isIntersecting || e.boundingClientRect.top < 0);
+    }, { rootMargin: '0px 0px -45% 0px' }).observe(blkTavoli);
     aggiorna();
 
     /* ── invio: richiesta di bozza e preventivo, con i file ── */
