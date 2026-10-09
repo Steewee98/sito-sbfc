@@ -142,21 +142,22 @@
             '<div class="dlgate-cross-title">&#127873; Prendi gratis anche le altre schede</div>' +
             '<div class="dlgate-cross-list" id="dlgate-cross-list"></div>' +
           '</div>' +
-          '<a class="dlgate-crusc" id="dlgate-crusc" href="https://www.sbfoodconsulting.com/cruscotto-imprenditore" target="_blank" rel="noopener">' +
-            '<span class="dlgate-crusc-badge">-15%</span>' +
+          '<a class="dlgate-crusc" id="dlgate-crusc" href="https://www.sbfoodconsulting.com/academy.html?utm_source=sito&utm_medium=download-scheda&utm_campaign=manuale#formazione" target="_blank" rel="noopener">' +
+            '<img class="dlgate-crusc-img" src="https://www.sbfoodconsulting.com/assets/img/formazione/manager-p1.jpg" alt="" width="54" height="76">' +
             '<span class="dlgate-crusc-body">' +
-              '<strong>Il Cruscotto dell\'Imprenditore</strong>' +
-              '<em>La guida che ti dice, numeri alla mano, come sta andando la tua attivit&agrave;. Oggi <b>&euro;21,25</b> con il codice <b>CRUSCOTTO15</b>.</em>' +
+              '<span class="dlgate-crusc-k">Nuovo manuale &middot; per te <b>&euro;12</b> invece di &euro;15</span>' +
+              '<strong>Il manager della ristorazione</strong>' +
+              '<em>15 pagine operative per chi guida un locale: persone, turni, ospitalit&agrave;, numeri, HACCP. Al pagamento usa la stessa email.</em>' +
             '</span>' +
             '<span class="dlgate-crusc-go">&rarr;</span>' +
-          '</a>' +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
     return wrap;
   }
 
-  // CSS del banner Cruscotto iniettato via JS (self-contained, niente modifiche a style.css)
+  // CSS del banner promo (oggi il manuale «Il manager della ristorazione», a 12 € per chi
+  // ha appena lasciato l'email: il server lo riconosce come lead) iniettato via JS
   function injectCruscStyles() {
     if (document.getElementById('dlgate-crusc-css')) return;
     var s = document.createElement('style');
@@ -168,11 +169,14 @@
       '.dlgate-crusc:hover{border-color:rgba(224,134,63,.95);transform:translateY(-1px)}' +
       '.dlgate-crusc-badge{flex:0 0 auto;background:#e0863f;color:#0a0705;font-weight:800;font-size:15px;' +
       'padding:8px 11px;border-radius:8px;line-height:1}' +
-      '.dlgate-crusc-body{display:flex;flex-direction:column;gap:4px;min-width:0}' +
+      '.dlgate-crusc-body{display:flex;flex-direction:column;gap:4px;min-width:0;text-align:left}' +
       '.dlgate-crusc-body strong{color:#f5efe6;font-size:15px;line-height:1.25}' +
       '.dlgate-crusc-body em{color:#c9b8a6;font-style:normal;font-size:12.5px;line-height:1.4}' +
       '.dlgate-crusc-body b{color:#e0863f;font-weight:700}' +
-      '.dlgate-crusc-go{margin-left:auto;color:#e0863f;font-size:22px;flex:0 0 auto}';
+      '.dlgate-crusc-go{margin-left:auto;color:#e0863f;font-size:22px;flex:0 0 auto}' +
+      '.dlgate-crusc-img{flex:0 0 auto;width:54px;height:76px;object-fit:cover;border-radius:3px;box-shadow:0 6px 16px rgba(0,0,0,.45)}' +
+      '.dlgate-crusc-k{color:#e0863f;font-size:11px;letter-spacing:.6px;text-transform:uppercase;font-weight:700}' +
+      '.dlgate-crusc-k b{color:#f5efe6}';
     document.head.appendChild(s);
   }
 
