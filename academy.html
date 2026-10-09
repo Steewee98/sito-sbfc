@@ -48,6 +48,50 @@
 .nf-stack:hover .nf-img-b { transform: rotate(3deg) translateY(10px); }
 @media (max-width: 1024px) { .nf-intro { grid-template-columns: 1fr; gap: 48px; } .nf-stack { height: 460px; max-width: 480px; margin: 0 auto; } }
 @media (max-width: 720px) { .nf-stack { height: 380px; } }
+
+/* ── Formazione: manuale «Il manager della ristorazione» (PDF in assets/pdf/formazione) ── */
+.fm { padding: 130px 0; background: var(--dark); color: var(--ivory); scroll-margin-top: 90px; overflow: hidden; }
+.fm-grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 80px; align-items: center; }
+.fm .label { color: var(--accent); }
+.fm h2 { font-size: clamp(2.4rem, 5vw, 3.9rem); line-height: 1.02; margin: 14px 0 20px; color: var(--ivory); }
+.fm h2 em { display: block; font-style: italic; font-weight: 400; color: var(--accent); font-size: .62em; line-height: 1.2; margin-top: 10px; }
+.fm-lead { color: rgba(245,242,238,.72); font-size: 1.05rem; line-height: 1.75; max-width: 540px; }
+.fm-cap { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; margin: 34px 0 0; counter-reset: cap; }
+.fm-cap li { counter-increment: cap; display: grid; grid-template-columns: 34px 1fr; align-items: baseline; padding: 11px 0; border-top: 1px solid rgba(245,242,238,.12); font-size: .93rem; color: rgba(245,242,238,.88); line-height: 1.4; }
+.fm-cap li::before { content: counter(cap, decimal-leading-zero); font-family: 'Playfair Display', serif; color: var(--accent); font-size: .98rem; }
+.fm-actions { display: flex; align-items: center; gap: 16px 26px; flex-wrap: wrap; margin-top: 36px; }
+.fm-meta { color: rgba(245,242,238,.6); font-size: .82rem; letter-spacing: .5px; }
+.fm-buy { margin-top: 34px; max-width: 560px; }
+.fm-prezzo { display: flex; align-items: baseline; gap: 16px; margin-bottom: 14px; }
+.fm-prezzo b { font-family: 'Playfair Display', serif; font-size: 2.3rem; font-weight: 500; color: var(--ivory); line-height: 1; }
+.fm-prezzo span { color: rgba(245,242,238,.72); font-size: .9rem; line-height: 1.5; }
+.fm-prezzo strong { color: var(--accent); }
+.fm-riga { display: flex; gap: 10px; }
+.fm-email { flex: 1; min-width: 0; padding: 14px 16px; border: 1.5px solid rgba(245,242,238,.28); background: rgba(245,242,238,.06); color: var(--ivory); font: inherit; font-size: 16px; border-radius: 0; }
+.fm-email::placeholder { color: rgba(245,242,238,.5); }
+.fm-email:focus { outline: 0; border-color: var(--accent); }
+.fm-riga .btn { white-space: nowrap; }
+.fm-buy .fm-meta { margin-top: 12px; }
+.fm-err { margin-top: 10px; color: #f0a37c; font-size: .88rem; }
+.fm-ok { margin-top: 34px; max-width: 560px; padding: 18px 20px; border-left: 3px solid var(--accent); background: rgba(245,242,238,.06); color: rgba(245,242,238,.9); line-height: 1.6; }
+.fm-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.fm-stack { position: relative; height: 620px; }
+.fm-stack img { position: absolute; width: 62%; border-radius: 3px; box-shadow: 0 40px 90px rgba(0,0,0,.45); transition: transform .8s var(--ease-out); }
+.fm-stack .fm-a { right: 2%; top: 4%; transform: rotate(6deg); }
+.fm-stack .fm-b { left: 0; top: 14%; transform: rotate(-5deg); }
+.fm-stack .fm-c { left: 19%; top: 0; z-index: 2; transform: rotate(-1deg); }
+.fm-stack:hover .fm-a { transform: rotate(8deg) translateX(14px); }
+.fm-stack:hover .fm-b { transform: rotate(-7deg) translateX(-14px); }
+@media (max-width: 1024px) { .fm-grid { grid-template-columns: 1fr; gap: 56px; } .fm-stack { height: 520px; max-width: 520px; width: 100%; margin: 0 auto; } }
+@media (max-width: 720px) {
+    .fm { padding: 80px 0; }
+    .fm-cap { grid-template-columns: 1fr 1fr; gap: 0 16px; }
+    .fm-cap li { grid-template-columns: 26px 1fr; font-size: .82rem; padding: 9px 0; }
+    .fm-cap li::before { font-size: .85rem; }
+    .fm-stack { height: 360px; }
+    .fm-riga { flex-direction: column; }
+    .fm-prezzo { flex-direction: column; gap: 6px; }
+}
 </style>
 </head>
 <body>
@@ -315,6 +359,49 @@
         </div>
 
         <p class="risorse-footnote" data-reveal>Nuove schede pubblicate ogni settimana. Torna a trovarci &mdash; oppure seguici sui social per non perderle.</p>
+    </div>
+</section>
+
+<!-- ═══════ FORMAZIONE — manuale «Il manager della ristorazione» ═══════ -->
+<section class="fm" id="formazione">
+    <div class="container fm-grid">
+        <div>
+            <span class="label" data-reveal>Formazione &middot; Manuale</span>
+            <h2 data-reveal data-reveal-delay="50">Il manager della ristorazione<em>Come essere un buon padrone di casa.</em></h2>
+            <p class="fm-lead" data-reveal data-reveal-delay="100">Il manuale pratico per manager, titolari e responsabili di sala: guidare le persone, organizzare turni e servizio, leggere i numeri, comprare e conservare bene, tenere in ordine sicurezza alimentare e documenti. Da leggere, insegnare e usare durante il servizio.</p>
+            <ol class="fm-cap" data-reveal data-reveal-delay="150">
+                <li>Chi &egrave; un buon manager</li>
+                <li>Guidare le persone</li>
+                <li>Turni, ruoli e briefing</li>
+                <li>Ospitalit&agrave; e reclami</li>
+                <li>Controllo quotidiano</li>
+                <li>Numeri e margini</li>
+                <li>Acquisti e fornitori</li>
+                <li>Magazzino e scorte</li>
+                <li>HACCP</li>
+                <li>Catena del freddo</li>
+                <li>Pulizie, rifiuti e infestanti</li>
+                <li>Allergeni e crisi</li>
+                <li>Norme e documenti</li>
+                <li>Il piano dei 30 giorni</li>
+            </ol>
+            <div class="fm-ok" id="fmOk" hidden><b>Grazie per l'acquisto.</b> Ti abbiamo mandato il manuale per email: controlla la posta (anche lo spam) tra qualche minuto.</div>
+            <form class="fm-buy" id="fmBuy" novalidate data-reveal data-reveal-delay="200">
+                <div class="fm-prezzo"><b>15 &euro;</b><span>Hai gi&agrave; scaricato una nostra scheda? Per te <strong>12 &euro;</strong>: usa la stessa email.</span></div>
+                <div class="fm-riga">
+                    <label class="fm-sr" for="fmEmail">La tua email</label>
+                    <input class="fm-email" id="fmEmail" type="email" autocomplete="email" placeholder="La tua email" required>
+                    <button type="submit" class="btn btn-primary" id="fmBtn">Acquista il manuale</button>
+                </div>
+                <p class="fm-meta">PDF &middot; 15 pagine &middot; ti arriva per email subito dopo il pagamento</p>
+                <p class="fm-err" id="fmErr" hidden></p>
+            </form>
+        </div>
+        <div class="fm-stack" data-reveal data-reveal-delay="120">
+            <img class="fm-a" src="assets/img/formazione/manager-p7.jpg" alt="Pagina del manuale: controllo economico e margini" loading="lazy">
+            <img class="fm-b" src="assets/img/formazione/manager-p3.jpg" alt="Pagina del manuale: guidare le persone" loading="lazy">
+            <img class="fm-c" src="assets/img/formazione/manager-p1.jpg" alt="Copertina del manuale Il manager della ristorazione" loading="lazy">
+        </div>
     </div>
 </section>
 
@@ -598,6 +685,35 @@
 <script src="challenges.js?v=20260715b"></script>
 <script src="main.js?v=20260924"></script>
 <script>
+/* ═══════ MANUALE «IL MANAGER DELLA RISTORAZIONE» ═══════
+   15 € ai nuovi, 12 € a chi ha già lasciato l'email per una scheda: decide il server
+   in base all'email (routes/pagamenti.py, prezzo_lead). Il PDF arriva per email. */
+(function () {
+    var form = document.getElementById('fmBuy'); if (!form) return;
+    var inp = document.getElementById('fmEmail'), btn = document.getElementById('fmBtn'), err = document.getElementById('fmErr');
+    try { var u = JSON.parse(localStorage.getItem('sb_user') || 'null'); if (u && u.email) inp.value = u.email; } catch (e) {}
+    if (new URLSearchParams(location.search).get('acquisto') === 'manuale') {
+        document.getElementById('fmOk').hidden = false; form.hidden = true;
+    }
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); err.hidden = true;
+        var email = inp.value.trim();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.textContent = "Scrivi un'email valida: è lì che ti mandiamo il manuale."; err.hidden = false; inp.focus(); return; }
+        btn.disabled = true; btn.textContent = 'Un momento...';
+        if (window.sbSchedaTrack) sbSchedaTrack('scheda_vista', 'manager-ristorazione-acquisto');
+        fetch('https://web-production-f3794.up.railway.app/api/checkout', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prodotto: 'manager-ristorazione', email: email })
+        }).then(function (r) { return r.json(); }).then(function (d) {
+            if (d.url) { location.href = d.url; return; }
+            throw new Error(d.error || 'errore');
+        }).catch(function () {
+            err.textContent = 'Non riusciamo ad aprire il pagamento. Riprova o scrivici a info@sbfoodconsulting.com.'; err.hidden = false;
+            btn.disabled = false; btn.textContent = 'Acquista il manuale';
+        });
+    });
+})();
+
 /* ═══════ STRIPE CHECKOUT ═══════ */
 
 async function avviaCheckout(prodottoId, btnEl) {
