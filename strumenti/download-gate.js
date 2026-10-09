@@ -150,6 +150,7 @@
               '<em>15 pagine operative per chi guida un locale: persone, turni, ospitalit&agrave;, numeri, HACCP. Al pagamento usa la stessa email.</em>' +
             '</span>' +
             '<span class="dlgate-crusc-go">&rarr;</span>' +
+          '</a>' +
         '</div>' +
       '</div>';
     document.body.appendChild(wrap);
