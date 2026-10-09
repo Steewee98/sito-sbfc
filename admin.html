@@ -1268,7 +1268,7 @@ document.querySelectorAll('.sidebar-item').forEach(function(el){
 
 
 // ============ STRUMENTI: manuale, Cruscotto, menù digitale, lead strumenti in una voce ============
-var STR_TABS=[['manuale','Manuale manager'],['cruscotto','Cruscotto'],['nfc','Menù digitale'],['lead-strumenti','Lead strumenti']];
+var STR_TABS=[['manuale','Manuale manager'],['nfc','Menù digitale'],['lead-strumenti','Lead strumenti']];  // il Cruscotto non è più in vendita (ott 2026): le vendite passate restano in Pagamenti Stripe
 function vaiStrumento(sec){var it=document.getElementById('sideStrumenti');it.dataset.section=sec;it.click();}
 STR_TABS.forEach(function(s){
     var sec=document.getElementById('sec-'+s[0]); if(!sec) return;
