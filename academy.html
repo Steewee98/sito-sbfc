@@ -692,8 +692,27 @@
     var form = document.getElementById('fmBuy'); if (!form) return;
     var inp = document.getElementById('fmEmail'), btn = document.getElementById('fmBtn'), err = document.getElementById('fmErr');
     try { var u = JSON.parse(localStorage.getItem('sb_user') || 'null'); if (u && u.email) inp.value = u.email; } catch (e) {}
-    if (new URLSearchParams(location.search).get('acquisto') === 'manuale') {
+    /* Eventi Meta per la sponsorizzata del manuale (partono solo col consenso cookie):
+       ViewContent quando si vede la sezione, InitiateCheckout all'invio, Purchase al ritorno
+       da Stripe. Purchase una volta sola per pagamento (eventID = sessione Stripe). */
+    var PRODOTTO_PX = { content_ids: ['manager-ristorazione'], content_type: 'product', content_name: 'Il manager della ristorazione', currency: 'EUR' };
+    var qs = new URLSearchParams(location.search);
+    if (qs.get('acquisto') === 'manuale') {
         document.getElementById('fmOk').hidden = false; form.hidden = true;
+        var sess = qs.get('s') || '', chiave = 'sb_manuale_purchase_' + (sess || 'x');
+        var gia = false; try { gia = !!localStorage.getItem(chiave); } catch (e) {}
+        if (!gia && sess && window.sbPixelStd) {
+            var valore = 15; try { valore = parseFloat(sessionStorage.getItem('sb_manuale_importo')) || 15; } catch (e) {}
+            sbPixelStd('Purchase', Object.assign({ value: valore }, PRODOTTO_PX), sess);
+            try { localStorage.setItem(chiave, '1'); sessionStorage.removeItem('sb_manuale_importo'); } catch (e) {}
+        }
+    } else if ('IntersectionObserver' in window) {
+        var visto = false, io = new IntersectionObserver(function (es) {
+            if (visto || !es[0].isIntersecting) return;
+            visto = true; io.disconnect();
+            if (window.sbPixelStd) sbPixelStd('ViewContent', Object.assign({ value: 15 }, PRODOTTO_PX));
+        }, { threshold: 0.35 });
+        io.observe(document.getElementById('formazione'));
     }
     form.addEventListener('submit', function (e) {
         e.preventDefault(); err.hidden = true;
@@ -705,7 +724,14 @@
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prodotto: 'manager-ristorazione', email: email })
         }).then(function (r) { return r.json(); }).then(function (d) {
-            if (d.url) { location.href = d.url; return; }
+            if (d.url) {
+                var imp = d.importo || 15;
+                try { sessionStorage.setItem('sb_manuale_importo', String(imp)); } catch (e) {}
+                if (window.sbPixelStd) sbPixelStd('InitiateCheckout', Object.assign({ value: imp }, PRODOTTO_PX));
+                // un attimo al pixel per partire prima di lasciare la pagina
+                setTimeout(function () { location.href = d.url; }, 350);
+                return;
+            }
             throw new Error(d.error || 'errore');
         }).catch(function () {
             err.textContent = 'Non riusciamo ad aprire il pagamento. Riprova o scrivici a info@sbfoodconsulting.com.'; err.hidden = false;
