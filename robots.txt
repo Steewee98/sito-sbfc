@@ -6,6 +6,7 @@ Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 # ─── Crawler AI generativi (GEO): consentiti esplicitamente ───
 # Alimentano le citazioni in ChatGPT, Claude, Perplexity, Gemini,
@@ -16,59 +17,69 @@ Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: anthropic-ai
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: Perplexity-User
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: Google-Extended
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: Bingbot
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 User-agent: Applebot-Extended
 Allow: /
 Disallow: /admin.html
 Disallow: /app/
 Disallow: /brandizzatore.html
+Disallow: /progetti.html
 
 Sitemap: https://www.sbfoodconsulting.com/sitemap.xml
