@@ -294,7 +294,11 @@ input:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px soli
 'use strict';
 var LOCALE = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 var API = LOCALE && localStorage.getItem('sb_api_locale') ? localStorage.getItem('sb_api_locale') : 'https://web-production-f3794.up.railway.app';
-var TOKEN = localStorage.getItem('sb_admin_token') || '';
+// Link personale di Simone: progetti.html?k=CHIAVE entra senza password (la chiave apre solo i
+// progetti). Resta nell'indirizzo apposta: così anche l'icona sulla schermata Home entra da sola.
+var CHIAVE_LINK = (new URLSearchParams(location.search).get('k') || '').trim();
+try { if (CHIAVE_LINK) localStorage.setItem('sb_progetti_token', CHIAVE_LINK); } catch (e){}
+var TOKEN = CHIAVE_LINK || localStorage.getItem('sb_progetti_token') || localStorage.getItem('sb_admin_token') || '';
 var STATI = [['in_lavorazione','In lavorazione'],['aperto','Aperto'],['in_attesa','In attesa'],['chiuso','Chiuso']];
 var NOMI = {}; STATI.forEach(function(s){ NOMI[s[0]] = s[1]; });
 var FERMO_GIORNI = 7;
@@ -754,7 +758,8 @@ $('fLogin').onsubmit = function(e){
 };
 function esci(){
   TOKEN = '';
-  localStorage.removeItem('sb_admin_token'); localStorage.removeItem('sb_admin_logged');
+  try { localStorage.removeItem('sb_admin_token'); localStorage.removeItem('sb_admin_logged'); localStorage.removeItem('sb_progetti_token'); } catch (e){}
+  if (CHIAVE_LINK){ CHIAVE_LINK = ''; history.replaceState(null, '', location.pathname); }
   location.hash = ''; mostra('vLogin');
 }
 $('bEsci').onclick = function(){ if (confirm('Uscire?')) esci(); };
