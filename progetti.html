@@ -320,16 +320,21 @@ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(
 $('fabIco').innerHTML = I.mic;
 try { filtro = sessionStorage.getItem('sb_prog_filtro') || 'tutti'; } catch (e){}
 
-function api(metodo, path, corpo){
+function api(metodo, path, corpo, attesa){
   var o = {method: metodo, headers: {'X-Admin-Token': TOKEN}};
   if (corpo !== undefined){ o.headers['Content-Type'] = 'application/json'; o.body = JSON.stringify(corpo); }
+  // senza risposta entro il tempo la richiesta si annulla: niente schermate bloccate
+  var ctl = window.AbortController ? new AbortController() : null, scaduta = false;
+  var t = ctl ? setTimeout(function(){ scaduta = true; ctl.abort(); }, attesa || 20000) : null;
+  if (ctl) o.signal = ctl.signal;
   return fetch(API + path, o).then(function(r){
+    clearTimeout(t);
     if (r.status === 401){ esci(); throw new Error('Accesso scaduto: rientra'); }
     return r.json().catch(function(){ return {}; }).then(function(j){
       if (!r.ok) throw new Error(j.error || 'Errore del server (' + r.status + ')');
       return j;
     });
-  }, function(){ throw new Error('Nessuna connessione: riprova'); });
+  }, function(){ clearTimeout(t); throw new Error(scaduta ? 'Il server non risponde: riprova' : 'Nessuna connessione: riprova'); });
 }
 var tToast;
 function toast(m){ var t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tToast); tToast = setTimeout(function(){ t.classList.remove('on'); }, 2200); }
@@ -374,10 +379,11 @@ function route(){
 
 // ── prima schermata ──
 function apriLista(){
+  if ($('vLista').hidden) progetti = [];
   if ($('vLista').hidden) window.scrollTo(0, 0);
   corrente = null; document.title = 'Progetti · SB Food';
   mostra('vLista');
-  api('GET', '/api/progetti').then(function(ps){ progetti = ps; disegnaLista(); })
+  api('GET', '/api/progetti').then(function(ps){ if (aperto() !== null) return; progetti = ps; disegnaLista(); })
     .catch(function(e){ $('lista').innerHTML = '<p class="vuoto">' + esc(e.message) + '</p>'; });
 }
 
@@ -450,6 +456,7 @@ function rigaProgetto(p){
 // ── progetto ──
 function apriProgetto(id){
   if (!corrente || corrente.id !== id){
+    corrente = null;
     window.scrollTo(0, 0);
     $('pNome').textContent = ''; $('pAgg').textContent = ''; $('pAnello').innerHTML = ''; $('pStato').innerHTML = ''; $('pPunto').querySelector('p').textContent = '';
     $('lDaFare').innerHTML = '<div class="sk"></div><div class="sk"></div>'; $('bFatte').hidden = true; $('bNote').hidden = true; $('pAvviso').innerHTML = '';
@@ -467,7 +474,9 @@ function cosa(v, fatta){
 }
 
 var FATTE_CORTE = 5, fatteAperte = false;
+function aperto(){ var m = location.hash.match(/^#p\/(\d+)/); return m ? +m[1] : null; }
 function disegnaProgetto(p){
+  if (!p || p.id !== aperto() || $('vProg').hidden) return;   // risposta arrivata tardi per un altro progetto
   if (!corrente || corrente.id !== p.id) fatteAperte = false;
   corrente = p;
   document.title = p.nome + ' · Progetti';
@@ -507,7 +516,7 @@ $('vProg').addEventListener('click', function(e){
   if (d.fatta){ t.classList.add('si'); if (navigator.vibrate) navigator.vibrate(10); setTimeout(function(){ agisci('PATCH', '/api/progetti/voci/' + d.fatta, {fatta: true}, 'Fatto'); }, 280); }
   else if (d.menu){ foglioVoce(+d.menu); }
   else if (d.riprova){ t.disabled = true; t.textContent = '…';
-    api('POST', '/api/progetti/note/' + d.riprova + '/rielabora').then(function(j){ segnaNuove(corrente, j.progetto); disegnaProgetto(j.progetto); toast('Nota letta'); })
+    api('POST', '/api/progetti/note/' + d.riprova + '/rielabora', undefined, 150000).then(function(j){ segnaNuove(corrente, j.progetto); disegnaProgetto(j.progetto); toast('Nota letta'); })
       .catch(function(e){ toast(e.message); t.disabled = false; t.textContent = 'Riprova'; }); }
   else if (d.toglinota){ if (confirm('Togliere questa nota e quello che aveva aggiunto?')) agisci('DELETE', '/api/progetti/note/' + d.toglinota, undefined, 'Nota tolta'); }
 });
@@ -536,6 +545,7 @@ $('velo').onclick = chiudiFoglio;
 function azioni(titolo, bottoni){ return '<div class="azioni">' + (titolo ? '<div class="tit">' + esc(titolo) + '</div>' : '') + bottoni + '</div>'; }
 
 $('pStato').onclick = function(){
+  if (!corrente) return;
   apriFoglio(azioni('Stato del progetto', STATI.map(function(s){
     return '<button data-s="' + s[0] + '"' + (s[0] === corrente.stato ? ' class="on"' : '') + '>' + s[1] + (s[0] === corrente.stato ? ' ✓' : '') + '</button>';
   }).join('')));
@@ -545,6 +555,7 @@ $('pStato').onclick = function(){
 };
 
 $('bMenu').onclick = function(){
+  if (!corrente) return;
   apriFoglio(azioni(corrente.nome, '<button id="mRin">Cambia nome</button><button id="mEl" class="rosso">Elimina progetto</button>'));
   $('mRin').onclick = function(){
     var t = prompt('Nuovo nome', corrente.nome);
@@ -563,8 +574,9 @@ $('bNuovo').onclick = function(){
   setTimeout(function(){ $('nNome').focus(); }, 300);
   $('fNuovo').onsubmit = function(e){
     e.preventDefault();
+    var b = this.querySelector('[type=submit]'); if (b.disabled) return; b.disabled = true;
     api('POST', '/api/progetti', {nome: $('nNome').value}).then(function(p){ chiudiFoglio(); location.hash = 'p/' + p.id; })
-      .catch(function(err){ $('nErr').textContent = err.message; });
+      .catch(function(err){ $('nErr').textContent = err.message; b.disabled = false; });
   };
 };
 
@@ -586,15 +598,17 @@ function foglioVoce(id){
 }
 
 $('bAggiungi').onclick = function(){
+  if (!corrente) return;
   apriFoglio('<form class="modulo" id="fVoce"><h3>Aggiungi</h3><label class="lab" for="vTesto">Cosa</label><input type="text" id="vTesto" required maxlength="300" autocomplete="off">' +
     '<div style="margin-top:8px"><label class="sw">Urgente <input type="checkbox" id="vUrg"></label><label class="sw">Già fatto <input type="checkbox" id="vFatto"></label></div>' +
     '<button class="ok" type="submit">Aggiungi</button><p class="err" id="vErr" role="alert"></p></form>');
   setTimeout(function(){ $('vTesto').focus(); }, 300);
   $('fVoce').onsubmit = function(e){
     e.preventDefault();
+    var b = this.querySelector('[type=submit]'); if (b.disabled) return; b.disabled = true;
     api('POST', '/api/progetti/' + corrente.id + '/voci', {testo: $('vTesto').value, tipo: $('vFatto').checked ? 'fatto' : 'da_fare', urgente: $('vUrg').checked})
       .then(function(p){ segnaNuove(corrente, p); chiudiFoglio(); disegnaProgetto(p); })
-      .catch(function(err){ $('vErr').textContent = err.message; });
+      .catch(function(err){ $('vErr').textContent = err.message; b.disabled = false; });
   };
 };
 $('bBack').onclick = function(){ location.hash = ''; };
@@ -648,7 +662,7 @@ function avvia(){
   rec.onspeechstart = parla;
   rec.onerror = function(ev){ if (ev.error !== 'no-speech' && ev.error !== 'aborted') guasto(ev.error); };
   rec.onend = function(){
-    base = unisci(base, sessione || $('dInt').textContent); sessione = '';
+    base = unisci(base, unisci(sessione, $('dInt').textContent)); sessione = '';
     $('dTa').value = base; $('dInt').textContent = ''; alta(); aggiornaManda();
     if (!ascolta){ ui(); return; }
     vuote = ebbe ? 0 : vuote + 1;
@@ -706,10 +720,10 @@ $('bDetta').onclick = apriDettatura;
 $('dManda').onclick = function(){
   ferma();
   var testo = unisci($('dTa').value, $('dInt').textContent);
-  if (testo.length < 3) return;
+  if (testo.length < 3 || !corrente || !$('dLavoro').hidden) return;
   $('dLavoro').hidden = false;
   var prima = corrente;
-  api('POST', '/api/progetti/' + corrente.id + '/note', {testo: testo}).then(function(j){
+  api('POST', '/api/progetti/' + corrente.id + '/note', {testo: testo}, 150000).then(function(j){
     segnaNuove(prima, j.progetto);
     disegnaProgetto(j.progetto);
     chiudiDettatura();
