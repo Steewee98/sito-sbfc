@@ -68,37 +68,57 @@
     .fm-prezzo { flex-direction: column; gap: 6px; }
 }
 
-/* ── Indice sotto l'hero: le tre porte dell'Academy ── */
-.ac-index { background: var(--ivory); padding: 0 0 90px; position: relative; z-index: 2; }
-.ac-index-grid { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 18px; transform: translateY(-56px); margin-bottom: -56px; }
-.ac-door { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 30px 30px 28px; background: #fff; border: 1px solid var(--border); text-decoration: none; color: var(--ink); box-shadow: 0 30px 60px -40px rgba(43,45,49,.45); transition: transform .35s var(--ease-out), border-color .35s; }
-.ac-door:hover { transform: translateY(-4px); border-color: var(--accent); }
-.ac-door:last-child { background: var(--accent); color: #fff; border-color: var(--accent); }
-.ac-door-n { font-family: 'Playfair Display', serif; font-size: 2.2rem; line-height: 1; color: var(--accent); }
-.ac-door:last-child .ac-door-n, .ac-door:last-child .ac-door-kicker, .ac-door:last-child .ac-door-meta { color: rgba(255,255,255,.85); }
-.ac-door-kicker { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-top: 14px; }
-.ac-door strong { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.45rem; line-height: 1.2; }
-.ac-door-meta { font-size: .86rem; color: var(--ink-soft); line-height: 1.5; padding-right: 36px; }
-.ac-door-go { position: absolute; right: 26px; bottom: 24px; font-size: 1.3rem; }
+/* ── Indice dentro l'hero: tre righe, stesso allineamento del titolo ── */
+.ac-toc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 36px; margin-top: 44px; max-width: 980px; }
+.ac-toc a { display: grid; grid-template-columns: 1fr auto; row-gap: 6px; padding: 18px 0 16px; border-top: 1px solid rgba(245,242,238,.2); text-decoration: none; transition: border-color .3s var(--ease-out); }
+.ac-toc-k { grid-column: 1; font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--accent); }
+.ac-toc-t { grid-column: 1; color: var(--ivory); font-size: 1.02rem; font-weight: 500; }
+.ac-toc-go { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: rgba(245,242,238,.5); font-size: 1.1rem; transition: transform .3s var(--ease-out), color .3s; }
+.ac-toc a:hover { border-color: var(--accent); }
+.ac-toc a:hover .ac-toc-go { color: var(--accent); transform: translateY(3px); }
+@media (max-width: 720px) {
+    .ac-toc { grid-template-columns: 1fr; margin-top: 28px; }
+    .ac-toc a { padding: 14px 0 12px; }
+    .ac-toc a:last-child { border-bottom: 1px solid rgba(245,242,238,.2); }
+}
 .ac-gratis-anchor { scroll-margin-top: 90px; }
 #programma { scroll-margin-top: 70px; }
-@media (max-width: 900px) { .ac-index-grid { grid-template-columns: 1fr; transform: translateY(-36px); margin-bottom: -36px; } .ac-index { padding-bottom: 50px; } }
-@media (max-width: 720px) {
-    .ac-index-grid { gap: 10px; }
-    .ac-door { display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; row-gap: 2px; padding: 16px 44px 16px 16px; }
-    .ac-door-n { font-size: 1.6rem; grid-row: span 2; align-self: center; }
-    .ac-door-kicker { margin-top: 0; }
-    .ac-door strong { font-size: 1.08rem; }
-    .ac-door-meta { display: none; }
-    .ac-door-go { right: 16px; bottom: auto; top: 50%; transform: translateY(-50%); }
-}
 
 /* ── Moduli: tutte le schede uguali, con il loro riquadro (prima una su due
    aveva lo stesso colore dello sfondo). Sezione più scura del manuale sopra. ── */
 .ac-moduli { background: #2a2c30; }
 .ac-moduli-stack { gap: 14px; }
-.ac-mcard--odd, .ac-mcard--even { background: #37393f; border: 1px solid rgba(245,242,238,.09); border-left: 3px solid rgba(245,242,238,.09); }
 .ac-mcard:hover { border-left-color: var(--accent); }
+
+/* ── Moduli: intro, «in ogni modulo», cosa impari ── */
+.ac-mh { display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: end; margin-bottom: 48px; }
+.ac-mh-lead { color: rgba(245,242,238,.72); line-height: 1.75; font-size: 1.02rem; max-width: 560px; }
+.ac-fmt { display: grid; grid-template-columns: 120px repeat(5, 1fr); gap: 24px; padding: 26px 0; border-top: 1px solid rgba(245,242,238,.12); border-bottom: 1px solid rgba(245,242,238,.12); margin-bottom: 56px; }
+.ac-fmt-h { font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--accent); padding-top: 4px; }
+.ac-fmt-i { display: flex; flex-direction: column; gap: 6px; color: rgba(245,242,238,.65); font-size: .86rem; line-height: 1.5; }
+.ac-fmt-i svg { color: var(--accent); margin-bottom: 4px; }
+.ac-fmt-i strong { color: var(--ivory); font-weight: 600; font-size: .95rem; }
+.ac-learn { margin: 16px 0 14px; display: grid; gap: 7px; }
+.ac-learn li { position: relative; padding-left: 20px; color: rgba(245,242,238,.85); font-size: .92rem; line-height: 1.5; }
+.ac-learn li::before { content: ""; position: absolute; left: 2px; top: 9px; width: 8px; height: 2px; background: var(--accent); }
+.ac-chi { display: block; font-size: .8rem; color: rgba(245,242,238,.5); font-style: italic; }
+.ac-mfoot { margin-top: 32px; color: rgba(245,242,238,.6); font-size: .92rem; }
+.ac-mfoot a { color: var(--accent); font-weight: 600; text-decoration: none; margin-left: 6px; }
+.ac-mcard { background: #37393f; border: 1px solid rgba(245,242,238,.09); border-left: 3px solid rgba(245,242,238,.09); }
+@media (max-width: 1024px) {
+    .ac-mh { grid-template-columns: 1fr; gap: 18px; }
+    .ac-fmt { grid-template-columns: repeat(3, 1fr); }
+    .ac-fmt-h { grid-column: 1 / -1; }
+}
+@media (max-width: 720px) {
+    .ac-mh { margin-bottom: 26px; }
+    .ac-fmt { grid-template-columns: 1fr 1fr; gap: 18px 16px; padding: 20px 0; margin-bottom: 30px; }
+    .ac-fmt-i { font-size: .8rem; }
+    .ac-fmt-i:last-child { grid-column: 1 / -1; }
+    .ac-mcard-right p { -webkit-line-clamp: unset !important; display: block !important; font-size: .9rem; }
+    .ac-learn li { font-size: .86rem; }
+    .ac-mfoot { margin-top: 14px; font-size: .85rem; }
+}
 </style>
 <script>if(location.hash==='#placca-nfc')location.replace('placche.html'+location.search);</script>
 <link rel="stylesheet" href="mobile.css?v=20261019c">
@@ -137,36 +157,14 @@
                 <span class="cs-hero-line cs-hero-line--accent"><span class="line-inner">Academy.</span></span>
             </h1>
             <p class="cs-hero-sub" data-reveal data-reveal-delay="200">Corso, manuale e strumenti gratuiti per ristoratori che vogliono smettere di improvvisare.</p>
+            <nav class="ac-toc" aria-label="Cosa trovi nell'Academy" data-reveal data-reveal-delay="300">
+                <a href="#gratis"><span class="ac-toc-k">Gratis</span><span class="ac-toc-t">Checklist e schede da stampare</span><span class="ac-toc-go" aria-hidden="true">&darr;</span></a>
+                <a href="#formazione"><span class="ac-toc-k">Il manuale</span><span class="ac-toc-t">Il manager della ristorazione</span><span class="ac-toc-go" aria-hidden="true">&darr;</span></a>
+                <a href="#programma"><span class="ac-toc-k">Il corso</span><span class="ac-toc-t">Cinque moduli online</span><span class="ac-toc-go" aria-hidden="true">&darr;</span></a>
+            </nav>
         </div>
     </div>
     <div class="scroll-indicator">Scroll</div>
-</section>
-
-<!-- ═══════ INDICE: le tre cose che trovi qui ═══════ -->
-<section class="ac-index" aria-label="Cosa trovi nell'Academy">
-    <div class="container ac-index-grid">
-        <a class="ac-door ac-door--free" href="#gratis" data-reveal>
-            <span class="ac-door-n">01</span>
-            <span class="ac-door-kicker">Gratis</span>
-            <strong>Checklist del locale e schede da stampare</strong>
-            <span class="ac-door-meta">Per iniziare senza spendere nulla</span>
-            <span class="ac-door-go" aria-hidden="true">&rarr;</span>
-        </a>
-        <a class="ac-door" href="#formazione" data-reveal data-reveal-delay="80">
-            <span class="ac-door-n">02</span>
-            <span class="ac-door-kicker">Il manuale</span>
-            <strong>Il manager della ristorazione, in PDF</strong>
-            <span class="ac-door-meta">Per chi guida la squadra &middot; arriva subito via email</span>
-            <span class="ac-door-go" aria-hidden="true">&rarr;</span>
-        </a>
-        <a class="ac-door" href="#programma" data-reveal data-reveal-delay="160">
-            <span class="ac-door-n">03</span>
-            <span class="ac-door-kicker">Il corso</span>
-            <strong>Cinque moduli per gestire il locale con metodo</strong>
-            <span class="ac-door-meta">Video, dispense, podcast e challenge &middot; vedi programma e prezzi</span>
-            <span class="ac-door-go" aria-hidden="true">&rarr;</span>
-        </a>
-    </div>
 </section>
 
 <!-- ═══════ GRATIS: checklist + schede ═══════ -->
@@ -447,14 +445,21 @@
 <!-- ═══════ 5 MODULI ═══════ -->
 <section class="ac-moduli" id="programma">
     <div class="container">
-        <div class="ac-moduli-header">
-            <span class="label" data-reveal>Programma</span>
-            <h2 class="ed-heading" data-reveal data-reveal-delay="50" style="color:var(--ivory)">I 5 moduli.</h2>
+        <div class="ac-moduli-header ac-mh">
+            <div>
+                <span class="label" data-reveal>Il corso online</span>
+                <h2 class="ed-heading" data-reveal data-reveal-delay="50" style="color:var(--ivory)">I 5 moduli.</h2>
+            </div>
+            <p class="ac-mh-lead" data-reveal data-reveal-delay="100">Un corso per titolari e gestori, diviso in cinque moduli. Ognuno affronta un problema preciso del locale, quindi puoi prendere solo quello che ti serve o il corso completo. Lo segui dal telefono o dal computer, quando vuoi, e resta tuo senza scadenza.</p>
+        </div>
+        <div class="ac-fmt" data-reveal data-reveal-delay="150">
+            <span class="ac-fmt-h">In ogni modulo</span>
+            <div class="ac-fmt-i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg><strong>Videolezione</strong><span>Il tema spiegato con esempi presi da locali veri</span></div><div class="ac-fmt-i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg><strong>Podcast</strong><span>La stessa lezione da ascoltare in macchina o prima del servizio</span></div><div class="ac-fmt-i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><strong>Dispensa</strong><span>Le slide da rileggere e tenere a portata di mano</span></div><div class="ac-fmt-i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><strong>Verifica</strong><span>Domande e un test finale per capire a che punto sei</span></div><div class="ac-fmt-i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><strong>Assistente</strong><span>Fai una domanda sulla lezione e ti risponde subito</span></div>
         </div>
     </div>
 
     <div class="ac-moduli-stack">
-        <a href="#area-studenti" id="modulo-01" class="ac-mcard ac-mcard--odd" data-reveal>
+        <a href="#prezzi" id="modulo-01" class="ac-mcard" data-reveal>
             <div class="ac-mcard-ghost" aria-hidden="true">01</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">01</span>
@@ -463,19 +468,13 @@
             <div class="ac-mcard-divider"></div>
             <div class="ac-mcard-right">
                 <h3>Hai davvero il controllo del tuo ristorante?</h3>
-                <p>La maggior parte dei ristoratori lavora ogni giorno senza una visione chiara di cosa sta succedendo nel proprio locale. Questo modulo insegna a misurare quello che conta.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
+                <p>La maggior parte dei ristoratori lavora ogni giorno senza una visione chiara di cosa succede nel locale. Qui si impara a guardare i numeri, il menù e le persone come un sistema unico.</p>
+                <ul class="ac-learn"><li>Controllo economico: i numeri da guardare ogni settimana</li><li>Menu engineering: quali piatti tenere, spingere o togliere</li><li>Personale, esperienza del cliente e il voto della tua azienda</li></ul>
+                <span class="ac-chi">Per chi ha un locale aperto e vuole capire dove perde soldi</span>
             </div>
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
-
-        <a href="#area-studenti" id="modulo-02" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="80">
+        <a href="#prezzi" id="modulo-02" class="ac-mcard" data-reveal data-reveal-delay="80">
             <div class="ac-mcard-ghost" aria-hidden="true">02</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">02</span>
@@ -484,19 +483,13 @@
             <div class="ac-mcard-divider"></div>
             <div class="ac-mcard-right">
                 <h3>Stai pagando per i risultati giusti?</h3>
-                <p>Ogni ristorante ha costi fissi che si accettano senza mai verificare se producono quello per cui vengono pagati. Questo modulo ti dà gli strumenti per analizzare ogni spesa.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
+                <p>Agenzie, gestionali, pubblicità: ogni locale paga servizi senza verificare cosa producono. Qui si impara a leggere i risultati veri e a scegliere chi tenere.</p>
+                <ul class="ac-learn"><li>Metriche di business e metriche di facciata</li><li>Quanto ti costa davvero un nuovo cliente</li><li>Il contratto con l’agenzia e il gestionale come sistema</li></ul>
+                <span class="ac-chi">Per chi spende in marketing e software e non sa se rende</span>
             </div>
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
-
-        <a href="#area-studenti" id="modulo-03" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="160">
+        <a href="#prezzi" id="modulo-03" class="ac-mcard" data-reveal data-reveal-delay="160">
             <div class="ac-mcard-ghost" aria-hidden="true">03</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">03</span>
@@ -505,19 +498,13 @@
             <div class="ac-mcard-divider"></div>
             <div class="ac-mcard-right">
                 <h3>Cosa ti blocca dal crescere?</h3>
-                <p>Crescere non significa aprire un secondo locale. Significa fare funzionare quello che hai al massimo del suo potenziale. Questo modulo identifica i tre blocchi operativi.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
+                <p>Crescere non vuol dire aprire un secondo locale, ma far rendere quello che hai. Qui si fa la diagnosi di cosa frena il tuo e si esce con un piano.</p>
+                <ul class="ac-learn"><li>I 7 blocchi: numeri, prodotto, persone, cliente, costi, mente, strategia</li><li>Delegare e tagliare i costi senza tagliare la qualità</li><li>Un piano d’azione per i prossimi 90 giorni</li></ul>
+                <span class="ac-chi">Per chi lavora tanto ma sente che il locale non va avanti</span>
             </div>
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
-
-        <a href="#area-studenti" id="modulo-04" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="240">
+        <a href="#prezzi" id="modulo-04" class="ac-mcard" data-reveal data-reveal-delay="240">
             <div class="ac-mcard-ghost" aria-hidden="true">04</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">04</span>
@@ -525,20 +512,14 @@
             </div>
             <div class="ac-mcard-divider"></div>
             <div class="ac-mcard-right">
-                <h3>L'Arte di Accogliere nel Food</h3>
-                <p>L'accoglienza non è gentilezza. È un sistema che si costruisce, si insegna e si replica. Questo modulo analizza ogni momento del contatto tra il locale e il cliente.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
+                <h3>L’arte di accogliere nel food</h3>
+                <p>L’accoglienza non è gentilezza: è un sistema che si costruisce, si insegna alla squadra e si ripete ogni sera. Qui si analizza ogni momento del contatto con il cliente.</p>
+                <ul class="ac-learn"><li>Le 5 fasi del servizio e i primi 7 secondi</li><li>Conoscere il piatto e gestire i reclami</li><li>Ritmo del servizio e clienti che tornano</li></ul>
+                <span class="ac-chi">Per titolari e responsabili di sala</span>
             </div>
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
-
-        <a href="#area-studenti" id="modulo-05" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="320">
+        <a href="#prezzi" id="modulo-05" class="ac-mcard" data-reveal data-reveal-delay="320">
             <div class="ac-mcard-ghost" aria-hidden="true">05</div>
             <div class="ac-mcard-left">
                 <span class="ac-mcard-n">05</span>
@@ -547,18 +528,14 @@
             <div class="ac-mcard-divider"></div>
             <div class="ac-mcard-right">
                 <h3>Come prepararsi al lancio del tuo locale</h3>
-                <p>I primi 90 giorni di un ristorante definiscono tutto. Questo modulo accompagna attraverso le tre fasi critiche del lancio con una checklist completa.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
+                <p>Prima di firmare un affitto servono i numeri giusti e un’idea verificata. Qui si costruisce l’apertura passo per passo, prima di spendere.</p>
+                <ul class="ac-learn"><li>Mentalità, validazione dell’idea e numeri dell’apertura</li><li>Prodotto, squadra e scelta della location</li><li>Le 10 regole d’oro per i primi mesi</li></ul>
+                <span class="ac-chi">Per chi deve ancora aprire o sta per farlo</span>
             </div>
             <span class="ac-mcard-arrow">&rarr;</span>
         </a>
     </div>
+    <div class="container"><p class="ac-mfoot" data-reveal>Ogni modulo 19,90&euro;, tutti e cinque 94,90&euro;. <a href="#prezzi">Vedi i prezzi &rarr;</a></p></div>
 </section>
 
 <!-- ═══════ PRICING ═══════ -->
