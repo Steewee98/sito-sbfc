@@ -1,0 +1,113 @@
+/* ═══════════════════════════════════════════════════════════════
+   Versione per telefono (fino a 720px). Si carica DOPO style.css e
+   dopo gli stili interni delle pagine, quindi vince a parità di regola.
+   Idea: meno testo e meno vuoto, le cose si vedono subito.
+   - margini delle sezioni ridotti
+   - scritte decorative giganti nascoste
+   - liste lunghe (schede, moduli, team, cosa include…) diventano
+     strisce da scorrere col dito, una scheda alla volta
+   - paragrafi secondari nascosti dove c'è già un titolo che dice tutto
+   La versione da computer non cambia.
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 720px) {
+
+  /* niente pagina che scorre di lato */
+  html, body { overflow-x: clip; }
+  .pv-stage { max-width: 100%; }
+
+  /* ── decorazioni che sul telefono sono solo spazio ── */
+  .nov-ghost, .sv-hero-ghost, .sv-block-ghost, .cs-hero-ghost, .ed-about-ghost,
+  .ps-step-num-bg, .ac-mcard-ghost, .ed-stats-line, .scroll-indicator,
+  .hero-scroll, .cs-hero-scroll, .cs-bio-ghost { display: none !important; }
+
+  /* ── ritmo verticale: sezioni più strette ── */
+  .nov, .team-section, .cs-bio, .cs-timeline, .cs-values, .risorse, .fm, .nf-promo,
+  .ac-moduli, .ac-pricing, .ac-studenti, .ps-intro, .ps-include, .ps-faq,
+  .nf-how, .nf-shop, .nf-faq, .nf-ask, .md-prova, .md-placca, .md-conf, .md-come, .md-faq,
+  .cl-portfolio, .cl-media, .ct-section, .chk-promo, .ed-services, .ed-stats, .ed-about,
+  .ed-clients, .ed-cta { padding-top: 52px !important; padding-bottom: 52px !important; }
+  .ps-step { padding-top: 40px !important; padding-bottom: 40px !important; }
+  .cs-hero, .sv-hero { padding-bottom: 36px !important; }
+  .nf-specs { padding-top: 36px !important; padding-bottom: 36px !important; }
+
+  /* titoli di sezione un filo più compatti */
+  .ed-heading, .team-header h2, .risorse-header h2, .ac-moduli-header h2, .ps-include-header h2 { margin-bottom: 14px !important; }
+  .nov-intro, .team-intro, .risorse-header p, .ps-include-header p { font-size: .95rem !important; line-height: 1.55 !important; }
+
+  /* ── strisce da scorrere ── */
+  .nov-grid, .team-grid, .risorse-grid, .ac-moduli-stack, .ps-include-grid, .cs-values-grid {
+    display: flex !important; flex-direction: row !important; gap: 14px !important; max-width: none !important; width: auto !important;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    margin-left: -16px !important; margin-right: -16px !important; padding: 4px 16px 18px !important; scroll-padding-left: 16px;
+  }
+  .nov-grid::-webkit-scrollbar, .team-grid::-webkit-scrollbar, .risorse-grid::-webkit-scrollbar,
+  .ac-moduli-stack::-webkit-scrollbar, .ps-include-grid::-webkit-scrollbar, .cs-values-grid::-webkit-scrollbar { display: none; }
+  .nov-grid > *, .team-grid > *, .risorse-grid > *, .ac-moduli-stack > *, .ps-include-grid > *, .cs-values-grid > * {
+    flex: 0 0 82% !important; max-width: 82% !important; scroll-snap-align: start; margin: 0 !important;
+  }
+  .team-grid > * { flex-basis: 64% !important; max-width: 64% !important; }
+  /* l'avviso «scorri» sotto ogni striscia */
+  .nov-grid::after, .team-grid::after, .risorse-grid::after, .ac-moduli-stack::after, .ps-include-grid::after { content: ""; flex: 0 0 1px; }
+  .sb-scorri { display: flex; align-items: center; gap: 8px; font-size: .72rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #c4622d; margin: -4px 0 0; }
+  .sb-scorri::after { content: "\2192"; font-size: 1rem; letter-spacing: 0; }
+
+  /* ── HOME ── */
+  .hero-editorial { min-height: 640px !important; height: auto !important; }
+  .nov-blocco { background: #fffdf9; border: 1px solid rgba(0,0,0,.06); border-radius: 18px; padding: 18px !important; }
+  .nov-media { height: 170px !important; margin-bottom: 8px !important; }
+  .nov-n { display: none !important; }
+  .nov-d { display: none !important; }
+  .nov-t { font-size: 1.15rem !important; }
+  .ed-stats-grid { grid-template-columns: 1fr 1fr !important; gap: 0 !important; }
+  .ed-stat { padding: 18px 8px !important; }
+  .ed-stat-number, .ed-stat-num { font-size: 2.6rem !important; }
+  .ed-about-image { max-height: 300px; overflow: hidden; border-radius: 4px; }
+  .ed-about-image img { width: 100%; height: 300px !important; object-fit: cover; object-position: 50% 20%; }
+  .ed-about-text p + p { display: none; }
+  .ed-clients-header { margin-bottom: 18px !important; }
+
+  /* ── «In sintesi» in fondo a ogni pagina: resta (serve a Google e alle AI) ma piccolo ── */
+  section[style*="#37393f"] > .container { padding-top: 40px !important; padding-bottom: 40px !important; }
+  section[style*="#37393f"] > .container p { font-size: 1rem !important; line-height: 1.6 !important; }
+
+  /* ── SERVIZI: foto più bassa, un paragrafo solo ── */
+  .sv-block-media, .sv-block-media img { height: 200px !important; min-height: 0 !important; }
+  .sv-block-media img { width: 100%; object-fit: cover; }
+  .sv-block-text { padding-top: 26px !important; padding-bottom: 34px !important; }
+  .sv-block-text p + p { display: none; }
+  .sv-block-num { font-size: 1.6rem !important; margin-bottom: 4px !important; }
+
+  /* ── CHI SIAMO ── */
+  .team-card { background: #fffdf9; border-radius: 18px; padding: 22px 18px !important; box-shadow: 0 10px 24px -18px rgba(80,50,30,.4); }
+  .team-icon { width: 48px !important; height: 48px !important; margin-bottom: 10px !important; }
+  .cs-bio-image, .cs-bio-image img { max-height: 260px; height: 260px !important; object-fit: cover; width: 100%; overflow: hidden; }
+  .cs-bio-text p:nth-of-type(n+3) { display: none; }
+  .cs-values-header { margin-bottom: 18px !important; }
+  .cs-values-grid > * { background: rgba(255,255,255,.04); border-radius: 18px; padding: 22px !important; border: 0 !important; }
+  .team-section .container, .cs-values .container { overflow: visible; }
+  .cs-tl-item { padding-bottom: 22px !important; }
+  .cs-tl-content p { font-size: .9rem !important; }
+
+  /* ── ACADEMY ── */
+  .risorsa-card { border-radius: 16px; }
+  .risorsa-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .ac-mcard { min-height: 0 !important; border-radius: 18px; }
+  .ac-mcard-right p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .fm-lead { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .fm-cap { columns: 1 !important; max-height: 0; overflow: hidden; margin: 0 !important; }
+
+  /* ── PERCORSO ── */
+  .ps-step-content p { font-size: .95rem !important; }
+  .ps-include-item { background: #fffdf9; border-radius: 18px; padding: 22px !important; }
+
+  /* ── FOOTER: due colonne, niente vuoti ── */
+  .footer { padding-top: 36px !important; }
+  .footer-divider { display: none !important; }
+  .footer-grid, .footer-grid-4 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 26px 18px !important; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-brand p { margin-bottom: 12px !important; }
+  .footer-links li { margin-bottom: 6px !important; }
+  .footer-bottom { margin-top: 18px !important; padding-top: 16px !important; }
+}
