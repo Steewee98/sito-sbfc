@@ -23,31 +23,6 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/sb-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/sb-180.png">
 <style>
-/* ── Placca NFC — sezione promo (shop completo in placca-nfc.html) ── */
-.nf-promo { padding: 120px 0; background: var(--surface); border-top: 1px solid var(--border); scroll-margin-top: 100px; }
-.nf-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
-.nf-intro h2 { font-size: clamp(2.6rem, 5.5vw, 4.2rem); line-height: 1.0; margin: 14px 0 22px; }
-.nf-intro h2 em { font-style: italic; font-weight: 400; color: var(--accent); }
-.nf-intro .lead { color: var(--ink-soft); font-size: 1.08rem; line-height: 1.75; max-width: 520px; margin-bottom: 28px; }
-.nf-steps { margin-top: 8px; }
-.nf-step { display: grid; grid-template-columns: 52px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--border); }
-.nf-step:last-child { border-bottom: 1px solid var(--border); }
-.nf-step-n { font-family: 'Playfair Display', serif; font-size: 1.9rem; line-height: 1; color: var(--accent); font-weight: 500; }
-.nf-step h3 { font-size: 1.12rem; margin-bottom: 4px; }
-.nf-step p { color: var(--ink-soft); line-height: 1.65; font-size: .92rem; }
-.nf-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 22px; font-size: .78rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; color: var(--ink-soft); }
-.nf-meta li::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
-.nf-promo-actions { display: flex; align-items: center; gap: 18px 26px; flex-wrap: wrap; margin-top: 34px; }
-.nf-promo-price { display: inline-flex; align-items: baseline; gap: 8px; color: var(--ink-soft); font-size: .85rem; }
-.nf-promo-price strong { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--ink); font-weight: 500; }
-.nf-stack { position: relative; height: 560px; }
-.nf-stack img { position: absolute; width: 58%; box-shadow: 0 40px 90px rgba(26,26,26,.25); transition: transform .8s var(--ease-out); }
-.nf-stack .nf-img-a { left: 0; top: 0; z-index: 2; transform: rotate(-4deg); }
-.nf-stack .nf-img-b { right: 0; bottom: 0; transform: rotate(5deg); }
-.nf-stack:hover .nf-img-a { transform: rotate(-2deg) translateY(-10px); }
-.nf-stack:hover .nf-img-b { transform: rotate(3deg) translateY(10px); }
-@media (max-width: 1024px) { .nf-intro { grid-template-columns: 1fr; gap: 48px; } .nf-stack { height: 460px; max-width: 480px; margin: 0 auto; } }
-@media (max-width: 720px) { .nf-stack { height: 380px; } }
 
 /* ── Formazione: manuale «Il manager della ristorazione» (PDF in assets/pdf/formazione) ── */
 .fm { padding: 130px 0; background: var(--dark); color: var(--ivory); scroll-margin-top: 90px; overflow: hidden; }
@@ -92,8 +67,34 @@
     .fm-riga { flex-direction: column; }
     .fm-prezzo { flex-direction: column; gap: 6px; }
 }
+
+/* ── Indice sotto l'hero: le tre porte dell'Academy ── */
+.ac-index { background: var(--ivory); padding: 0 0 90px; position: relative; z-index: 2; }
+.ac-index-grid { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 18px; transform: translateY(-56px); margin-bottom: -56px; }
+.ac-door { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 30px 30px 28px; background: #fff; border: 1px solid var(--border); text-decoration: none; color: var(--ink); box-shadow: 0 30px 60px -40px rgba(43,45,49,.45); transition: transform .35s var(--ease-out), border-color .35s; }
+.ac-door:hover { transform: translateY(-4px); border-color: var(--accent); }
+.ac-door:first-child { background: var(--accent); color: #fff; border-color: var(--accent); }
+.ac-door-n { font-family: 'Playfair Display', serif; font-size: 2.2rem; line-height: 1; color: var(--accent); }
+.ac-door:first-child .ac-door-n, .ac-door:first-child .ac-door-kicker, .ac-door:first-child .ac-door-meta { color: rgba(255,255,255,.85); }
+.ac-door-kicker { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-top: 14px; }
+.ac-door strong { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.45rem; line-height: 1.2; }
+.ac-door-meta { font-size: .86rem; color: var(--ink-soft); line-height: 1.5; padding-right: 36px; }
+.ac-door-go { position: absolute; right: 26px; bottom: 24px; font-size: 1.3rem; }
+.ac-gratis-anchor { scroll-margin-top: 90px; }
+#programma { scroll-margin-top: 70px; }
+@media (max-width: 900px) { .ac-index-grid { grid-template-columns: 1fr; transform: translateY(-36px); margin-bottom: -36px; } .ac-index { padding-bottom: 50px; } }
+@media (max-width: 720px) {
+    .ac-index-grid { gap: 10px; }
+    .ac-door { display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; row-gap: 2px; padding: 16px 44px 16px 16px; }
+    .ac-door-n { font-size: 1.6rem; grid-row: span 2; align-self: center; }
+    .ac-door-kicker { margin-top: 0; }
+    .ac-door strong { font-size: 1.08rem; }
+    .ac-door-meta { display: none; }
+    .ac-door-go { right: 16px; bottom: auto; top: 50%; transform: translateY(-50%); }
+}
 </style>
-<link rel="stylesheet" href="mobile.css?v=20261019">
+<script>if(location.hash==='#placca-nfc')location.replace('placche.html'+location.search);</script>
+<link rel="stylesheet" href="mobile.css?v=20261019b">
 </head>
 <body>
 
@@ -109,6 +110,7 @@
             <li><a href="servizi.html">Servizi</a></li>
             <li><a href="percorso-sb.html">Percorso SB</a></li>
             <li><a href="academy.html" class="active">Academy</a></li>
+            <li><a href="placche.html">Placche</a></li>
             <li><a href="clienti.html">Clienti</a></li>
             <li><a href="contatti.html">Contatti</a></li>
             <li><a href="https://academy-sbfc-production.up.railway.app" class="nav-accedi" title="Area studenti — accedi alla piattaforma">Accedi</a></li>
@@ -127,19 +129,275 @@
                 <span class="cs-hero-line"><span class="line-inner">SB Food</span></span>
                 <span class="cs-hero-line cs-hero-line--accent"><span class="line-inner">Academy.</span></span>
             </h1>
-            <p class="cs-hero-sub" data-reveal data-reveal-delay="200">Il percorso formativo per ristoratori che vogliono smettere di improvvisare.</p>
+            <p class="cs-hero-sub" data-reveal data-reveal-delay="200">Corso, manuale e strumenti gratuiti per ristoratori che vogliono smettere di improvvisare.</p>
         </div>
     </div>
     <div class="scroll-indicator">Scroll</div>
 </section>
 
+<!-- ═══════ INDICE: le tre cose che trovi qui ═══════ -->
+<section class="ac-index" aria-label="Cosa trovi nell'Academy">
+    <div class="container ac-index-grid">
+        <a class="ac-door" href="#programma" data-reveal>
+            <span class="ac-door-n">01</span>
+            <span class="ac-door-kicker">Il corso</span>
+            <strong>Cinque moduli per gestire il locale con metodo</strong>
+            <span class="ac-door-meta">Video, dispense, podcast e challenge &middot; vedi programma e prezzi</span>
+            <span class="ac-door-go" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="ac-door" href="#formazione" data-reveal data-reveal-delay="80">
+            <span class="ac-door-n">02</span>
+            <span class="ac-door-kicker">Il manuale</span>
+            <strong>Il manager della ristorazione, in PDF</strong>
+            <span class="ac-door-meta">Per chi guida la squadra &middot; arriva subito via email</span>
+            <span class="ac-door-go" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="ac-door ac-door--free" href="#gratis" data-reveal data-reveal-delay="160">
+            <span class="ac-door-n">03</span>
+            <span class="ac-door-kicker">Gratis</span>
+            <strong>Checklist del locale e schede da stampare</strong>
+            <span class="ac-door-meta">Per iniziare senza spendere nulla</span>
+            <span class="ac-door-go" aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- ═══════ 5 MODULI ═══════ -->
+<section class="ac-moduli" id="programma">
+    <div class="container">
+        <div class="ac-moduli-header">
+            <span class="label" data-reveal>Programma</span>
+            <h2 class="ed-heading" data-reveal data-reveal-delay="50" style="color:var(--ivory)">I 5 moduli.</h2>
+        </div>
+    </div>
+
+    <div class="ac-moduli-stack">
+        <a href="#area-studenti" id="modulo-01" class="ac-mcard ac-mcard--odd" data-reveal>
+            <div class="ac-mcard-ghost" aria-hidden="true">01</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">01</span>
+                <span class="ac-mcard-label">Modulo 01</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Hai davvero il controllo del tuo ristorante?</h3>
+                <p>La maggior parte dei ristoratori lavora ogni giorno senza una visione chiara di cosa sta succedendo nel proprio locale. Questo modulo insegna a misurare quello che conta.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-02" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="80">
+            <div class="ac-mcard-ghost" aria-hidden="true">02</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">02</span>
+                <span class="ac-mcard-label">Modulo 02</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Stai pagando per i risultati giusti?</h3>
+                <p>Ogni ristorante ha costi fissi che si accettano senza mai verificare se producono quello per cui vengono pagati. Questo modulo ti dà gli strumenti per analizzare ogni spesa.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-03" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="160">
+            <div class="ac-mcard-ghost" aria-hidden="true">03</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">03</span>
+                <span class="ac-mcard-label">Modulo 03</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Cosa ti blocca dal crescere?</h3>
+                <p>Crescere non significa aprire un secondo locale. Significa fare funzionare quello che hai al massimo del suo potenziale. Questo modulo identifica i tre blocchi operativi.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-04" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="240">
+            <div class="ac-mcard-ghost" aria-hidden="true">04</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">04</span>
+                <span class="ac-mcard-label">Modulo 04</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>L'Arte di Accogliere nel Food</h3>
+                <p>L'accoglienza non è gentilezza. È un sistema che si costruisce, si insegna e si replica. Questo modulo analizza ogni momento del contatto tra il locale e il cliente.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-05" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="320">
+            <div class="ac-mcard-ghost" aria-hidden="true">05</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">05</span>
+                <span class="ac-mcard-label">Modulo 05</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Come prepararsi al lancio del tuo locale</h3>
+                <p>I primi 90 giorni di un ristorante definiscono tutto. Questo modulo accompagna attraverso le tre fasi critiche del lancio con una checklist completa.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- ═══════ PRICING ═══════ -->
+<section class="ac-pricing" id="prezzi">
+    <div class="container">
+        <div class="ac-pricing-header">
+            <span class="label" data-reveal>Prezzi</span>
+            <h2 class="ed-heading" data-reveal data-reveal-delay="50">Scegli il tuo<br>percorso.</h2>
+        </div>
+        <div class="pricing-grid" style="max-width:780px">
+            <div class="pricing-card pricing-card--light" data-reveal data-reveal-delay="50">
+                <h3>Singolo modulo</h3>
+                <div class="pricing-amount">19,90&euro; <span>/ modulo</span></div>
+                <ul class="pricing-features">
+                    <li>Accesso al modulo scelto</li>
+                    <li>Video + slides + podcast</li>
+                    <li>Accesso illimitato</li>
+                </ul>
+                <button onclick="apriSceltaModulo()" class="btn btn-outline-dark" style="width:100%;cursor:pointer">Scegli un modulo</button>
+            </div>
+            <div class="pricing-card pricing-card--dark" data-reveal data-reveal-delay="150">
+                <div class="pricing-badge">Consigliato</div>
+                <h3>Corso completo</h3>
+                <div class="pricing-amount">94,90&euro;</div>
+                <ul class="pricing-features">
+                    <li>Tutti e 5 i moduli</li>
+                    <li>Video + slides + podcast per modulo</li>
+                    <li>Accesso illimitato</li>
+                    <li>Aggiornamenti futuri inclusi</li>
+                    <li>Risparmio rispetto ai singoli</li>
+                </ul>
+                <button onclick="avviaCheckout('corso-completo')" class="btn btn-primary" style="width:100%;cursor:pointer">Inizia ora</button>
+            </div>
+        </div>
+
+        <!-- Modal scelta modulo -->
+        <div id="modulo-select-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;overflow-y:auto">
+            <div style="max-width:520px;margin:80px auto;background:var(--surface);padding:0;overflow:hidden">
+                <div style="background:var(--dark);padding:24px 32px;display:flex;justify-content:space-between;align-items:center">
+                    <h3 style="color:var(--ivory);font-family:'Playfair Display',serif;margin:0;font-size:1.15rem">Scegli il modulo</h3>
+                    <button onclick="chiudiSceltaModulo()" style="background:none;border:none;color:var(--ivory);font-size:1.5rem;cursor:pointer;line-height:1">&times;</button>
+                </div>
+                <div style="padding:24px 32px">
+                    <div onclick="avviaCheckout('modulo-1')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">01</strong> <span style="color:var(--ink);margin-left:8px">Hai davvero il controllo del tuo ristorante?</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-2')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">02</strong> <span style="color:var(--ink);margin-left:8px">Stai pagando per i risultati giusti?</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-3')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">03</strong> <span style="color:var(--ink);margin-left:8px">Cosa ti blocca dal crescere?</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-4')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">04</strong> <span style="color:var(--ink);margin-left:8px">L'Arte di Accogliere nel Food</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-5')" style="padding:14px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">05</strong> <span style="color:var(--ink);margin-left:8px">Come prepararsi al lancio del tuo locale</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ FORMAZIONE — manuale «Il manager della ristorazione» ═══════ -->
+<section class="fm" id="formazione">
+    <div class="container fm-grid">
+        <div>
+            <span class="label" data-reveal>Formazione &middot; Manuale</span>
+            <h2 data-reveal data-reveal-delay="50">Il manager della ristorazione<em>Come essere un buon padrone di casa.</em></h2>
+            <p class="fm-lead" data-reveal data-reveal-delay="100">Il manuale pratico per manager, titolari e responsabili di sala: guidare le persone, organizzare turni e servizio, leggere i numeri, comprare e conservare bene, tenere in ordine sicurezza alimentare e documenti. Da leggere, insegnare e usare durante il servizio.</p>
+            <ol class="fm-cap" data-reveal data-reveal-delay="150">
+                <li>Chi &egrave; un buon manager</li>
+                <li>Guidare le persone</li>
+                <li>Turni, ruoli e briefing</li>
+                <li>Ospitalit&agrave; e reclami</li>
+                <li>Controllo quotidiano</li>
+                <li>Numeri e margini</li>
+                <li>Acquisti e fornitori</li>
+                <li>Magazzino e scorte</li>
+                <li>HACCP</li>
+                <li>Catena del freddo</li>
+                <li>Pulizie, rifiuti e infestanti</li>
+                <li>Allergeni e crisi</li>
+                <li>Norme e documenti</li>
+                <li>Il piano dei 30 giorni</li>
+            </ol>
+            <div class="fm-ok" id="fmOk" hidden><b>Grazie per l'acquisto.</b> Ti abbiamo mandato il manuale per email: controlla la posta (anche lo spam) tra qualche minuto.</div>
+            <form class="fm-buy" id="fmBuy" novalidate data-reveal data-reveal-delay="200">
+                <div class="fm-prezzo"><b>15 &euro;</b><span>Hai gi&agrave; scaricato una nostra scheda? Per te <strong>12 &euro;</strong>: usa la stessa email.</span></div>
+                <div class="fm-riga">
+                    <label class="fm-sr" for="fmEmail">La tua email</label>
+                    <input class="fm-email" id="fmEmail" type="email" autocomplete="email" placeholder="La tua email" required>
+                    <button type="submit" class="btn btn-primary" id="fmBtn">Acquista il manuale</button>
+                </div>
+                <p class="fm-meta">PDF &middot; 15 pagine &middot; ti arriva per email subito dopo il pagamento</p>
+                <p class="fm-err" id="fmErr" hidden></p>
+            </form>
+        </div>
+        <div class="fm-stack" data-reveal data-reveal-delay="120">
+            <img class="fm-a" src="assets/img/formazione/manager-p7.jpg" alt="Pagina del manuale: controllo economico e margini" loading="lazy">
+            <img class="fm-b" src="assets/img/formazione/manager-p3.jpg" alt="Pagina del manuale: guidare le persone" loading="lazy">
+            <img class="fm-c" src="assets/img/formazione/manager-p1.jpg" alt="Copertina del manuale Il manager della ristorazione" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ GRATIS: checklist + schede ═══════ -->
+<div id="gratis" class="ac-gratis-anchor"></div>
 <!-- ═══════ CHECKLIST PROMO ═══════ -->
 <section class="chk-promo">
     <div class="chk-promo-glow" aria-hidden="true"></div>
     <div class="container chk-promo-inner">
         <div class="chk-promo-copy">
-            <span class="chk-promo-label" data-reveal>Risorsa gratuita &middot; Checklist</span>
-            <h2 class="chk-promo-title" data-reveal data-reveal-delay="50">Prima di investire in formazione,<br><em>scopri dove sei davvero.</em></h2>
+            <span class="chk-promo-label" data-reveal>Gratis &middot; Checklist</span>
+            <h2 class="chk-promo-title" data-reveal data-reveal-delay="50">Non sai da dove partire?<br><em>Scopri dove sei davvero.</em></h2>
             <p class="chk-promo-lead" data-reveal data-reveal-delay="100">15 domande, 5 aree operative, un punteggio chiaro. La radiografia onesta del tuo locale in 5 minuti &mdash; prima di spendere un euro in un corso.</p>
             <ul class="chk-promo-meta" data-reveal data-reveal-delay="150">
                 <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5 minuti</li>
@@ -363,262 +621,6 @@
     </div>
 </section>
 
-<!-- ═══════ FORMAZIONE — manuale «Il manager della ristorazione» ═══════ -->
-<section class="fm" id="formazione">
-    <div class="container fm-grid">
-        <div>
-            <span class="label" data-reveal>Formazione &middot; Manuale</span>
-            <h2 data-reveal data-reveal-delay="50">Il manager della ristorazione<em>Come essere un buon padrone di casa.</em></h2>
-            <p class="fm-lead" data-reveal data-reveal-delay="100">Il manuale pratico per manager, titolari e responsabili di sala: guidare le persone, organizzare turni e servizio, leggere i numeri, comprare e conservare bene, tenere in ordine sicurezza alimentare e documenti. Da leggere, insegnare e usare durante il servizio.</p>
-            <ol class="fm-cap" data-reveal data-reveal-delay="150">
-                <li>Chi &egrave; un buon manager</li>
-                <li>Guidare le persone</li>
-                <li>Turni, ruoli e briefing</li>
-                <li>Ospitalit&agrave; e reclami</li>
-                <li>Controllo quotidiano</li>
-                <li>Numeri e margini</li>
-                <li>Acquisti e fornitori</li>
-                <li>Magazzino e scorte</li>
-                <li>HACCP</li>
-                <li>Catena del freddo</li>
-                <li>Pulizie, rifiuti e infestanti</li>
-                <li>Allergeni e crisi</li>
-                <li>Norme e documenti</li>
-                <li>Il piano dei 30 giorni</li>
-            </ol>
-            <div class="fm-ok" id="fmOk" hidden><b>Grazie per l'acquisto.</b> Ti abbiamo mandato il manuale per email: controlla la posta (anche lo spam) tra qualche minuto.</div>
-            <form class="fm-buy" id="fmBuy" novalidate data-reveal data-reveal-delay="200">
-                <div class="fm-prezzo"><b>15 &euro;</b><span>Hai gi&agrave; scaricato una nostra scheda? Per te <strong>12 &euro;</strong>: usa la stessa email.</span></div>
-                <div class="fm-riga">
-                    <label class="fm-sr" for="fmEmail">La tua email</label>
-                    <input class="fm-email" id="fmEmail" type="email" autocomplete="email" placeholder="La tua email" required>
-                    <button type="submit" class="btn btn-primary" id="fmBtn">Acquista il manuale</button>
-                </div>
-                <p class="fm-meta">PDF &middot; 15 pagine &middot; ti arriva per email subito dopo il pagamento</p>
-                <p class="fm-err" id="fmErr" hidden></p>
-            </form>
-        </div>
-        <div class="fm-stack" data-reveal data-reveal-delay="120">
-            <img class="fm-a" src="assets/img/formazione/manager-p7.jpg" alt="Pagina del manuale: controllo economico e margini" loading="lazy">
-            <img class="fm-b" src="assets/img/formazione/manager-p3.jpg" alt="Pagina del manuale: guidare le persone" loading="lazy">
-            <img class="fm-c" src="assets/img/formazione/manager-p1.jpg" alt="Copertina del manuale Il manager della ristorazione" loading="lazy">
-        </div>
-    </div>
-</section>
-
-<!-- ═══════ MENÙ DIGITALE — promo (pagina completa in menu-digitale.html).
-     L'id resta «placca-nfc»: ci puntano email della sequenza e challenge. ═══════ -->
-<section class="nf-promo" id="placca-nfc">
-    <div class="container">
-        <div class="nf-intro">
-            <div>
-                <span class="label" data-reveal>Strumento &middot; Men&ugrave; digitale</span>
-                <h2 data-reveal data-reveal-delay="50">Appoggia il telefono,<br><em>si apre il men&ugrave;.</em></h2>
-                <p class="lead" data-reveal data-reveal-delay="100">Una placca su ogni tavolo: il cliente ci appoggia il telefono, o inquadra il QR, e sfoglia il tuo men&ugrave; con le foto dei piatti, nella sua lingua, con gli allergeni e il Wi-Fi. A fine cena gli chiede com'&egrave; andata: le recensioni arrivano nel momento giusto.</p>
-                <div class="nf-steps">
-                    <div class="nf-step" data-reveal data-reveal-delay="150"><span class="nf-step-n">01</span><div><h3>Ci mandi il men&ugrave;</h3><p>Anche la foto della carta. Testi, traduzioni e allergeni li prepariamo noi.</p></div></div>
-                    <div class="nf-step" data-reveal data-reveal-delay="200"><span class="nf-step-n">02</span><div><h3>Una placca per tavolo</h3><p>Con il nome del tuo locale o in grafica SB, gi&agrave; programmate. Le appoggi e funzionano.</p></div></div>
-                    <div class="nf-step" data-reveal data-reveal-delay="250"><span class="nf-step-n">03</span><div><h3>Lo teniamo aggiornato</h3><p>Nuovi piatti, prezzi, il Wi-Fi: ce lo scrivi e in giornata &egrave; online.</p></div></div>
-                </div>
-                <ul class="nf-meta" data-reveal data-reveal-delay="300"><li>Cinque lingue</li><li>Allergeni</li><li>Wi-Fi</li><li>Recensioni a fine cena</li></ul>
-                <div class="nf-promo-actions" data-reveal data-reveal-delay="350">
-                    <a href="menu-digitale.html" class="btn btn-primary">Prova il men&ugrave; &rarr;</a>
-                    <span class="nf-promo-price"><a href="menu-digitale.html#configura" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">Da 12 &euro; a tavolo</a> &middot; poi 19 &euro; al mese</span>
-                </div>
-            </div>
-            <div class="nf-stack" data-reveal data-reveal-delay="120">
-                <img class="nf-img-a" src="assets/nfc/shop/tavolo-pers-bianca.jpg" alt="Placca da tavolo del menù digitale, plexiglas bianco" loading="lazy">
-                <img class="nf-img-b" src="assets/nfc/shop/tavolo-pers-nera.jpg" alt="Placca da tavolo del menù digitale, plexiglas nero" loading="lazy">
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- ═══════ 5 MODULI ═══════ -->
-<section class="ac-moduli">
-    <div class="container">
-        <div class="ac-moduli-header">
-            <span class="label" data-reveal>Programma</span>
-            <h2 class="ed-heading" data-reveal data-reveal-delay="50" style="color:var(--ivory)">I 5 moduli.</h2>
-        </div>
-    </div>
-
-    <div class="ac-moduli-stack">
-        <a href="#area-studenti" id="modulo-01" class="ac-mcard ac-mcard--odd" data-reveal>
-            <div class="ac-mcard-ghost" aria-hidden="true">01</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">01</span>
-                <span class="ac-mcard-label">Modulo 01</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Hai davvero il controllo del tuo ristorante?</h3>
-                <p>La maggior parte dei ristoratori lavora ogni giorno senza una visione chiara di cosa sta succedendo nel proprio locale. Questo modulo insegna a misurare quello che conta.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-02" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="80">
-            <div class="ac-mcard-ghost" aria-hidden="true">02</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">02</span>
-                <span class="ac-mcard-label">Modulo 02</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Stai pagando per i risultati giusti?</h3>
-                <p>Ogni ristorante ha costi fissi che si accettano senza mai verificare se producono quello per cui vengono pagati. Questo modulo ti dà gli strumenti per analizzare ogni spesa.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-03" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="160">
-            <div class="ac-mcard-ghost" aria-hidden="true">03</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">03</span>
-                <span class="ac-mcard-label">Modulo 03</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Cosa ti blocca dal crescere?</h3>
-                <p>Crescere non significa aprire un secondo locale. Significa fare funzionare quello che hai al massimo del suo potenziale. Questo modulo identifica i tre blocchi operativi.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-04" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="240">
-            <div class="ac-mcard-ghost" aria-hidden="true">04</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">04</span>
-                <span class="ac-mcard-label">Modulo 04</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>L'Arte di Accogliere nel Food</h3>
-                <p>L'accoglienza non è gentilezza. È un sistema che si costruisce, si insegna e si replica. Questo modulo analizza ogni momento del contatto tra il locale e il cliente.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-05" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="320">
-            <div class="ac-mcard-ghost" aria-hidden="true">05</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">05</span>
-                <span class="ac-mcard-label">Modulo 05</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Come prepararsi al lancio del tuo locale</h3>
-                <p>I primi 90 giorni di un ristorante definiscono tutto. Questo modulo accompagna attraverso le tre fasi critiche del lancio con una checklist completa.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-    </div>
-</section>
-
-<!-- ═══════ PRICING ═══════ -->
-<section class="ac-pricing" id="prezzi">
-    <div class="container">
-        <div class="ac-pricing-header">
-            <span class="label" data-reveal>Prezzi</span>
-            <h2 class="ed-heading" data-reveal data-reveal-delay="50">Scegli il tuo<br>percorso.</h2>
-        </div>
-        <div class="pricing-grid" style="max-width:780px">
-            <div class="pricing-card pricing-card--light" data-reveal data-reveal-delay="50">
-                <h3>Singolo modulo</h3>
-                <div class="pricing-amount">19,90&euro; <span>/ modulo</span></div>
-                <ul class="pricing-features">
-                    <li>Accesso al modulo scelto</li>
-                    <li>Video + slides + podcast</li>
-                    <li>Accesso illimitato</li>
-                </ul>
-                <button onclick="apriSceltaModulo()" class="btn btn-outline-dark" style="width:100%;cursor:pointer">Scegli un modulo</button>
-            </div>
-            <div class="pricing-card pricing-card--dark" data-reveal data-reveal-delay="150">
-                <div class="pricing-badge">Consigliato</div>
-                <h3>Corso completo</h3>
-                <div class="pricing-amount">94,90&euro;</div>
-                <ul class="pricing-features">
-                    <li>Tutti e 5 i moduli</li>
-                    <li>Video + slides + podcast per modulo</li>
-                    <li>Accesso illimitato</li>
-                    <li>Aggiornamenti futuri inclusi</li>
-                    <li>Risparmio rispetto ai singoli</li>
-                </ul>
-                <button onclick="avviaCheckout('corso-completo')" class="btn btn-primary" style="width:100%;cursor:pointer">Inizia ora</button>
-            </div>
-        </div>
-
-        <!-- Modal scelta modulo -->
-        <div id="modulo-select-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;overflow-y:auto">
-            <div style="max-width:520px;margin:80px auto;background:var(--surface);padding:0;overflow:hidden">
-                <div style="background:var(--dark);padding:24px 32px;display:flex;justify-content:space-between;align-items:center">
-                    <h3 style="color:var(--ivory);font-family:'Playfair Display',serif;margin:0;font-size:1.15rem">Scegli il modulo</h3>
-                    <button onclick="chiudiSceltaModulo()" style="background:none;border:none;color:var(--ivory);font-size:1.5rem;cursor:pointer;line-height:1">&times;</button>
-                </div>
-                <div style="padding:24px 32px">
-                    <div onclick="avviaCheckout('modulo-1')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">01</strong> <span style="color:var(--ink);margin-left:8px">Hai davvero il controllo del tuo ristorante?</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-2')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">02</strong> <span style="color:var(--ink);margin-left:8px">Stai pagando per i risultati giusti?</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-3')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">03</strong> <span style="color:var(--ink);margin-left:8px">Cosa ti blocca dal crescere?</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-4')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">04</strong> <span style="color:var(--ink);margin-left:8px">L'Arte di Accogliere nel Food</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-5')" style="padding:14px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">05</strong> <span style="color:var(--ink);margin-left:8px">Come prepararsi al lancio del tuo locale</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- ═══════ AREA STUDENTI (FUNZIONALE) ═══════ -->
 <section class="ac-studenti" id="area-studenti">
     <div class="container">
@@ -675,7 +677,7 @@
                     <a href="https://www.linkedin.com/company/sb-food-consulting" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
                 </div>
             </div>
-            <div class="footer-links"><h4>Navigazione</h4><ul><li><a href="chi-siamo.html">Chi siamo</a></li><li><a href="servizi.html">Servizi</a></li><li><a href="percorso-sb.html">Percorso SB</a></li><li><a href="academy.html">Academy</a></li><li><a href="clienti.html">Clienti</a></li>
+            <div class="footer-links"><h4>Navigazione</h4><ul><li><a href="chi-siamo.html">Chi siamo</a></li><li><a href="servizi.html">Servizi</a></li><li><a href="percorso-sb.html">Percorso SB</a></li><li><a href="academy.html">Academy</a></li><li><a href="placche.html">Placche NFC</a></li><li><a href="clienti.html">Clienti</a></li>
                     <li><a href="faq.html">FAQ</a></li></ul></div>
             <div class="footer-links"><h4>Contatti</h4><ul><li><a href="mailto:info@sbfoodconsulting.com">info@sbfoodconsulting.com</a></li><li><a href="tel:+393913983820">+39 391 398 3820</a></li><li>Roma, Italia</li></ul></div>
         </div>

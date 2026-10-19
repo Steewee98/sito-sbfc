@@ -111,3 +111,12 @@
   .footer-links li { margin-bottom: 6px !important; }
   .footer-bottom { margin-top: 18px !important; padding-top: 16px !important; }
 }
+
+/* Menu da computer: con la voce «Placche» le voci non devono andare a capo
+   sugli schermi da 1025 a 1300px (sotto i 1024 c'è già il menu a tendina). */
+.navbar-menu li a { white-space: nowrap; }
+@media (min-width: 1025px) and (max-width: 1300px) {
+  .navbar-menu { gap: 20px; }
+  .navbar-menu li a { letter-spacing: .03em; }
+  .navbar-menu li a.nav-accedi { padding: 8px 14px; }
+}
