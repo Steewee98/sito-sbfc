@@ -47,6 +47,12 @@
     flex: 0 0 82% !important; max-width: 82% !important; scroll-snap-align: start; margin: 0 !important;
   }
   .team-grid > * { flex-basis: 64% !important; max-width: 64% !important; }
+  /* le strisce scorrono solo di lato: niente movimento in verticale
+     (l'animazione d'entrata e l'hover spostavano le schede e facevano scorrere in su e giù) */
+  .nov-grid, .team-grid, .risorse-grid, .ac-moduli-stack, .ps-include-grid, .cs-values-grid {
+    overflow-y: hidden !important; touch-action: pan-x pan-y; align-items: stretch !important; }
+  .nov-grid > *, .team-grid > *, .risorse-grid > *, .ac-moduli-stack > *, .ps-include-grid > *, .cs-values-grid > * {
+    transform: none !important; }
   /* l'avviso «scorri» sotto ogni striscia */
   .nov-grid::after, .team-grid::after, .risorse-grid::after, .ac-moduli-stack::after, .ps-include-grid::after { content: ""; flex: 0 0 1px; }
   .sb-scorri { display: flex; align-items: center; gap: 8px; font-size: .72rem; font-weight: 700; letter-spacing: 2px;

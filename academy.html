@@ -70,12 +70,12 @@
 
 /* ── Indice sotto l'hero: le tre porte dell'Academy ── */
 .ac-index { background: var(--ivory); padding: 0 0 90px; position: relative; z-index: 2; }
-.ac-index-grid { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 18px; transform: translateY(-56px); margin-bottom: -56px; }
+.ac-index-grid { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 18px; transform: translateY(-56px); margin-bottom: -56px; }
 .ac-door { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 30px 30px 28px; background: #fff; border: 1px solid var(--border); text-decoration: none; color: var(--ink); box-shadow: 0 30px 60px -40px rgba(43,45,49,.45); transition: transform .35s var(--ease-out), border-color .35s; }
 .ac-door:hover { transform: translateY(-4px); border-color: var(--accent); }
-.ac-door:first-child { background: var(--accent); color: #fff; border-color: var(--accent); }
+.ac-door:last-child { background: var(--accent); color: #fff; border-color: var(--accent); }
 .ac-door-n { font-family: 'Playfair Display', serif; font-size: 2.2rem; line-height: 1; color: var(--accent); }
-.ac-door:first-child .ac-door-n, .ac-door:first-child .ac-door-kicker, .ac-door:first-child .ac-door-meta { color: rgba(255,255,255,.85); }
+.ac-door:last-child .ac-door-n, .ac-door:last-child .ac-door-kicker, .ac-door:last-child .ac-door-meta { color: rgba(255,255,255,.85); }
 .ac-door-kicker { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-top: 14px; }
 .ac-door strong { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.45rem; line-height: 1.2; }
 .ac-door-meta { font-size: .86rem; color: var(--ink-soft); line-height: 1.5; padding-right: 36px; }
@@ -92,9 +92,16 @@
     .ac-door-meta { display: none; }
     .ac-door-go { right: 16px; bottom: auto; top: 50%; transform: translateY(-50%); }
 }
+
+/* ── Moduli: tutte le schede uguali, con il loro riquadro (prima una su due
+   aveva lo stesso colore dello sfondo). Sezione più scura del manuale sopra. ── */
+.ac-moduli { background: #2a2c30; }
+.ac-moduli-stack { gap: 14px; }
+.ac-mcard--odd, .ac-mcard--even { background: #37393f; border: 1px solid rgba(245,242,238,.09); border-left: 3px solid rgba(245,242,238,.09); }
+.ac-mcard:hover { border-left-color: var(--accent); }
 </style>
 <script>if(location.hash==='#placca-nfc')location.replace('placche.html'+location.search);</script>
-<link rel="stylesheet" href="mobile.css?v=20261019b">
+<link rel="stylesheet" href="mobile.css?v=20261019c">
 </head>
 <body>
 
@@ -138,11 +145,11 @@
 <!-- ═══════ INDICE: le tre cose che trovi qui ═══════ -->
 <section class="ac-index" aria-label="Cosa trovi nell'Academy">
     <div class="container ac-index-grid">
-        <a class="ac-door" href="#programma" data-reveal>
+        <a class="ac-door ac-door--free" href="#gratis" data-reveal>
             <span class="ac-door-n">01</span>
-            <span class="ac-door-kicker">Il corso</span>
-            <strong>Cinque moduli per gestire il locale con metodo</strong>
-            <span class="ac-door-meta">Video, dispense, podcast e challenge &middot; vedi programma e prezzi</span>
+            <span class="ac-door-kicker">Gratis</span>
+            <strong>Checklist del locale e schede da stampare</strong>
+            <span class="ac-door-meta">Per iniziare senza spendere nulla</span>
             <span class="ac-door-go" aria-hidden="true">&rarr;</span>
         </a>
         <a class="ac-door" href="#formazione" data-reveal data-reveal-delay="80">
@@ -152,240 +159,13 @@
             <span class="ac-door-meta">Per chi guida la squadra &middot; arriva subito via email</span>
             <span class="ac-door-go" aria-hidden="true">&rarr;</span>
         </a>
-        <a class="ac-door ac-door--free" href="#gratis" data-reveal data-reveal-delay="160">
+        <a class="ac-door" href="#programma" data-reveal data-reveal-delay="160">
             <span class="ac-door-n">03</span>
-            <span class="ac-door-kicker">Gratis</span>
-            <strong>Checklist del locale e schede da stampare</strong>
-            <span class="ac-door-meta">Per iniziare senza spendere nulla</span>
+            <span class="ac-door-kicker">Il corso</span>
+            <strong>Cinque moduli per gestire il locale con metodo</strong>
+            <span class="ac-door-meta">Video, dispense, podcast e challenge &middot; vedi programma e prezzi</span>
             <span class="ac-door-go" aria-hidden="true">&rarr;</span>
         </a>
-    </div>
-</section>
-
-<!-- ═══════ 5 MODULI ═══════ -->
-<section class="ac-moduli" id="programma">
-    <div class="container">
-        <div class="ac-moduli-header">
-            <span class="label" data-reveal>Programma</span>
-            <h2 class="ed-heading" data-reveal data-reveal-delay="50" style="color:var(--ivory)">I 5 moduli.</h2>
-        </div>
-    </div>
-
-    <div class="ac-moduli-stack">
-        <a href="#area-studenti" id="modulo-01" class="ac-mcard ac-mcard--odd" data-reveal>
-            <div class="ac-mcard-ghost" aria-hidden="true">01</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">01</span>
-                <span class="ac-mcard-label">Modulo 01</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Hai davvero il controllo del tuo ristorante?</h3>
-                <p>La maggior parte dei ristoratori lavora ogni giorno senza una visione chiara di cosa sta succedendo nel proprio locale. Questo modulo insegna a misurare quello che conta.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-02" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="80">
-            <div class="ac-mcard-ghost" aria-hidden="true">02</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">02</span>
-                <span class="ac-mcard-label">Modulo 02</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Stai pagando per i risultati giusti?</h3>
-                <p>Ogni ristorante ha costi fissi che si accettano senza mai verificare se producono quello per cui vengono pagati. Questo modulo ti dà gli strumenti per analizzare ogni spesa.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-03" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="160">
-            <div class="ac-mcard-ghost" aria-hidden="true">03</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">03</span>
-                <span class="ac-mcard-label">Modulo 03</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Cosa ti blocca dal crescere?</h3>
-                <p>Crescere non significa aprire un secondo locale. Significa fare funzionare quello che hai al massimo del suo potenziale. Questo modulo identifica i tre blocchi operativi.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-04" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="240">
-            <div class="ac-mcard-ghost" aria-hidden="true">04</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">04</span>
-                <span class="ac-mcard-label">Modulo 04</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>L'Arte di Accogliere nel Food</h3>
-                <p>L'accoglienza non è gentilezza. È un sistema che si costruisce, si insegna e si replica. Questo modulo analizza ogni momento del contatto tra il locale e il cliente.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-
-        <a href="#area-studenti" id="modulo-05" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="320">
-            <div class="ac-mcard-ghost" aria-hidden="true">05</div>
-            <div class="ac-mcard-left">
-                <span class="ac-mcard-n">05</span>
-                <span class="ac-mcard-label">Modulo 05</span>
-            </div>
-            <div class="ac-mcard-divider"></div>
-            <div class="ac-mcard-right">
-                <h3>Come prepararsi al lancio del tuo locale</h3>
-                <p>I primi 90 giorni di un ristorante definiscono tutto. Questo modulo accompagna attraverso le tre fasi critiche del lancio con una checklist completa.</p>
-                <div class="ac-mcard-badges">
-                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
-                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
-                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
-                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
-                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
-                </div>
-            </div>
-            <span class="ac-mcard-arrow">&rarr;</span>
-        </a>
-    </div>
-</section>
-
-<!-- ═══════ PRICING ═══════ -->
-<section class="ac-pricing" id="prezzi">
-    <div class="container">
-        <div class="ac-pricing-header">
-            <span class="label" data-reveal>Prezzi</span>
-            <h2 class="ed-heading" data-reveal data-reveal-delay="50">Scegli il tuo<br>percorso.</h2>
-        </div>
-        <div class="pricing-grid" style="max-width:780px">
-            <div class="pricing-card pricing-card--light" data-reveal data-reveal-delay="50">
-                <h3>Singolo modulo</h3>
-                <div class="pricing-amount">19,90&euro; <span>/ modulo</span></div>
-                <ul class="pricing-features">
-                    <li>Accesso al modulo scelto</li>
-                    <li>Video + slides + podcast</li>
-                    <li>Accesso illimitato</li>
-                </ul>
-                <button onclick="apriSceltaModulo()" class="btn btn-outline-dark" style="width:100%;cursor:pointer">Scegli un modulo</button>
-            </div>
-            <div class="pricing-card pricing-card--dark" data-reveal data-reveal-delay="150">
-                <div class="pricing-badge">Consigliato</div>
-                <h3>Corso completo</h3>
-                <div class="pricing-amount">94,90&euro;</div>
-                <ul class="pricing-features">
-                    <li>Tutti e 5 i moduli</li>
-                    <li>Video + slides + podcast per modulo</li>
-                    <li>Accesso illimitato</li>
-                    <li>Aggiornamenti futuri inclusi</li>
-                    <li>Risparmio rispetto ai singoli</li>
-                </ul>
-                <button onclick="avviaCheckout('corso-completo')" class="btn btn-primary" style="width:100%;cursor:pointer">Inizia ora</button>
-            </div>
-        </div>
-
-        <!-- Modal scelta modulo -->
-        <div id="modulo-select-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;overflow-y:auto">
-            <div style="max-width:520px;margin:80px auto;background:var(--surface);padding:0;overflow:hidden">
-                <div style="background:var(--dark);padding:24px 32px;display:flex;justify-content:space-between;align-items:center">
-                    <h3 style="color:var(--ivory);font-family:'Playfair Display',serif;margin:0;font-size:1.15rem">Scegli il modulo</h3>
-                    <button onclick="chiudiSceltaModulo()" style="background:none;border:none;color:var(--ivory);font-size:1.5rem;cursor:pointer;line-height:1">&times;</button>
-                </div>
-                <div style="padding:24px 32px">
-                    <div onclick="avviaCheckout('modulo-1')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">01</strong> <span style="color:var(--ink);margin-left:8px">Hai davvero il controllo del tuo ristorante?</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-2')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">02</strong> <span style="color:var(--ink);margin-left:8px">Stai pagando per i risultati giusti?</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-3')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">03</strong> <span style="color:var(--ink);margin-left:8px">Cosa ti blocca dal crescere?</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-4')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">04</strong> <span style="color:var(--ink);margin-left:8px">L'Arte di Accogliere nel Food</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                    <div onclick="avviaCheckout('modulo-5')" style="padding:14px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-                        <div><strong style="color:var(--ink)">05</strong> <span style="color:var(--ink);margin-left:8px">Come prepararsi al lancio del tuo locale</span></div>
-                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ═══════ FORMAZIONE — manuale «Il manager della ristorazione» ═══════ -->
-<section class="fm" id="formazione">
-    <div class="container fm-grid">
-        <div>
-            <span class="label" data-reveal>Formazione &middot; Manuale</span>
-            <h2 data-reveal data-reveal-delay="50">Il manager della ristorazione<em>Come essere un buon padrone di casa.</em></h2>
-            <p class="fm-lead" data-reveal data-reveal-delay="100">Il manuale pratico per manager, titolari e responsabili di sala: guidare le persone, organizzare turni e servizio, leggere i numeri, comprare e conservare bene, tenere in ordine sicurezza alimentare e documenti. Da leggere, insegnare e usare durante il servizio.</p>
-            <ol class="fm-cap" data-reveal data-reveal-delay="150">
-                <li>Chi &egrave; un buon manager</li>
-                <li>Guidare le persone</li>
-                <li>Turni, ruoli e briefing</li>
-                <li>Ospitalit&agrave; e reclami</li>
-                <li>Controllo quotidiano</li>
-                <li>Numeri e margini</li>
-                <li>Acquisti e fornitori</li>
-                <li>Magazzino e scorte</li>
-                <li>HACCP</li>
-                <li>Catena del freddo</li>
-                <li>Pulizie, rifiuti e infestanti</li>
-                <li>Allergeni e crisi</li>
-                <li>Norme e documenti</li>
-                <li>Il piano dei 30 giorni</li>
-            </ol>
-            <div class="fm-ok" id="fmOk" hidden><b>Grazie per l'acquisto.</b> Ti abbiamo mandato il manuale per email: controlla la posta (anche lo spam) tra qualche minuto.</div>
-            <form class="fm-buy" id="fmBuy" novalidate data-reveal data-reveal-delay="200">
-                <div class="fm-prezzo"><b>15 &euro;</b><span>Hai gi&agrave; scaricato una nostra scheda? Per te <strong>12 &euro;</strong>: usa la stessa email.</span></div>
-                <div class="fm-riga">
-                    <label class="fm-sr" for="fmEmail">La tua email</label>
-                    <input class="fm-email" id="fmEmail" type="email" autocomplete="email" placeholder="La tua email" required>
-                    <button type="submit" class="btn btn-primary" id="fmBtn">Acquista il manuale</button>
-                </div>
-                <p class="fm-meta">PDF &middot; 15 pagine &middot; ti arriva per email subito dopo il pagamento</p>
-                <p class="fm-err" id="fmErr" hidden></p>
-            </form>
-        </div>
-        <div class="fm-stack" data-reveal data-reveal-delay="120">
-            <img class="fm-a" src="assets/img/formazione/manager-p7.jpg" alt="Pagina del manuale: controllo economico e margini" loading="lazy">
-            <img class="fm-b" src="assets/img/formazione/manager-p3.jpg" alt="Pagina del manuale: guidare le persone" loading="lazy">
-            <img class="fm-c" src="assets/img/formazione/manager-p1.jpg" alt="Copertina del manuale Il manager della ristorazione" loading="lazy">
-        </div>
     </div>
 </section>
 
@@ -618,6 +398,233 @@
         </div>
 
         <p class="risorse-footnote" data-reveal>Nuove schede pubblicate ogni settimana. Torna a trovarci &mdash; oppure seguici sui social per non perderle.</p>
+    </div>
+</section>
+
+<!-- ═══════ FORMAZIONE — manuale «Il manager della ristorazione» ═══════ -->
+<section class="fm" id="formazione">
+    <div class="container fm-grid">
+        <div>
+            <span class="label" data-reveal>Formazione &middot; Manuale</span>
+            <h2 data-reveal data-reveal-delay="50">Il manager della ristorazione<em>Come essere un buon padrone di casa.</em></h2>
+            <p class="fm-lead" data-reveal data-reveal-delay="100">Il manuale pratico per manager, titolari e responsabili di sala: guidare le persone, organizzare turni e servizio, leggere i numeri, comprare e conservare bene, tenere in ordine sicurezza alimentare e documenti. Da leggere, insegnare e usare durante il servizio.</p>
+            <ol class="fm-cap" data-reveal data-reveal-delay="150">
+                <li>Chi &egrave; un buon manager</li>
+                <li>Guidare le persone</li>
+                <li>Turni, ruoli e briefing</li>
+                <li>Ospitalit&agrave; e reclami</li>
+                <li>Controllo quotidiano</li>
+                <li>Numeri e margini</li>
+                <li>Acquisti e fornitori</li>
+                <li>Magazzino e scorte</li>
+                <li>HACCP</li>
+                <li>Catena del freddo</li>
+                <li>Pulizie, rifiuti e infestanti</li>
+                <li>Allergeni e crisi</li>
+                <li>Norme e documenti</li>
+                <li>Il piano dei 30 giorni</li>
+            </ol>
+            <div class="fm-ok" id="fmOk" hidden><b>Grazie per l'acquisto.</b> Ti abbiamo mandato il manuale per email: controlla la posta (anche lo spam) tra qualche minuto.</div>
+            <form class="fm-buy" id="fmBuy" novalidate data-reveal data-reveal-delay="200">
+                <div class="fm-prezzo"><b>15 &euro;</b><span>Hai gi&agrave; scaricato una nostra scheda? Per te <strong>12 &euro;</strong>: usa la stessa email.</span></div>
+                <div class="fm-riga">
+                    <label class="fm-sr" for="fmEmail">La tua email</label>
+                    <input class="fm-email" id="fmEmail" type="email" autocomplete="email" placeholder="La tua email" required>
+                    <button type="submit" class="btn btn-primary" id="fmBtn">Acquista il manuale</button>
+                </div>
+                <p class="fm-meta">PDF &middot; 15 pagine &middot; ti arriva per email subito dopo il pagamento</p>
+                <p class="fm-err" id="fmErr" hidden></p>
+            </form>
+        </div>
+        <div class="fm-stack" data-reveal data-reveal-delay="120">
+            <img class="fm-a" src="assets/img/formazione/manager-p7.jpg" alt="Pagina del manuale: controllo economico e margini" loading="lazy">
+            <img class="fm-b" src="assets/img/formazione/manager-p3.jpg" alt="Pagina del manuale: guidare le persone" loading="lazy">
+            <img class="fm-c" src="assets/img/formazione/manager-p1.jpg" alt="Copertina del manuale Il manager della ristorazione" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ 5 MODULI ═══════ -->
+<section class="ac-moduli" id="programma">
+    <div class="container">
+        <div class="ac-moduli-header">
+            <span class="label" data-reveal>Programma</span>
+            <h2 class="ed-heading" data-reveal data-reveal-delay="50" style="color:var(--ivory)">I 5 moduli.</h2>
+        </div>
+    </div>
+
+    <div class="ac-moduli-stack">
+        <a href="#area-studenti" id="modulo-01" class="ac-mcard ac-mcard--odd" data-reveal>
+            <div class="ac-mcard-ghost" aria-hidden="true">01</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">01</span>
+                <span class="ac-mcard-label">Modulo 01</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Hai davvero il controllo del tuo ristorante?</h3>
+                <p>La maggior parte dei ristoratori lavora ogni giorno senza una visione chiara di cosa sta succedendo nel proprio locale. Questo modulo insegna a misurare quello che conta.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-02" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="80">
+            <div class="ac-mcard-ghost" aria-hidden="true">02</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">02</span>
+                <span class="ac-mcard-label">Modulo 02</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Stai pagando per i risultati giusti?</h3>
+                <p>Ogni ristorante ha costi fissi che si accettano senza mai verificare se producono quello per cui vengono pagati. Questo modulo ti dà gli strumenti per analizzare ogni spesa.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-03" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="160">
+            <div class="ac-mcard-ghost" aria-hidden="true">03</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">03</span>
+                <span class="ac-mcard-label">Modulo 03</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Cosa ti blocca dal crescere?</h3>
+                <p>Crescere non significa aprire un secondo locale. Significa fare funzionare quello che hai al massimo del suo potenziale. Questo modulo identifica i tre blocchi operativi.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-04" class="ac-mcard ac-mcard--even" data-reveal data-reveal-delay="240">
+            <div class="ac-mcard-ghost" aria-hidden="true">04</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">04</span>
+                <span class="ac-mcard-label">Modulo 04</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>L'Arte di Accogliere nel Food</h3>
+                <p>L'accoglienza non è gentilezza. È un sistema che si costruisce, si insegna e si replica. Questo modulo analizza ogni momento del contatto tra il locale e il cliente.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+
+        <a href="#area-studenti" id="modulo-05" class="ac-mcard ac-mcard--odd" data-reveal data-reveal-delay="320">
+            <div class="ac-mcard-ghost" aria-hidden="true">05</div>
+            <div class="ac-mcard-left">
+                <span class="ac-mcard-n">05</span>
+                <span class="ac-mcard-label">Modulo 05</span>
+            </div>
+            <div class="ac-mcard-divider"></div>
+            <div class="ac-mcard-right">
+                <h3>Come prepararsi al lancio del tuo locale</h3>
+                <p>I primi 90 giorni di un ristorante definiscono tutto. Questo modulo accompagna attraverso le tre fasi critiche del lancio con una checklist completa.</p>
+                <div class="ac-mcard-badges">
+                    <span class="ac-badge ac-badge--simone">&#9654; Simone</span>
+                    <span class="ac-badge ac-badge--video">&#9654; Video</span>
+                    <span class="ac-badge ac-badge--slides">&#9673; Slides</span>
+                    <span class="ac-badge ac-badge--podcast">&#9678; Podcast</span>
+                    <span class="ac-badge ac-badge--challenge">&#127942; Challenge</span>
+                </div>
+            </div>
+            <span class="ac-mcard-arrow">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- ═══════ PRICING ═══════ -->
+<section class="ac-pricing" id="prezzi">
+    <div class="container">
+        <div class="ac-pricing-header">
+            <span class="label" data-reveal>Prezzi</span>
+            <h2 class="ed-heading" data-reveal data-reveal-delay="50">Scegli il tuo<br>percorso.</h2>
+        </div>
+        <div class="pricing-grid" style="max-width:780px">
+            <div class="pricing-card pricing-card--light" data-reveal data-reveal-delay="50">
+                <h3>Singolo modulo</h3>
+                <div class="pricing-amount">19,90&euro; <span>/ modulo</span></div>
+                <ul class="pricing-features">
+                    <li>Accesso al modulo scelto</li>
+                    <li>Video + slides + podcast</li>
+                    <li>Accesso illimitato</li>
+                </ul>
+                <button onclick="apriSceltaModulo()" class="btn btn-outline-dark" style="width:100%;cursor:pointer">Scegli un modulo</button>
+            </div>
+            <div class="pricing-card pricing-card--dark" data-reveal data-reveal-delay="150">
+                <div class="pricing-badge">Consigliato</div>
+                <h3>Corso completo</h3>
+                <div class="pricing-amount">94,90&euro;</div>
+                <ul class="pricing-features">
+                    <li>Tutti e 5 i moduli</li>
+                    <li>Video + slides + podcast per modulo</li>
+                    <li>Accesso illimitato</li>
+                    <li>Aggiornamenti futuri inclusi</li>
+                    <li>Risparmio rispetto ai singoli</li>
+                </ul>
+                <button onclick="avviaCheckout('corso-completo')" class="btn btn-primary" style="width:100%;cursor:pointer">Inizia ora</button>
+            </div>
+        </div>
+
+        <!-- Modal scelta modulo -->
+        <div id="modulo-select-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;overflow-y:auto">
+            <div style="max-width:520px;margin:80px auto;background:var(--surface);padding:0;overflow:hidden">
+                <div style="background:var(--dark);padding:24px 32px;display:flex;justify-content:space-between;align-items:center">
+                    <h3 style="color:var(--ivory);font-family:'Playfair Display',serif;margin:0;font-size:1.15rem">Scegli il modulo</h3>
+                    <button onclick="chiudiSceltaModulo()" style="background:none;border:none;color:var(--ivory);font-size:1.5rem;cursor:pointer;line-height:1">&times;</button>
+                </div>
+                <div style="padding:24px 32px">
+                    <div onclick="avviaCheckout('modulo-1')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">01</strong> <span style="color:var(--ink);margin-left:8px">Hai davvero il controllo del tuo ristorante?</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-2')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">02</strong> <span style="color:var(--ink);margin-left:8px">Stai pagando per i risultati giusti?</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-3')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">03</strong> <span style="color:var(--ink);margin-left:8px">Cosa ti blocca dal crescere?</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-4')" style="padding:14px 0;border-bottom:1px solid #edeae5;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">04</strong> <span style="color:var(--ink);margin-left:8px">L'Arte di Accogliere nel Food</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                    <div onclick="avviaCheckout('modulo-5')" style="padding:14px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                        <div><strong style="color:var(--ink)">05</strong> <span style="color:var(--ink);margin-left:8px">Come prepararsi al lancio del tuo locale</span></div>
+                        <span style="color:var(--accent);font-weight:600;white-space:nowrap;margin-left:16px">19,90&euro;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
