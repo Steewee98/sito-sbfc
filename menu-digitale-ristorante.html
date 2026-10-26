@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menù digitale ristorante: guida e costi | SB Food</title>
+    <meta name="description" content="Come scegliere il menù digitale per il ristorante: differenze tra QR e NFC, funzioni utili in sala, costi reali ed errori da evitare.">
+    <meta name="keywords" content="menù digitale ristorante, menu digitale nfc ristorante, costo menu digitale ristorante, menu qr code ristorante, placca nfc tavolo ristorante">
+    <link rel="canonical" href="https://www.sbfoodconsulting.com/menu-digitale-ristorante.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="SB Food Consulting">
+    <meta property="og:title" content="Il menù digitale del ristorante: cosa serve davvero, quanto costa e gli errori da evitare">
+    <meta property="og:description" content="Come scegliere il menù digitale per il ristorante: differenze tra QR e NFC, funzioni utili in sala, costi reali ed errori da evitare.">
+    <meta property="og:url" content="https://www.sbfoodconsulting.com/menu-digitale-ristorante.html">
+    <meta property="og:image" content="https://www.sbfoodconsulting.com/assets/logo/logo-blu.png">
+    <meta property="og:locale" content="it_IT">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=20260826">
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/sb-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/sb-16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/sb-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/sb-180.png">
+    <style>
+        /* navbar-su-chiaro: pagina senza hero scuro, il menu bianco va su fondo scuro */
+        .navbar{background:var(--dark)}
+        .article-wrap{max-width:760px;margin:0 auto;padding:120px 24px 80px}
+        .article-eyebrow{color:#c4622d;font-size:.78rem;letter-spacing:3px;text-transform:uppercase;font-weight:600;display:block;margin-bottom:14px}
+        .article-wrap h1{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:#37393f;line-height:1.15;margin-bottom:16px}
+        .article-meta{color:#9a948b;font-size:.85rem;margin-bottom:40px}
+        .article-lead{font-size:1.18rem;line-height:1.7;color:#37393f;margin-bottom:36px}
+        .article-wrap h2{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:600;color:#37393f;margin:46px 0 16px;line-height:1.25}
+        .article-wrap p{font-size:1.05rem;line-height:1.8;color:#5a5a5a;margin:0 0 20px}
+        .article-wrap ul{margin:0 0 22px;padding-left:22px}
+        .article-wrap li{font-size:1.05rem;line-height:1.75;color:#5a5a5a;margin-bottom:10px}
+        .article-wrap strong{color:#37393f}
+        .article-box{background:#faf8f5;border-left:3px solid #c4622d;border-radius:0 10px 10px 0;padding:20px 24px;margin:0 0 24px}
+        .article-box p{margin:0;font-size:1rem}
+        .article-formula{background:#37393f;color:#f5f2ee;border-radius:12px;padding:22px 26px;margin:0 0 24px;font-size:1.1rem;text-align:center}
+        .article-formula strong{color:#e8a07a}
+        .article-cta{margin-top:54px;padding:34px;background:#37393f;border-radius:14px;text-align:center}
+        .article-cta p{color:#f5f2ee;font-size:1.08rem;margin:0 0 20px;line-height:1.6}
+        .article-cta a{display:inline-block;background:#c4622d;color:#fff;text-decoration:none;padding:14px 30px;border-radius:8px;font-weight:600;font-size:.95rem}
+        .article-related{margin-top:48px;border-top:1px solid #e8e4df;padding-top:24px}
+        .article-related a{color:#c4622d;text-decoration:none;font-weight:600}
+        @media(max-width:600px){.article-wrap{padding:96px 18px 64px}.article-wrap h1{font-size:1.9rem}}
+    </style>
+<link rel="stylesheet" href="mobile.css?v=20261019c">
+</head>
+<body>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="/" class="navbar-logo">
+            <img src="assets/logo/logo-bianco.png" alt="SB Food Consulting" style="height:42px;width:auto;display:block">
+        </a>
+        <ul class="navbar-menu" id="navMenu">
+            <li><a href="/">Home</a></li>
+            <li><a href="chi-siamo.html">Chi siamo</a></li>
+            <li><a href="servizi.html">Servizi</a></li>
+            <li><a href="percorso-sb.html">Percorso SB</a></li>
+            <li><a href="academy.html">Academy</a></li>
+            <li><a href="smart-table.html">Smart table</a></li>
+            <li><a href="clienti.html">Clienti</a></li>
+            <li><a href="contatti.html">Contatti</a></li>
+            <li><a href="https://academy-sbfc-production.up.railway.app" class="nav-accedi" title="Area studenti — accedi alla piattaforma">Accedi</a></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+</nav>
+
+<main class="article-wrap">
+    <span class="article-eyebrow">Smart table</span>
+    <h1>Il menù digitale del ristorante: cosa serve davvero, quanto costa e gli errori da evitare</h1>
+    <p class="article-meta">A cura di SB Food Consulting &middot; 35 anni nella gestione dei ristoranti &middot; 26 ottobre 2026</p>
+
+    <p class="article-lead">Il sabato sera hai la sala piena, tre tavoli che si siedono insieme e un cameriere fermo a spiegare i piatti in inglese mentre le comande in cucina aspettano. Il menù digitale per il ristorante risolve questi colli di bottiglia solo se è veloce da aprire e sempre aggiornato: vediamo cosa deve avere, quanto costa e quali errori evitare prima di sceglierlo.</p>
+
+    <h2>Quando il menù di carta ti fa perdere tempo in sala</h2>
+    <p>Pensa a un martedì mattina: il fornitore del pesce ti avvisa che il rombo non è arrivato, ma ti ha portato delle ottime orate. Se usi solo la carta, hai due strade. O ristampi gli inserti prima del servizio, perdendo mezz'ora in ufficio tra impaginazione e stampante inceppata, oppure dici ai camerieri di avvisare a voce ogni singolo tavolo. Il risultato lo conosci bene: a metà servizio qualcuno si dimentica, il cliente ordina proprio il piatto che manca e il cameriere deve tornare al tavolo a scusarsi.</p>
+    <p>Lo stesso vale per i prezzi. Quando una materia prima rincara e ti accorgi che devi ritoccare i listini dopo aver controllato i margini e <a href="come-calcolare-il-food-cost.html">come calcolare il food cost</a>, ristampare venti o trenta menù diventa una tassa fissa e una perdita di tempo. Così rimandi la modifica di settimana in settimana e intanto lavori con il margine eroso. Anche l'usura ha il suo peso: carte macchiate d'olio, angoli piegati o fogli volanti danno subito l'idea di un locale trascurato, ancora prima che arrivi il pane in tavola.</p>
+    <p>Passare al digitale non significa buttare via la carta. In molti locali le due cose convivono benissimo: porti il menù cartaceo a chi ama sfogliarlo, ma lasci sul tavolo uno strumento immediato per chi vuole vedere le foto dei piatti, leggere nella propria lingua o ordinare un dolce e un amaro senza dover cercare lo sguardo del cameriere dall'altra parte della sala.</p>
+
+    <h2>Cosa deve avere il menù digitale di un ristorante per funzionare</h2>
+    <p>Molti ristoratori pensano di avere già un menù online solo perché hanno caricato un file PDF sul proprio sito web e hanno generato un codice gratuito. Chi si siede a tavola, però, usa lo schermo verticale dello smartphone: aprire un PDF significa dover scaricare un file pesante, allargare la pagina con due dita, scorrere a destra e a sinistra per leggere il prezzo associato al piatto e rischiare di perdere subito la pazienza.</p>
+    <p>Un sistema progettato per la sala funziona come una pagina web leggera che si adatta allo schermo del telefono. Non costringe mai il cliente a scaricare applicazioni e si apre in un istante anche se nei muri spessi del locale il telefono prende poco. Oltre alla leggibilità, ci sono elementi pratici che fanno risparmiare tempo alla brigata di sala durante il turno:</p>
+    <ul>
+        <li><strong>Navigazione per categorie e foto reali</strong>: il cliente tocca antipasti, primi o vini e salta subito alla sezione giusta, vedendo la foto del piatto senza dover scorrere cinque pagine di testo.</li>
+        <li><strong>Traduzione per i turisti</strong>: avere il menù leggibile in cinque lingue toglie dall'imbarazzo il personale di sala e velocizza la presa della comanda con gli ospiti stranieri.</li>
+        <li><strong>Allergeni chiari piatto per piatto</strong>: gli allergeni vanno indicati ai clienti in modo preciso; averli sempre visibili sotto ogni portata evita il classico avanti e indietro tra sala e cucina per chiedere allo chef se in quella salsa c'è il lattosio o la frutta a guscio.</li>
+        <li><strong>Passaggio rapido al Wi-Fi e alle recensioni</strong>: dallo stesso schermo il cliente può copiare l'accesso alla rete del locale a inizio pasto e, dopo il caffè, trovare il pulsante diretto per lasciare una recensione.</li>
+        <li><strong>Aggiornamenti delegati senza pensieri</strong>: il vero risparmio di tempo c'è quando non devi metterti tu al computer a spostare righe e prezzi, ma ti basta mandare un messaggio a chi ti gestisce il servizio per avere il piatto nuovo online in giornata.</li>
+    </ul>
+
+    <h2>QR code o placca NFC: cosa cambia sul tavolo</h2>
+    <p>Il codice QR stampato su carta o su adesivo richiede sempre che il cliente prenda il telefono, apra la fotocamera, inquadri il quadratino e aspetti che venga messo a fuoco. Inoltre, con i lavaggi di fine turno, un semplice foglio o adesivo sul tavolo rischia di rovinarsi, e con le luci soffuse del servizio serale inquadrare il codice può risultare meno immediato.</p>
+    <p>La tecnologia NFC semplifica questo passaggio. Funziona esattamente come quando paghi avvicinando il telefono o la carta al POS: dentro una placca da tavolo c'è un piccolo chip che non ha bisogno di batterie né di ricarica. Il cliente appoggia la parte alta del suo iPhone o del suo telefono Android sulla placca e il menù si apre da solo sullo schermo, senza aprire la fotocamera e senza inquadrare nulla.</p>
+    <p>E se al tavolo si siede un ospite con un telefono vecchio o con la lettura NFC disattivata nelle impostazioni? Nessun blocco: sulla stessa placca è sempre stampato anche un codice QR. In questo modo offri entrambe le opzioni di lettura con un unico supporto da tenere sul tavolo.</p>
+
+    <h2>Quanto costa il menù digitale per il ristorante</h2>
+    <p>Quando valuti un servizio di questo tipo, il prezzo va diviso in due voci distinte: la spesa iniziale per preparare il menù e mettere le placche sui tavoli, e il canone per mantenerlo online e aggiornarlo nel tempo. Con il nostro servizio di <a href="menu-digitale.html">menù digitale per ristoranti</a>, i numeri sono pubblici e fissi, così puoi fare i conti prima ancora di contattarci.</p>
+    <p>La preparazione iniziale di design, menù e software costa 49&nbsp;€ se hai già un menù digitale da cui partire, 99&nbsp;€ se hai solo il menù di carta, oppure 149&nbsp;€ se non hai ancora un menù e lo scriviamo da zero insieme a te. Le placche da tavolo con tecnologia NFC e QR costano 12&nbsp;€ ciascuna nella versione neutra e 18&nbsp;€ nella versione personalizzata con i tuoi colori e il tuo logo, sempre con la spedizione inclusa. Se non vuoi le placche fisiche, in alternativa puoi avere il file grafico pronto da stampare, che ovviamente non avrà il chip NFC. Per mantenere il menù online con tutte le modifiche incluse il costo è di 19&nbsp;€ al mese, oppure 190&nbsp;€ se scegli il pagamento annuale.</p>
+    <p>Facciamo un esempio: hai una trattoria con 10 tavoli, oggi usi solo il listino cartaceo e scegli le placche neutre. Spendi 99&nbsp;€ per la preparazione del menù e 120&nbsp;€ per le 10 placche, più 19&nbsp;€ al mese per avere il servizio attivo e tutte le modifiche fatte da noi quando cambi i piatti. In un secondo esempio, se hai un locale con 20 tavoli, hai già un menù digitale e vuoi le placche personalizzate con il tuo logo, spendi 49&nbsp;€ di preparazione e 18&nbsp;€ per ciascuna delle 20 placche, sempre con il canone di 19&nbsp;€ al mese (o 190&nbsp;€ l'anno).</p>
+
+    <h2>I 4 errori da evitare quando passi al digitale</h2>
+    <p>Mettere uno strumento tecnologico sui tavoli senza pensare a come lavorano la sala e la cucina rischia di creare più confusione di prima. Ecco i quattro passi falsi da evitare:</p>
+    <ul>
+        <li><strong>Abbonarsi a piattaforme complicate dove devi fare tutto da solo</strong>: se per cambiare il prezzo di un contorno devi entrare in un pannello di controllo a fine servizio, ricordare la password e ridimensionare le foto, il rischio concreto è che tu finisca per rimandare gli aggiornamenti e ritrovarti con il menù vecchio.</li>
+        <li><strong>Lasciare sul tavolo piatti esauriti o con prezzi diversi dalla cassa</strong>: se sul digitale la tagliata è ancora visibile ma in cucina è finita ieri, oppure costa diverso rispetto al gestionale di cassa, il cliente si sente trascurato e la discussione a fine pasto è assicurata.</li>
+        <li><strong>Dimenticarsi di formare i camerieri</strong>: la placca sul tavolo non sostituisce l'accoglienza; chi lavora in sala deve sapere come presentarla con naturalezza appena fa accomodare gli ospiti e come usarla per proporre un vino o un piatto del giorno.</li>
+        <li><strong>Trascurare la compilazione degli allergeni</strong>: copiare gli ingredienti a memoria senza controllare le schede tecniche dei prodotti che entrano in dispensa è un rischio serio; gli allergeni vanno verificati piatto per piatto con chi guida la cucina prima di andare online.</li>
+    </ul>
+
+    <h2>Dal menù alle recensioni: come sfruttare lo stesso tavolo</h2>
+    <p>Un buon servizio si chiude quando l'ospite si alza soddisfatto, ma spesso i clienti contenti escono dal locale e si dimenticano di raccontarlo online, mentre chi ha avuto un piccolo intoppo scrive subito. Avere già il menù digitale con il pulsante per le recensioni o affiancare una <a href="placca-nfc.html">placca NFC per le recensioni</a> ti aiuta a cogliere il momento giusto: quando il cliente ti fa un complimento al tavolo o alla cassa, gli basta appoggiare il telefono per aprire direttamente la tua pagina su Google, TripAdvisor o TheFork.</p>
+    <p>Attenzione però a come lo chiedi: Google, TripAdvisor e TheFork vietano di incentivare o filtrare le recensioni, quindi non devi mai promettere amari gratis o sconti sul conto in cambio di cinque stelle. Lo strumento serve a togliere ogni ostacolo tecnico a chi ha già voglia di parlare bene di te, ed è una delle abitudini di sala che spieghiamo anche nel Modulo 04 della <a href="academy.html">SB Food Academy</a>.</p>
+
+    <div class="article-box"><p>Prima di inserire o aggiornare i piatti sul menù digitale, verifica che ricette e grammature siano allineate in cucina: scarica gratis la nostra <a href="strumenti/scheda-ricetta">Scheda Ricetta</a> per mettere in ordine ingredienti e porzioni.</p></div>
+
+    <h2>Domande frequenti</h2>
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#37393f;margin:26px 0 8px">Come funziona l'aggiornamento se cambio i piatti ogni settimana?</h3>
+    <p>Con il servizio di SB Food Consulting non devi entrare in nessun programma: ci scrivi cosa cambia e noi aggiorniamo piatti, descrizioni o prezzi in giornata. Tutte le modifiche sono già comprese nel canone mensile di 19&nbsp;€ (o 190&nbsp;€ l'anno).</p>
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#37393f;margin:26px 0 8px">Il cliente deve scaricare un'applicazione per leggere il menù?</h3>
+    <p>No, non serve nessuna applicazione. Sia iPhone che Android leggono il chip NFC della placca semplicemente avvicinando il telefono, aprendo subito il menù nel browser internet; per i telefoni senza NFC c'è comunque il codice QR stampato sulla stessa placca.</p>
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#37393f;margin:26px 0 8px">Chi inserisce gli allergeni nel menù digitale?</h3>
+    <p>Prepariamo noi l'intero menù e compiliamo la lista degli allergeni insieme a te, controllando il listino piatto per piatto. Prima di pubblicare il menù online, ti mandiamo tutto per un tuo ricontrollo finale così hai la certezza che ogni indicazione sia corretta.</p>
+
+    <div class="article-cta">
+        <p>Vuoi vedere come funziona la placca da tavolo e calcolare la spesa precisa per il numero dei tuoi tavoli? Vai alla pagina dedicata al <a href="menu-digitale.html">menù digitale per il ristorante</a>.</p>
+        <a href="menu-digitale.html">Scopri il menù digitale →</a>
+    </div>
+
+    <div class="article-related">
+        Continua a leggere: <a href="aumentare-recensioni-google-ristorante.html">Come aumentare le recensioni Google del ristorante: metodo, regole e lavoro di sala</a> &middot; <a href="aumentare-scontrino-medio-ristorante.html">Come aumentare lo scontrino medio del ristorante senza alzare i prezzi a caso</a> &middot; <a href="inventario-ristorante.html">Come fare l&#x27;inventario del ristorante: cucina, cantina e food cost reale</a>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-divider"></div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="/" class="navbar-logo">
+                    <img src="assets/logo/logo-blu.png" alt="SB Food Consulting" style="height:42px;width:auto;display:block">
+                </a>
+                <p>Dove la ristorazione diventa strategia.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/sbfoodconsulting" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                    <a href="https://www.linkedin.com/company/sb-food-consulting" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Navigazione</h4>
+                <ul>
+                    <li><a href="chi-siamo.html">Chi siamo</a></li>
+                    <li><a href="servizi.html">Servizi</a></li>
+                    <li><a href="percorso-sb.html">Percorso SB</a></li>
+                    <li><a href="academy.html">Academy</a></li>
+                    <li><a href="smart-table.html">Smart table</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contatti</h4>
+                <ul>
+                    <li><a href="mailto:info@sbfoodconsulting.com">info@sbfoodconsulting.com</a></li>
+                    <li><a href="tel:+393913983820">+39 391 398 3820</a></li>
+                    <li>Roma, Italia</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 SB Food Consulting. Tutti i diritti riservati.</p>
+            <p>P.IVA 17372881007</p>
+        </div>
+    </div>
+</footer>
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "BlogPosting",
+   "@id": "https://www.sbfoodconsulting.com/menu-digitale-ristorante.html#article",
+   "headline": "Il menù digitale del ristorante: cosa serve davvero, quanto costa e gli errori da evitare",
+   "description": "Come scegliere il menù digitale per il ristorante: differenze tra QR e NFC, funzioni utili in sala, costi reali ed errori da evitare.",
+   "inLanguage": "it-IT",
+   "image": "https://www.sbfoodconsulting.com/assets/logo/logo-blu.png",
+   "datePublished": "2026-10-26",
+   "dateModified": "2026-10-26",
+   "author": {
+    "@id": "https://www.sbfoodconsulting.com/#simone-braghetta"
+   },
+   "publisher": {
+    "@id": "https://www.sbfoodconsulting.com/#organization"
+   },
+   "mainEntityOfPage": "https://www.sbfoodconsulting.com/menu-digitale-ristorante.html",
+   "keywords": "menù digitale ristorante, menu digitale nfc ristorante, costo menu digitale ristorante, menu qr code ristorante, placca nfc tavolo ristorante"
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Come funziona l'aggiornamento se cambio i piatti ogni settimana?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Con il servizio di SB Food Consulting non devi entrare in nessun programma: ci scrivi cosa cambia e noi aggiorniamo piatti, descrizioni o prezzi in giornata. Tutte le modifiche sono già comprese nel canone mensile di 19 € (o 190 € l'anno)."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Il cliente deve scaricare un'applicazione per leggere il menù?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No, non serve nessuna applicazione. Sia iPhone che Android leggono il chip NFC della placca semplicemente avvicinando il telefono, aprendo subito il menù nel browser internet; per i telefoni senza NFC c'è comunque il codice QR stampato sulla stessa placca."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Chi inserisce gli allergeni nel menù digitale?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Prepariamo noi l'intero menù e compiliamo la lista degli allergeni insieme a te, controllando il listino piatto per piatto. Prima di pubblicare il menù online, ti mandiamo tutto per un tuo ricontrollo finale così hai la certezza che ogni indicazione sia corretta."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://www.sbfoodconsulting.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Blog",
+     "item": "https://www.sbfoodconsulting.com/blog.html"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Il menù digitale del ristorante: cosa serve davvero, quanto costa e gli errori da evitare",
+     "item": "https://www.sbfoodconsulting.com/menu-digitale-ristorante.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+<script src="main.js?v=20260924"></script>
+</body>
+</html>
