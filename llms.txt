@@ -26,6 +26,9 @@ SB Food Consulting è il marchio di **BRAGHETTA FOOD & CONSULTING S.R.L.** (P.IV
 - [Clienti](https://www.sbfoodconsulting.com/clienti.html): locali e realtà seguite.
 - [Contatti](https://www.sbfoodconsulting.com/contatti.html): come richiedere una consulenza.
 
+## Guide del blog
+- [Come fare l'inventario del ristorante: cucina, cantina e food cost reale](https://www.sbfoodconsulting.com/inventario-ristorante.html): Come organizzare l'inventario di cucina e cantina in meno tempo e usarlo per calcolare il food cost reale del mese.
+
 ## Contatti
 - Email: info@sbfoodconsulting.com
 - Telefono: +39 391 398 3820
