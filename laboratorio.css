@@ -1,0 +1,254 @@
+/* ═══════════════════════════════════════════════════════════════
+   Laboratorio strategico SB (laboratorio-strategico-ristorante.html)
+   Idea della pagina: «il modello sul tavolo». Le sezioni si appoggiano
+   una sull'altra come pezzi di una costruzione: il bollo «Primo in Italia»
+   sporge dalla foto, i quattro passaggi salgono a gradini, la citazione
+   è una lastra che entra nella sezione dopo. Angoli vivi come il resto
+   del sito, un solo accento (terracotta).
+   ═══════════════════════════════════════════════════════════════ */
+
+/* le immagini hanno width/height per evitare salti: l'altezza la decide aspect-ratio */
+.lab-hero img, .lab-cosa img, .lab-formato img, .sv-lab img { height: auto; }
+
+/* ── HERO ── */
+.lab-hero {
+    position: relative; overflow: hidden;
+    background: var(--dark); color: var(--ivory);
+    padding: 150px 0 110px;
+}
+.lab-hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+}
+.lab-hero .breadcrumb { margin-bottom: 34px; }
+.lab-eyebrow {
+    display: inline-block; font-size: .68rem; font-weight: 600;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 22px;
+}
+.lab-h1 {
+    font-family: 'Playfair Display', serif; font-weight: 600;
+    font-size: clamp(2.2rem, 3.5vw, 3.15rem); line-height: 1.1;
+    color: var(--ivory); margin-bottom: 26px;
+}
+.lab-h1 em { font-style: italic; color: var(--accent); }
+.lab-hero-sub {
+    font-size: 1.08rem; line-height: 1.7; color: rgba(245,242,238,.72);
+    max-width: 30em; margin-bottom: 38px;
+}
+.lab-hero-media { position: relative; }
+/* la lastra terracotta dietro la foto, spostata come un pezzo appoggiato storto */
+.lab-hero-media::before {
+    content: ""; position: absolute; inset: 28px -28px -28px 28px;
+    background: var(--accent); opacity: .9;
+}
+.lab-hero-media img {
+    position: relative; display: block; width: 100%;
+    aspect-ratio: 3 / 2; object-fit: cover;
+}
+/* il bollo: l'unico elemento che rompe il bordo della foto */
+.lab-seal {
+    position: absolute; left: -46px; bottom: -46px; z-index: 2;
+    width: 164px; height: 164px; border-radius: 50%;
+    background: var(--ivory); color: var(--ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; box-shadow: 0 18px 40px rgba(20,16,12,.35);
+    transform: rotate(-8deg);
+}
+.lab-seal strong {
+    font-family: 'Playfair Display', serif; font-size: 1.55rem; line-height: 1;
+    font-weight: 700; color: var(--accent);
+}
+.lab-seal span {
+    font-size: .58rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+    line-height: 1.55; margin-top: 6px; padding: 0 14px;
+}
+
+/* ── COS'È ── */
+.lab-cosa { background: var(--ivory); padding: 130px 0 120px; }
+.lab-cosa-grid { display: grid; grid-template-columns: 7fr 5fr; gap: 90px; align-items: start; }
+.lab-cosa h2 { max-width: 13em; }
+.lab-cosa p { font-size: 1.05rem; line-height: 1.8; color: var(--ink-soft); max-width: 36em; margin-bottom: 20px; }
+.lab-cosa-media { margin-top: 80px; }
+.lab-cosa-media img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+
+/* ── I PASSAGGI: quattro gradini che salgono ── */
+.lab-passi { background: var(--dark); color: var(--ivory); padding: 130px 0 140px; overflow: hidden; }
+.lab-passi h2 { color: var(--ivory); margin-bottom: 70px; }
+.lab-scala { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-items: start; }
+.lab-gradino {
+    border-top: 4px solid var(--accent);
+    background: rgba(245,242,238,.04);
+    padding: 30px 26px 34px;
+}
+.lab-gradino:nth-child(1) { margin-top: 180px; }
+.lab-gradino:nth-child(2) { margin-top: 120px; }
+.lab-gradino:nth-child(3) { margin-top: 60px; }
+.lab-gradino:nth-child(4) { background: var(--accent-deep); border-top-color: var(--ivory); }
+.lab-gradino h3 {
+    font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.45rem;
+    margin-bottom: 12px; color: var(--ivory);
+}
+.lab-gradino p { font-size: .95rem; line-height: 1.7; color: rgba(245,242,238,.7); }
+.lab-gradino:nth-child(4) p { color: rgba(255,255,255,.9); }
+
+/* ── COSA POSSIAMO FARE ── */
+.lab-usi { background: var(--ivory); padding: 130px 0 170px; }
+.lab-usi h2 { margin-bottom: 60px; max-width: 12em; }
+.lab-usi-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 80px; row-gap: 0; }
+.lab-uso { padding: 30px 0 34px; border-top: 1px solid var(--border); }
+.lab-uso h3 {
+    font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.35rem;
+    color: var(--ink); margin-bottom: 8px;
+}
+.lab-uso p { color: var(--ink-soft); line-height: 1.75; max-width: 30em; }
+
+/* ── CITAZIONE: lastra che entra nella sezione successiva ── */
+.lab-quote-wrap { position: relative; z-index: 2; margin: -90px 0 -90px; }
+.lab-quote {
+    max-width: 980px; margin-left: auto;
+    background: var(--accent-deep); color: #fff;
+    padding: 64px 72px;
+    box-shadow: 14px 14px 0 rgba(26,26,26,.18);
+}
+.lab-quote p {
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500;
+    font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.3; padding-bottom: 4px;
+}
+
+/* ── PERCHÉ FUNZIONA ── */
+.lab-perche { background: var(--dark); color: var(--ivory); padding: 200px 0 130px; }
+.lab-perche h2 { color: var(--ivory); margin-bottom: 60px; }
+.lab-perche-grid { display: grid; grid-template-columns: 6fr 5fr; gap: 60px; }
+.lab-motivo h3 {
+    font-family: 'Playfair Display', serif; font-weight: 600; color: var(--ivory);
+    font-size: 1.5rem; margin-bottom: 12px;
+}
+.lab-motivo p { color: rgba(245,242,238,.7); line-height: 1.8; }
+.lab-motivo--grande { border-left: 4px solid var(--accent); padding-left: 36px; }
+.lab-motivo--grande h3 { font-size: clamp(2rem, 3.4vw, 2.8rem); line-height: 1.1; margin-bottom: 20px; }
+.lab-motivo--grande p { font-size: 1.1rem; max-width: 28em; }
+.lab-perche-col { display: grid; gap: 46px; align-content: start; padding-top: 8px; }
+
+/* ── FORMATO ── */
+.lab-formato { background: var(--ivory); padding: 130px 0; }
+.lab-formato-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: center; }
+.lab-formato-media img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: 40% 50%; }
+.lab-formato p { font-size: 1.08rem; line-height: 1.8; color: var(--ink-soft); max-width: 34em; margin-bottom: 34px; }
+
+/* ── NOTA SUL MARCHIO ── */
+.lab-marchio { background: var(--dark); border-top: 1px solid rgba(255,255,255,.08); padding: 28px 0; }
+.lab-marchio p { font-size: .74rem; line-height: 1.6; color: rgba(245,242,238,.5); max-width: 60em; }
+
+/* ── BLOCCO IN EVIDENZA NELLA PAGINA SERVIZI ── */
+.sv-lab { position: relative; background: var(--accent-deep); color: #fff; padding: 90px 0; overflow: hidden; }
+.sv-lab-grid { display: grid; grid-template-columns: 7fr 5fr; gap: 70px; align-items: center; }
+.sv-lab .lab-eyebrow { color: #fff; }
+.sv-lab h2 {
+    font-family: 'Playfair Display', serif; font-weight: 600; color: #fff;
+    font-size: clamp(2.1rem, 4vw, 3.2rem); line-height: 1.08; margin-bottom: 22px;
+}
+.sv-lab p { font-size: 1.05rem; line-height: 1.75; color: rgba(255,255,255,.9); max-width: 34em; margin-bottom: 16px; }
+.sv-lab p.sv-lab-forte { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.35rem; color: #fff; }
+.sv-lab .btn { background: var(--ink); color: var(--ivory); margin-top: 14px; }
+.sv-lab .btn:hover { background: #111; transform: translateY(-2px); }
+.sv-lab-media img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; box-shadow: 18px 18px 0 rgba(26,26,26,.25); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+    .lab-hero { padding: 132px 0 90px; }
+    .lab-hero-grid, .lab-cosa-grid, .lab-perche-grid, .lab-formato-grid, .sv-lab-grid { grid-template-columns: 1fr; gap: 48px; }
+    .lab-cosa-media { margin-top: 0; }
+    .lab-cosa-media img { aspect-ratio: 4 / 3; }
+    .lab-scala { grid-template-columns: 1fr 1fr; }
+    .lab-gradino:nth-child(n) { margin-top: 0; }
+    .lab-usi-grid { grid-template-columns: 1fr; }
+    .lab-quote { padding: 44px 36px; }
+}
+@media (max-width: 600px) {
+    .lab-hero-media::before { inset: 14px -14px -14px 14px; }
+    .lab-seal { width: 124px; height: 124px; left: -8px; bottom: -40px; }
+    .lab-seal strong { font-size: 1.2rem; }
+    .lab-seal span { font-size: .5rem; letter-spacing: .8px; padding: 0 10px; }
+    .lab-cosa, .lab-passi, .lab-usi, .lab-formato { padding: 90px 0; }
+    .lab-usi { padding-bottom: 130px; }
+    .lab-perche { padding: 160px 0 90px; }
+    .lab-scala { grid-template-columns: 1fr; }
+    .lab-quote-wrap { margin: -70px 0; }
+    .lab-motivo--grande { padding-left: 22px; }
+    .lab-passi h2.ed-heading, .lab-usi h2.ed-heading, .lab-perche h2.ed-heading { margin-bottom: 40px; }
+}
+
+/* nota del marchio sotto il bottone, obbligatoria vicino al nome del metodo */
+.sv-lab p.sv-lab-marchio { font-size: .68rem; line-height: 1.5; color: rgba(255,255,255,.85); margin: 22px 0 0; max-width: 40em; }
+
+/* ═══════ HOME: LABORATORIO IN EVIDENZA (.hlab) ═══════
+   Linguaggio delle Novità (filigrana, corsivo terracotta, pila di foto
+   storte che si apre al passaggio) su fondo scuro, per staccarla dalle
+   Novità chiare sopra e dai servizi sotto. */
+.hlab { position: relative; overflow: hidden; background: var(--dark); color: var(--ivory); padding: 120px 0 70px; }
+.hlab-ghost {
+    position: absolute; top: 8%; left: -2%; z-index: 0; pointer-events: none;
+    font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700;
+    font-size: clamp(10rem, 20vw, 23rem); line-height: 1;
+    color: rgba(196,98,45,.07); white-space: nowrap;
+}
+.hlab .container { position: relative; z-index: 1; }
+.hlab-grid { display: grid; grid-template-columns: 5fr 6fr; gap: 70px; align-items: center;
+    text-decoration: none; color: inherit; }
+.hlab-testo { display: block; border-top: 1px solid rgba(245,242,238,.14); padding-top: 30px; }
+.hlab-h { color: var(--ivory); margin-top: 14px; }
+.hlab-h em { font-style: italic; color: var(--accent); }
+.hlab-forte { display: block; font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.2rem, 1.7vw, 1.45rem); line-height: 1.4; color: var(--ivory);
+    border-left: 3px solid var(--accent); padding-left: 20px; margin-bottom: 22px; max-width: 26em; }
+.hlab-d { display: block; font-size: .98rem; line-height: 1.75; color: rgba(245,242,238,.68);
+    max-width: 46ch; margin-bottom: 28px; }
+.hlab-go { display: inline-block; }
+.hlab-grid:hover .nov-go em { transform: translateX(7px); }
+.hlab-grid:hover .hlab-h em { text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 1px; }
+
+.hlab-media { position: relative; display: block; aspect-ratio: 6 / 5; }
+.hlab-f { position: absolute; left: 50%; top: 50%; height: auto;
+    transition: transform .6s var(--ease-out), box-shadow .6s var(--ease-out); }
+.hlab-f1 { width: 76%; transform: translate(-42%,-46%) rotate(3deg); box-shadow: 0 30px 64px rgba(10,10,12,.45); }
+.hlab-f2 { width: 40%; transform: translate(-112%,-62%) rotate(-8deg); box-shadow: 0 20px 44px rgba(10,10,12,.35); opacity: .95; }
+.hlab-grid:hover .hlab-f1 { transform: translate(-38%,-48%) rotate(5deg) scale(1.02); }
+.hlab-grid:hover .hlab-f2 { transform: translate(-120%,-64%) rotate(-11deg); }
+.hlab-seal { left: auto; right: 2%; bottom: 2%; }
+.hlab-marchio { font-size: .68rem; line-height: 1.5; color: rgba(245,242,238,.42); max-width: 60em; margin-top: 50px; }
+
+@media (prefers-reduced-motion: reduce) { .hlab-f { transition: none; } }
+@media (max-width: 900px) {
+    .hlab { padding: 80px 0 56px; }
+    .hlab-ghost { font-size: 8rem; top: 4%; left: -10%; }
+    .hlab-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hlab-media { aspect-ratio: 5 / 4; }
+    .hlab-seal { right: 0; bottom: -4%; }
+}
+
+/* ═══════ SERVIZI: LABORATORIO COME BLOCCO DI PUNTA (.sv-block--lab) ═══════ */
+.sv-block--lab .sv-block-grid { min-height: 660px; }
+.sv-block--lab .sv-block-media { overflow: visible; }
+.sv-block--lab .sv-block-media img { height: 100%; }
+.sv-block--lab .sv-block-ghost { color: rgba(196,98,45,.05); }
+.sv-block-num--lab em { font-style: italic; color: var(--accent); }
+.sv-block--lab .sv-block-num { margin-bottom: 26px; }
+.sv-block--lab .label { margin-bottom: 14px; }
+.sv-block--lab .sv-block-text h2 { font-size: clamp(2rem, 3.2vw, 2.9rem); }
+.sv-block--lab p.sv-lab-frase { font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.3rem; line-height: 1.45; color: var(--ink); border-left: 3px solid var(--accent);
+    padding-left: 18px; margin-bottom: 20px; }
+.sv-block--lab p.sv-lab-nota { font-size: .66rem; line-height: 1.5; color: var(--ink-soft); opacity: .8;
+    margin: 30px 0 0; max-width: 460px; }
+.sv-lab-seal { left: -40px; right: auto; bottom: 56px; }
+.sv-block--lab .sv-block-ghost { right: auto; left: -3%; }
+@media (max-width: 900px) {
+    .sv-block--lab .sv-block-grid { min-height: 0; }
+    .sv-lab-seal { left: auto; right: 16px; bottom: -40px; }
+    .sv-block--lab .sv-block-text { padding-top: 70px; }
+}
+@media (max-width: 768px) {
+    /* mobile.css nasconde il secondo paragrafo dei servizi: qui servono tutti */
+    .sv-block--lab .sv-block-text p + p { display: block !important; }
+    .sv-block--lab .sv-block-text { padding-top: 64px !important; }
+}
